@@ -10,6 +10,8 @@ import { router } from 'expo-router'
 import { useGuides, useFeaturedGuides, useUrgentGuides } from '../../src/hooks/useGuides'
 import { useCategories } from '../../src/hooks/useCategories'
 import { useHistoryStore } from '../../src/stores/historyStore'
+import { useSettingsStore } from '../../src/stores/settingsStore'
+import { translations } from '../../src/utils/translations'
 import { colors } from '../../src/theme/colors'
 import { spacing } from '../../src/theme/spacing'
 import { typography } from '../../src/theme/typography'
@@ -19,7 +21,9 @@ export default function HomeScreen() {
   const { data: featured } = useFeaturedGuides()
   const { data: urgent } = useUrgentGuides()
   const { data: categories } = useCategories()
+  const { language } = useSettingsStore()
 
+  const t = translations[language]
   const { recentIds, cachedGuides } = useHistoryStore()
 
   const recentGuides = recentIds
@@ -34,10 +38,15 @@ export default function HomeScreen() {
     })
   }
 
+  const getTitle = (item: any) => language === 'fil' ? item.title_fil : item.title_en
+  const getTagline = (item: any) => language === 'fil' ? item.tagline_fil : item.tagline_en
+  const getCategoryName = (item: any) => language === 'fil' ? item.name_fil : item.name_en
+
   return (
     <ScrollView
       style={styles.container}
       contentContainerStyle={styles.content}
+      showsVerticalScrollIndicator={false}
       refreshControl={
         <RefreshControl
           refreshing={isRefetching}
@@ -48,12 +57,14 @@ export default function HomeScreen() {
     >
       <View style={styles.header}>
         <Text style={styles.logo}>DemoAlam 💡</Text>
-        <Text style={styles.tagline}>Ano ang hindi mo pa alam?</Text>
+        <Text style={styles.tagline}>
+          {language === 'fil' ? 'Ano ang hindi mo pa alam?' : 'What do you not know yet?'}
+        </Text>
       </View>
 
       {recentGuides.length > 0 && (
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>👀 Recently Viewed</Text>
+          <Text style={styles.sectionTitle}>👀 {t.recentlyViewed}</Text>
 
           <ScrollView horizontal showsHorizontalScrollIndicator={false}>
             {recentGuides.map((guide) => (
@@ -64,15 +75,15 @@ export default function HomeScreen() {
                 onPress={() => openGuide(guide.id)}
               >
                 <Text style={styles.recentCategory}>
-                  {guide.category?.icon} {guide.category?.name_fil}
+                  {guide.category?.icon} {guide.category ? getCategoryName(guide.category) : ''}
                 </Text>
 
                 <Text style={styles.recentTitle} numberOfLines={2}>
-                  {guide.title_fil}
+                  {getTitle(guide)}
                 </Text>
 
                 <Text style={styles.readTime}>
-                  🕐 {guide.read_time_min} minuto
+                  🕐 {guide.read_time_min} {language === 'fil' ? 'minuto' : 'min'}
                 </Text>
               </TouchableOpacity>
             ))}
@@ -81,7 +92,7 @@ export default function HomeScreen() {
       )}
 
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Mga Kategorya</Text>
+        <Text style={styles.sectionTitle}>{t.categories}</Text>
 
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
           {categories && categories.length > 0 ? (
@@ -92,19 +103,21 @@ export default function HomeScreen() {
               >
                 <Text style={styles.categoryIcon}>{cat.icon}</Text>
                 <Text style={[styles.categoryLabel, { color: cat.color }]}>
-                  {cat.name_fil}
+                  {getCategoryName(cat)}
                 </Text>
               </View>
             ))
           ) : (
-            <Text style={styles.emptyText}>Wala pang categories.</Text>
+            <Text style={styles.emptyText}>
+              {language === 'fil' ? 'Wala pang categories.' : 'No categories yet.'}
+            </Text>
           )}
         </ScrollView>
       </View>
 
       {urgent && urgent.length > 0 && (
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>🚨 Scam Alerts</Text>
+          <Text style={styles.sectionTitle}>🚨 {t.scamAlerts}</Text>
 
           {urgent.map((guide) => (
             <TouchableOpacity
@@ -114,12 +127,14 @@ export default function HomeScreen() {
               onPress={() => openGuide(guide.id)}
             >
               <Text style={styles.urgentBadge}>URGENT</Text>
-              <Text style={styles.cardTitle}>{guide.title_fil}</Text>
-              <Text style={styles.cardTagline}>{guide.tagline_fil}</Text>
+              <Text style={styles.cardTitle}>{getTitle(guide)}</Text>
+              <Text style={styles.cardTagline}>{getTagline(guide)}</Text>
 
               <View style={styles.cardFooter}>
-                <Text style={styles.readTime}>🕐 {guide.read_time_min} minuto</Text>
-                <Text style={styles.openText}>Buksan →</Text>
+                <Text style={styles.readTime}>
+                  🕐 {guide.read_time_min} {language === 'fil' ? 'minuto' : 'min'}
+                </Text>
+                <Text style={styles.openText}>{t.open}</Text>
               </View>
             </TouchableOpacity>
           ))}
@@ -128,7 +143,7 @@ export default function HomeScreen() {
 
       {featured && featured.length > 0 && (
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>⭐ Featured</Text>
+          <Text style={styles.sectionTitle}>⭐ {t.featured}</Text>
 
           {featured.map((guide) => (
             <TouchableOpacity
@@ -138,15 +153,17 @@ export default function HomeScreen() {
               onPress={() => openGuide(guide.id)}
             >
               <Text style={styles.cardCategory}>
-                {guide.category?.icon} {guide.category?.name_fil}
+                {guide.category?.icon} {guide.category ? getCategoryName(guide.category) : ''}
               </Text>
 
-              <Text style={styles.cardTitle}>{guide.title_fil}</Text>
-              <Text style={styles.cardTagline}>{guide.tagline_fil}</Text>
+              <Text style={styles.cardTitle}>{getTitle(guide)}</Text>
+              <Text style={styles.cardTagline}>{getTagline(guide)}</Text>
 
               <View style={styles.cardFooter}>
-                <Text style={styles.readTime}>🕐 {guide.read_time_min} minuto</Text>
-                <Text style={styles.openText}>Buksan →</Text>
+                <Text style={styles.readTime}>
+                  🕐 {guide.read_time_min} {language === 'fil' ? 'minuto' : 'min'}
+                </Text>
+                <Text style={styles.openText}>{t.open}</Text>
               </View>
             </TouchableOpacity>
           ))}
@@ -154,10 +171,10 @@ export default function HomeScreen() {
       )}
 
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>📚 Lahat ng Guides</Text>
+        <Text style={styles.sectionTitle}>📚 {t.allGuides}</Text>
 
         {isLoading ? (
-          <Text style={styles.loadingText}>Naglo-load...</Text>
+          <Text style={styles.loadingText}>{t.loading}</Text>
         ) : guides && guides.length > 0 ? (
           guides.map((guide) => (
             <TouchableOpacity
@@ -167,20 +184,24 @@ export default function HomeScreen() {
               onPress={() => openGuide(guide.id)}
             >
               <Text style={styles.cardCategory}>
-                {guide.category?.icon} {guide.category?.name_fil}
+                {guide.category?.icon} {guide.category ? getCategoryName(guide.category) : ''}
               </Text>
 
-              <Text style={styles.cardTitle}>{guide.title_fil}</Text>
-              <Text style={styles.cardTagline}>{guide.tagline_fil}</Text>
+              <Text style={styles.cardTitle}>{getTitle(guide)}</Text>
+              <Text style={styles.cardTagline}>{getTagline(guide)}</Text>
 
               <View style={styles.cardFooter}>
-                <Text style={styles.readTime}>🕐 {guide.read_time_min} minuto</Text>
-                <Text style={styles.openText}>Buksan →</Text>
+                <Text style={styles.readTime}>
+                  🕐 {guide.read_time_min} {language === 'fil' ? 'minuto' : 'min'}
+                </Text>
+                <Text style={styles.openText}>{t.open}</Text>
               </View>
             </TouchableOpacity>
           ))
         ) : (
-          <Text style={styles.emptyText}>Wala pang guides na available.</Text>
+          <Text style={styles.emptyText}>
+            {language === 'fil' ? 'Wala pang guides na available.' : 'No guides available yet.'}
+          </Text>
         )}
       </View>
     </ScrollView>
@@ -194,7 +215,7 @@ const styles = StyleSheet.create({
   },
 
   content: {
-    paddingBottom: spacing.xxl,
+    paddingBottom: 140,
   },
 
   header: {
@@ -230,7 +251,6 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     padding: spacing.md,
     marginRight: spacing.md,
-
     elevation: 3,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
@@ -274,7 +294,6 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     padding: spacing.md,
     marginBottom: spacing.md,
-
     elevation: 3,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },

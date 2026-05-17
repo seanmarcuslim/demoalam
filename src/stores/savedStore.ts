@@ -9,6 +9,7 @@ interface SavedStore {
   save: (guide: Guide) => void
   unsave: (id: string) => void
   isSaved: (id: string) => boolean
+  toggleSave: (guide: Guide) => void
 }
 
 export const useSavedStore = create<SavedStore>()(
@@ -17,20 +18,42 @@ export const useSavedStore = create<SavedStore>()(
       savedIds: [],
       cachedGuides: {},
 
-      save: (guide: Guide) => set((state) => ({
-        savedIds: [...state.savedIds, guide.id],
-        cachedGuides: { ...state.cachedGuides, [guide.id]: guide },
-      })),
+      save: (guide: Guide) =>
+        set((state) => {
+          const alreadySaved = state.savedIds.includes(guide.id)
 
-      unsave: (id: string) => set((state) => {
-        const { [id]: _, ...rest } = state.cachedGuides
-        return {
-          savedIds: state.savedIds.filter((savedId) => savedId !== id),
-          cachedGuides: rest,
-        }
-      }),
+          return {
+            savedIds: alreadySaved
+              ? state.savedIds
+              : [...state.savedIds, guide.id],
+            cachedGuides: {
+              ...state.cachedGuides,
+              [guide.id]: guide,
+            },
+          }
+        }),
+
+      unsave: (id: string) =>
+        set((state) => {
+          const { [id]: _, ...rest } = state.cachedGuides
+
+          return {
+            savedIds: state.savedIds.filter((savedId) => savedId !== id),
+            cachedGuides: rest,
+          }
+        }),
 
       isSaved: (id: string) => get().savedIds.includes(id),
+
+      toggleSave: (guide: Guide) => {
+        const saved = get().isSaved(guide.id)
+
+        if (saved) {
+          get().unsave(guide.id)
+        } else {
+          get().save(guide)
+        }
+      },
     }),
     {
       name: 'saved-guides',

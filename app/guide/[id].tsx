@@ -4,9 +4,11 @@ import {
   ScrollView,
   StyleSheet,
   ActivityIndicator,
+  TouchableOpacity,
 } from 'react-native'
 import { useLocalSearchParams } from 'expo-router'
 import { useGuide } from '../../src/hooks/useGuides'
+import { useSavedStore } from '../../src/stores/savedStore'
 import { colors } from '../../src/theme/colors'
 import { spacing } from '../../src/theme/spacing'
 import { typography } from '../../src/theme/typography'
@@ -17,6 +19,11 @@ export default function GuideDetailsScreen() {
   const guideId = Array.isArray(id) ? id[0] : id
 
   const { data: guide, isLoading, error } = useGuide(guideId)
+
+  const toggleSave = useSavedStore((state) => state.toggleSave)
+  const isSaved = useSavedStore((state) =>
+    guide ? state.isSaved(guide.id) : false
+  )
 
   if (isLoading) {
     return (
@@ -69,6 +76,20 @@ export default function GuideDetailsScreen() {
             </Text>
           )}
         </View>
+
+        {/* Save Button */}
+        <TouchableOpacity
+          activeOpacity={0.85}
+          style={[
+            styles.saveButton,
+            isSaved && styles.savedButton,
+          ]}
+          onPress={() => toggleSave(guide)}
+        >
+          <Text style={styles.saveButtonText}>
+            {isSaved ? '⭐ Saved' : '🤍 Save Guide'}
+          </Text>
+        </TouchableOpacity>
       </View>
 
       {/* Sections */}
@@ -174,6 +195,24 @@ const styles = StyleSheet.create({
   urgentBadge: {
     ...typography.caption,
     color: '#ffdddd',
+    fontWeight: '700',
+  },
+
+  saveButton: {
+    marginTop: spacing.lg,
+    backgroundColor: 'rgba(255,255,255,0.15)',
+    paddingVertical: spacing.md,
+    borderRadius: 14,
+    alignItems: 'center',
+  },
+
+  savedButton: {
+    backgroundColor: 'rgba(255,255,255,0.25)',
+  },
+
+  saveButtonText: {
+    ...typography.body,
+    color: colors.surface,
     fontWeight: '700',
   },
 

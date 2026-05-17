@@ -1,4 +1,4 @@
-import { View, Text, FlatList, StyleSheet, RefreshControl, ScrollView } from 'react-native'
+import { View, Text, StyleSheet, RefreshControl, ScrollView } from 'react-native'
 import { useGuides, useFeaturedGuides, useUrgentGuides } from '../../src/hooks/useGuides'
 import { useCategories } from '../../src/hooks/useCategories'
 import { colors } from '../../src/theme/colors'
@@ -14,6 +14,7 @@ export default function HomeScreen() {
   return (
     <ScrollView
       style={styles.container}
+      contentContainerStyle={styles.content}
       refreshControl={
         <RefreshControl
           refreshing={isRefetching}
@@ -22,26 +23,32 @@ export default function HomeScreen() {
         />
       }
     >
-      {/* Header */}
       <View style={styles.header}>
         <Text style={styles.logo}>DemoAlam 💡</Text>
         <Text style={styles.tagline}>Ano ang hindi mo pa alam?</Text>
       </View>
 
-      {/* Categories Row */}
-      <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.categoryRow}>
-        {categories?.map((cat) => (
-          <View key={cat.id} style={[styles.categoryChip, { backgroundColor: cat.color + '20' }]}>
-            <Text style={styles.categoryIcon}>{cat.icon}</Text>
-            <Text style={[styles.categoryLabel, { color: cat.color }]}>{cat.name_fil}</Text>
-          </View>
-        ))}
-      </ScrollView>
+      <View style={styles.section}>
+        <Text style={styles.sectionTitle}>Mga Kategorya</Text>
 
-      {/* Urgent/Scam Alerts */}
+        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+          {categories && categories.length > 0 ? (
+            categories.map((cat) => (
+              <View key={cat.id} style={[styles.categoryChip, { backgroundColor: cat.color + '20' }]}>
+                <Text style={styles.categoryIcon}>{cat.icon}</Text>
+                <Text style={[styles.categoryLabel, { color: cat.color }]}>{cat.name_fil}</Text>
+              </View>
+            ))
+          ) : (
+            <Text style={styles.emptyText}>Wala pang categories.</Text>
+          )}
+        </ScrollView>
+      </View>
+
       {urgent && urgent.length > 0 && (
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>🚨 Scam Alerts</Text>
+
           {urgent.map((guide) => (
             <View key={guide.id} style={[styles.card, styles.urgentCard]}>
               <Text style={styles.urgentBadge}>URGENT</Text>
@@ -53,13 +60,15 @@ export default function HomeScreen() {
         </View>
       )}
 
-      {/* Featured */}
       {featured && featured.length > 0 && (
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>⭐ Featured</Text>
+
           {featured.map((guide) => (
             <View key={guide.id} style={styles.card}>
-              <Text style={styles.cardCategory}>{guide.category?.icon} {guide.category?.name_fil}</Text>
+              <Text style={styles.cardCategory}>
+                {guide.category?.icon} {guide.category?.name_fil}
+              </Text>
               <Text style={styles.cardTitle}>{guide.title_fil}</Text>
               <Text style={styles.cardTagline}>{guide.tagline_fil}</Text>
               <Text style={styles.readTime}>🕐 {guide.read_time_min} minuto</Text>
@@ -68,20 +77,24 @@ export default function HomeScreen() {
         </View>
       )}
 
-      {/* All Guides */}
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>📚 Lahat ng Guides</Text>
+
         {isLoading ? (
           <Text style={styles.loadingText}>Naglo-load...</Text>
-        ) : (
-          guides?.map((guide) => (
+        ) : guides && guides.length > 0 ? (
+          guides.map((guide) => (
             <View key={guide.id} style={styles.card}>
-              <Text style={styles.cardCategory}>{guide.category?.icon} {guide.category?.name_fil}</Text>
+              <Text style={styles.cardCategory}>
+                {guide.category?.icon} {guide.category?.name_fil}
+              </Text>
               <Text style={styles.cardTitle}>{guide.title_fil}</Text>
               <Text style={styles.cardTagline}>{guide.tagline_fil}</Text>
               <Text style={styles.readTime}>🕐 {guide.read_time_min} minuto</Text>
             </View>
           ))
+        ) : (
+          <Text style={styles.emptyText}>Wala pang guides na available.</Text>
         )}
       </View>
     </ScrollView>
@@ -92,6 +105,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.background,
+  },
+  content: {
+    paddingBottom: spacing.xxl,
   },
   header: {
     backgroundColor: colors.primary,
@@ -107,10 +123,13 @@ const styles = StyleSheet.create({
     color: colors.primaryLight,
     marginTop: spacing.xs,
   },
-  categoryRow: {
-    paddingVertical: spacing.sm,
-    paddingHorizontal: spacing.md,
-    backgroundColor: colors.surface,
+  section: {
+    padding: spacing.md,
+  },
+  sectionTitle: {
+    ...typography.h3,
+    color: colors.text,
+    marginBottom: spacing.md,
   },
   categoryChip: {
     flexDirection: 'row',
@@ -127,14 +146,6 @@ const styles = StyleSheet.create({
   categoryLabel: {
     ...typography.label,
     fontWeight: '600',
-  },
-  section: {
-    padding: spacing.md,
-  },
-  sectionTitle: {
-    ...typography.h3,
-    color: colors.text,
-    marginBottom: spacing.md,
   },
   card: {
     backgroundColor: colors.surface,
@@ -180,5 +191,10 @@ const styles = StyleSheet.create({
     color: colors.textMuted,
     textAlign: 'center',
     padding: spacing.lg,
+  },
+  emptyText: {
+    ...typography.body,
+    color: colors.textMuted,
+    paddingVertical: spacing.sm,
   },
 })

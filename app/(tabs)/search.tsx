@@ -9,7 +9,10 @@ export default function SearchScreen() {
   const { searchTerm, setSearchTerm, results, isLoading, hasResults } = useSearch()
 
   const openGuide = (id: string) => {
-    router.push(`/guide/${id}`)
+    router.push({
+      pathname: '/guide/[id]',
+      params: { id },
+    })
   }
 
   return (

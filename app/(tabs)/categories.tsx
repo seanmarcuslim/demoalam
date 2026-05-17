@@ -1,4 +1,5 @@
 import { View, Text, ScrollView, TouchableOpacity, StyleSheet } from 'react-native'
+import { router } from 'expo-router'
 import { useCategories } from '../../src/hooks/useCategories'
 import { colors } from '../../src/theme/colors'
 import { spacing } from '../../src/theme/spacing'
@@ -6,6 +7,13 @@ import { typography } from '../../src/theme/typography'
 
 export default function CategoriesScreen() {
   const { data: categories, isLoading } = useCategories()
+
+  const openCategory = (id: string, name: string) => {
+    router.push({
+      pathname: '/category/[id]',
+      params: { id, name },
+    })
+  }
 
   return (
     <ScrollView
@@ -28,6 +36,7 @@ export default function CategoriesScreen() {
             <TouchableOpacity
               activeOpacity={0.85}
               key={cat.id}
+              onPress={() => openCategory(cat.id, cat.name_fil)}
               style={[
                 styles.categoryCard,
                 {
@@ -52,6 +61,8 @@ export default function CategoriesScreen() {
               <Text style={styles.categoryNameEn}>
                 {cat.name_en}
               </Text>
+
+              <Text style={styles.openText}>Tingnan →</Text>
             </TouchableOpacity>
           ))}
         </View>
@@ -138,6 +149,13 @@ const styles = StyleSheet.create({
     color: colors.textMuted,
     textAlign: 'center',
     marginTop: spacing.xs,
+  },
+
+  openText: {
+    ...typography.caption,
+    color: colors.primary,
+    fontWeight: '700',
+    marginTop: spacing.sm,
   },
 
   loadingText: {

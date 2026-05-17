@@ -20,7 +20,10 @@ export default function HomeScreen() {
   const { data: categories } = useCategories()
 
   const openGuide = (id: string) => {
-    router.push(`/guide/${id}`)
+    router.push({
+      pathname: '/guide/[id]',
+      params: { id },
+    })
   }
 
   return (

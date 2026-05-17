@@ -23,9 +23,11 @@ function AppContent() {
       <StatusBar style="light" backgroundColor={colors.primary} />
 
       <Stack screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen name="index" />
+        <Stack.Screen name="(tabs)" />
         <Stack.Screen name="login" />
         <Stack.Screen name="register" />
+        <Stack.Screen name="onboarding" />
       </Stack>
     </>
   )

@@ -3,6 +3,7 @@ import { router } from 'expo-router'
 import { useSettingsStore } from '../../src/stores/settingsStore'
 import { useSavedStore } from '../../src/stores/savedStore'
 import { useSessionStore } from '../../src/stores/sessionStore'
+import { useOnboardingStore } from '../../src/stores/onboardingStore'
 import { useAuth } from '../../src/hooks/useAuth'
 import { colors } from '../../src/theme/colors'
 import { spacing } from '../../src/theme/spacing'
@@ -12,6 +13,7 @@ export default function ProfileScreen() {
   const { language, setLanguage } = useSettingsStore()
   const { savedIds } = useSavedStore()
   const { isGuest, email } = useSessionStore()
+  const { resetOnboarding } = useOnboardingStore()
   const { signOut, isLoading } = useAuth()
 
   const handleLogout = async () => {
@@ -21,6 +23,11 @@ export default function ProfileScreen() {
     } catch (error: any) {
       Alert.alert('Logout failed', error.message || 'Please try again.')
     }
+  }
+
+  const handleResetOnboarding = () => {
+    resetOnboarding()
+    router.replace('/onboarding')
   }
 
   return (
@@ -93,6 +100,14 @@ export default function ProfileScreen() {
             thumbColor={colors.surface}
           />
         </View>
+
+        <TouchableOpacity
+          activeOpacity={0.85}
+          style={styles.resetButton}
+          onPress={handleResetOnboarding}
+        >
+          <Text style={styles.resetButtonText}>Reset Onboarding</Text>
+        </TouchableOpacity>
       </View>
 
       <View style={styles.section}>
@@ -244,6 +259,22 @@ const styles = StyleSheet.create({
     ...typography.caption,
     color: colors.textMuted,
     marginTop: 2,
+  },
+
+  resetButton: {
+    backgroundColor: colors.surface,
+    borderRadius: 12,
+    padding: spacing.md,
+    alignItems: 'center',
+    marginTop: spacing.md,
+    borderWidth: 1,
+    borderColor: colors.border,
+  },
+
+  resetButtonText: {
+    ...typography.body,
+    color: colors.text,
+    fontWeight: '700',
   },
 
   aboutCard: {

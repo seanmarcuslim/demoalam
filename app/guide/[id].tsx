@@ -5,12 +5,14 @@ import {
   StyleSheet,
   ActivityIndicator,
   TouchableOpacity,
+  Alert,
 } from 'react-native'
 import { useEffect } from 'react'
-import { useLocalSearchParams } from 'expo-router'
+import { useLocalSearchParams, router } from 'expo-router'
 import { useGuide } from '../../src/hooks/useGuides'
 import { useSavedStore } from '../../src/stores/savedStore'
 import { useHistoryStore } from '../../src/stores/historyStore'
+import { useSessionStore } from '../../src/stores/sessionStore'
 import { colors } from '../../src/theme/colors'
 import { spacing } from '../../src/theme/spacing'
 import { typography } from '../../src/theme/typography'
@@ -22,12 +24,34 @@ export default function GuideDetailsScreen() {
 
   const { data: guide, isLoading, error } = useGuide(guideId)
 
+  const isGuest = useSessionStore((state) => state.isGuest)
   const toggleSave = useSavedStore((state) => state.toggleSave)
   const addToHistory = useHistoryStore((state) => state.addToHistory)
 
   const isSaved = useSavedStore((state) =>
     guide ? state.isSaved(guide.id) : false
   )
+
+  const handleSave = () => {
+    if (!guide) return
+
+    if (isGuest) {
+      Alert.alert(
+        'Login required',
+        'Please login first to save guides.',
+        [
+          { text: 'Cancel', style: 'cancel' },
+          {
+            text: 'Login',
+            onPress: () => router.push('/login'),
+          },
+        ]
+      )
+      return
+    }
+
+    toggleSave(guide)
+  }
 
   useEffect(() => {
     if (guide) {
@@ -48,9 +72,7 @@ export default function GuideDetailsScreen() {
     return (
       <View style={styles.centered}>
         <Text style={styles.errorTitle}>May problema 😕</Text>
-        <Text style={styles.errorText}>
-          Hindi ma-load ang guide.
-        </Text>
+        <Text style={styles.errorText}>Hindi ma-load ang guide.</Text>
       </View>
     )
   }
@@ -71,27 +93,20 @@ export default function GuideDetailsScreen() {
         <Text style={styles.tagline}>{guide.tagline_fil}</Text>
 
         <View style={styles.metaRow}>
-          <Text style={styles.meta}>
-            🕐 {guide.read_time_min} minuto
-          </Text>
+          <Text style={styles.meta}>🕐 {guide.read_time_min} minuto</Text>
 
           {guide.is_urgent && (
-            <Text style={styles.urgentBadge}>
-              🚨 URGENT
-            </Text>
+            <Text style={styles.urgentBadge}>🚨 URGENT</Text>
           )}
         </View>
 
         <TouchableOpacity
           activeOpacity={0.85}
-          style={[
-            styles.saveButton,
-            isSaved && styles.savedButton,
-          ]}
-          onPress={() => toggleSave(guide)}
+          style={[styles.saveButton, isSaved && styles.savedButton]}
+          onPress={handleSave}
         >
           <Text style={styles.saveButtonText}>
-            {isSaved ? '⭐ Saved' : '🤍 Save Guide'}
+            {isSaved ? '⭐ Saved' : isGuest ? '🔒 Login to Save' : '🤍 Save Guide'}
           </Text>
         </TouchableOpacity>
       </View>

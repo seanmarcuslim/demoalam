@@ -1,4 +1,12 @@
-import { View, Text, StyleSheet, RefreshControl, ScrollView } from 'react-native'
+import {
+  View,
+  Text,
+  StyleSheet,
+  RefreshControl,
+  ScrollView,
+  TouchableOpacity,
+} from 'react-native'
+import { router } from 'expo-router'
 import { useGuides, useFeaturedGuides, useUrgentGuides } from '../../src/hooks/useGuides'
 import { useCategories } from '../../src/hooks/useCategories'
 import { colors } from '../../src/theme/colors'
@@ -10,6 +18,10 @@ export default function HomeScreen() {
   const { data: featured } = useFeaturedGuides()
   const { data: urgent } = useUrgentGuides()
   const { data: categories } = useCategories()
+
+  const openGuide = (id: string) => {
+    router.push(`/guide/${id}`)
+  }
 
   return (
     <ScrollView
@@ -34,9 +46,14 @@ export default function HomeScreen() {
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
           {categories && categories.length > 0 ? (
             categories.map((cat) => (
-              <View key={cat.id} style={[styles.categoryChip, { backgroundColor: cat.color + '20' }]}>
+              <View
+                key={cat.id}
+                style={[styles.categoryChip, { backgroundColor: cat.color + '20' }]}
+              >
                 <Text style={styles.categoryIcon}>{cat.icon}</Text>
-                <Text style={[styles.categoryLabel, { color: cat.color }]}>{cat.name_fil}</Text>
+                <Text style={[styles.categoryLabel, { color: cat.color }]}>
+                  {cat.name_fil}
+                </Text>
               </View>
             ))
           ) : (
@@ -50,12 +67,20 @@ export default function HomeScreen() {
           <Text style={styles.sectionTitle}>🚨 Scam Alerts</Text>
 
           {urgent.map((guide) => (
-            <View key={guide.id} style={[styles.card, styles.urgentCard]}>
+            <TouchableOpacity
+              key={guide.id}
+              style={[styles.card, styles.urgentCard]}
+              activeOpacity={0.85}
+              onPress={() => openGuide(guide.id)}
+            >
               <Text style={styles.urgentBadge}>URGENT</Text>
               <Text style={styles.cardTitle}>{guide.title_fil}</Text>
               <Text style={styles.cardTagline}>{guide.tagline_fil}</Text>
-              <Text style={styles.readTime}>🕐 {guide.read_time_min} minuto</Text>
-            </View>
+              <View style={styles.cardFooter}>
+                <Text style={styles.readTime}>🕐 {guide.read_time_min} minuto</Text>
+                <Text style={styles.openText}>Buksan →</Text>
+              </View>
+            </TouchableOpacity>
           ))}
         </View>
       )}
@@ -65,14 +90,22 @@ export default function HomeScreen() {
           <Text style={styles.sectionTitle}>⭐ Featured</Text>
 
           {featured.map((guide) => (
-            <View key={guide.id} style={styles.card}>
+            <TouchableOpacity
+              key={guide.id}
+              style={styles.card}
+              activeOpacity={0.85}
+              onPress={() => openGuide(guide.id)}
+            >
               <Text style={styles.cardCategory}>
                 {guide.category?.icon} {guide.category?.name_fil}
               </Text>
               <Text style={styles.cardTitle}>{guide.title_fil}</Text>
               <Text style={styles.cardTagline}>{guide.tagline_fil}</Text>
-              <Text style={styles.readTime}>🕐 {guide.read_time_min} minuto</Text>
-            </View>
+              <View style={styles.cardFooter}>
+                <Text style={styles.readTime}>🕐 {guide.read_time_min} minuto</Text>
+                <Text style={styles.openText}>Buksan →</Text>
+              </View>
+            </TouchableOpacity>
           ))}
         </View>
       )}
@@ -84,14 +117,22 @@ export default function HomeScreen() {
           <Text style={styles.loadingText}>Naglo-load...</Text>
         ) : guides && guides.length > 0 ? (
           guides.map((guide) => (
-            <View key={guide.id} style={styles.card}>
+            <TouchableOpacity
+              key={guide.id}
+              style={styles.card}
+              activeOpacity={0.85}
+              onPress={() => openGuide(guide.id)}
+            >
               <Text style={styles.cardCategory}>
                 {guide.category?.icon} {guide.category?.name_fil}
               </Text>
               <Text style={styles.cardTitle}>{guide.title_fil}</Text>
               <Text style={styles.cardTagline}>{guide.tagline_fil}</Text>
-              <Text style={styles.readTime}>🕐 {guide.read_time_min} minuto</Text>
-            </View>
+              <View style={styles.cardFooter}>
+                <Text style={styles.readTime}>🕐 {guide.read_time_min} minuto</Text>
+                <Text style={styles.openText}>Buksan →</Text>
+              </View>
+            </TouchableOpacity>
           ))
         ) : (
           <Text style={styles.emptyText}>Wala pang guides na available.</Text>
@@ -182,9 +223,19 @@ const styles = StyleSheet.create({
     color: colors.textMuted,
     marginBottom: spacing.sm,
   },
+  cardFooter: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
   readTime: {
     ...typography.caption,
     color: colors.textLight,
+  },
+  openText: {
+    ...typography.caption,
+    color: colors.primary,
+    fontWeight: '700',
   },
   loadingText: {
     ...typography.body,

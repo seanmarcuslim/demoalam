@@ -9,26 +9,28 @@ export default function SearchScreen() {
 
   return (
     <View style={styles.container}>
-      {/* Header */}
       <View style={styles.header}>
         <Text style={styles.title}>Maghanap 🔍</Text>
+        <Text style={styles.subtitle}>Hanapin ang guide na kailangan mo</Text>
+
         <TextInput
           style={styles.searchBar}
-          placeholder="Hanapin ang guide..."
+          placeholder="Halimbawa: valid ID, bank, scam..."
           placeholderTextColor={colors.textLight}
           value={searchTerm}
           onChangeText={setSearchTerm}
           autoCorrect={false}
+          autoCapitalize="none"
+          returnKeyType="search"
         />
       </View>
 
-      {/* Results */}
-      {searchTerm.length === 0 ? (
+      {searchTerm.trim().length === 0 ? (
         <View style={styles.emptyState}>
-          <Text style={styles.emptyIcon}>🔍</Text>
+          <Text style={styles.emptyIcon}>🔎</Text>
           <Text style={styles.emptyTitle}>Ano ang hinahanap mo?</Text>
           <Text style={styles.emptySubtitle}>
-            Halimbawa: "valid ID", "bank account", "scam"
+            Subukan maghanap ng guide tungkol sa IDs, pera, trabaho, school, o scam alerts.
           </Text>
         </View>
       ) : isLoading ? (
@@ -37,23 +39,27 @@ export default function SearchScreen() {
         <View style={styles.emptyState}>
           <Text style={styles.emptyIcon}>😕</Text>
           <Text style={styles.emptyTitle}>Walang resulta</Text>
-          <Text style={styles.emptySubtitle}>
-            Subukan ang ibang salita
-          </Text>
+          <Text style={styles.emptySubtitle}>Subukan ang ibang salita.</Text>
         </View>
       ) : (
         <FlatList
           data={results}
           keyExtractor={(item) => item.id}
           contentContainerStyle={styles.resultsList}
+          keyboardShouldPersistTaps="handled"
           renderItem={({ item }) => (
-            <TouchableOpacity style={styles.resultCard}>
+            <TouchableOpacity activeOpacity={0.85} style={styles.resultCard}>
               <Text style={styles.resultCategory}>
                 {item.category?.icon} {item.category?.name_fil}
               </Text>
+
               <Text style={styles.resultTitle}>{item.title_fil}</Text>
               <Text style={styles.resultTagline}>{item.tagline_fil}</Text>
-              <Text style={styles.readTime}>🕐 {item.read_time_min} minuto</Text>
+
+              <View style={styles.cardFooter}>
+                <Text style={styles.readTime}>🕐 {item.read_time_min} minuto</Text>
+                <Text style={styles.openText}>Buksan →</Text>
+              </View>
             </TouchableOpacity>
           )}
         />
@@ -71,16 +77,24 @@ const styles = StyleSheet.create({
     backgroundColor: colors.primary,
     padding: spacing.lg,
     paddingTop: spacing.xxl,
+    borderBottomLeftRadius: 24,
+    borderBottomRightRadius: 24,
   },
   title: {
     ...typography.h1,
     color: colors.surface,
+  },
+  subtitle: {
+    ...typography.body,
+    color: colors.primaryLight,
+    marginTop: spacing.xs,
     marginBottom: spacing.md,
   },
   searchBar: {
     backgroundColor: colors.surface,
-    borderRadius: 12,
-    padding: spacing.md,
+    borderRadius: 16,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.md,
     ...typography.body,
     color: colors.text,
   },
@@ -91,7 +105,7 @@ const styles = StyleSheet.create({
     padding: spacing.xl,
   },
   emptyIcon: {
-    fontSize: 48,
+    fontSize: 52,
     marginBottom: spacing.md,
   },
   emptyTitle: {
@@ -104,19 +118,21 @@ const styles = StyleSheet.create({
     ...typography.body,
     color: colors.textMuted,
     textAlign: 'center',
+    lineHeight: 22,
   },
   loadingText: {
     ...typography.body,
     color: colors.textMuted,
     textAlign: 'center',
-    padding: spacing.lg,
+    padding: spacing.xl,
   },
   resultsList: {
     padding: spacing.md,
+    paddingBottom: spacing.xxl,
   },
   resultCard: {
     backgroundColor: colors.surface,
-    borderRadius: 12,
+    borderRadius: 16,
     padding: spacing.md,
     marginBottom: spacing.md,
     elevation: 3,
@@ -138,10 +154,20 @@ const styles = StyleSheet.create({
   resultTagline: {
     ...typography.body,
     color: colors.textMuted,
-    marginBottom: spacing.sm,
+    marginBottom: spacing.md,
+  },
+  cardFooter: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   readTime: {
     ...typography.caption,
     color: colors.textLight,
+  },
+  openText: {
+    ...typography.caption,
+    color: colors.primary,
+    fontWeight: '700',
   },
 })

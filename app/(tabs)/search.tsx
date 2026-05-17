@@ -1,4 +1,5 @@
 import { View, Text, TextInput, FlatList, StyleSheet, TouchableOpacity } from 'react-native'
+import { router } from 'expo-router'
 import { useSearch } from '../../src/hooks/useSearch'
 import { colors } from '../../src/theme/colors'
 import { spacing } from '../../src/theme/spacing'
@@ -6,6 +7,10 @@ import { typography } from '../../src/theme/typography'
 
 export default function SearchScreen() {
   const { searchTerm, setSearchTerm, results, isLoading, hasResults } = useSearch()
+
+  const openGuide = (id: string) => {
+    router.push(`/guide/${id}`)
+  }
 
   return (
     <View style={styles.container}>
@@ -48,7 +53,11 @@ export default function SearchScreen() {
           contentContainerStyle={styles.resultsList}
           keyboardShouldPersistTaps="handled"
           renderItem={({ item }) => (
-            <TouchableOpacity activeOpacity={0.85} style={styles.resultCard}>
+            <TouchableOpacity
+              activeOpacity={0.85}
+              style={styles.resultCard}
+              onPress={() => openGuide(item.id)}
+            >
               <Text style={styles.resultCategory}>
                 {item.category?.icon} {item.category?.name_fil}
               </Text>

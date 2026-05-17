@@ -5,7 +5,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 interface SessionStore {
   isGuest: boolean
   userId: string | null
-  setUser: (userId: string) => void
+  email: string | null
+  setUser: (userId: string, email?: string | null) => void
   clearUser: () => void
 }
 
@@ -14,9 +15,21 @@ export const useSessionStore = create<SessionStore>()(
     (set) => ({
       isGuest: true,
       userId: null,
+      email: null,
 
-      setUser: (userId) => set({ userId, isGuest: false }),
-      clearUser: () => set({ userId: null, isGuest: true }),
+      setUser: (userId, email = null) =>
+        set({
+          userId,
+          email,
+          isGuest: false,
+        }),
+
+      clearUser: () =>
+        set({
+          userId: null,
+          email: null,
+          isGuest: true,
+        }),
     }),
     {
       name: 'app-session',

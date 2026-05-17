@@ -55,6 +55,7 @@ export default function SearchScreen() {
           keyExtractor={(item) => item.id}
           contentContainerStyle={styles.resultsList}
           keyboardShouldPersistTaps="handled"
+          showsVerticalScrollIndicator={false}
           renderItem={({ item }) => (
             <TouchableOpacity
               activeOpacity={0.85}
@@ -115,6 +116,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     padding: spacing.xl,
+    paddingBottom: 140,
   },
   emptyIcon: {
     fontSize: 52,
@@ -137,10 +139,11 @@ const styles = StyleSheet.create({
     color: colors.textMuted,
     textAlign: 'center',
     padding: spacing.xl,
+    paddingBottom: 140,
   },
   resultsList: {
     padding: spacing.md,
-    paddingBottom: spacing.xxl,
+    paddingBottom: 140,
   },
   resultCard: {
     backgroundColor: colors.surface,

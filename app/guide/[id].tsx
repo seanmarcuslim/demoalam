@@ -143,7 +143,7 @@ const styles = StyleSheet.create({
   },
 
   content: {
-    paddingBottom: spacing.xxl,
+    paddingBottom: 140,
   },
 
   centered: {

@@ -27,7 +27,6 @@ export default function SavedScreen() {
 
   return (
     <View style={styles.container}>
-      {/* Header */}
       <View style={styles.header}>
         <Text style={styles.title}>Na-save Mo 🔖</Text>
 
@@ -36,7 +35,6 @@ export default function SavedScreen() {
         </Text>
       </View>
 
-      {/* Empty State */}
       {savedGuides.length === 0 ? (
         <View style={styles.emptyState}>
           <Text style={styles.emptyIcon}>🔖</Text>
@@ -124,6 +122,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     padding: spacing.xl,
+    paddingBottom: 140,
   },
 
   emptyIcon: {
@@ -147,7 +146,7 @@ const styles = StyleSheet.create({
 
   list: {
     padding: spacing.md,
-    paddingBottom: spacing.xxl,
+    paddingBottom: 140,
   },
 
   card: {

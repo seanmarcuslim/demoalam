@@ -1,4 +1,12 @@
-import { View, Text, StyleSheet, TouchableOpacity, Switch, Alert } from 'react-native'
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Switch,
+  Alert,
+  ScrollView,
+} from 'react-native'
 import { router } from 'expo-router'
 import { useSettingsStore } from '../../src/stores/settingsStore'
 import { useSavedStore } from '../../src/stores/savedStore'
@@ -31,10 +39,18 @@ export default function ProfileScreen() {
   }
 
   return (
-    <View style={styles.container}>
+    <ScrollView
+      style={styles.container}
+      contentContainerStyle={styles.content}
+      showsVerticalScrollIndicator={false}
+    >
       <View style={styles.header}>
         <Text style={styles.avatar}>{isGuest ? '👤' : '✅'}</Text>
-        <Text style={styles.title}>{isGuest ? 'Guest User' : 'Logged In'}</Text>
+
+        <Text style={styles.title}>
+          {isGuest ? 'Guest User' : 'Logged In'}
+        </Text>
+
         <Text style={styles.subtitle}>
           {isGuest ? 'Nagba-browse bilang bisita' : email}
         </Text>
@@ -65,7 +81,9 @@ export default function ProfileScreen() {
               style={styles.secondaryButton}
               onPress={() => router.push('/register')}
             >
-              <Text style={styles.secondaryButtonText}>Create Account</Text>
+              <Text style={styles.secondaryButtonText}>
+                Create Account
+              </Text>
             </TouchableOpacity>
           </View>
         ) : (
@@ -88,6 +106,7 @@ export default function ProfileScreen() {
         <View style={styles.settingRow}>
           <View>
             <Text style={styles.settingLabel}>Wika</Text>
+
             <Text style={styles.settingSubtitle}>
               {language === 'fil' ? 'Filipino' : 'English'}
             </Text>
@@ -96,7 +115,10 @@ export default function ProfileScreen() {
           <Switch
             value={language === 'fil'}
             onValueChange={(val) => setLanguage(val ? 'fil' : 'en')}
-            trackColor={{ false: colors.border, true: colors.primary }}
+            trackColor={{
+              false: colors.border,
+              true: colors.primary,
+            }}
             thumbColor={colors.surface}
           />
         </View>
@@ -106,7 +128,9 @@ export default function ProfileScreen() {
           style={styles.resetButton}
           onPress={handleResetOnboarding}
         >
-          <Text style={styles.resetButtonText}>Reset Onboarding</Text>
+          <Text style={styles.resetButtonText}>
+            Reset Onboarding
+          </Text>
         </TouchableOpacity>
       </View>
 
@@ -115,13 +139,17 @@ export default function ProfileScreen() {
 
         <View style={styles.aboutCard}>
           <Text style={styles.appName}>DemoAlam 💡</Text>
+
           <Text style={styles.appTagline}>
             "Sayang, ngayon ko lang nalaman."
           </Text>
-          <Text style={styles.appVersion}>Version 1.0.0</Text>
+
+          <Text style={styles.appVersion}>
+            Version 1.0.0
+          </Text>
         </View>
       </View>
-    </View>
+    </ScrollView>
   )
 }
 
@@ -129,6 +157,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.background,
+  },
+
+  content: {
+    paddingBottom: 140,
   },
 
   header: {

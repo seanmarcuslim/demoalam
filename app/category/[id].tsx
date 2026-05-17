@@ -11,7 +11,7 @@ import { useLocalSearchParams, router } from 'expo-router'
 import { useGuides } from '../../src/hooks/useGuides'
 import { useSettingsStore } from '../../src/stores/settingsStore'
 import { translations } from '../../src/utils/translations'
-import { colors } from '../../src/theme/colors'
+import { useTheme } from '../../src/hooks/useTheme'
 import { spacing } from '../../src/theme/spacing'
 import { typography } from '../../src/theme/typography'
 
@@ -29,6 +29,7 @@ export default function CategoryDetailsScreen() {
   } = useGuides(categoryId)
 
   const { language } = useSettingsStore()
+  const { colors } = useTheme()
 
   const t = translations[language]
 
@@ -48,10 +49,15 @@ export default function CategoryDetailsScreen() {
   const getCategoryName = (item: any) =>
     language === 'fil' ? item.name_fil : item.name_en
 
+  const styles = createStyles(colors)
+
   if (isLoading) {
     return (
       <View style={styles.centered}>
-        <ActivityIndicator size="large" color={colors.primary} />
+        <ActivityIndicator
+          size="large"
+          color={colors.primary}
+        />
 
         <Text style={styles.loadingText}>
           {t.loading}
@@ -168,138 +174,139 @@ export default function CategoryDetailsScreen() {
   )
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: colors.background,
-  },
+const createStyles = (colors: any) =>
+  StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: colors.background,
+    },
 
-  content: {
-    paddingBottom: 140,
-  },
+    content: {
+      paddingBottom: 140,
+    },
 
-  centered: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: colors.background,
-    padding: spacing.xl,
-  },
+    centered: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: colors.background,
+      padding: spacing.xl,
+    },
 
-  loadingText: {
-    ...typography.body,
-    color: colors.textMuted,
-    marginTop: spacing.md,
-  },
+    loadingText: {
+      ...typography.body,
+      color: colors.textMuted,
+      marginTop: spacing.md,
+    },
 
-  header: {
-    backgroundColor: colors.primary,
-    padding: spacing.lg,
-    paddingTop: spacing.xxl,
-    borderBottomLeftRadius: 24,
-    borderBottomRightRadius: 24,
-  },
+    header: {
+      backgroundColor: colors.primary,
+      padding: spacing.lg,
+      paddingTop: spacing.xxl,
+      borderBottomLeftRadius: 24,
+      borderBottomRightRadius: 24,
+    },
 
-  backText: {
-    ...typography.caption,
-    color: colors.primaryLight,
-    marginBottom: spacing.md,
-    fontWeight: '700',
-  },
+    backText: {
+      ...typography.caption,
+      color: colors.primaryLight,
+      marginBottom: spacing.md,
+      fontWeight: '700',
+    },
 
-  title: {
-    ...typography.h1,
-    color: colors.surface,
-  },
+    title: {
+      ...typography.h1,
+      color: colors.surface,
+    },
 
-  subtitle: {
-    ...typography.body,
-    color: colors.primaryLight,
-    marginTop: spacing.xs,
-  },
+    subtitle: {
+      ...typography.body,
+      color: colors.primaryLight,
+      marginTop: spacing.xs,
+    },
 
-  guidesContainer: {
-    padding: spacing.md,
-  },
+    guidesContainer: {
+      padding: spacing.md,
+    },
 
-  countText: {
-    ...typography.caption,
-    color: colors.textMuted,
-    marginBottom: spacing.md,
-  },
+    countText: {
+      ...typography.caption,
+      color: colors.textMuted,
+      marginBottom: spacing.md,
+    },
 
-  card: {
-    backgroundColor: colors.surface,
-    borderRadius: 16,
-    padding: spacing.md,
-    marginBottom: spacing.md,
+    card: {
+      backgroundColor: colors.surface,
+      borderRadius: 16,
+      padding: spacing.md,
+      marginBottom: spacing.md,
 
-    elevation: 3,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.08,
-    shadowRadius: 4,
-  },
+      elevation: 3,
+      shadowColor: colors.shadow,
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.08,
+      shadowRadius: 4,
+    },
 
-  cardCategory: {
-    ...typography.caption,
-    color: colors.textMuted,
-    marginBottom: spacing.xs,
-  },
+    cardCategory: {
+      ...typography.caption,
+      color: colors.textMuted,
+      marginBottom: spacing.xs,
+    },
 
-  cardTitle: {
-    ...typography.h3,
-    color: colors.text,
-    marginBottom: spacing.xs,
-  },
+    cardTitle: {
+      ...typography.h3,
+      color: colors.text,
+      marginBottom: spacing.xs,
+    },
 
-  cardTagline: {
-    ...typography.body,
-    color: colors.textMuted,
-    marginBottom: spacing.md,
-  },
+    cardTagline: {
+      ...typography.body,
+      color: colors.textMuted,
+      marginBottom: spacing.md,
+    },
 
-  cardFooter: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
+    cardFooter: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+    },
 
-  readTime: {
-    ...typography.caption,
-    color: colors.textLight,
-  },
+    readTime: {
+      ...typography.caption,
+      color: colors.textLight,
+    },
 
-  openText: {
-    ...typography.caption,
-    color: colors.primary,
-    fontWeight: '700',
-  },
+    openText: {
+      ...typography.caption,
+      color: colors.primary,
+      fontWeight: '700',
+    },
 
-  emptyCard: {
-    backgroundColor: colors.surface,
-    borderRadius: 18,
-    padding: spacing.xl,
-    alignItems: 'center',
-    elevation: 2,
-  },
+    emptyCard: {
+      backgroundColor: colors.surface,
+      borderRadius: 18,
+      padding: spacing.xl,
+      alignItems: 'center',
+      elevation: 2,
+    },
 
-  emptyIcon: {
-    fontSize: 44,
-    marginBottom: spacing.md,
-  },
+    emptyIcon: {
+      fontSize: 44,
+      marginBottom: spacing.md,
+    },
 
-  emptyTitle: {
-    ...typography.h3,
-    color: colors.text,
-    marginBottom: spacing.sm,
-    textAlign: 'center',
-  },
+    emptyTitle: {
+      ...typography.h3,
+      color: colors.text,
+      marginBottom: spacing.sm,
+      textAlign: 'center',
+    },
 
-  emptyText: {
-    ...typography.body,
-    color: colors.textMuted,
-    textAlign: 'center',
-    lineHeight: 22,
-  },
-})
+    emptyText: {
+      ...typography.body,
+      color: colors.textMuted,
+      textAlign: 'center',
+      lineHeight: 22,
+    },
+  })

@@ -10,7 +10,7 @@ import { router } from 'expo-router'
 import { useCategories } from '../../src/hooks/useCategories'
 import { useSettingsStore } from '../../src/stores/settingsStore'
 import { translations } from '../../src/utils/translations'
-import { colors } from '../../src/theme/colors'
+import { useTheme } from '../../src/hooks/useTheme'
 import { spacing } from '../../src/theme/spacing'
 import { typography } from '../../src/theme/typography'
 
@@ -23,6 +23,7 @@ export default function CategoriesScreen() {
   } = useCategories()
 
   const { language } = useSettingsStore()
+  const { colors } = useTheme()
 
   const t = translations[language]
 
@@ -38,6 +39,125 @@ export default function CategoriesScreen() {
 
   const getSecondaryName = (cat: any) =>
     language === 'fil' ? cat.name_en : cat.name_fil
+
+  const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: colors.background,
+    },
+
+    content: {
+      paddingBottom: 140,
+    },
+
+    header: {
+      backgroundColor: colors.primary,
+      padding: spacing.lg,
+      paddingTop: spacing.xxl,
+      borderBottomLeftRadius: 24,
+      borderBottomRightRadius: 24,
+    },
+
+    title: {
+      ...typography.h1,
+      color: colors.surface,
+    },
+
+    subtitle: {
+      ...typography.body,
+      color: colors.primaryLight,
+      marginTop: spacing.xs,
+    },
+
+    loadingContainer: {
+      padding: spacing.xl,
+      alignItems: 'center',
+    },
+
+    loadingText: {
+      ...typography.body,
+      color: colors.textMuted,
+    },
+
+    grid: {
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+      justifyContent: 'space-between',
+      padding: spacing.md,
+    },
+
+    categoryCard: {
+      width: '47%',
+      borderRadius: 18,
+      padding: spacing.lg,
+      marginBottom: spacing.md,
+      alignItems: 'center',
+      borderWidth: 2,
+
+      elevation: 3,
+      shadowColor: '#000',
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.08,
+      shadowRadius: 4,
+    },
+
+    iconContainer: {
+      width: 70,
+      height: 70,
+      borderRadius: 35,
+      justifyContent: 'center',
+      alignItems: 'center',
+      marginBottom: spacing.md,
+    },
+
+    categoryIcon: {
+      fontSize: 34,
+    },
+
+    categoryName: {
+      ...typography.h3,
+      textAlign: 'center',
+    },
+
+    categoryNameEn: {
+      ...typography.caption,
+      color: colors.textMuted,
+      textAlign: 'center',
+      marginTop: spacing.xs,
+    },
+
+    openText: {
+      ...typography.caption,
+      color: colors.primary,
+      fontWeight: '700',
+      marginTop: spacing.sm,
+    },
+
+    emptyContainer: {
+      alignItems: 'center',
+      justifyContent: 'center',
+      padding: spacing.xxl,
+    },
+
+    emptyIcon: {
+      fontSize: 48,
+      marginBottom: spacing.md,
+    },
+
+    emptyTitle: {
+      ...typography.h3,
+      color: colors.text,
+      marginBottom: spacing.sm,
+      textAlign: 'center',
+    },
+
+    emptyText: {
+      ...typography.body,
+      color: colors.textMuted,
+      textAlign: 'center',
+      lineHeight: 22,
+    },
+  })
 
   return (
     <ScrollView
@@ -139,122 +259,3 @@ export default function CategoriesScreen() {
     </ScrollView>
   )
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: colors.background,
-  },
-
-  content: {
-    paddingBottom: 140,
-  },
-
-  header: {
-    backgroundColor: colors.primary,
-    padding: spacing.lg,
-    paddingTop: spacing.xxl,
-    borderBottomLeftRadius: 24,
-    borderBottomRightRadius: 24,
-  },
-
-  title: {
-    ...typography.h1,
-    color: colors.surface,
-  },
-
-  subtitle: {
-    ...typography.body,
-    color: colors.primaryLight,
-    marginTop: spacing.xs,
-  },
-
-  loadingContainer: {
-    padding: spacing.xl,
-    alignItems: 'center',
-  },
-
-  loadingText: {
-    ...typography.body,
-    color: colors.textMuted,
-  },
-
-  grid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between',
-    padding: spacing.md,
-  },
-
-  categoryCard: {
-    width: '47%',
-    borderRadius: 18,
-    padding: spacing.lg,
-    marginBottom: spacing.md,
-    alignItems: 'center',
-    borderWidth: 2,
-
-    elevation: 3,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.08,
-    shadowRadius: 4,
-  },
-
-  iconContainer: {
-    width: 70,
-    height: 70,
-    borderRadius: 35,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: spacing.md,
-  },
-
-  categoryIcon: {
-    fontSize: 34,
-  },
-
-  categoryName: {
-    ...typography.h3,
-    textAlign: 'center',
-  },
-
-  categoryNameEn: {
-    ...typography.caption,
-    color: colors.textMuted,
-    textAlign: 'center',
-    marginTop: spacing.xs,
-  },
-
-  openText: {
-    ...typography.caption,
-    color: colors.primary,
-    fontWeight: '700',
-    marginTop: spacing.sm,
-  },
-
-  emptyContainer: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: spacing.xxl,
-  },
-
-  emptyIcon: {
-    fontSize: 48,
-    marginBottom: spacing.md,
-  },
-
-  emptyTitle: {
-    ...typography.h3,
-    color: colors.text,
-    marginBottom: spacing.sm,
-    textAlign: 'center',
-  },
-
-  emptyText: {
-    ...typography.body,
-    color: colors.textMuted,
-    textAlign: 'center',
-    lineHeight: 22,
-  },
-})

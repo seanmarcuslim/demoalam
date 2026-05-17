@@ -13,12 +13,20 @@ import { useSavedStore } from '../../src/stores/savedStore'
 import { useSessionStore } from '../../src/stores/sessionStore'
 import { useOnboardingStore } from '../../src/stores/onboardingStore'
 import { useAuth } from '../../src/hooks/useAuth'
-import { colors } from '../../src/theme/colors'
+import { useTheme } from '../../src/hooks/useTheme'
 import { spacing } from '../../src/theme/spacing'
 import { typography } from '../../src/theme/typography'
 
 export default function ProfileScreen() {
-  const { language, setLanguage } = useSettingsStore()
+  const {
+    language,
+    setLanguage,
+    theme,
+    toggleTheme,
+  } = useSettingsStore()
+
+  const { colors, isDark } = useTheme()
+
   const { savedIds } = useSavedStore()
   const { isGuest, email } = useSessionStore()
   const { resetOnboarding } = useOnboardingStore()
@@ -36,8 +44,13 @@ export default function ProfileScreen() {
       )
     } catch (error: any) {
       Alert.alert(
-        language === 'fil' ? 'Hindi ma-logout' : 'Logout failed',
-        error.message || (language === 'fil' ? 'Subukan muli.' : 'Please try again.')
+        language === 'fil'
+          ? 'Hindi ma-logout'
+          : 'Logout failed',
+        error.message ||
+          (language === 'fil'
+            ? 'Subukan muli.'
+            : 'Please try again.')
       )
     }
   }
@@ -47,6 +60,8 @@ export default function ProfileScreen() {
     router.replace('/onboarding')
   }
 
+  const styles = createStyles(colors)
+
   return (
     <ScrollView
       style={styles.container}
@@ -54,13 +69,13 @@ export default function ProfileScreen() {
       showsVerticalScrollIndicator={false}
     >
       <View style={styles.header}>
-        <Text style={styles.avatar}>{isGuest ? '👤' : '✅'}</Text>
+        <Text style={styles.avatar}>
+          {isGuest ? '👤' : '✅'}
+        </Text>
 
         <Text style={styles.title}>
           {isGuest
-            ? language === 'fil'
-              ? 'Guest User'
-              : 'Guest User'
+            ? 'Guest User'
             : language === 'fil'
               ? 'Naka-login'
               : 'Logged In'}
@@ -77,16 +92,22 @@ export default function ProfileScreen() {
 
       <View style={styles.statsRow}>
         <View style={styles.statCard}>
-          <Text style={styles.statNumber}>{savedIds.length}</Text>
+          <Text style={styles.statNumber}>
+            {savedIds.length}
+          </Text>
 
           <Text style={styles.statLabel}>
-            {language === 'fil' ? 'Na-save' : 'Saved'}
+            {language === 'fil'
+              ? 'Na-save'
+              : 'Saved'}
           </Text>
         </View>
       </View>
 
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Account</Text>
+        <Text style={styles.sectionTitle}>
+          Account
+        </Text>
 
         {isGuest ? (
           <View style={styles.authCard}>
@@ -95,7 +116,9 @@ export default function ProfileScreen() {
               style={styles.primaryButton}
               onPress={() => router.push('/login')}
             >
-              <Text style={styles.primaryButtonText}>Login</Text>
+              <Text style={styles.primaryButtonText}>
+                Login
+              </Text>
             </TouchableOpacity>
 
             <TouchableOpacity
@@ -104,7 +127,9 @@ export default function ProfileScreen() {
               onPress={() => router.push('/register')}
             >
               <Text style={styles.secondaryButtonText}>
-                {language === 'fil' ? 'Gumawa ng Account' : 'Create Account'}
+                {language === 'fil'
+                  ? 'Gumawa ng Account'
+                  : 'Create Account'}
               </Text>
             </TouchableOpacity>
           </View>
@@ -128,23 +153,55 @@ export default function ProfileScreen() {
 
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>
-          {language === 'fil' ? 'Mga Setting' : 'Settings'}
+          {language === 'fil'
+            ? 'Mga Setting'
+            : 'Settings'}
         </Text>
 
         <View style={styles.settingRow}>
           <View>
             <Text style={styles.settingLabel}>
-              {language === 'fil' ? 'Wika' : 'Language'}
+              {language === 'fil'
+                ? 'Wika'
+                : 'Language'}
             </Text>
 
             <Text style={styles.settingSubtitle}>
-              {language === 'fil' ? 'Filipino' : 'English'}
+              {language === 'fil'
+                ? 'Filipino'
+                : 'English'}
             </Text>
           </View>
 
           <Switch
             value={language === 'fil'}
-            onValueChange={(val) => setLanguage(val ? 'fil' : 'en')}
+            onValueChange={(val) =>
+              setLanguage(val ? 'fil' : 'en')
+            }
+            trackColor={{
+              false: colors.border,
+              true: colors.primary,
+            }}
+            thumbColor={colors.surface}
+          />
+        </View>
+
+        <View style={styles.settingRow}>
+          <View>
+            <Text style={styles.settingLabel}>
+              {language === 'fil'
+                ? 'Dark Mode'
+                : 'Dark Mode'}
+            </Text>
+
+            <Text style={styles.settingSubtitle}>
+              {isDark ? 'Enabled' : 'Disabled'}
+            </Text>
+          </View>
+
+          <Switch
+            value={theme === 'dark'}
+            onValueChange={toggleTheme}
             trackColor={{
               false: colors.border,
               true: colors.primary,
@@ -159,18 +216,24 @@ export default function ProfileScreen() {
           onPress={handleResetOnboarding}
         >
           <Text style={styles.resetButtonText}>
-            {language === 'fil' ? 'I-reset ang Onboarding' : 'Reset Onboarding'}
+            {language === 'fil'
+              ? 'I-reset ang Onboarding'
+              : 'Reset Onboarding'}
           </Text>
         </TouchableOpacity>
       </View>
 
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>
-          {language === 'fil' ? 'Tungkol sa App' : 'About the App'}
+          {language === 'fil'
+            ? 'Tungkol sa App'
+            : 'About the App'}
         </Text>
 
         <View style={styles.aboutCard}>
-          <Text style={styles.appName}>DemoAlam 💡</Text>
+          <Text style={styles.appName}>
+            DemoAlam 💡
+          </Text>
 
           <Text style={styles.appTagline}>
             {language === 'fil'
@@ -178,193 +241,196 @@ export default function ProfileScreen() {
               : '"I wish I knew this earlier."'}
           </Text>
 
-          <Text style={styles.appVersion}>Version 1.0.0</Text>
+          <Text style={styles.appVersion}>
+            Version 1.0.0
+          </Text>
         </View>
       </View>
     </ScrollView>
   )
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: colors.background,
-  },
+const createStyles = (colors: any) =>
+  StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: colors.background,
+    },
 
-  content: {
-    paddingBottom: 140,
-  },
+    content: {
+      paddingBottom: 140,
+    },
 
-  header: {
-    backgroundColor: colors.primary,
-    padding: spacing.lg,
-    paddingTop: spacing.xxl,
-    alignItems: 'center',
-  },
+    header: {
+      backgroundColor: colors.primary,
+      padding: spacing.lg,
+      paddingTop: spacing.xxl,
+      alignItems: 'center',
+    },
 
-  avatar: {
-    fontSize: 48,
-    marginBottom: spacing.sm,
-  },
+    avatar: {
+      fontSize: 48,
+      marginBottom: spacing.sm,
+    },
 
-  title: {
-    ...typography.h2,
-    color: colors.surface,
-  },
+    title: {
+      ...typography.h2,
+      color: colors.surface,
+    },
 
-  subtitle: {
-    ...typography.body,
-    color: colors.primaryLight,
-    marginTop: spacing.xs,
-    textAlign: 'center',
-  },
+    subtitle: {
+      ...typography.body,
+      color: colors.primaryLight,
+      marginTop: spacing.xs,
+      textAlign: 'center',
+    },
 
-  statsRow: {
-    flexDirection: 'row',
-    padding: spacing.md,
-    gap: spacing.md,
-  },
+    statsRow: {
+      flexDirection: 'row',
+      padding: spacing.md,
+      gap: spacing.md,
+    },
 
-  statCard: {
-    backgroundColor: colors.surface,
-    borderRadius: 12,
-    padding: spacing.md,
-    alignItems: 'center',
-    flex: 1,
-    elevation: 2,
-  },
+    statCard: {
+      backgroundColor: colors.surface,
+      borderRadius: 12,
+      padding: spacing.md,
+      alignItems: 'center',
+      flex: 1,
+      elevation: 2,
+    },
 
-  statNumber: {
-    ...typography.h1,
-    color: colors.primary,
-  },
+    statNumber: {
+      ...typography.h1,
+      color: colors.primary,
+    },
 
-  statLabel: {
-    ...typography.caption,
-    color: colors.textMuted,
-    marginTop: spacing.xs,
-  },
+    statLabel: {
+      ...typography.caption,
+      color: colors.textMuted,
+      marginTop: spacing.xs,
+    },
 
-  section: {
-    padding: spacing.md,
-  },
+    section: {
+      padding: spacing.md,
+    },
 
-  sectionTitle: {
-    ...typography.h3,
-    color: colors.text,
-    marginBottom: spacing.md,
-  },
+    sectionTitle: {
+      ...typography.h3,
+      color: colors.text,
+      marginBottom: spacing.md,
+    },
 
-  authCard: {
-    backgroundColor: colors.surface,
-    borderRadius: 12,
-    padding: spacing.md,
-    elevation: 2,
-  },
+    authCard: {
+      backgroundColor: colors.surface,
+      borderRadius: 12,
+      padding: spacing.md,
+      elevation: 2,
+    },
 
-  primaryButton: {
-    backgroundColor: colors.primary,
-    borderRadius: 12,
-    padding: spacing.md,
-    alignItems: 'center',
-    marginBottom: spacing.sm,
-  },
+    primaryButton: {
+      backgroundColor: colors.primary,
+      borderRadius: 12,
+      padding: spacing.md,
+      alignItems: 'center',
+      marginBottom: spacing.sm,
+    },
 
-  primaryButtonText: {
-    ...typography.body,
-    color: colors.surface,
-    fontWeight: '700',
-  },
+    primaryButtonText: {
+      ...typography.body,
+      color: colors.surface,
+      fontWeight: '700',
+    },
 
-  secondaryButton: {
-    borderWidth: 1,
-    borderColor: colors.primary,
-    borderRadius: 12,
-    padding: spacing.md,
-    alignItems: 'center',
-  },
+    secondaryButton: {
+      borderWidth: 1,
+      borderColor: colors.primary,
+      borderRadius: 12,
+      padding: spacing.md,
+      alignItems: 'center',
+    },
 
-  secondaryButtonText: {
-    ...typography.body,
-    color: colors.primary,
-    fontWeight: '700',
-  },
+    secondaryButtonText: {
+      ...typography.body,
+      color: colors.primary,
+      fontWeight: '700',
+    },
 
-  logoutButton: {
-    backgroundColor: colors.danger,
-    borderRadius: 12,
-    padding: spacing.md,
-    alignItems: 'center',
-  },
+    logoutButton: {
+      backgroundColor: colors.danger,
+      borderRadius: 12,
+      padding: spacing.md,
+      alignItems: 'center',
+    },
 
-  logoutButtonText: {
-    ...typography.body,
-    color: colors.surface,
-    fontWeight: '700',
-  },
+    logoutButtonText: {
+      ...typography.body,
+      color: colors.surface,
+      fontWeight: '700',
+    },
 
-  settingRow: {
-    backgroundColor: colors.surface,
-    borderRadius: 12,
-    padding: spacing.md,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    elevation: 2,
-  },
+    settingRow: {
+      backgroundColor: colors.surface,
+      borderRadius: 12,
+      padding: spacing.md,
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      elevation: 2,
+      marginBottom: spacing.md,
+    },
 
-  settingLabel: {
-    ...typography.body,
-    color: colors.text,
-    fontWeight: '600',
-  },
+    settingLabel: {
+      ...typography.body,
+      color: colors.text,
+      fontWeight: '600',
+    },
 
-  settingSubtitle: {
-    ...typography.caption,
-    color: colors.textMuted,
-    marginTop: 2,
-  },
+    settingSubtitle: {
+      ...typography.caption,
+      color: colors.textMuted,
+      marginTop: 2,
+    },
 
-  resetButton: {
-    backgroundColor: colors.surface,
-    borderRadius: 12,
-    padding: spacing.md,
-    alignItems: 'center',
-    marginTop: spacing.md,
-    borderWidth: 1,
-    borderColor: colors.border,
-  },
+    resetButton: {
+      backgroundColor: colors.surface,
+      borderRadius: 12,
+      padding: spacing.md,
+      alignItems: 'center',
+      borderWidth: 1,
+      borderColor: colors.border,
+    },
 
-  resetButtonText: {
-    ...typography.body,
-    color: colors.text,
-    fontWeight: '700',
-  },
+    resetButtonText: {
+      ...typography.body,
+      color: colors.text,
+      fontWeight: '700',
+    },
 
-  aboutCard: {
-    backgroundColor: colors.surface,
-    borderRadius: 12,
-    padding: spacing.lg,
-    alignItems: 'center',
-    elevation: 2,
-  },
+    aboutCard: {
+      backgroundColor: colors.surface,
+      borderRadius: 12,
+      padding: spacing.lg,
+      alignItems: 'center',
+      elevation: 2,
+    },
 
-  appName: {
-    ...typography.h2,
-    color: colors.primary,
-  },
+    appName: {
+      ...typography.h2,
+      color: colors.primary,
+    },
 
-  appTagline: {
-    ...typography.body,
-    color: colors.textMuted,
-    textAlign: 'center',
-    marginTop: spacing.sm,
-    fontStyle: 'italic',
-  },
+    appTagline: {
+      ...typography.body,
+      color: colors.textMuted,
+      textAlign: 'center',
+      marginTop: spacing.sm,
+      fontStyle: 'italic',
+    },
 
-  appVersion: {
-    ...typography.caption,
-    color: colors.textLight,
-    marginTop: spacing.md,
-  },
-})
+    appVersion: {
+      ...typography.caption,
+      color: colors.textLight,
+      marginTop: spacing.md,
+    },
+  })

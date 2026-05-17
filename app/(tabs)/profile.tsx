@@ -27,9 +27,18 @@ export default function ProfileScreen() {
   const handleLogout = async () => {
     try {
       await signOut()
-      Alert.alert('Logged out', 'You are now browsing as guest.')
+
+      Alert.alert(
+        language === 'fil' ? 'Naka-logout' : 'Logged out',
+        language === 'fil'
+          ? 'Nagba-browse ka na ngayon bilang bisita.'
+          : 'You are now browsing as guest.'
+      )
     } catch (error: any) {
-      Alert.alert('Logout failed', error.message || 'Please try again.')
+      Alert.alert(
+        language === 'fil' ? 'Hindi ma-logout' : 'Logout failed',
+        error.message || (language === 'fil' ? 'Subukan muli.' : 'Please try again.')
+      )
     }
   }
 
@@ -48,18 +57,31 @@ export default function ProfileScreen() {
         <Text style={styles.avatar}>{isGuest ? '👤' : '✅'}</Text>
 
         <Text style={styles.title}>
-          {isGuest ? 'Guest User' : 'Logged In'}
+          {isGuest
+            ? language === 'fil'
+              ? 'Guest User'
+              : 'Guest User'
+            : language === 'fil'
+              ? 'Naka-login'
+              : 'Logged In'}
         </Text>
 
         <Text style={styles.subtitle}>
-          {isGuest ? 'Nagba-browse bilang bisita' : email}
+          {isGuest
+            ? language === 'fil'
+              ? 'Nagba-browse bilang bisita'
+              : 'Browsing as guest'
+            : email}
         </Text>
       </View>
 
       <View style={styles.statsRow}>
         <View style={styles.statCard}>
           <Text style={styles.statNumber}>{savedIds.length}</Text>
-          <Text style={styles.statLabel}>Na-save</Text>
+
+          <Text style={styles.statLabel}>
+            {language === 'fil' ? 'Na-save' : 'Saved'}
+          </Text>
         </View>
       </View>
 
@@ -82,7 +104,7 @@ export default function ProfileScreen() {
               onPress={() => router.push('/register')}
             >
               <Text style={styles.secondaryButtonText}>
-                Create Account
+                {language === 'fil' ? 'Gumawa ng Account' : 'Create Account'}
               </Text>
             </TouchableOpacity>
           </View>
@@ -94,18 +116,26 @@ export default function ProfileScreen() {
             disabled={isLoading}
           >
             <Text style={styles.logoutButtonText}>
-              {isLoading ? 'Logging out...' : 'Logout'}
+              {isLoading
+                ? language === 'fil'
+                  ? 'Naglo-logout...'
+                  : 'Logging out...'
+                : 'Logout'}
             </Text>
           </TouchableOpacity>
         )}
       </View>
 
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Mga Setting</Text>
+        <Text style={styles.sectionTitle}>
+          {language === 'fil' ? 'Mga Setting' : 'Settings'}
+        </Text>
 
         <View style={styles.settingRow}>
           <View>
-            <Text style={styles.settingLabel}>Wika</Text>
+            <Text style={styles.settingLabel}>
+              {language === 'fil' ? 'Wika' : 'Language'}
+            </Text>
 
             <Text style={styles.settingSubtitle}>
               {language === 'fil' ? 'Filipino' : 'English'}
@@ -129,24 +159,26 @@ export default function ProfileScreen() {
           onPress={handleResetOnboarding}
         >
           <Text style={styles.resetButtonText}>
-            Reset Onboarding
+            {language === 'fil' ? 'I-reset ang Onboarding' : 'Reset Onboarding'}
           </Text>
         </TouchableOpacity>
       </View>
 
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Tungkol sa App</Text>
+        <Text style={styles.sectionTitle}>
+          {language === 'fil' ? 'Tungkol sa App' : 'About the App'}
+        </Text>
 
         <View style={styles.aboutCard}>
           <Text style={styles.appName}>DemoAlam 💡</Text>
 
           <Text style={styles.appTagline}>
-            "Sayang, ngayon ko lang nalaman."
+            {language === 'fil'
+              ? '"Sayang, ngayon ko lang nalaman."'
+              : '"I wish I knew this earlier."'}
           </Text>
 
-          <Text style={styles.appVersion}>
-            Version 1.0.0
-          </Text>
+          <Text style={styles.appVersion}>Version 1.0.0</Text>
         </View>
       </View>
     </ScrollView>

@@ -6,6 +6,7 @@ import {
   ActivityIndicator,
   TouchableOpacity,
   Alert,
+  RefreshControl,
 } from 'react-native'
 import { useEffect } from 'react'
 import { useLocalSearchParams, router } from 'expo-router'
@@ -13,6 +14,8 @@ import { useGuide } from '../../src/hooks/useGuides'
 import { useSavedStore } from '../../src/stores/savedStore'
 import { useHistoryStore } from '../../src/stores/historyStore'
 import { useSessionStore } from '../../src/stores/sessionStore'
+import { useSettingsStore } from '../../src/stores/settingsStore'
+import { translations } from '../../src/utils/translations'
 import { colors } from '../../src/theme/colors'
 import { spacing } from '../../src/theme/spacing'
 import { typography } from '../../src/theme/typography'
@@ -22,25 +25,64 @@ export default function GuideDetailsScreen() {
 
   const guideId = Array.isArray(id) ? id[0] : id
 
-  const { data: guide, isLoading, error } = useGuide(guideId)
+  const {
+    data: guide,
+    isLoading,
+    error,
+    refetch,
+    isRefetching,
+  } = useGuide(guideId)
 
   const isGuest = useSessionStore((state) => state.isGuest)
   const toggleSave = useSavedStore((state) => state.toggleSave)
   const addToHistory = useHistoryStore((state) => state.addToHistory)
+  const { language } = useSettingsStore()
+
+  const t = translations[language]
 
   const isSaved = useSavedStore((state) =>
     guide ? state.isSaved(guide.id) : false
   )
+
+  const getTitle = (item: any) =>
+    language === 'fil' ? item.title_fil : item.title_en
+
+  const getTagline = (item: any) =>
+    language === 'fil' ? item.tagline_fil : item.tagline_en
+
+  const getCategoryName = (item: any) =>
+    language === 'fil' ? item.name_fil : item.name_en
+
+  const getSectionTitle = (section: any, index: number) => {
+    const title = language === 'fil' ? section.title_fil : section.title_en
+    return title || `Section ${index + 1}`
+  }
+
+  const getSectionContent = (section: any) => {
+    const content = language === 'fil' ? section.content_fil : section.content_en
+
+    return (
+      content ||
+      (language === 'fil'
+        ? 'Walang content.'
+        : 'No content available.')
+    )
+  }
 
   const handleSave = () => {
     if (!guide) return
 
     if (isGuest) {
       Alert.alert(
-        'Login required',
-        'Please login first to save guides.',
+        language === 'fil' ? 'Kailangan mag-login' : 'Login required',
+        language === 'fil'
+          ? 'Mag-login muna para makapag-save ng guides.'
+          : 'Please login first to save guides.',
         [
-          { text: 'Cancel', style: 'cancel' },
+          {
+            text: language === 'fil' ? 'Kanselahin' : 'Cancel',
+            style: 'cancel',
+          },
           {
             text: 'Login',
             onPress: () => router.push('/login'),
@@ -63,17 +105,37 @@ export default function GuideDetailsScreen() {
     return (
       <View style={styles.centered}>
         <ActivityIndicator size="large" color={colors.primary} />
-        <Text style={styles.loadingText}>Naglo-load ng guide...</Text>
+
+        <Text style={styles.loadingText}>
+          {language === 'fil' ? 'Naglo-load ng guide...' : 'Loading guide...'}
+        </Text>
       </View>
     )
   }
 
   if (error || !guide) {
     return (
-      <View style={styles.centered}>
-        <Text style={styles.errorTitle}>May problema 😕</Text>
-        <Text style={styles.errorText}>Hindi ma-load ang guide.</Text>
-      </View>
+      <ScrollView
+        style={styles.container}
+        contentContainerStyle={styles.errorContent}
+        refreshControl={
+          <RefreshControl
+            refreshing={isRefetching}
+            onRefresh={refetch}
+            colors={[colors.primary]}
+          />
+        }
+      >
+        <Text style={styles.errorTitle}>
+          {language === 'fil' ? 'May problema 😕' : 'Something went wrong 😕'}
+        </Text>
+
+        <Text style={styles.errorText}>
+          {language === 'fil'
+            ? 'Hindi ma-load ang guide. Hilahin pababa para subukan muli.'
+            : 'Unable to load this guide. Pull down to try again.'}
+        </Text>
+      </ScrollView>
     )
   }
 
@@ -82,18 +144,37 @@ export default function GuideDetailsScreen() {
       style={styles.container}
       contentContainerStyle={styles.content}
       showsVerticalScrollIndicator={false}
+      refreshControl={
+        <RefreshControl
+          refreshing={isRefetching}
+          onRefresh={refetch}
+          colors={[colors.primary]}
+        />
+      }
     >
       <View style={styles.header}>
-        <Text style={styles.category}>
-          {guide.category?.icon} {guide.category?.name_fil}
+        <Text style={styles.backText} onPress={() => router.back()}>
+          ← {language === 'fil' ? 'Bumalik' : 'Back'}
         </Text>
 
-        <Text style={styles.title}>{guide.title_fil}</Text>
+        <Text style={styles.category}>
+          {guide.category?.icon}{' '}
+          {guide.category ? getCategoryName(guide.category) : ''}
+        </Text>
 
-        <Text style={styles.tagline}>{guide.tagline_fil}</Text>
+        <Text style={styles.title}>
+          {getTitle(guide)}
+        </Text>
+
+        <Text style={styles.tagline}>
+          {getTagline(guide)}
+        </Text>
 
         <View style={styles.metaRow}>
-          <Text style={styles.meta}>🕐 {guide.read_time_min} minuto</Text>
+          <Text style={styles.meta}>
+            🕐 {guide.read_time_min}{' '}
+            {language === 'fil' ? 'minuto' : 'min'}
+          </Text>
 
           {guide.is_urgent && (
             <Text style={styles.urgentBadge}>🚨 URGENT</Text>
@@ -106,7 +187,11 @@ export default function GuideDetailsScreen() {
           onPress={handleSave}
         >
           <Text style={styles.saveButtonText}>
-            {isSaved ? '⭐ Saved' : isGuest ? '🔒 Login to Save' : '🤍 Save Guide'}
+            {isSaved
+              ? t.savedGuide
+              : isGuest
+                ? t.loginToSave
+                : t.saveGuide}
           </Text>
         </TouchableOpacity>
       </View>
@@ -116,18 +201,20 @@ export default function GuideDetailsScreen() {
           guide.sections.map((section: any, index: number) => (
             <View key={section.id || index} style={styles.sectionCard}>
               <Text style={styles.sectionTitle}>
-                {section.title_fil || `Section ${index + 1}`}
+                {getSectionTitle(section, index)}
               </Text>
 
               <Text style={styles.sectionContent}>
-                {section.content_fil || 'Walang content.'}
+                {getSectionContent(section)}
               </Text>
             </View>
           ))
         ) : (
           <View style={styles.sectionCard}>
             <Text style={styles.sectionContent}>
-              Wala pang available na content para sa guide na ito.
+              {language === 'fil'
+                ? 'Wala pang available na content para sa guide na ito.'
+                : 'No content is available for this guide yet.'}
             </Text>
           </View>
         )}
@@ -143,6 +230,14 @@ const styles = StyleSheet.create({
   },
 
   content: {
+    paddingBottom: 140,
+  },
+
+  errorContent: {
+    flexGrow: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: spacing.xl,
     paddingBottom: 140,
   },
 
@@ -164,12 +259,14 @@ const styles = StyleSheet.create({
     ...typography.h2,
     color: colors.text,
     marginBottom: spacing.sm,
+    textAlign: 'center',
   },
 
   errorText: {
     ...typography.body,
     color: colors.textMuted,
     textAlign: 'center',
+    lineHeight: 22,
   },
 
   header: {
@@ -178,6 +275,13 @@ const styles = StyleSheet.create({
     paddingTop: spacing.xxl,
     borderBottomLeftRadius: 28,
     borderBottomRightRadius: 28,
+  },
+
+  backText: {
+    ...typography.caption,
+    color: colors.primaryLight,
+    marginBottom: spacing.md,
+    fontWeight: '700',
   },
 
   category: {

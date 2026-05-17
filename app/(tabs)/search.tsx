@@ -1,12 +1,17 @@
 import { View, Text, TextInput, FlatList, StyleSheet, TouchableOpacity } from 'react-native'
 import { router } from 'expo-router'
 import { useSearch } from '../../src/hooks/useSearch'
+import { useSettingsStore } from '../../src/stores/settingsStore'
+import { translations } from '../../src/utils/translations'
 import { colors } from '../../src/theme/colors'
 import { spacing } from '../../src/theme/spacing'
 import { typography } from '../../src/theme/typography'
 
 export default function SearchScreen() {
   const { searchTerm, setSearchTerm, results, isLoading, hasResults } = useSearch()
+  const { language } = useSettingsStore()
+
+  const t = translations[language]
 
   const openGuide = (id: string) => {
     router.push({
@@ -15,15 +20,33 @@ export default function SearchScreen() {
     })
   }
 
+  const getTitle = (item: any) =>
+    language === 'fil' ? item.title_fil : item.title_en
+
+  const getTagline = (item: any) =>
+    language === 'fil' ? item.tagline_fil : item.tagline_en
+
+  const getCategoryName = (item: any) =>
+    language === 'fil' ? item.name_fil : item.name_en
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.title}>Maghanap 🔍</Text>
-        <Text style={styles.subtitle}>Hanapin ang guide na kailangan mo</Text>
+        <Text style={styles.title}>{t.search} 🔍</Text>
+
+        <Text style={styles.subtitle}>
+          {language === 'fil'
+            ? 'Hanapin ang guide na kailangan mo'
+            : 'Find the guide you need'}
+        </Text>
 
         <TextInput
           style={styles.searchBar}
-          placeholder="Halimbawa: valid ID, bank, scam..."
+          placeholder={
+            language === 'fil'
+              ? 'Halimbawa: valid ID, bank, scam...'
+              : 'Example: valid ID, bank, scam...'
+          }
           placeholderTextColor={colors.textLight}
           value={searchTerm}
           onChangeText={setSearchTerm}
@@ -36,18 +59,32 @@ export default function SearchScreen() {
       {searchTerm.trim().length === 0 ? (
         <View style={styles.emptyState}>
           <Text style={styles.emptyIcon}>🔎</Text>
-          <Text style={styles.emptyTitle}>Ano ang hinahanap mo?</Text>
+
+          <Text style={styles.emptyTitle}>
+            {language === 'fil' ? 'Ano ang hinahanap mo?' : 'What are you looking for?'}
+          </Text>
+
           <Text style={styles.emptySubtitle}>
-            Subukan maghanap ng guide tungkol sa IDs, pera, trabaho, school, o scam alerts.
+            {language === 'fil'
+              ? 'Subukan maghanap ng guide tungkol sa IDs, pera, trabaho, school, o scam alerts.'
+              : 'Try searching guides about IDs, money, jobs, school, or scam alerts.'}
           </Text>
         </View>
       ) : isLoading ? (
-        <Text style={styles.loadingText}>Naghahanap...</Text>
+        <Text style={styles.loadingText}>
+          {language === 'fil' ? 'Naghahanap...' : 'Searching...'}
+        </Text>
       ) : !hasResults ? (
         <View style={styles.emptyState}>
           <Text style={styles.emptyIcon}>😕</Text>
-          <Text style={styles.emptyTitle}>Walang resulta</Text>
-          <Text style={styles.emptySubtitle}>Subukan ang ibang salita.</Text>
+
+          <Text style={styles.emptyTitle}>
+            {language === 'fil' ? 'Walang resulta' : 'No results found'}
+          </Text>
+
+          <Text style={styles.emptySubtitle}>
+            {language === 'fil' ? 'Subukan ang ibang salita.' : 'Try another keyword.'}
+          </Text>
         </View>
       ) : (
         <FlatList
@@ -63,15 +100,18 @@ export default function SearchScreen() {
               onPress={() => openGuide(item.id)}
             >
               <Text style={styles.resultCategory}>
-                {item.category?.icon} {item.category?.name_fil}
+                {item.category?.icon} {item.category ? getCategoryName(item.category) : ''}
               </Text>
 
-              <Text style={styles.resultTitle}>{item.title_fil}</Text>
-              <Text style={styles.resultTagline}>{item.tagline_fil}</Text>
+              <Text style={styles.resultTitle}>{getTitle(item)}</Text>
+              <Text style={styles.resultTagline}>{getTagline(item)}</Text>
 
               <View style={styles.cardFooter}>
-                <Text style={styles.readTime}>🕐 {item.read_time_min} minuto</Text>
-                <Text style={styles.openText}>Buksan →</Text>
+                <Text style={styles.readTime}>
+                  🕐 {item.read_time_min} {language === 'fil' ? 'minuto' : 'min'}
+                </Text>
+
+                <Text style={styles.openText}>{t.open}</Text>
               </View>
             </TouchableOpacity>
           )}
@@ -86,6 +126,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.background,
   },
+
   header: {
     backgroundColor: colors.primary,
     padding: spacing.lg,
@@ -93,16 +134,19 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 24,
     borderBottomRightRadius: 24,
   },
+
   title: {
     ...typography.h1,
     color: colors.surface,
   },
+
   subtitle: {
     ...typography.body,
     color: colors.primaryLight,
     marginTop: spacing.xs,
     marginBottom: spacing.md,
   },
+
   searchBar: {
     backgroundColor: colors.surface,
     borderRadius: 16,
@@ -111,6 +155,7 @@ const styles = StyleSheet.create({
     ...typography.body,
     color: colors.text,
   },
+
   emptyState: {
     flex: 1,
     alignItems: 'center',
@@ -118,22 +163,26 @@ const styles = StyleSheet.create({
     padding: spacing.xl,
     paddingBottom: 140,
   },
+
   emptyIcon: {
     fontSize: 52,
     marginBottom: spacing.md,
   },
+
   emptyTitle: {
     ...typography.h3,
     color: colors.text,
     textAlign: 'center',
     marginBottom: spacing.sm,
   },
+
   emptySubtitle: {
     ...typography.body,
     color: colors.textMuted,
     textAlign: 'center',
     lineHeight: 22,
   },
+
   loadingText: {
     ...typography.body,
     color: colors.textMuted,
@@ -141,10 +190,12 @@ const styles = StyleSheet.create({
     padding: spacing.xl,
     paddingBottom: 140,
   },
+
   resultsList: {
     padding: spacing.md,
     paddingBottom: 140,
   },
+
   resultCard: {
     backgroundColor: colors.surface,
     borderRadius: 16,
@@ -156,30 +207,36 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.08,
     shadowRadius: 4,
   },
+
   resultCategory: {
     ...typography.caption,
     color: colors.textMuted,
     marginBottom: spacing.xs,
   },
+
   resultTitle: {
     ...typography.h3,
     color: colors.text,
     marginBottom: spacing.xs,
   },
+
   resultTagline: {
     ...typography.body,
     color: colors.textMuted,
     marginBottom: spacing.md,
   },
+
   cardFooter: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
   },
+
   readTime: {
     ...typography.caption,
     color: colors.textLight,
   },
+
   openText: {
     ...typography.caption,
     color: colors.primary,

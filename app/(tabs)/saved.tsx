@@ -7,12 +7,17 @@ import {
 } from 'react-native'
 import { router } from 'expo-router'
 import { useSavedStore } from '../../src/stores/savedStore'
+import { useSettingsStore } from '../../src/stores/settingsStore'
+import { translations } from '../../src/utils/translations'
 import { colors } from '../../src/theme/colors'
 import { spacing } from '../../src/theme/spacing'
 import { typography } from '../../src/theme/typography'
 
 export default function SavedScreen() {
   const { savedIds, cachedGuides, unsave } = useSavedStore()
+  const { language } = useSettingsStore()
+
+  const t = translations[language]
 
   const savedGuides = savedIds
     .map((id) => cachedGuides[id])
@@ -25,13 +30,25 @@ export default function SavedScreen() {
     })
   }
 
+  const getTitle = (item: any) =>
+    language === 'fil' ? item.title_fil : item.title_en
+
+  const getTagline = (item: any) =>
+    language === 'fil' ? item.tagline_fil : item.tagline_en
+
+  const getCategoryName = (item: any) =>
+    language === 'fil' ? item.name_fil : item.name_en
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.title}>Na-save Mo 🔖</Text>
+        <Text style={styles.title}>
+          {language === 'fil' ? 'Na-save Mo 🔖' : 'Saved Guides 🔖'}
+        </Text>
 
         <Text style={styles.subtitle}>
-          {savedGuides.length} na guide
+          {savedGuides.length}{' '}
+          {language === 'fil' ? 'na guide' : 'saved guides'}
         </Text>
       </View>
 
@@ -40,11 +57,15 @@ export default function SavedScreen() {
           <Text style={styles.emptyIcon}>🔖</Text>
 
           <Text style={styles.emptyTitle}>
-            Wala pang na-save
+            {language === 'fil'
+              ? 'Wala pang na-save'
+              : 'No saved guides yet'}
           </Text>
 
           <Text style={styles.emptySubtitle}>
-            I-save ang mga guides para madaling balikan.
+            {language === 'fil'
+              ? 'I-save ang mga guides para madaling balikan.'
+              : 'Save guides so you can easily revisit them later.'}
           </Text>
         </View>
       ) : (
@@ -60,27 +81,33 @@ export default function SavedScreen() {
               onPress={() => openGuide(item.id)}
             >
               <Text style={styles.cardCategory}>
-                {item.category?.icon} {item.category?.name_fil}
+                {item.category?.icon}{' '}
+                {item.category
+                  ? getCategoryName(item.category)
+                  : ''}
               </Text>
 
               <Text style={styles.cardTitle}>
-                {item.title_fil}
+                {getTitle(item)}
               </Text>
 
               <Text style={styles.cardTagline}>
-                {item.tagline_fil}
+                {getTagline(item)}
               </Text>
 
               <View style={styles.cardFooter}>
                 <Text style={styles.readTime}>
-                  🕐 {item.read_time_min} minuto
+                  🕐 {item.read_time_min}{' '}
+                  {language === 'fil' ? 'minuto' : 'min'}
                 </Text>
 
                 <TouchableOpacity
                   onPress={() => unsave(item.id)}
                 >
                   <Text style={styles.unsaveButton}>
-                    I-remove
+                    {language === 'fil'
+                      ? 'I-remove'
+                      : 'Remove'}
                   </Text>
                 </TouchableOpacity>
               </View>

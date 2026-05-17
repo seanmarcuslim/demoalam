@@ -1,12 +1,30 @@
-import { View, Text, ScrollView, TouchableOpacity, StyleSheet } from 'react-native'
+import {
+  View,
+  Text,
+  ScrollView,
+  TouchableOpacity,
+  StyleSheet,
+  RefreshControl,
+} from 'react-native'
 import { router } from 'expo-router'
 import { useCategories } from '../../src/hooks/useCategories'
+import { useSettingsStore } from '../../src/stores/settingsStore'
+import { translations } from '../../src/utils/translations'
 import { colors } from '../../src/theme/colors'
 import { spacing } from '../../src/theme/spacing'
 import { typography } from '../../src/theme/typography'
 
 export default function CategoriesScreen() {
-  const { data: categories, isLoading } = useCategories()
+  const {
+    data: categories,
+    isLoading,
+    refetch,
+    isRefetching,
+  } = useCategories()
+
+  const { language } = useSettingsStore()
+
+  const t = translations[language]
 
   const openCategory = (id: string, name: string) => {
     router.push({
@@ -15,28 +33,52 @@ export default function CategoriesScreen() {
     })
   }
 
+  const getCategoryName = (cat: any) =>
+    language === 'fil' ? cat.name_fil : cat.name_en
+
+  const getSecondaryName = (cat: any) =>
+    language === 'fil' ? cat.name_en : cat.name_fil
+
   return (
     <ScrollView
       style={styles.container}
       contentContainerStyle={styles.content}
       showsVerticalScrollIndicator={false}
+      refreshControl={
+        <RefreshControl
+          refreshing={isRefetching}
+          onRefresh={refetch}
+          colors={[colors.primary]}
+        />
+      }
     >
       <View style={styles.header}>
-        <Text style={styles.title}>Mga Kategorya 📚</Text>
+        <Text style={styles.title}>
+          {t.categories} 📚
+        </Text>
+
         <Text style={styles.subtitle}>
-          Piliin ang gusto mong matutunan
+          {language === 'fil'
+            ? 'Piliin ang gusto mong matutunan'
+            : 'Choose what you want to learn'}
         </Text>
       </View>
 
       {isLoading ? (
-        <Text style={styles.loadingText}>Naglo-load...</Text>
+        <View style={styles.loadingContainer}>
+          <Text style={styles.loadingText}>
+            {t.loading}
+          </Text>
+        </View>
       ) : categories && categories.length > 0 ? (
         <View style={styles.grid}>
           {categories.map((cat) => (
             <TouchableOpacity
               activeOpacity={0.85}
               key={cat.id}
-              onPress={() => openCategory(cat.id, cat.name_fil)}
+              onPress={() =>
+                openCategory(cat.id, getCategoryName(cat))
+              }
               style={[
                 styles.categoryCard,
                 {
@@ -51,25 +93,48 @@ export default function CategoriesScreen() {
                   { backgroundColor: cat.color + '20' },
                 ]}
               >
-                <Text style={styles.categoryIcon}>{cat.icon}</Text>
+                <Text style={styles.categoryIcon}>
+                  {cat.icon}
+                </Text>
               </View>
 
-              <Text style={[styles.categoryName, { color: cat.color }]}>
-                {cat.name_fil}
+              <Text
+                style={[
+                  styles.categoryName,
+                  { color: cat.color },
+                ]}
+              >
+                {getCategoryName(cat)}
               </Text>
 
               <Text style={styles.categoryNameEn}>
-                {cat.name_en}
+                {getSecondaryName(cat)}
               </Text>
 
-              <Text style={styles.openText}>Tingnan →</Text>
+              <Text style={styles.openText}>
+                {language === 'fil'
+                  ? 'Tingnan →'
+                  : 'View →'}
+              </Text>
             </TouchableOpacity>
           ))}
         </View>
       ) : (
-        <Text style={styles.emptyText}>
-          Wala pang available na categories.
-        </Text>
+        <View style={styles.emptyContainer}>
+          <Text style={styles.emptyIcon}>📭</Text>
+
+          <Text style={styles.emptyTitle}>
+            {language === 'fil'
+              ? 'Walang categories'
+              : 'No categories'}
+          </Text>
+
+          <Text style={styles.emptyText}>
+            {language === 'fil'
+              ? 'Wala pang available na categories.'
+              : 'No categories available yet.'}
+          </Text>
+        </View>
       )}
     </ScrollView>
   )
@@ -82,7 +147,7 @@ const styles = StyleSheet.create({
   },
 
   content: {
-    paddingBottom: spacing.xxl,
+    paddingBottom: 140,
   },
 
   header: {
@@ -102,6 +167,16 @@ const styles = StyleSheet.create({
     ...typography.body,
     color: colors.primaryLight,
     marginTop: spacing.xs,
+  },
+
+  loadingContainer: {
+    padding: spacing.xl,
+    alignItems: 'center',
+  },
+
+  loadingText: {
+    ...typography.body,
+    color: colors.textMuted,
   },
 
   grid: {
@@ -158,17 +233,28 @@ const styles = StyleSheet.create({
     marginTop: spacing.sm,
   },
 
-  loadingText: {
-    ...typography.body,
-    color: colors.textMuted,
+  emptyContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: spacing.xxl,
+  },
+
+  emptyIcon: {
+    fontSize: 48,
+    marginBottom: spacing.md,
+  },
+
+  emptyTitle: {
+    ...typography.h3,
+    color: colors.text,
+    marginBottom: spacing.sm,
     textAlign: 'center',
-    padding: spacing.xl,
   },
 
   emptyText: {
     ...typography.body,
     color: colors.textMuted,
     textAlign: 'center',
-    padding: spacing.xl,
+    lineHeight: 22,
   },
 })

@@ -6,9 +6,11 @@ import {
   ActivityIndicator,
   TouchableOpacity,
 } from 'react-native'
+import { useEffect } from 'react'
 import { useLocalSearchParams } from 'expo-router'
 import { useGuide } from '../../src/hooks/useGuides'
 import { useSavedStore } from '../../src/stores/savedStore'
+import { useHistoryStore } from '../../src/stores/historyStore'
 import { colors } from '../../src/theme/colors'
 import { spacing } from '../../src/theme/spacing'
 import { typography } from '../../src/theme/typography'
@@ -21,9 +23,17 @@ export default function GuideDetailsScreen() {
   const { data: guide, isLoading, error } = useGuide(guideId)
 
   const toggleSave = useSavedStore((state) => state.toggleSave)
+  const addToHistory = useHistoryStore((state) => state.addToHistory)
+
   const isSaved = useSavedStore((state) =>
     guide ? state.isSaved(guide.id) : false
   )
+
+  useEffect(() => {
+    if (guide) {
+      addToHistory(guide)
+    }
+  }, [guide, addToHistory])
 
   if (isLoading) {
     return (
@@ -51,19 +61,14 @@ export default function GuideDetailsScreen() {
       contentContainerStyle={styles.content}
       showsVerticalScrollIndicator={false}
     >
-      {/* Header */}
       <View style={styles.header}>
         <Text style={styles.category}>
           {guide.category?.icon} {guide.category?.name_fil}
         </Text>
 
-        <Text style={styles.title}>
-          {guide.title_fil}
-        </Text>
+        <Text style={styles.title}>{guide.title_fil}</Text>
 
-        <Text style={styles.tagline}>
-          {guide.tagline_fil}
-        </Text>
+        <Text style={styles.tagline}>{guide.tagline_fil}</Text>
 
         <View style={styles.metaRow}>
           <Text style={styles.meta}>
@@ -77,7 +82,6 @@ export default function GuideDetailsScreen() {
           )}
         </View>
 
-        {/* Save Button */}
         <TouchableOpacity
           activeOpacity={0.85}
           style={[
@@ -92,7 +96,6 @@ export default function GuideDetailsScreen() {
         </TouchableOpacity>
       </View>
 
-      {/* Sections */}
       <View style={styles.sectionContainer}>
         {guide.sections && guide.sections.length > 0 ? (
           guide.sections.map((section: any, index: number) => (

@@ -1,6 +1,10 @@
 import { supabase } from './supabase'
 import { Guide } from '../types/guide'
 
+function toPlainTextQuery(query: string) {
+  return query.trim().replace(/\s+/g, ' ')
+}
+
 export const guidesService = {
   async fetchGuides(
     categoryId?: string
@@ -46,6 +50,10 @@ export const guidesService = {
         )
         .eq('id', id)
         .eq('is_published', true)
+        .order('order_index', {
+          referencedTable: 'guide_sections',
+          ascending: true,
+        })
         .single()
 
     if (error) {
@@ -106,7 +114,7 @@ export const guidesService = {
   async searchGuides(
     query: string
   ): Promise<Guide[]> {
-    const cleanQuery = query.trim()
+    const cleanQuery = toPlainTextQuery(query)
 
     if (!cleanQuery) {
       return []
@@ -119,7 +127,12 @@ export const guidesService = {
           '*, category:categories(*)'
         )
         .eq('is_published', true)
-        .or(`title_en.ilike.%${cleanQuery}%,title_fil.ilike.%${cleanQuery}%,tagline_en.ilike.%${cleanQuery}%,tagline_fil.ilike.%${cleanQuery}%,keywords_en.ilike.%${cleanQuery}%,keywords_fil.ilike.%${cleanQuery}%`)
+        .textSearch('search_vector', cleanQuery, {
+          type: 'plain',
+        })
+        .order('published_at', {
+          ascending: false,
+        })
         .limit(20)
 
     if (error) {

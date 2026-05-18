@@ -1,21 +1,22 @@
 import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  Switch,
   Alert,
   ScrollView,
+  StyleSheet,
+  Switch,
+  TouchableOpacity,
+  View,
 } from 'react-native'
 import { router } from 'expo-router'
+import { Ionicons } from '@expo/vector-icons'
 import { useSettingsStore } from '../../src/stores/settingsStore'
 import { useSavedStore } from '../../src/stores/savedStore'
 import { useSessionStore } from '../../src/stores/sessionStore'
 import { useOnboardingStore } from '../../src/stores/onboardingStore'
 import { useAuth } from '../../src/hooks/useAuth'
 import { useTheme } from '../../src/hooks/useTheme'
+import { translations } from '../../src/utils/translations'
 import { spacing } from '../../src/theme/spacing'
-import { typography } from '../../src/theme/typography'
+import SafeText from '../../src/components/ui/SafeText'
 
 export default function ProfileScreen() {
   const {
@@ -26,11 +27,12 @@ export default function ProfileScreen() {
   } = useSettingsStore()
 
   const { colors, isDark } = useTheme()
-
   const { savedIds } = useSavedStore()
   const { isGuest, email } = useSessionStore()
   const { resetOnboarding } = useOnboardingStore()
   const { signOut, isLoading } = useAuth()
+  const t = translations[language]
+  const styles = createStyles(colors)
 
   const handleLogout = async () => {
     try {
@@ -44,13 +46,9 @@ export default function ProfileScreen() {
       )
     } catch (error: any) {
       Alert.alert(
-        language === 'fil'
-          ? 'Hindi ma-logout'
-          : 'Logout failed',
+        language === 'fil' ? 'Hindi ma-logout' : 'Logout failed',
         error.message ||
-          (language === 'fil'
-            ? 'Subukan muli.'
-            : 'Please try again.')
+          (language === 'fil' ? 'Subukan muli.' : 'Please try again.')
       )
     }
   }
@@ -60,194 +58,216 @@ export default function ProfileScreen() {
     router.replace('/onboarding')
   }
 
-  const styles = createStyles(colors)
-
   return (
     <ScrollView
       style={styles.container}
       contentContainerStyle={styles.content}
       showsVerticalScrollIndicator={false}
     >
-      <View style={styles.header}>
-        <Text style={styles.avatar}>
-          {isGuest ? '👤' : '✅'}
-        </Text>
+      <View style={styles.hero}>
+        <View style={styles.avatar}>
+          <Ionicons
+            name={isGuest ? 'person-outline' : 'checkmark-circle'}
+            size={30}
+            color={colors.primary}
+          />
+        </View>
 
-        <Text style={styles.title}>
-          {isGuest
-            ? 'Guest User'
-            : language === 'fil'
-              ? 'Naka-login'
-              : 'Logged In'}
-        </Text>
-
-        <Text style={styles.subtitle}>
+        <SafeText variant="h1" color="surface" style={styles.heroTitle}>
           {isGuest
             ? language === 'fil'
-              ? 'Nagba-browse bilang bisita'
-              : 'Browsing as guest'
+              ? 'Guest mode'
+              : 'Guest mode'
+            : language === 'fil'
+              ? 'Naka-login'
+              : 'Logged in'}
+        </SafeText>
+
+        <SafeText variant="bodyMd" color="surface" style={styles.heroSubtitle}>
+          {isGuest
+            ? language === 'fil'
+              ? 'Mabilis magbasa, walang kailangang account.'
+              : 'Read quickly without needing an account.'
             : email}
-        </Text>
-      </View>
+        </SafeText>
 
-      <View style={styles.statsRow}>
-        <View style={styles.statCard}>
-          <Text style={styles.statNumber}>
-            {savedIds.length}
-          </Text>
-
-          <Text style={styles.statLabel}>
-            {language === 'fil'
-              ? 'Na-save'
-              : 'Saved'}
-          </Text>
+        <View style={styles.heroStats}>
+          <View style={styles.statPill}>
+            <SafeText variant="h2" color="surface">
+              {savedIds.length}
+            </SafeText>
+            <SafeText variant="caption" color="surface" style={styles.statLabel}>
+              {language === 'fil' ? 'Na-save' : 'Saved'}
+            </SafeText>
+          </View>
         </View>
       </View>
 
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>
-          Account
-        </Text>
+        <SafeText variant="h3" weight="700" style={styles.sectionTitle}>
+          {t.account}
+        </SafeText>
 
         {isGuest ? (
-          <View style={styles.authCard}>
+          <View style={styles.panel}>
+            <SafeText variant="bodyMd" color="muted" style={styles.panelCopy}>
+              {language === 'fil'
+                ? 'Optional ang account. Mag-login lang kung gusto mong i-sync ang saved guides sa future.'
+                : 'Accounts are optional. Log in only if you want future sync for saved guides.'}
+            </SafeText>
+
             <TouchableOpacity
-              activeOpacity={0.85}
+              activeOpacity={0.86}
               style={styles.primaryButton}
               onPress={() => router.push('/login')}
             >
-              <Text style={styles.primaryButtonText}>
-                Login
-              </Text>
+              <Ionicons name="log-in-outline" size={18} color="#FFFFFF" />
+              <SafeText color="surface" weight="700">
+                {t.login}
+              </SafeText>
             </TouchableOpacity>
 
             <TouchableOpacity
-              activeOpacity={0.85}
+              activeOpacity={0.86}
               style={styles.secondaryButton}
               onPress={() => router.push('/register')}
             >
-              <Text style={styles.secondaryButtonText}>
-                {language === 'fil'
-                  ? 'Gumawa ng Account'
-                  : 'Create Account'}
-              </Text>
+              <SafeText color="primary" weight="700">
+                {t.createAccount}
+              </SafeText>
             </TouchableOpacity>
           </View>
         ) : (
           <TouchableOpacity
-            activeOpacity={0.85}
-            style={styles.logoutButton}
+            activeOpacity={0.86}
+            style={styles.dangerButton}
             onPress={handleLogout}
             disabled={isLoading}
           >
-            <Text style={styles.logoutButtonText}>
+            <Ionicons name="log-out-outline" size={18} color="#FFFFFF" />
+            <SafeText color="surface" weight="700">
               {isLoading
                 ? language === 'fil'
                   ? 'Naglo-logout...'
                   : 'Logging out...'
-                : 'Logout'}
-            </Text>
+                : t.logout}
+            </SafeText>
           </TouchableOpacity>
         )}
       </View>
 
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>
-          {language === 'fil'
-            ? 'Mga Setting'
-            : 'Settings'}
-        </Text>
+        <SafeText variant="h3" weight="700" style={styles.sectionTitle}>
+          {language === 'fil' ? 'Mga Setting' : 'Settings'}
+        </SafeText>
 
-        <View style={styles.settingRow}>
-          <View>
-            <Text style={styles.settingLabel}>
-              {language === 'fil'
-                ? 'Wika'
-                : 'Language'}
-            </Text>
+        <SettingRow
+          icon="language-outline"
+          title={language === 'fil' ? 'Wika' : 'Language'}
+          subtitle={language === 'fil' ? 'Filipino' : 'English'}
+          right={
+            <Switch
+              value={language === 'fil'}
+              onValueChange={(val) => setLanguage(val ? 'fil' : 'en')}
+              trackColor={{
+                false: colors.border,
+                true: colors.primary,
+              }}
+              thumbColor={colors.surface}
+            />
+          }
+        />
 
-            <Text style={styles.settingSubtitle}>
-              {language === 'fil'
-                ? 'Filipino'
-                : 'English'}
-            </Text>
-          </View>
-
-          <Switch
-            value={language === 'fil'}
-            onValueChange={(val) =>
-              setLanguage(val ? 'fil' : 'en')
-            }
-            trackColor={{
-              false: colors.border,
-              true: colors.primary,
-            }}
-            thumbColor={colors.surface}
-          />
-        </View>
-
-        <View style={styles.settingRow}>
-          <View>
-            <Text style={styles.settingLabel}>
-              {language === 'fil'
-                ? 'Dark Mode'
-                : 'Dark Mode'}
-            </Text>
-
-            <Text style={styles.settingSubtitle}>
-              {isDark ? 'Enabled' : 'Disabled'}
-            </Text>
-          </View>
-
-          <Switch
-            value={theme === 'dark'}
-            onValueChange={toggleTheme}
-            trackColor={{
-              false: colors.border,
-              true: colors.primary,
-            }}
-            thumbColor={colors.surface}
-          />
-        </View>
+        <SettingRow
+          icon="moon-outline"
+          title={t.darkMode}
+          subtitle={isDark ? t.enabled : t.disabled}
+          right={
+            <Switch
+              value={theme === 'dark'}
+              onValueChange={toggleTheme}
+              trackColor={{
+                false: colors.border,
+                true: colors.primary,
+              }}
+              thumbColor={colors.surface}
+            />
+          }
+        />
 
         <TouchableOpacity
-          activeOpacity={0.85}
-          style={styles.resetButton}
+          activeOpacity={0.86}
+          style={styles.resetRow}
           onPress={handleResetOnboarding}
         >
-          <Text style={styles.resetButtonText}>
-            {language === 'fil'
-              ? 'I-reset ang Onboarding'
-              : 'Reset Onboarding'}
-          </Text>
+          <View style={styles.rowIcon}>
+            <Ionicons name="refresh" size={20} color={colors.primary} />
+          </View>
+          <View style={styles.rowCopy}>
+            <SafeText weight="700">
+              {language === 'fil' ? 'I-reset ang Onboarding' : 'Reset Onboarding'}
+            </SafeText>
+            <SafeText variant="caption" color="muted" style={styles.rowSubtitle}>
+              {language === 'fil'
+                ? 'Balikan ang unang gabay ng app.'
+                : 'See the first-launch intro again.'}
+            </SafeText>
+          </View>
+          <Ionicons name="chevron-forward" size={18} color={colors.textLight} />
         </TouchableOpacity>
       </View>
 
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>
-          {language === 'fil'
-            ? 'Tungkol sa App'
-            : 'About the App'}
-        </Text>
+        <SafeText variant="h3" weight="700" style={styles.sectionTitle}>
+          {language === 'fil' ? 'Tungkol sa App' : 'About the App'}
+        </SafeText>
 
         <View style={styles.aboutCard}>
-          <Text style={styles.appName}>
-            DemoAlam 💡
-          </Text>
-
-          <Text style={styles.appTagline}>
+          <View style={styles.aboutIcon}>
+            <SafeText variant="h2">💡</SafeText>
+          </View>
+          <SafeText variant="h2" color="primary">
+            DemoAlam
+          </SafeText>
+          <SafeText variant="bodyMd" color="muted" style={styles.appTagline}>
             {language === 'fil'
               ? '"Sayang, ngayon ko lang nalaman."'
               : '"I wish I knew this earlier."'}
-          </Text>
-
-          <Text style={styles.appVersion}>
+          </SafeText>
+          <SafeText variant="caption" color="light" style={styles.appVersion}>
             Version 1.0.0
-          </Text>
+          </SafeText>
         </View>
       </View>
     </ScrollView>
   )
+
+  function SettingRow({
+    icon,
+    title,
+    subtitle,
+    right,
+  }: {
+    icon: keyof typeof Ionicons.glyphMap
+    title: string
+    subtitle: string
+    right: React.ReactNode
+  }) {
+    return (
+      <View style={styles.settingRow}>
+        <View style={styles.rowIcon}>
+          <Ionicons name={icon} size={20} color={colors.primary} />
+        </View>
+        <View style={styles.rowCopy}>
+          <SafeText weight="700">{title}</SafeText>
+          <SafeText variant="caption" color="muted" style={styles.rowSubtitle}>
+            {subtitle}
+          </SafeText>
+        </View>
+        {right}
+      </View>
+    )
+  }
 }
 
 const createStyles = (colors: any) =>
@@ -261,176 +281,173 @@ const createStyles = (colors: any) =>
       paddingBottom: 140,
     },
 
-    header: {
+    hero: {
       backgroundColor: colors.primary,
-      padding: spacing.lg,
+      paddingHorizontal: spacing.lg,
       paddingTop: spacing.xxl,
+      paddingBottom: spacing.lg,
+      borderBottomLeftRadius: 28,
+      borderBottomRightRadius: 28,
       alignItems: 'center',
     },
 
     avatar: {
-      fontSize: 48,
-      marginBottom: spacing.sm,
-    },
-
-    title: {
-      ...typography.h2,
-      color: colors.surface,
-    },
-
-    subtitle: {
-      ...typography.body,
-      color: colors.primaryLight,
-      marginTop: spacing.xs,
-      textAlign: 'center',
-    },
-
-    statsRow: {
-      flexDirection: 'row',
-      padding: spacing.md,
-      gap: spacing.md,
-    },
-
-    statCard: {
+      width: 68,
+      height: 68,
+      borderRadius: 24,
       backgroundColor: colors.surface,
-      borderRadius: 12,
-      padding: spacing.md,
       alignItems: 'center',
-      flex: 1,
-      elevation: 2,
-    },
-
-    statNumber: {
-      ...typography.h1,
-      color: colors.primary,
-    },
-
-    statLabel: {
-      ...typography.caption,
-      color: colors.textMuted,
-      marginTop: spacing.xs,
-    },
-
-    section: {
-      padding: spacing.md,
-    },
-
-    sectionTitle: {
-      ...typography.h3,
-      color: colors.text,
+      justifyContent: 'center',
       marginBottom: spacing.md,
     },
 
-    authCard: {
+    heroTitle: {
+      textAlign: 'center',
+    },
+
+    heroSubtitle: {
+      opacity: 0.9,
+      marginTop: spacing.sm,
+      textAlign: 'center',
+    },
+
+    heroStats: {
+      marginTop: spacing.lg,
+      flexDirection: 'row',
+    },
+
+    statPill: {
+      minWidth: 110,
+      borderRadius: 16,
+      borderWidth: 1,
+      borderColor: 'rgba(255,255,255,0.28)',
+      backgroundColor: 'rgba(255,255,255,0.12)',
+      paddingVertical: spacing.md,
+      paddingHorizontal: spacing.lg,
+      alignItems: 'center',
+    },
+
+    statLabel: {
+      opacity: 0.88,
+    },
+
+    section: {
+      paddingHorizontal: spacing.md,
+      paddingTop: spacing.lg,
+    },
+
+    sectionTitle: {
+      marginBottom: spacing.md,
+    },
+
+    panel: {
       backgroundColor: colors.surface,
-      borderRadius: 12,
+      borderRadius: 16,
+      borderWidth: 1,
+      borderColor: colors.border,
       padding: spacing.md,
-      elevation: 2,
+    },
+
+    panelCopy: {
+      marginBottom: spacing.md,
     },
 
     primaryButton: {
+      minHeight: 50,
+      borderRadius: 14,
       backgroundColor: colors.primary,
-      borderRadius: 12,
-      padding: spacing.md,
+      flexDirection: 'row',
       alignItems: 'center',
+      justifyContent: 'center',
+      gap: spacing.sm,
       marginBottom: spacing.sm,
     },
 
-    primaryButtonText: {
-      ...typography.body,
-      color: colors.surface,
-      fontWeight: '700',
-    },
-
     secondaryButton: {
+      minHeight: 50,
+      borderRadius: 14,
       borderWidth: 1,
       borderColor: colors.primary,
-      borderRadius: 12,
-      padding: spacing.md,
       alignItems: 'center',
+      justifyContent: 'center',
     },
 
-    secondaryButtonText: {
-      ...typography.body,
-      color: colors.primary,
-      fontWeight: '700',
-    },
-
-    logoutButton: {
+    dangerButton: {
+      minHeight: 50,
+      borderRadius: 14,
       backgroundColor: colors.danger,
-      borderRadius: 12,
-      padding: spacing.md,
+      flexDirection: 'row',
       alignItems: 'center',
-    },
-
-    logoutButtonText: {
-      ...typography.body,
-      color: colors.surface,
-      fontWeight: '700',
+      justifyContent: 'center',
+      gap: spacing.sm,
     },
 
     settingRow: {
       backgroundColor: colors.surface,
-      borderRadius: 12,
-      padding: spacing.md,
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      elevation: 2,
-      marginBottom: spacing.md,
-    },
-
-    settingLabel: {
-      ...typography.body,
-      color: colors.text,
-      fontWeight: '600',
-    },
-
-    settingSubtitle: {
-      ...typography.caption,
-      color: colors.textMuted,
-      marginTop: 2,
-    },
-
-    resetButton: {
-      backgroundColor: colors.surface,
-      borderRadius: 12,
-      padding: spacing.md,
-      alignItems: 'center',
+      borderRadius: 16,
       borderWidth: 1,
       borderColor: colors.border,
+      padding: spacing.md,
+      flexDirection: 'row',
+      alignItems: 'center',
+      marginBottom: spacing.md,
+      gap: spacing.md,
     },
 
-    resetButtonText: {
-      ...typography.body,
-      color: colors.text,
-      fontWeight: '700',
+    resetRow: {
+      backgroundColor: colors.surface,
+      borderRadius: 16,
+      borderWidth: 1,
+      borderColor: colors.border,
+      padding: spacing.md,
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: spacing.md,
+    },
+
+    rowIcon: {
+      width: 40,
+      height: 40,
+      borderRadius: 14,
+      backgroundColor: colors.primaryLight,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+
+    rowCopy: {
+      flex: 1,
+    },
+
+    rowSubtitle: {
+      marginTop: 2,
     },
 
     aboutCard: {
       backgroundColor: colors.surface,
-      borderRadius: 12,
+      borderRadius: 18,
+      borderWidth: 1,
+      borderColor: colors.border,
       padding: spacing.lg,
       alignItems: 'center',
-      elevation: 2,
     },
 
-    appName: {
-      ...typography.h2,
-      color: colors.primary,
+    aboutIcon: {
+      width: 58,
+      height: 58,
+      borderRadius: 20,
+      backgroundColor: colors.accentLight,
+      alignItems: 'center',
+      justifyContent: 'center',
+      marginBottom: spacing.md,
     },
 
     appTagline: {
-      ...typography.body,
-      color: colors.textMuted,
       textAlign: 'center',
       marginTop: spacing.sm,
       fontStyle: 'italic',
     },
 
     appVersion: {
-      ...typography.caption,
-      color: colors.textLight,
       marginTop: spacing.md,
     },
   })

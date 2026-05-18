@@ -3,6 +3,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { StatusBar } from 'expo-status-bar'
 import { colors } from '../src/theme/colors'
 import { useAuthSession } from '../src/hooks/useAuthSession'
+import FeedbackToast from '../src/components/layout/FeedbackToast'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -29,6 +30,8 @@ function AppContent() {
         <Stack.Screen name="register" />
         <Stack.Screen name="onboarding" />
       </Stack>
+
+      <FeedbackToast />
     </>
   )
 }

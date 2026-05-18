@@ -1,24 +1,25 @@
 import {
-  View,
-  Text,
   FlatList,
   StyleSheet,
   TouchableOpacity,
+  View,
 } from 'react-native'
 import { router } from 'expo-router'
+import { Ionicons } from '@expo/vector-icons'
 import { useSavedStore } from '../../src/stores/savedStore'
 import { useSettingsStore } from '../../src/stores/settingsStore'
 import { translations } from '../../src/utils/translations'
 import { useTheme } from '../../src/hooks/useTheme'
 import { spacing } from '../../src/theme/spacing'
-import { typography } from '../../src/theme/typography'
+import SafeText from '../../src/components/ui/SafeText'
+import GuideCard from '../../src/components/guide/GuideCard'
 
 export default function SavedScreen() {
-  const { savedIds, cachedGuides, unsave } = useSavedStore()
+  const { savedIds, cachedGuides, toggleSave } = useSavedStore()
   const { language } = useSettingsStore()
   const { colors } = useTheme()
-
   const t = translations[language]
+  const styles = createStyles(colors)
 
   const savedGuides = savedIds
     .map((id) => cachedGuides[id])
@@ -31,203 +32,165 @@ export default function SavedScreen() {
     })
   }
 
-  const getTitle = (item: any) =>
-    language === 'fil' ? item.title_fil : item.title_en
+  const renderHeader = () => (
+    <View>
+      <View style={styles.hero}>
+        <View style={styles.heroIcon}>
+          <Ionicons name="bookmark" size={24} color={colors.primary} />
+        </View>
+        <SafeText variant="h1" color="surface">
+          {language === 'fil' ? 'Na-save Mo' : 'Saved Guides'}
+        </SafeText>
+        <SafeText variant="bodyMd" color="surface" style={styles.subtitle}>
+          {savedGuides.length} {t.savedCount}
+        </SafeText>
+      </View>
 
-  const getTagline = (item: any) =>
-    language === 'fil' ? item.tagline_fil : item.tagline_en
+      {savedGuides.length > 0 ? (
+        <View style={styles.notice}>
+          <Ionicons name="cloud-offline-outline" size={19} color={colors.success} />
+          <SafeText variant="bodyMd" color="muted" style={styles.noticeText}>
+            {language === 'fil'
+              ? 'Naka-cache ang saved guides para madaling balikan.'
+              : 'Saved guides are cached so you can revisit them quickly.'}
+          </SafeText>
+        </View>
+      ) : null}
+    </View>
+  )
 
-  const getCategoryName = (item: any) =>
-    language === 'fil' ? item.name_fil : item.name_en
+  return (
+    <FlatList
+      data={savedGuides}
+      keyExtractor={(item) => item.id}
+      ListHeaderComponent={renderHeader}
+      ListEmptyComponent={
+        <View style={styles.emptyState}>
+          <View style={styles.emptyIcon}>
+            <Ionicons name="bookmark-outline" size={32} color={colors.primary} />
+          </View>
+          <SafeText variant="h3" weight="700" style={styles.emptyTitle}>
+            {language === 'fil' ? 'Wala pang na-save' : 'No saved guides yet'}
+          </SafeText>
+          <SafeText variant="bodyMd" color="muted" style={styles.emptySubtitle}>
+            {language === 'fil'
+              ? 'I-tap ang bookmark sa kahit anong guide para mabilis mo itong balikan.'
+              : 'Tap the bookmark on any guide so it is easy to revisit later.'}
+          </SafeText>
 
-  const styles = StyleSheet.create({
-    container: {
-      flex: 1,
+          <TouchableOpacity
+            activeOpacity={0.86}
+            style={styles.emptyAction}
+            onPress={() => router.push('/')}
+          >
+            <SafeText color="surface" weight="700">
+              {language === 'fil' ? 'Mag-browse ng guides' : 'Browse guides'}
+            </SafeText>
+          </TouchableOpacity>
+        </View>
+      }
+      contentContainerStyle={styles.content}
+      showsVerticalScrollIndicator={false}
+      renderItem={({ item }) => (
+        <GuideCard
+          guide={item}
+          language={language}
+          isSaved
+          onPress={() => openGuide(item.id)}
+          onSave={() => toggleSave(item)}
+        />
+      )}
+      removeClippedSubviews
+      maxToRenderPerBatch={5}
+      windowSize={5}
+    />
+  )
+}
+
+const createStyles = (colors: any) =>
+  StyleSheet.create({
+    content: {
       backgroundColor: colors.background,
-    },
-
-    header: {
-      backgroundColor: colors.primary,
-      padding: spacing.lg,
-      paddingTop: spacing.xxl,
-      borderBottomLeftRadius: 24,
-      borderBottomRightRadius: 24,
-    },
-
-    title: {
-      ...typography.h1,
-      color: colors.surface,
-    },
-
-    subtitle: {
-      ...typography.body,
-      color: colors.primaryLight,
-      marginTop: spacing.xs,
-    },
-
-    emptyState: {
-      flex: 1,
-      alignItems: 'center',
-      justifyContent: 'center',
-      padding: spacing.xl,
       paddingBottom: 140,
     },
 
+    hero: {
+      backgroundColor: colors.primary,
+      paddingHorizontal: spacing.lg,
+      paddingTop: spacing.xxl,
+      paddingBottom: spacing.lg,
+      borderBottomLeftRadius: 28,
+      borderBottomRightRadius: 28,
+    },
+
+    heroIcon: {
+      width: 50,
+      height: 50,
+      borderRadius: 16,
+      backgroundColor: colors.surface,
+      alignItems: 'center',
+      justifyContent: 'center',
+      marginBottom: spacing.md,
+    },
+
+    subtitle: {
+      opacity: 0.9,
+      marginTop: spacing.sm,
+    },
+
+    notice: {
+      marginHorizontal: spacing.md,
+      marginTop: spacing.lg,
+      borderRadius: 14,
+      backgroundColor: colors.successLight,
+      borderWidth: 1,
+      borderColor: `${colors.success}30`,
+      padding: spacing.md,
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: spacing.sm,
+    },
+
+    noticeText: {
+      flex: 1,
+    },
+
+    emptyState: {
+      margin: spacing.md,
+      borderRadius: 18,
+      backgroundColor: colors.surface,
+      borderWidth: 1,
+      borderColor: colors.border,
+      padding: spacing.xl,
+      alignItems: 'center',
+    },
+
     emptyIcon: {
-      fontSize: 52,
+      width: 64,
+      height: 64,
+      borderRadius: 32,
+      backgroundColor: colors.primaryLight,
+      alignItems: 'center',
+      justifyContent: 'center',
       marginBottom: spacing.md,
     },
 
     emptyTitle: {
-      ...typography.h3,
-      color: colors.text,
       textAlign: 'center',
       marginBottom: spacing.sm,
     },
 
     emptySubtitle: {
-      ...typography.body,
-      color: colors.textMuted,
       textAlign: 'center',
-      lineHeight: 22,
+      marginBottom: spacing.lg,
     },
 
-    list: {
-      padding: spacing.md,
-      paddingBottom: 140,
-    },
-
-    card: {
-      backgroundColor: colors.surface,
-      borderRadius: 16,
-      padding: spacing.md,
-      marginBottom: spacing.md,
-
-      elevation: 3,
-      shadowColor: '#000',
-      shadowOffset: { width: 0, height: 2 },
-      shadowOpacity: 0.08,
-      shadowRadius: 4,
-    },
-
-    cardCategory: {
-      ...typography.caption,
-      color: colors.textMuted,
-      marginBottom: spacing.xs,
-    },
-
-    cardTitle: {
-      ...typography.h3,
-      color: colors.text,
-      marginBottom: spacing.xs,
-    },
-
-    cardTagline: {
-      ...typography.body,
-      color: colors.textMuted,
-      marginBottom: spacing.sm,
-    },
-
-    cardFooter: {
-      flexDirection: 'row',
-      justifyContent: 'space-between',
+    emptyAction: {
+      minHeight: 46,
+      borderRadius: 14,
+      paddingHorizontal: spacing.lg,
+      backgroundColor: colors.primary,
       alignItems: 'center',
-    },
-
-    readTime: {
-      ...typography.caption,
-      color: colors.textLight,
-    },
-
-    unsaveButton: {
-      ...typography.caption,
-      color: colors.danger,
-      fontWeight: '700',
+      justifyContent: 'center',
     },
   })
-
-  return (
-    <View style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.title}>
-          {language === 'fil'
-            ? 'Na-save Mo 🔖'
-            : 'Saved Guides 🔖'}
-        </Text>
-
-        <Text style={styles.subtitle}>
-          {savedGuides.length}{' '}
-          {language === 'fil'
-            ? 'na guide'
-            : 'saved guides'}
-        </Text>
-      </View>
-
-      {savedGuides.length === 0 ? (
-        <View style={styles.emptyState}>
-          <Text style={styles.emptyIcon}>🔖</Text>
-
-          <Text style={styles.emptyTitle}>
-            {language === 'fil'
-              ? 'Wala pang na-save'
-              : 'No saved guides yet'}
-          </Text>
-
-          <Text style={styles.emptySubtitle}>
-            {language === 'fil'
-              ? 'I-save ang mga guides para madaling balikan.'
-              : 'Save guides so you can easily revisit them later.'}
-          </Text>
-        </View>
-      ) : (
-        <FlatList
-          data={savedGuides}
-          keyExtractor={(item) => item.id}
-          contentContainerStyle={styles.list}
-          showsVerticalScrollIndicator={false}
-          renderItem={({ item }) => (
-            <TouchableOpacity
-              activeOpacity={0.85}
-              style={styles.card}
-              onPress={() => openGuide(item.id)}
-            >
-              <Text style={styles.cardCategory}>
-                {item.category?.icon}{' '}
-                {item.category
-                  ? getCategoryName(item.category)
-                  : ''}
-              </Text>
-
-              <Text style={styles.cardTitle}>
-                {getTitle(item)}
-              </Text>
-
-              <Text style={styles.cardTagline}>
-                {getTagline(item)}
-              </Text>
-
-              <View style={styles.cardFooter}>
-                <Text style={styles.readTime}>
-                  🕐 {item.read_time_min}{' '}
-                  {language === 'fil'
-                    ? 'minuto'
-                    : 'min'}
-                </Text>
-
-                <TouchableOpacity
-                  onPress={() => unsave(item.id)}
-                >
-                  <Text style={styles.unsaveButton}>
-                    {language === 'fil'
-                      ? 'I-remove'
-                      : 'Remove'}
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            </TouchableOpacity>
-          )}
-        />
-      )}
-    </View>
-  )
-}

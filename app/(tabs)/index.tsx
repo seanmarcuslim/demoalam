@@ -1,46 +1,71 @@
 import {
-  View,
-  Text,
-  StyleSheet,
+  FlatList,
   RefreshControl,
   ScrollView,
+  StyleSheet,
   TouchableOpacity,
+  View,
 } from 'react-native'
 import { router } from 'expo-router'
+import { Ionicons } from '@expo/vector-icons'
 import {
-  useGuides,
   useFeaturedGuides,
+  useGuides,
   useUrgentGuides,
 } from '../../src/hooks/useGuides'
 import { useCategories } from '../../src/hooks/useCategories'
 import { useHistoryStore } from '../../src/stores/historyStore'
+import { useSavedStore } from '../../src/stores/savedStore'
 import { useSettingsStore } from '../../src/stores/settingsStore'
-import { useTheme } from '../../src/hooks/useTheme'
 import { translations } from '../../src/utils/translations'
+import { useTheme } from '../../src/hooks/useTheme'
 import { spacing } from '../../src/theme/spacing'
-import { typography } from '../../src/theme/typography'
-import AppHeader from '../../src/components/ui/AppHeader'
+import SafeText from '../../src/components/ui/SafeText'
+import Badge from '../../src/components/ui/Badge'
+import GuideCard from '../../src/components/guide/GuideCard'
+import { Guide } from '../../src/types/guide'
+import LoadingFeed from '../../src/components/layout/LoadingFeed'
+
 export default function HomeScreen() {
   const { colors } = useTheme()
-
-  const { data: guides, isLoading, refetch, isRefetching } =
-    useGuides()
-
-  const { data: featured } = useFeaturedGuides()
-  const { data: urgent } = useUrgentGuides()
-  const { data: categories } = useCategories()
-
   const { language } = useSettingsStore()
-
   const t = translations[language]
+  const styles = createStyles(colors)
 
-  const { recentIds, cachedGuides } =
-    useHistoryStore()
+  const {
+    data: guides = [],
+    isLoading,
+    refetch,
+    isRefetching,
+  } = useGuides()
+  const { data: featured = [] } = useFeaturedGuides()
+  const { data: urgent = [] } = useUrgentGuides()
+  const { data: categories = [] } = useCategories()
+  const { recentIds, cachedGuides } = useHistoryStore()
+  const toggleSave = useSavedStore((state) => state.toggleSave)
+  const isSaved = useSavedStore((state) => state.isSaved)
 
   const recentGuides = recentIds
     .map((id) => cachedGuides[id])
     .filter(Boolean)
     .slice(0, 5)
+
+  const featuredGuide = featured[0]
+  const firstTimerGuides = guides
+    .filter((guide) =>
+      guide.tags?.some((tag) =>
+        ['first job', 'first-time', 'valid id', 'requirements'].some((needle) =>
+          tag.toLowerCase().includes(needle)
+        )
+      )
+    )
+    .slice(0, 4)
+  const moneyGuides = guides
+    .filter((guide) => guide.category?.slug === 'money')
+    .slice(0, 4)
+  const governmentGuides = guides
+    .filter((guide) => guide.category?.slug === 'gov')
+    .slice(0, 4)
 
   const openGuide = (id: string) => {
     router.push({
@@ -49,27 +74,300 @@ export default function HomeScreen() {
     })
   }
 
-  const getTitle = (item: any) =>
-    language === 'fil'
-      ? item.title_fil
-      : item.title_en
+  const openCategory = (id: string, name: string) => {
+    router.push({
+      pathname: '/category/[id]',
+      params: { id, name },
+    })
+  }
 
-  const getTagline = (item: any) =>
-    language === 'fil'
-      ? item.tagline_fil
-      : item.tagline_en
+  const getTitle = (guide: Guide) =>
+    language === 'fil' ? guide.title_fil : guide.title_en
 
-  const getCategoryName = (item: any) =>
-    language === 'fil'
-      ? item.name_fil
-      : item.name_en
+  const getTagline = (guide: Guide) =>
+    language === 'fil' ? guide.tagline_fil : guide.tagline_en
 
-  const styles = createStyles(colors)
+  const getCategoryName = (category: any) =>
+    language === 'fil' ? category.name_fil : category.name_en
+
+  const renderGuide = ({ item }: { item: Guide }) => (
+    <GuideCard
+      guide={item}
+      language={language}
+      isSaved={isSaved(item.id)}
+      onPress={() => openGuide(item.id)}
+      onSave={() => toggleSave(item)}
+    />
+  )
+
+  const renderCuratedSection = ({
+    title,
+    subtitle,
+    items,
+    icon,
+  }: {
+    title: string
+    subtitle: string
+    items: Guide[]
+    icon: string
+  }) => {
+    if (items.length === 0) {
+      return null
+    }
+
+    return (
+      <View style={styles.section}>
+        <View style={styles.sectionHeaderRow}>
+          <View>
+            <SafeText variant="h3" weight="700">
+              {icon} {title}
+            </SafeText>
+            <SafeText variant="caption" color="muted" style={styles.sectionSubtitle}>
+              {subtitle}
+            </SafeText>
+          </View>
+        </View>
+
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={styles.curatedRow}
+        >
+          {items.map((guide) => (
+            <View key={guide.id} style={styles.curatedCardWrap}>
+              <GuideCard
+                guide={guide}
+                language={language}
+                isSaved={isSaved(guide.id)}
+                onPress={() => openGuide(guide.id)}
+                onSave={() => toggleSave(guide)}
+                compact
+              />
+            </View>
+          ))}
+        </ScrollView>
+      </View>
+    )
+  }
+
+  const renderHeader = () => (
+    <View>
+      <View style={styles.hero}>
+        <View style={styles.heroTop}>
+          <View>
+            <SafeText variant="caption" color="surface" style={styles.eyebrow}>
+              DemoAlam
+            </SafeText>
+            <SafeText variant="h1" color="surface" style={styles.heroTitle}>
+              {language === 'fil'
+                ? 'Sayang, ngayon ko lang nalaman.'
+                : 'Useful things worth knowing earlier.'}
+            </SafeText>
+          </View>
+
+          <View style={styles.logoMark}>
+            <SafeText variant="h2" color="primary">💡</SafeText>
+          </View>
+        </View>
+
+        <SafeText variant="bodyMd" color="surface" style={styles.heroSubtitle}>
+          {language === 'fil'
+            ? 'Praktikal na gabay para sa ID, pera, trabaho, gobyerno, at iwas-scam.'
+            : 'Practical guides for IDs, money, work, government tasks, and scam safety.'}
+        </SafeText>
+
+        <View style={styles.heroStats}>
+          <View style={styles.statPill}>
+            <SafeText variant="label" color="surface">
+              {guides.length || 0} {language === 'fil' ? 'guides' : 'guides'}
+            </SafeText>
+          </View>
+          <View style={styles.statPill}>
+            <SafeText variant="label" color="surface">
+              {urgent.length} {language === 'fil' ? 'alerts' : 'alerts'}
+            </SafeText>
+          </View>
+        </View>
+      </View>
+
+      <View style={styles.section}>
+        <View style={styles.sectionHeader}>
+          <SafeText variant="h3" weight="700">
+            {t.categories}
+          </SafeText>
+          <SafeText variant="caption" color="muted">
+            {language === 'fil' ? 'Piliin ang topic' : 'Browse topics'}
+          </SafeText>
+        </View>
+
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={styles.categoryRow}
+        >
+          {categories.map((cat) => (
+            <TouchableOpacity
+              key={cat.id}
+              activeOpacity={0.86}
+              style={[
+                styles.categoryChip,
+                {
+                  borderColor: `${cat.color}35`,
+                  backgroundColor: `${cat.color}12`,
+                },
+              ]}
+              onPress={() => openCategory(cat.id, getCategoryName(cat))}
+            >
+              <SafeText style={styles.categoryIcon}>{cat.icon}</SafeText>
+              <SafeText variant="label" style={{ color: cat.color }}>
+                {getCategoryName(cat)}
+              </SafeText>
+            </TouchableOpacity>
+          ))}
+        </ScrollView>
+      </View>
+
+      {featuredGuide ? (
+        <TouchableOpacity
+          activeOpacity={0.88}
+          style={styles.featured}
+          onPress={() => openGuide(featuredGuide.id)}
+        >
+          <View style={styles.featuredCopy}>
+            <Badge label={t.featured} icon="⭐" color={colors.accent} />
+            <SafeText variant="h2" color="surface" style={styles.featuredTitle} numberOfLines={2}>
+              {getTitle(featuredGuide)}
+            </SafeText>
+            <SafeText variant="bodyMd" color="surface" style={styles.featuredText} numberOfLines={2}>
+              {getTagline(featuredGuide)}
+            </SafeText>
+          </View>
+
+          <View style={styles.featuredAction}>
+            <Ionicons name="arrow-forward" size={20} color={colors.primary} />
+          </View>
+        </TouchableOpacity>
+      ) : null}
+
+      {urgent.length > 0 ? (
+        <View style={styles.section}>
+          <View style={styles.sectionHeader}>
+            <SafeText variant="h3" weight="700">
+              🚨 {t.scamAlerts}
+            </SafeText>
+            <SafeText variant="caption" color="muted">
+              {language === 'fil' ? 'Basahin muna bago magpadala' : 'Read before sending money'}
+            </SafeText>
+          </View>
+
+          {urgent.map((guide) => (
+            <GuideCard
+              key={guide.id}
+              guide={guide}
+              language={language}
+              isSaved={isSaved(guide.id)}
+              onPress={() => openGuide(guide.id)}
+              onSave={() => toggleSave(guide)}
+              compact
+            />
+          ))}
+        </View>
+      ) : null}
+
+      {recentGuides.length > 0 ? (
+        <View style={styles.section}>
+          <View style={styles.sectionHeader}>
+            <SafeText variant="h3" weight="700">
+              👀 {t.recentlyViewed}
+            </SafeText>
+          </View>
+
+          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+            {recentGuides.map((guide) => (
+              <TouchableOpacity
+                key={guide.id}
+                activeOpacity={0.86}
+                style={styles.recentCard}
+                onPress={() => openGuide(guide.id)}
+              >
+                <SafeText variant="caption" color="muted" numberOfLines={1}>
+                  {guide.category?.icon} {guide.category ? getCategoryName(guide.category) : ''}
+                </SafeText>
+                <SafeText variant="body" weight="700" numberOfLines={2} style={styles.recentTitle}>
+                  {getTitle(guide)}
+                </SafeText>
+              </TouchableOpacity>
+            ))}
+          </ScrollView>
+        </View>
+      ) : null}
+
+      {renderCuratedSection({
+        title: language === 'fil' ? 'Para sa First-Timers' : 'For First-Timers',
+        subtitle:
+          language === 'fil'
+            ? 'Unang trabaho, unang ID, unang requirements'
+            : 'First job, first ID, first requirements',
+        items: firstTimerGuides,
+        icon: '🧭',
+      })}
+
+      {renderCuratedSection({
+        title: language === 'fil' ? 'Money Moves' : 'Money Moves',
+        subtitle:
+          language === 'fil'
+            ? 'Bago magbayad, umutang, o mag-open ng account'
+            : 'Before paying, borrowing, or opening an account',
+        items: moneyGuides,
+        icon: '💸',
+      })}
+
+      {renderCuratedSection({
+        title: language === 'fil' ? 'Government Basics' : 'Government Basics',
+        subtitle:
+          language === 'fil'
+            ? 'Para hindi sayang ang punta sa opisina'
+            : 'Avoid wasted trips to government offices',
+        items: governmentGuides,
+        icon: '🏛️',
+      })}
+
+      <View style={styles.sectionHeaderBlock}>
+        <SafeText variant="h3" weight="700">
+          📚 {t.allGuides}
+        </SafeText>
+        <SafeText variant="caption" color="muted">
+          {language === 'fil' ? 'Para sa first-timers at everyday decisions' : 'For first-timers and everyday decisions'}
+        </SafeText>
+      </View>
+    </View>
+  )
 
   return (
-    <ScrollView
-      style={styles.container}
-      contentContainerStyle={styles.content}
+    <FlatList
+      data={guides}
+      renderItem={renderGuide}
+      keyExtractor={(item) => item.id}
+      ListHeaderComponent={renderHeader}
+      ListEmptyComponent={
+        <View style={styles.empty}>
+          {isLoading ? (
+            <LoadingFeed count={3} />
+          ) : (
+            <>
+              <SafeText variant="h3" weight="700">
+                {language === 'fil' ? 'Wala pang guides' : 'No guides yet'}
+              </SafeText>
+              <SafeText variant="bodyMd" color="muted" style={styles.emptyText}>
+                {language === 'fil'
+                  ? 'Kapag may Supabase data na, lalabas dito ang mga gabay.'
+                  : 'Guides will appear here once Supabase has data.'}
+              </SafeText>
+            </>
+          )}
+        </View>
+      }
+      contentContainerStyle={styles.listContent}
       showsVerticalScrollIndicator={false}
       refreshControl={
         <RefreshControl
@@ -79,416 +377,197 @@ export default function HomeScreen() {
           tintColor={colors.primary}
         />
       }
-    >
-<AppHeader
-  title="DemoAlam 💡"
-  subtitle={
-    language === 'fil'
-      ? 'Ano ang hindi mo pa alam?'
-      : 'What do you not know yet?'
-  }
-/>
-
-      {recentGuides.length > 0 && (
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>
-            👀 {t.recentlyViewed}
-          </Text>
-
-          <ScrollView
-            horizontal
-            showsHorizontalScrollIndicator={false}
-          >
-            {recentGuides.map((guide) => (
-              <TouchableOpacity
-                key={guide.id}
-                activeOpacity={0.85}
-                style={styles.recentCard}
-                onPress={() => openGuide(guide.id)}
-              >
-                <Text style={styles.recentCategory}>
-                  {guide.category?.icon}{' '}
-                  {guide.category
-                    ? getCategoryName(guide.category)
-                    : ''}
-                </Text>
-
-                <Text
-                  style={styles.recentTitle}
-                  numberOfLines={2}
-                >
-                  {getTitle(guide)}
-                </Text>
-
-                <Text style={styles.readTime}>
-                  🕐 {guide.read_time_min}{' '}
-                  {language === 'fil'
-                    ? 'minuto'
-                    : 'min'}
-                </Text>
-              </TouchableOpacity>
-            ))}
-          </ScrollView>
-        </View>
-      )}
-
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>
-          {t.categories}
-        </Text>
-
-        <ScrollView
-          horizontal
-          showsHorizontalScrollIndicator={false}
-        >
-          {categories &&
-          categories.length > 0 ? (
-            categories.map((cat) => (
-              <View
-                key={cat.id}
-                style={[
-                  styles.categoryChip,
-                  {
-                    backgroundColor:
-                      cat.color + '20',
-                  },
-                ]}
-              >
-                <Text style={styles.categoryIcon}>
-                  {cat.icon}
-                </Text>
-
-                <Text
-                  style={[
-                    styles.categoryLabel,
-                    { color: cat.color },
-                  ]}
-                >
-                  {getCategoryName(cat)}
-                </Text>
-              </View>
-            ))
-          ) : (
-            <Text style={styles.emptyText}>
-              {language === 'fil'
-                ? 'Wala pang categories.'
-                : 'No categories yet.'}
-            </Text>
-          )}
-        </ScrollView>
-      </View>
-
-      {urgent && urgent.length > 0 && (
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>
-            🚨 {t.scamAlerts}
-          </Text>
-
-          {urgent.map((guide) => (
-            <TouchableOpacity
-              key={guide.id}
-              style={[
-                styles.card,
-                styles.urgentCard,
-              ]}
-              activeOpacity={0.85}
-              onPress={() => openGuide(guide.id)}
-            >
-              <Text style={styles.urgentBadge}>
-                URGENT
-              </Text>
-
-              <Text style={styles.cardTitle}>
-                {getTitle(guide)}
-              </Text>
-
-              <Text style={styles.cardTagline}>
-                {getTagline(guide)}
-              </Text>
-
-              <View style={styles.cardFooter}>
-                <Text style={styles.readTime}>
-                  🕐 {guide.read_time_min}{' '}
-                  {language === 'fil'
-                    ? 'minuto'
-                    : 'min'}
-                </Text>
-
-                <Text style={styles.openText}>
-                  {t.open}
-                </Text>
-              </View>
-            </TouchableOpacity>
-          ))}
-        </View>
-      )}
-
-      {featured && featured.length > 0 && (
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>
-            ⭐ {t.featured}
-          </Text>
-
-          {featured.map((guide) => (
-            <TouchableOpacity
-              key={guide.id}
-              style={styles.card}
-              activeOpacity={0.85}
-              onPress={() => openGuide(guide.id)}
-            >
-              <Text style={styles.cardCategory}>
-                {guide.category?.icon}{' '}
-                {guide.category
-                  ? getCategoryName(
-                      guide.category
-                    )
-                  : ''}
-              </Text>
-
-              <Text style={styles.cardTitle}>
-                {getTitle(guide)}
-              </Text>
-
-              <Text style={styles.cardTagline}>
-                {getTagline(guide)}
-              </Text>
-
-              <View style={styles.cardFooter}>
-                <Text style={styles.readTime}>
-                  🕐 {guide.read_time_min}{' '}
-                  {language === 'fil'
-                    ? 'minuto'
-                    : 'min'}
-                </Text>
-
-                <Text style={styles.openText}>
-                  {t.open}
-                </Text>
-              </View>
-            </TouchableOpacity>
-          ))}
-        </View>
-      )}
-
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>
-          📚 {t.allGuides}
-        </Text>
-
-        {isLoading ? (
-          <Text style={styles.loadingText}>
-            {t.loading}
-          </Text>
-        ) : guides &&
-          guides.length > 0 ? (
-          guides.map((guide) => (
-            <TouchableOpacity
-              key={guide.id}
-              style={styles.card}
-              activeOpacity={0.85}
-              onPress={() => openGuide(guide.id)}
-            >
-              <Text style={styles.cardCategory}>
-                {guide.category?.icon}{' '}
-                {guide.category
-                  ? getCategoryName(
-                      guide.category
-                    )
-                  : ''}
-              </Text>
-
-              <Text style={styles.cardTitle}>
-                {getTitle(guide)}
-              </Text>
-
-              <Text style={styles.cardTagline}>
-                {getTagline(guide)}
-              </Text>
-
-              <View style={styles.cardFooter}>
-                <Text style={styles.readTime}>
-                  🕐 {guide.read_time_min}{' '}
-                  {language === 'fil'
-                    ? 'minuto'
-                    : 'min'}
-                </Text>
-
-                <Text style={styles.openText}>
-                  {t.open}
-                </Text>
-              </View>
-            </TouchableOpacity>
-          ))
-        ) : (
-          <Text style={styles.emptyText}>
-            {language === 'fil'
-              ? 'Wala pang guides na available.'
-              : 'No guides available yet.'}
-          </Text>
-        )}
-      </View>
-    </ScrollView>
+      removeClippedSubviews
+      maxToRenderPerBatch={5}
+      updateCellsBatchingPeriod={50}
+      windowSize={5}
+      initialNumToRender={4}
+    />
   )
 }
 
 const createStyles = (colors: any) =>
   StyleSheet.create({
-    container: {
-      flex: 1,
+    listContent: {
       backgroundColor: colors.background,
-    },
-
-    content: {
       paddingBottom: 140,
     },
 
-    header: {
+    hero: {
       backgroundColor: colors.primary,
-      padding: spacing.lg,
+      paddingHorizontal: spacing.lg,
       paddingTop: spacing.xxl,
+      paddingBottom: spacing.lg,
+      borderBottomLeftRadius: 28,
+      borderBottomRightRadius: 28,
     },
 
-    logo: {
-      ...typography.h1,
-      color: colors.surface,
+    heroTop: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      gap: spacing.md,
     },
 
-    tagline: {
-      ...typography.body,
-      color: colors.primaryLight,
-      marginTop: spacing.xs,
+    eyebrow: {
+      textTransform: 'uppercase',
+      opacity: 0.82,
+      marginBottom: spacing.sm,
+    },
+
+    heroTitle: {
+      maxWidth: 290,
+    },
+
+    heroSubtitle: {
+      opacity: 0.9,
+      marginTop: spacing.md,
+      maxWidth: 330,
+    },
+
+    logoMark: {
+      width: 48,
+      height: 48,
+      borderRadius: 14,
+      backgroundColor: colors.surface,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+
+    heroStats: {
+      flexDirection: 'row',
+      gap: spacing.sm,
+      marginTop: spacing.lg,
+    },
+
+    statPill: {
+      borderRadius: 999,
+      borderWidth: 1,
+      borderColor: 'rgba(255,255,255,0.28)',
+      paddingHorizontal: spacing.md,
+      paddingVertical: spacing.sm,
+      backgroundColor: 'rgba(255,255,255,0.12)',
     },
 
     section: {
-      padding: spacing.md,
+      paddingHorizontal: spacing.md,
+      paddingTop: spacing.lg,
     },
 
-    sectionTitle: {
-      ...typography.h3,
-      color: colors.text,
+    sectionHeader: {
       marginBottom: spacing.md,
     },
 
-    recentCard: {
-      width: 220,
-      backgroundColor: colors.surface,
-      borderRadius: 16,
-      padding: spacing.md,
-      marginRight: spacing.md,
-
-      elevation: 3,
-      shadowColor: '#000',
-      shadowOffset: {
-        width: 0,
-        height: 2,
-      },
-      shadowOpacity: 0.08,
-      shadowRadius: 4,
-    },
-
-    recentCategory: {
-      ...typography.caption,
-      color: colors.textMuted,
-      marginBottom: spacing.xs,
-    },
-
-    recentTitle: {
-      ...typography.h3,
-      color: colors.text,
+    sectionHeaderRow: {
       marginBottom: spacing.md,
+    },
+
+    sectionSubtitle: {
+      marginTop: spacing.xs,
+    },
+
+    sectionHeaderBlock: {
+      paddingHorizontal: spacing.md,
+      paddingTop: spacing.lg,
+      paddingBottom: spacing.md,
+    },
+
+    categoryRow: {
+      gap: spacing.sm,
+      paddingRight: spacing.md,
     },
 
     categoryChip: {
-      flexDirection: 'row',
-      alignItems: 'center',
+      minHeight: 44,
+      borderRadius: 999,
+      borderWidth: 1,
       paddingHorizontal: spacing.md,
       paddingVertical: spacing.sm,
-      borderRadius: 20,
-      marginRight: spacing.sm,
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: spacing.xs,
     },
 
     categoryIcon: {
       fontSize: 16,
-      marginRight: 4,
     },
 
-    categoryLabel: {
-      ...typography.label,
-      fontWeight: '600',
+    featured: {
+      marginHorizontal: spacing.md,
+      marginTop: spacing.lg,
+      backgroundColor: colors.primaryDark,
+      borderRadius: 18,
+      padding: spacing.lg,
+      minHeight: 188,
+      overflow: 'hidden',
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'flex-end',
+      elevation: 4,
+      shadowColor: colors.shadow,
+      shadowOffset: { width: 0, height: 4 },
+      shadowOpacity: 0.14,
+      shadowRadius: 8,
     },
 
-    card: {
-      backgroundColor: colors.surface,
-      borderRadius: 12,
-      padding: spacing.md,
-      marginBottom: spacing.md,
-
-      elevation: 3,
-      shadowColor: '#000',
-      shadowOffset: {
-        width: 0,
-        height: 2,
-      },
-      shadowOpacity: 0.08,
-      shadowRadius: 4,
+    featuredCopy: {
+      flex: 1,
+      paddingRight: spacing.md,
     },
 
-    urgentCard: {
-      borderLeftWidth: 4,
-      borderLeftColor: colors.danger,
-    },
-
-    urgentBadge: {
-      ...typography.label,
-      color: colors.danger,
-      marginBottom: spacing.xs,
-    },
-
-    cardCategory: {
-      ...typography.caption,
-      color: colors.textMuted,
-      marginBottom: spacing.xs,
-    },
-
-    cardTitle: {
-      ...typography.h3,
-      color: colors.text,
-      marginBottom: spacing.xs,
-    },
-
-    cardTagline: {
-      ...typography.body,
-      color: colors.textMuted,
+    featuredTitle: {
+      marginTop: spacing.md,
       marginBottom: spacing.sm,
     },
 
-    cardFooter: {
-      flexDirection: 'row',
-      justifyContent: 'space-between',
+    featuredText: {
+      opacity: 0.86,
+    },
+
+    featuredAction: {
+      width: 44,
+      height: 44,
+      borderRadius: 22,
+      backgroundColor: colors.surface,
       alignItems: 'center',
+      justifyContent: 'center',
     },
 
-    readTime: {
-      ...typography.caption,
-      color: colors.textLight,
+    recentCard: {
+      width: 210,
+      backgroundColor: colors.surface,
+      borderRadius: 14,
+      borderWidth: 1,
+      borderColor: colors.border,
+      padding: spacing.md,
+      marginRight: spacing.sm,
+      minHeight: 104,
     },
 
-    openText: {
-      ...typography.caption,
-      color: colors.primary,
-      fontWeight: '700',
+    recentTitle: {
+      marginTop: spacing.sm,
     },
 
-    loadingText: {
-      ...typography.body,
-      color: colors.textMuted,
-      textAlign: 'center',
-      padding: spacing.lg,
+    curatedRow: {
+      paddingRight: spacing.md,
+      gap: spacing.sm,
+    },
+
+    curatedCardWrap: {
+      width: 286,
+    },
+
+    empty: {
+      margin: spacing.md,
+      borderRadius: 16,
+      backgroundColor: colors.surface,
+      padding: spacing.xl,
+      alignItems: 'center',
+      borderWidth: 1,
+      borderColor: colors.border,
     },
 
     emptyText: {
-      ...typography.body,
-      color: colors.textMuted,
-      paddingVertical: spacing.sm,
+      marginTop: spacing.sm,
+      textAlign: 'center',
     },
   })

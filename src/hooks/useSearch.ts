@@ -9,7 +9,8 @@ export function useSearch() {
   // 300ms debounce — don't search on every keystroke
   useEffect(() => {
     const timer = setTimeout(() => {
-      setDebouncedTerm(searchTerm)
+      const cleanTerm = searchTerm.trim()
+      setDebouncedTerm(cleanTerm)
     }, 300)
     return () => clearTimeout(timer)
   }, [searchTerm])

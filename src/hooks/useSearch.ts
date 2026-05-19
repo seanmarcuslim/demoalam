@@ -15,11 +15,17 @@ export function useSearch() {
     return () => clearTimeout(timer)
   }, [searchTerm])
 
-  const { data: results, isLoading } = useQuery({
+  const {
+    data: results,
+    isLoading,
+    isError,
+    refetch,
+  } = useQuery({
     queryKey: ['search', debouncedTerm],
     queryFn: () => guidesService.searchGuides(debouncedTerm),
     enabled: debouncedTerm.length > 1,
     staleTime: 1000 * 60 * 2,
+    networkMode: 'offlineFirst',
   })
 
   return {
@@ -27,6 +33,8 @@ export function useSearch() {
     setSearchTerm,
     results: results || [],
     isLoading,
+    isError,
+    refetch,
     hasResults: (results?.length ?? 0) > 0,
   }
 }

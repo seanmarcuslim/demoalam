@@ -1,12 +1,12 @@
 insert into public.categories (slug, name_en, name_fil, icon, color, order_index)
 values
-  ('ids', 'IDs', 'Mga ID', '🪪', '#1A6BCC', 1),
-  ('work', 'Work', 'Trabaho', '💼', '#188038', 2),
-  ('money', 'Money', 'Pera', '💸', '#F5A623', 3),
-  ('gov', 'Government', 'Gobyerno', '🏛️', '#6F42C1', 4),
-  ('scams', 'Scams', 'Scam Alerts', '🚨', '#D93025', 5),
-  ('emergency', 'Emergency', 'Emergency', '🚑', '#E37400', 6),
-  ('adulting', 'Adulting', 'Adulting', '🎓', '#00897B', 7)
+  ('ids', 'IDs', 'Mga ID', '🪪', '#2563A9', 1),
+  ('work', 'Work', 'Trabaho', '💼', '#267A4D', 2),
+  ('money', 'Money', 'Pera', '💸', '#D9902F', 3),
+  ('gov', 'Government', 'Gobyerno', '🏛️', '#6D5BA8', 4),
+  ('scams', 'Scams', 'Scam Alerts', '🚨', '#C83E3A', 5),
+  ('emergency', 'Emergency', 'Emergency', '🚑', '#B86B16', 6),
+  ('adulting', 'Adulting', 'Adulting', '🎓', '#2F8277', 7)
 on conflict (slug) do update set
   name_en = excluded.name_en,
   name_fil = excluded.name_fil,
@@ -416,6 +416,59 @@ on conflict (slug) do update set
   tags = excluded.tags,
   published_at = excluded.published_at,
   updated_at = now();
+
+update public.guides
+set
+  keywords_en = tags,
+  keywords_fil = tags,
+  updated_at = now()
+where slug in (
+  'fast-valid-id',
+  'gcash-scam-red-flags',
+  'first-job-requirements',
+  'government-appointment-basics',
+  'lost-wallet-first-steps',
+  'renting-first-time-checklist',
+  'nbi-clearance-first-timers',
+  'barangay-certificate-when-needed',
+  'resume-no-experience',
+  'job-interview-basic-answers',
+  'bank-account-first-time',
+  'loan-red-flags-before-borrowing',
+  'payday-budget-simple-split',
+  'sss-number-first-job',
+  'philhealth-pagibig-tin-basics',
+  'fake-job-offer-red-flags',
+  'phishing-link-checklist',
+  'phone-stolen-first-hour',
+  'medical-emergency-documents',
+  'moving-out-budget',
+  'first-time-utility-bills'
+);
+
+update public.guides
+set
+  official_sources = case slug
+    when 'gcash-scam-red-flags' then
+      '[{"title":"Report a scam","publisher":"GCash Help Center","url":"https://help.gcash.com/hc/en-us/articles/4413295284377-Report-a-scam"}]'::jsonb
+    when 'sss-number-first-job' then
+      '[{"title":"Become an SSS Member","publisher":"Social Security System","url":"https://www.sss.gov.ph/become-an-sss-member/"}]'::jsonb
+    when 'philhealth-pagibig-tin-basics' then
+      '[
+        {"title":"PhilHealth Online Services","publisher":"PhilHealth","url":"https://www.philhealth.gov.ph/services"},
+        {"title":"Pag-IBIG Fund","publisher":"Pag-IBIG Fund","url":"https://www.pagibigfund.gov.ph/"}
+      ]'::jsonb
+    when 'phishing-link-checklist' then
+      '[{"title":"GCash Help Center","publisher":"GCash Help Center","url":"https://help.gcash.com/hc/en-us/"}]'::jsonb
+    else official_sources
+  end,
+  updated_at = now()
+where slug in (
+  'gcash-scam-red-flags',
+  'sss-number-first-job',
+  'philhealth-pagibig-tin-basics',
+  'phishing-link-checklist'
+);
 
 delete from public.guide_sections
 where guide_id in (

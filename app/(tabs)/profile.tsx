@@ -16,6 +16,7 @@ import { useAuth } from '../../src/hooks/useAuth'
 import { useTheme } from '../../src/hooks/useTheme'
 import { translations } from '../../src/utils/translations'
 import { spacing } from '../../src/theme/spacing'
+import type { ThemeColors } from '../../src/theme/colors'
 import SafeText from '../../src/components/ui/SafeText'
 
 export default function ProfileScreen() {
@@ -44,11 +45,13 @@ export default function ProfileScreen() {
           ? 'Nagba-browse ka na ngayon bilang bisita.'
           : 'You are now browsing as guest.'
       )
-    } catch (error: any) {
+    } catch (error: unknown) {
       Alert.alert(
         language === 'fil' ? 'Hindi ma-logout' : 'Logout failed',
-        error.message ||
-          (language === 'fil' ? 'Subukan muli.' : 'Please try again.')
+        getErrorMessage(
+          error,
+          language === 'fil' ? 'Subukan muli.' : 'Please try again.'
+        )
       )
     }
   }
@@ -270,7 +273,11 @@ export default function ProfileScreen() {
   }
 }
 
-const createStyles = (colors: any) =>
+function getErrorMessage(error: unknown, fallback: string) {
+  return error instanceof Error ? error.message : fallback
+}
+
+const createStyles = (colors: ThemeColors) =>
   StyleSheet.create({
     container: {
       flex: 1,

@@ -4,6 +4,8 @@ import { Ionicons } from '@expo/vector-icons'
 import { Guide } from '../../types/guide'
 import { useTheme } from '../../hooks/useTheme'
 import { spacing } from '../../theme/spacing'
+import { ThemeColors } from '../../theme/colors'
+import { getCategoryAccent } from '../../lib/categoryVisuals'
 import SafeText from '../ui/SafeText'
 import Badge from '../ui/Badge'
 import { useFeedbackStore } from '../../stores/feedbackStore'
@@ -35,7 +37,8 @@ function GuideCard({
       ? guide.category.name_fil
       : guide.category.name_en
     : ''
-  const categoryColor = guide.category?.color || colors.primary
+  const categoryColor = getCategoryAccent(guide.category, colors.primary)
+  const hasOfficialSources = (guide.official_sources?.length ?? 0) > 0
 
   const handleSave = () => {
     onSave()
@@ -101,6 +104,23 @@ function GuideCard({
           <SafeText variant="caption" color="light">
             {guide.read_time_min} {language === 'fil' ? 'minuto' : 'min'}
           </SafeText>
+
+          {hasOfficialSources ? (
+            <View style={styles.sourcePill}>
+              <Ionicons
+                name="shield-checkmark"
+                size={13}
+                color={colors.success}
+              />
+              <SafeText
+                variant="caption"
+                weight="700"
+                style={{ color: colors.success }}
+              >
+                {language === 'fil' ? 'Source' : 'Source'}
+              </SafeText>
+            </View>
+          ) : null}
         </View>
 
         <View style={styles.action}>
@@ -114,7 +134,7 @@ function GuideCard({
   )
 }
 
-const createStyles = (colors: any, urgent: boolean, compact: boolean) =>
+const createStyles = (colors: ThemeColors, urgent: boolean, compact: boolean) =>
   StyleSheet.create({
     card: {
       backgroundColor: colors.surface,
@@ -167,6 +187,19 @@ const createStyles = (colors: any, urgent: boolean, compact: boolean) =>
       flexDirection: 'row',
       alignItems: 'center',
       gap: spacing.xs,
+      flexWrap: 'wrap',
+      flex: 1,
+      paddingRight: spacing.sm,
+    },
+
+    sourcePill: {
+      minHeight: 24,
+      borderRadius: 999,
+      backgroundColor: colors.successLight,
+      paddingHorizontal: spacing.sm,
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: 3,
     },
 
     action: {

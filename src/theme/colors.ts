@@ -1,36 +1,36 @@
 export const lightColors = {
   // Brand
-  primary: '#1A6BCC',
-  primaryDark: '#0F4A99',
-  primaryLight: '#E8F0FB',
+  primary: '#2563A9',
+  primaryDark: '#173F73',
+  primaryLight: '#EAF2FC',
 
   // Accent
-  accent: '#F5A623',
-  accentLight: '#FEF3D7',
+  accent: '#D9902F',
+  accentLight: '#FFF3D8',
 
   // Semantic
-  danger: '#D93025',
-  dangerLight: '#FDECEA',
+  danger: '#C83E3A',
+  dangerLight: '#FCEDEE',
 
-  success: '#188038',
-  successLight: '#E6F4EA',
+  success: '#267A4D',
+  successLight: '#E8F4EE',
 
-  warning: '#E37400',
-  warningLight: '#FEF7E0',
+  warning: '#B86B16',
+  warningLight: '#FFF4DF',
 
   // Text
-  text: '#1A1A2E',
-  textMuted: '#5F6368',
-  textLight: '#9AA0A6',
+  text: '#17202A',
+  textMuted: '#5E6B78',
+  textLight: '#8E9AA6',
 
   // Backgrounds
-  background: '#F8F9FA',
+  background: '#F6F8FB',
   surface: '#FFFFFF',
-  surfaceSecondary: '#F1F3F4',
-  surfaceHover: '#E8EAED',
+  surfaceSecondary: '#EEF3F7',
+  surfaceHover: '#E5ECF3',
 
   // Borders
-  border: '#E8EAED',
+  border: '#DDE5EE',
 
   // Misc
   shadow: '#000000',
@@ -39,37 +39,37 @@ export const lightColors = {
 
 export const darkColors = {
   // Brand
-  primary: '#4D9DFF',
-  primaryDark: '#1A6BCC',
-  primaryLight: '#8CC0FF',
+  primary: '#6EA8E8',
+  primaryDark: '#2F5F9A',
+  primaryLight: '#D7E9FF',
 
   // Accent
-  accent: '#FFB547',
-  accentLight: '#4A3A14',
+  accent: '#E5B65B',
+  accentLight: '#3B2F1D',
 
   // Semantic
-  danger: '#FF6B6B',
-  dangerLight: '#4A1F1F',
+  danger: '#F07C78',
+  dangerLight: '#3E2224',
 
-  success: '#57D287',
-  successLight: '#1E3A2B',
+  success: '#72C79A',
+  successLight: '#1F352C',
 
-  warning: '#FFB020',
-  warningLight: '#4A3714',
+  warning: '#E3A44C',
+  warningLight: '#3B2D1B',
 
   // Text
-  text: '#F5F7FA',
-  textMuted: '#B0B7C3',
-  textLight: '#7D8590',
+  text: '#F3F6F8',
+  textMuted: '#B4C0CA',
+  textLight: '#82909C',
 
   // Backgrounds
-  background: '#0F1115',
-  surface: '#1A1D24',
-  surfaceSecondary: '#22262F',
-  surfaceHover: '#2A2F3A',
+  background: '#10161C',
+  surface: '#18212A',
+  surfaceSecondary: '#202B35',
+  surfaceHover: '#293643',
 
   // Borders
-  border: '#2D333D',
+  border: '#31404E',
 
   // Misc
   shadow: '#000000',
@@ -77,3 +77,5 @@ export const darkColors = {
 }
 
 export const colors = lightColors
+
+export type ThemeColors = typeof lightColors

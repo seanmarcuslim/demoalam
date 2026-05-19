@@ -2,15 +2,18 @@ import {
   View,
   StyleSheet,
   TouchableOpacity,
+  StyleProp,
+  ViewStyle,
 } from 'react-native'
 import { ReactNode } from 'react'
 import { useTheme } from '../../hooks/useTheme'
 import { spacing } from '../../theme/spacing'
+import { ThemeColors } from '../../theme/colors'
 
 interface AppCardProps {
   children: ReactNode
   onPress?: () => void
-  style?: any
+  style?: StyleProp<ViewStyle>
 }
 
 export default function AppCard({
@@ -41,7 +44,7 @@ export default function AppCard({
   )
 }
 
-const createStyles = (colors: any) =>
+const createStyles = (colors: ThemeColors) =>
   StyleSheet.create({
     card: {
       backgroundColor: colors.surface,

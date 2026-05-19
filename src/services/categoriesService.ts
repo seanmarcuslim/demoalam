@@ -1,5 +1,6 @@
 import { supabase } from './supabase'
 import { Category } from '../types/category'
+import { throwServiceError } from './serviceErrors'
 
 export const categoriesService = {
   async fetchCategories(): Promise<Category[]> {
@@ -10,8 +11,7 @@ export const categoriesService = {
       .order('order_index', { ascending: true })
 
     if (error) {
-      console.error('Error fetching categories:', error)
-      throw error
+      throwServiceError('Error fetching categories:', error)
     }
 
     return data || []

@@ -6,6 +6,7 @@ export function useGuides(categoryId?: string) {
     queryKey: ['guides', categoryId],
     queryFn: () => guidesService.fetchGuides(categoryId),
     staleTime: 1000 * 60 * 5,
+    networkMode: 'offlineFirst',
   })
 }
 
@@ -14,6 +15,7 @@ export function useFeaturedGuides() {
     queryKey: ['guides', 'featured'],
     queryFn: () => guidesService.fetchFeatured(),
     staleTime: 1000 * 60 * 5,
+    networkMode: 'offlineFirst',
   })
 }
 
@@ -22,6 +24,16 @@ export function useUrgentGuides() {
     queryKey: ['guides', 'urgent'],
     queryFn: () => guidesService.fetchUrgent(),
     staleTime: 1000 * 60 * 5,
+    networkMode: 'offlineFirst',
+  })
+}
+
+export function useTrendingGuides() {
+  return useQuery({
+    queryKey: ['guides', 'trending'],
+    queryFn: () => guidesService.fetchTrending(),
+    staleTime: 1000 * 60 * 5,
+    networkMode: 'offlineFirst',
   })
 }
 
@@ -31,5 +43,6 @@ export function useGuide(id: string) {
     queryFn: () => guidesService.fetchGuide(id),
     staleTime: 1000 * 60 * 5,
     enabled: !!id,
+    networkMode: 'offlineFirst',
   })
 }

@@ -20,6 +20,9 @@ create table if not exists public.guides (
   title_fil text not null,
   tagline_en text not null,
   tagline_fil text not null,
+  keywords_en text[],
+  keywords_fil text[],
+  official_sources jsonb not null default '[]'::jsonb,
   is_featured boolean default false,
   is_urgent boolean default false,
   is_published boolean default true,
@@ -64,6 +67,7 @@ create index if not exists idx_guides_urgent on public.guides(is_urgent) where i
 create index if not exists idx_guides_published on public.guides(is_published, published_at desc);
 create index if not exists idx_sections_guide on public.guide_sections(guide_id, order_index);
 create index if not exists idx_search_vector on public.guides using gin(search_vector);
+create index if not exists idx_guide_views_guide_time on public.guide_views(guide_id, viewed_at desc);
 
 create or replace function public.update_guide_search_vector()
 returns trigger as $$
@@ -73,6 +77,8 @@ begin
     to_tsvector('english', coalesce(new.tagline_en, '')) ||
     to_tsvector('simple', coalesce(new.title_fil, '')) ||
     to_tsvector('simple', coalesce(new.tagline_fil, '')) ||
+    to_tsvector('simple', coalesce(array_to_string(new.keywords_en, ' '), '')) ||
+    to_tsvector('simple', coalesce(array_to_string(new.keywords_fil, ' '), '')) ||
     to_tsvector('simple', coalesce(array_to_string(new.tags, ' '), ''));
   return new;
 end;

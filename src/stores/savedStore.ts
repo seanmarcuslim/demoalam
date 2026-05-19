@@ -3,10 +3,13 @@ import { persist, createJSONStorage } from 'zustand/middleware'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { Guide } from '../types/guide'
 
+const SAVED_STORE_VERSION = 2
+
 interface SavedStore {
   savedIds: string[]
   cachedGuides: Record<string, Guide>
   save: (guide: Guide) => void
+  hydrateSavedGuides: (guides: Guide[]) => void
   unsave: (id: string) => void
   isSaved: (id: string) => boolean
   toggleSave: (guide: Guide) => void
@@ -30,6 +33,24 @@ export const useSavedStore = create<SavedStore>()(
               ...state.cachedGuides,
               [guide.id]: guide,
             },
+          }
+        }),
+
+      hydrateSavedGuides: (guides: Guide[]) =>
+        set((state) => {
+          const nextCachedGuides = { ...state.cachedGuides }
+
+          guides.forEach((guide) => {
+            if (state.savedIds.includes(guide.id)) {
+              nextCachedGuides[guide.id] = {
+                ...nextCachedGuides[guide.id],
+                ...guide,
+              }
+            }
+          })
+
+          return {
+            cachedGuides: nextCachedGuides,
           }
         }),
 
@@ -57,7 +78,16 @@ export const useSavedStore = create<SavedStore>()(
     }),
     {
       name: 'saved-guides',
+      version: SAVED_STORE_VERSION,
       storage: createJSONStorage(() => AsyncStorage),
+      migrate: (persistedState) => {
+        const state = persistedState as Partial<SavedStore> | undefined
+
+        return {
+          savedIds: Array.isArray(state?.savedIds) ? state.savedIds : [],
+          cachedGuides: {},
+        }
+      },
     }
   )
 )

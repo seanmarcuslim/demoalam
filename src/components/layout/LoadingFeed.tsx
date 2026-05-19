@@ -1,6 +1,7 @@
 import { StyleSheet, View } from 'react-native'
 import { useTheme } from '../../hooks/useTheme'
 import { spacing } from '../../theme/spacing'
+import { ThemeColors } from '../../theme/colors'
 import Skeleton from '../ui/Skeleton'
 
 interface LoadingFeedProps {
@@ -28,7 +29,7 @@ export default function LoadingFeed({ count = 3 }: LoadingFeedProps) {
   )
 }
 
-const createStyles = (colors: any) =>
+const createStyles = (colors: ThemeColors) =>
   StyleSheet.create({
     wrap: {
       paddingHorizontal: spacing.md,

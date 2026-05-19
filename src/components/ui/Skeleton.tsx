@@ -1,11 +1,11 @@
-import { StyleSheet, View } from 'react-native'
+import { StyleSheet, View, type StyleProp, type ViewStyle } from 'react-native'
 import { useTheme } from '../../hooks/useTheme'
 
 interface SkeletonProps {
   width?: number | `${number}%`
   height?: number
   radius?: number
-  style?: any
+  style?: StyleProp<ViewStyle>
 }
 
 export default function Skeleton({

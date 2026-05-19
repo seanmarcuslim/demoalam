@@ -1,5 +1,6 @@
 import { supabase } from './supabase'
 import { Guide } from '../types/guide'
+import { throwServiceError } from './serviceErrors'
 
 function toPlainTextQuery(query: string) {
   return query.trim().replace(/\s+/g, ' ')
@@ -29,11 +30,7 @@ export const guidesService = {
     const { data, error } = await query
 
     if (error) {
-      console.error(
-        'Error fetching guides:',
-        error
-      )
-      throw error
+      throwServiceError('Error fetching guides:', error)
     }
 
     return data || []
@@ -57,11 +54,7 @@ export const guidesService = {
         .single()
 
     if (error) {
-      console.error(
-        'Error fetching guide:',
-        error
-      )
-      throw error
+      throwServiceError('Error fetching guide:', error)
     }
 
     return data
@@ -79,11 +72,7 @@ export const guidesService = {
         .limit(5)
 
     if (error) {
-      console.error(
-        'Error fetching featured:',
-        error
-      )
-      throw error
+      throwServiceError('Error fetching featured:', error)
     }
 
     return data || []
@@ -101,11 +90,21 @@ export const guidesService = {
         .limit(5)
 
     if (error) {
-      console.error(
-        'Error fetching urgent:',
-        error
-      )
-      throw error
+      throwServiceError('Error fetching urgent:', error)
+    }
+
+    return data || []
+  },
+
+  async fetchTrending(): Promise<Guide[]> {
+    const { data, error } =
+      await supabase.rpc('get_trending_guides_with_category', {
+        since_interval: '7 days',
+        result_limit: 10,
+      })
+
+    if (error) {
+      throwServiceError('Error fetching trending guides:', error)
     }
 
     return data || []
@@ -136,11 +135,7 @@ export const guidesService = {
         .limit(20)
 
     if (error) {
-      console.error(
-        'Error searching guides:',
-        error
-      )
-      throw error
+      throwServiceError('Error searching guides:', error)
     }
 
     return data || []

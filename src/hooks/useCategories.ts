@@ -6,5 +6,6 @@ export function useCategories() {
     queryKey: ['categories'],
     queryFn: () => categoriesService.fetchCategories(),
     staleTime: 1000 * 60 * 10,
+    networkMode: 'offlineFirst',
   })
 }

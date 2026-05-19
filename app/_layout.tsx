@@ -1,9 +1,10 @@
 import { Stack } from 'expo-router'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { StatusBar } from 'expo-status-bar'
-import { colors } from '../src/theme/colors'
 import { useAuthSession } from '../src/hooks/useAuthSession'
 import FeedbackToast from '../src/components/layout/FeedbackToast'
+import { useTheme } from '../src/hooks/useTheme'
+import OfflineBanner from '../src/components/layout/OfflineBanner'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -18,10 +19,14 @@ const queryClient = new QueryClient({
 
 function AppContent() {
   useAuthSession()
+  const { colors, isDark } = useTheme()
 
   return (
     <>
-      <StatusBar style="light" backgroundColor={colors.primary} />
+      <StatusBar
+        style={isDark ? 'light' : 'dark'}
+        backgroundColor={colors.background}
+      />
 
       <Stack screenOptions={{ headerShown: false }}>
         <Stack.Screen name="index" />
@@ -32,6 +37,7 @@ function AppContent() {
       </Stack>
 
       <FeedbackToast />
+      <OfflineBanner />
     </>
   )
 }

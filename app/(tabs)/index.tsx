@@ -11,6 +11,7 @@ import { Ionicons } from '@expo/vector-icons'
 import {
   useFeaturedGuides,
   useGuides,
+  useTrendingGuides,
   useUrgentGuides,
 } from '../../src/hooks/useGuides'
 import { useCategories } from '../../src/hooks/useCategories'
@@ -20,11 +21,15 @@ import { useSettingsStore } from '../../src/stores/settingsStore'
 import { translations } from '../../src/utils/translations'
 import { useTheme } from '../../src/hooks/useTheme'
 import { spacing } from '../../src/theme/spacing'
+import type { ThemeColors } from '../../src/theme/colors'
 import SafeText from '../../src/components/ui/SafeText'
 import Badge from '../../src/components/ui/Badge'
+import AppButton from '../../src/components/ui/AppButton'
 import GuideCard from '../../src/components/guide/GuideCard'
 import { Guide } from '../../src/types/guide'
+import { Category } from '../../src/types/category'
 import LoadingFeed from '../../src/components/layout/LoadingFeed'
+import { getCategoryAccent } from '../../src/lib/categoryVisuals'
 
 export default function HomeScreen() {
   const { colors } = useTheme()
@@ -35,11 +40,13 @@ export default function HomeScreen() {
   const {
     data: guides = [],
     isLoading,
+    isError,
     refetch,
     isRefetching,
   } = useGuides()
   const { data: featured = [] } = useFeaturedGuides()
   const { data: urgent = [] } = useUrgentGuides()
+  const { data: trending = [] } = useTrendingGuides()
   const { data: categories = [] } = useCategories()
   const { recentIds, cachedGuides } = useHistoryStore()
   const toggleSave = useSavedStore((state) => state.toggleSave)
@@ -51,6 +58,7 @@ export default function HomeScreen() {
     .slice(0, 5)
 
   const featuredGuide = featured[0]
+  const trendingGuides = (trending.length > 0 ? trending : guides).slice(0, 4)
   const firstTimerGuides = guides
     .filter((guide) =>
       guide.tags?.some((tag) =>
@@ -87,7 +95,7 @@ export default function HomeScreen() {
   const getTagline = (guide: Guide) =>
     language === 'fil' ? guide.tagline_fil : guide.tagline_en
 
-  const getCategoryName = (category: any) =>
+  const getCategoryName = (category: Category) =>
     language === 'fil' ? category.name_fil : category.name_en
 
   const renderGuide = ({ item }: { item: Guide }) => (
@@ -205,25 +213,29 @@ export default function HomeScreen() {
           showsHorizontalScrollIndicator={false}
           contentContainerStyle={styles.categoryRow}
         >
-          {categories.map((cat) => (
-            <TouchableOpacity
-              key={cat.id}
-              activeOpacity={0.86}
-              style={[
-                styles.categoryChip,
-                {
-                  borderColor: `${cat.color}35`,
-                  backgroundColor: `${cat.color}12`,
-                },
-              ]}
-              onPress={() => openCategory(cat.id, getCategoryName(cat))}
-            >
-              <SafeText style={styles.categoryIcon}>{cat.icon}</SafeText>
-              <SafeText variant="label" style={{ color: cat.color }}>
-                {getCategoryName(cat)}
-              </SafeText>
-            </TouchableOpacity>
-          ))}
+          {categories.map((cat) => {
+            const accent = getCategoryAccent(cat, colors.primary)
+
+            return (
+              <TouchableOpacity
+                key={cat.id}
+                activeOpacity={0.86}
+                style={[
+                  styles.categoryChip,
+                  {
+                    borderColor: `${accent}35`,
+                    backgroundColor: `${accent}12`,
+                  },
+                ]}
+                onPress={() => openCategory(cat.id, getCategoryName(cat))}
+              >
+                <SafeText style={styles.categoryIcon}>{cat.icon}</SafeText>
+                <SafeText variant="label" style={{ color: accent }}>
+                  {getCategoryName(cat)}
+                </SafeText>
+              </TouchableOpacity>
+            )
+          })}
         </ScrollView>
       </View>
 
@@ -303,6 +315,20 @@ export default function HomeScreen() {
       ) : null}
 
       {renderCuratedSection({
+        title: language === 'fil' ? 'Trending Ngayon' : 'Trending Now',
+        subtitle:
+          trending.length > 0
+            ? language === 'fil'
+              ? 'Pinakabinabasa nitong mga araw'
+              : 'Most viewed in the last few days'
+            : language === 'fil'
+              ? 'Mga guide na magandang unahin'
+              : 'Useful guides to start with',
+        items: trendingGuides,
+        icon: '↗',
+      })}
+
+      {renderCuratedSection({
         title: language === 'fil' ? 'Para sa First-Timers' : 'For First-Timers',
         subtitle:
           language === 'fil'
@@ -353,6 +379,29 @@ export default function HomeScreen() {
         <View style={styles.empty}>
           {isLoading ? (
             <LoadingFeed count={3} />
+          ) : isError ? (
+            <>
+              <Ionicons
+                name="cloud-offline-outline"
+                size={34}
+                color={colors.warning}
+              />
+              <SafeText variant="h3" weight="700" style={styles.emptyTitle}>
+                {language === 'fil'
+                  ? 'Hindi ma-load ang guides'
+                  : 'Unable to load guides'}
+              </SafeText>
+              <SafeText variant="bodyMd" color="muted" style={styles.emptyText}>
+                {language === 'fil'
+                  ? 'I-check ang internet connection o subukan ulit.'
+                  : 'Check your internet connection or try again.'}
+              </SafeText>
+              <AppButton
+                title={language === 'fil' ? 'Subukan ulit' : 'Try again'}
+                onPress={() => refetch()}
+                style={styles.emptyAction}
+              />
+            </>
           ) : (
             <>
               <SafeText variant="h3" weight="700">
@@ -386,7 +435,7 @@ export default function HomeScreen() {
   )
 }
 
-const createStyles = (colors: any) =>
+const createStyles = (colors: ThemeColors) =>
   StyleSheet.create({
     listContent: {
       backgroundColor: colors.background,
@@ -569,5 +618,15 @@ const createStyles = (colors: any) =>
     emptyText: {
       marginTop: spacing.sm,
       textAlign: 'center',
+    },
+
+    emptyTitle: {
+      marginTop: spacing.md,
+      textAlign: 'center',
+    },
+
+    emptyAction: {
+      marginTop: spacing.lg,
+      alignSelf: 'stretch',
     },
   })

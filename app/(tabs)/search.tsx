@@ -16,12 +16,26 @@ import { useCategories } from '../../src/hooks/useCategories'
 import { translations } from '../../src/utils/translations'
 import { useTheme } from '../../src/hooks/useTheme'
 import { spacing } from '../../src/theme/spacing'
+import type { ThemeColors } from '../../src/theme/colors'
 import SafeText from '../../src/components/ui/SafeText'
 import GuideCard from '../../src/components/guide/GuideCard'
 import Badge from '../../src/components/ui/Badge'
 import LoadingFeed from '../../src/components/layout/LoadingFeed'
+import AppHeader from '../../src/components/ui/AppHeader'
+import AppCard from '../../src/components/ui/AppCard'
+import AppButton from '../../src/components/ui/AppButton'
+import EmptyState from '../../src/components/ui/EmptyState'
+import { getCategoryAccent } from '../../src/lib/categoryVisuals'
 
-const SUGGESTIONS = ['valid ID', 'trabaho', 'gcash scam', 'NBI', 'rent', 'budget', 'SSS']
+const SUGGESTIONS = [
+  'valid ID',
+  'trabaho',
+  'gcash scam',
+  'NBI',
+  'rent',
+  'budget',
+  'SSS',
+]
 
 export default function SearchScreen() {
   const {
@@ -29,27 +43,40 @@ export default function SearchScreen() {
     setSearchTerm,
     results,
     isLoading,
-    hasResults,
+    isError,
+    refetch,
   } = useSearch()
+
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
 
   const { language } = useSettingsStore()
   const { colors } = useTheme()
   const { data: categories = [] } = useCategories()
+
   const t = translations[language]
+
   const toggleSave = useSavedStore((state) => state.toggleSave)
   const isSaved = useSavedStore((state) => state.isSaved)
+
   const recentSearches = useSearchStore((state) => state.recentSearches)
   const addRecentSearch = useSearchStore((state) => state.addRecentSearch)
   const clearRecentSearches = useSearchStore((state) => state.clearRecentSearches)
+
   const styles = createStyles(colors)
 
   const showEmptySearch = searchTerm.trim().length === 0
+
   const filteredResults = selectedCategory
     ? results.filter((guide) => guide.category_id === selectedCategory)
     : results
+
   const hasFilteredResults = filteredResults.length > 0
-  const showNoResults = !isLoading && searchTerm.trim().length > 0 && !hasFilteredResults
+
+  const showNoResults =
+    !isLoading &&
+    !isError &&
+    searchTerm.trim().length > 0 &&
+    !hasFilteredResults
 
   const openGuide = (id: string) => {
     router.push({
@@ -73,12 +100,18 @@ export default function SearchScreen() {
       return (
         <View style={styles.suggestionWrap}>
           {recentSearches.length > 0 ? (
-            <View style={styles.recentBlock}>
+            <AppCard style={styles.recentBlock}>
               <View style={styles.recentHeader}>
                 <SafeText variant="h3" weight="700">
-                  {language === 'fil' ? 'Huli mong hinanap' : 'Recent searches'}
+                  {language === 'fil'
+                    ? 'Huli mong hinanap'
+                    : 'Recent searches'}
                 </SafeText>
-                <TouchableOpacity activeOpacity={0.82} onPress={clearRecentSearches}>
+
+                <TouchableOpacity
+                  activeOpacity={0.82}
+                  onPress={clearRecentSearches}
+                >
                   <SafeText variant="caption" color="primary" weight="700">
                     {language === 'fil' ? 'Burahin' : 'Clear'}
                   </SafeText>
@@ -96,23 +129,26 @@ export default function SearchScreen() {
                   </TouchableOpacity>
                 ))}
               </View>
-            </View>
+            </AppCard>
           ) : null}
 
-          <SafeText variant="h3" weight="700" style={styles.tryTitle}>
-            {language === 'fil' ? 'Subukan hanapin' : 'Try searching'}
-          </SafeText>
-          <View style={styles.suggestions}>
-            {SUGGESTIONS.map((item) => (
-              <TouchableOpacity
-                key={item}
-                activeOpacity={0.84}
-                onPress={() => commitSearch(item)}
-              >
-                <Badge label={item} color={colors.primary} />
-              </TouchableOpacity>
-            ))}
-          </View>
+          <AppCard>
+            <SafeText variant="h3" weight="700">
+              {language === 'fil' ? 'Subukan hanapin' : 'Try searching'}
+            </SafeText>
+
+            <View style={styles.suggestions}>
+              {SUGGESTIONS.map((item) => (
+                <TouchableOpacity
+                  key={item}
+                  activeOpacity={0.84}
+                  onPress={() => commitSearch(item)}
+                >
+                  <Badge label={item} color={colors.primary} />
+                </TouchableOpacity>
+              ))}
+            </View>
+          </AppCard>
         </View>
       )
     }
@@ -122,12 +158,15 @@ export default function SearchScreen() {
         <SafeText variant="h3" weight="700">
           {language === 'fil' ? 'Mga Resulta' : 'Results'}
         </SafeText>
+
         <SafeText variant="caption" color="muted">
           {isLoading
             ? language === 'fil'
               ? 'Naghahanap...'
               : 'Searching...'
-            : `${filteredResults.length} ${language === 'fil' ? 'nahanap' : 'found'}`}
+            : `${filteredResults.length} ${
+                language === 'fil' ? 'nahanap' : 'found'
+              }`}
         </SafeText>
 
         <View style={styles.filterRow}>
@@ -148,8 +187,9 @@ export default function SearchScreen() {
             </SafeText>
           </TouchableOpacity>
 
-          {categories.slice(0, 7).map((cat) => {
+          {categories.map((cat) => {
             const active = selectedCategory === cat.id
+            const accent = getCategoryAccent(cat, colors.primary)
 
             return (
               <TouchableOpacity
@@ -158,17 +198,20 @@ export default function SearchScreen() {
                 style={[
                   styles.filterChip,
                   {
-                    borderColor: active ? cat.color : `${cat.color}35`,
-                    backgroundColor: active ? cat.color : `${cat.color}12`,
+                    borderColor: active ? accent : `${accent}35`,
+                    backgroundColor: active ? accent : `${accent}12`,
                   },
                 ]}
                 onPress={() => setSelectedCategory(active ? null : cat.id)}
               >
                 <SafeText>{cat.icon}</SafeText>
+
                 <SafeText
                   variant="caption"
                   weight="700"
-                  style={{ color: active ? '#FFFFFF' : cat.color }}
+                  style={{
+                    color: active ? '#FFFFFF' : accent,
+                  }}
                 >
                   {language === 'fil' ? cat.name_fil : cat.name_en}
                 </SafeText>
@@ -182,21 +225,19 @@ export default function SearchScreen() {
 
   return (
     <View style={styles.container}>
-      <View style={styles.hero}>
-        <SafeText variant="caption" color="surface" style={styles.eyebrow}>
-          {language === 'fil' ? 'Hanapin agad' : 'Find it fast'}
-        </SafeText>
-        <SafeText variant="h1" color="surface">
-          {t.search} 🔍
-        </SafeText>
-        <SafeText variant="bodyMd" color="surface" style={styles.subtitle}>
-          {language === 'fil'
+      <AppHeader
+        title={`${t.search} 🔍`}
+        subtitle={
+          language === 'fil'
             ? 'Type mo lang ang kailangan mo. IDs, pera, trabaho, scam alerts.'
-            : 'Search practical guides about IDs, money, work, and scam alerts.'}
-        </SafeText>
+            : 'Search practical guides about IDs, money, work, and scam alerts.'
+        }
+      />
 
+      <View style={styles.searchBoxWrap}>
         <View style={styles.searchBox}>
           <Ionicons name="search" size={20} color={colors.textMuted} />
+
           <TextInput
             style={styles.searchInput}
             placeholder={
@@ -212,34 +253,66 @@ export default function SearchScreen() {
             autoCapitalize="none"
             returnKeyType="search"
           />
+
           {searchTerm.length > 0 ? (
-            <TouchableOpacity hitSlop={10} onPress={() => setSearchTerm('')}>
-              <Ionicons name="close-circle" size={20} color={colors.textLight} />
+            <TouchableOpacity
+              hitSlop={10}
+              onPress={() => setSearchTerm('')}
+            >
+              <Ionicons
+                name="close-circle"
+                size={20}
+                color={colors.textLight}
+              />
             </TouchableOpacity>
           ) : null}
         </View>
       </View>
 
       <FlatList
-        data={showEmptySearch || showNoResults ? [] : filteredResults}
+        data={showEmptySearch || showNoResults || isError ? [] : filteredResults}
         keyExtractor={(item) => item.id}
         ListHeaderComponent={renderListHeader}
         ListEmptyComponent={
-          isLoading && !showEmptySearch ? (
+          isError && !showEmptySearch ? (
+            <AppCard style={styles.emptyCard}>
+              <EmptyState
+                icon="!"
+                title={
+                  language === 'fil'
+                    ? 'Hindi ma-search ngayon'
+                    : 'Search is unavailable'
+                }
+                subtitle={
+                  language === 'fil'
+                    ? 'I-check ang internet connection o subukan ulit.'
+                    : 'Check your internet connection or try again.'
+                }
+              />
+
+              <AppButton
+                title={language === 'fil' ? 'Subukan ulit' : 'Try again'}
+                onPress={() => refetch()}
+                style={styles.emptyAction}
+              />
+            </AppCard>
+          ) : isLoading && !showEmptySearch ? (
             <LoadingFeed count={2} />
           ) : showNoResults ? (
-            <View style={styles.emptyState}>
-              <View style={styles.emptyIcon}>
-                <Ionicons name="search-outline" size={30} color={colors.primary} />
-              </View>
-              <SafeText variant="h3" weight="700" style={styles.emptyTitle}>
-                {language === 'fil' ? 'Walang resulta' : 'No results found'}
-              </SafeText>
-              <SafeText variant="bodyMd" color="muted" style={styles.emptySubtitle}>
-                {language === 'fil'
-                  ? 'Subukan ang mas simpleng salita o alisin ang category filter.'
-                  : 'Try simpler words or remove the category filter.'}
-              </SafeText>
+            <AppCard style={styles.emptyCard}>
+              <EmptyState
+                icon="🔎"
+                title={
+                  language === 'fil'
+                    ? 'Walang resulta'
+                    : 'No results found'
+                }
+                subtitle={
+                  language === 'fil'
+                    ? 'Subukan ang mas simpleng salita o alisin ang category filter.'
+                    : 'Try simpler words or remove the category filter.'
+                }
+              />
 
               <View style={styles.emptySuggestions}>
                 {SUGGESTIONS.slice(0, 4).map((item) => (
@@ -255,7 +328,7 @@ export default function SearchScreen() {
                   </TouchableOpacity>
                 ))}
               </View>
-            </View>
+            </AppCard>
           ) : null
         }
         contentContainerStyle={styles.content}
@@ -279,7 +352,7 @@ export default function SearchScreen() {
   )
 }
 
-const createStyles = (colors: any) =>
+const createStyles = (colors: ThemeColors) =>
   StyleSheet.create({
     container: {
       flex: 1,
@@ -291,25 +364,12 @@ const createStyles = (colors: any) =>
       paddingBottom: 140,
     },
 
-    hero: {
+    searchBoxWrap: {
       backgroundColor: colors.primary,
       paddingHorizontal: spacing.lg,
-      paddingTop: spacing.xxl,
       paddingBottom: spacing.lg,
       borderBottomLeftRadius: 28,
       borderBottomRightRadius: 28,
-    },
-
-    eyebrow: {
-      textTransform: 'uppercase',
-      opacity: 0.82,
-      marginBottom: spacing.sm,
-    },
-
-    subtitle: {
-      opacity: 0.9,
-      marginTop: spacing.sm,
-      marginBottom: spacing.lg,
     },
 
     searchBox: {
@@ -349,10 +409,6 @@ const createStyles = (colors: any) =>
       gap: spacing.md,
     },
 
-    tryTitle: {
-      marginTop: spacing.xs,
-    },
-
     suggestions: {
       flexDirection: 'row',
       flexWrap: 'wrap',
@@ -389,33 +445,11 @@ const createStyles = (colors: any) =>
       backgroundColor: colors.primary,
     },
 
-    emptyState: {
+    emptyCard: {
       margin: spacing.md,
-      borderRadius: 16,
-      backgroundColor: colors.surface,
+      alignItems: 'center',
       borderWidth: 1,
       borderColor: colors.border,
-      padding: spacing.xl,
-      alignItems: 'center',
-    },
-
-    emptyIcon: {
-      width: 58,
-      height: 58,
-      borderRadius: 29,
-      backgroundColor: colors.primaryLight,
-      alignItems: 'center',
-      justifyContent: 'center',
-      marginBottom: spacing.md,
-    },
-
-    emptyTitle: {
-      textAlign: 'center',
-      marginBottom: spacing.sm,
-    },
-
-    emptySubtitle: {
-      textAlign: 'center',
     },
 
     emptySuggestions: {
@@ -424,5 +458,10 @@ const createStyles = (colors: any) =>
       justifyContent: 'center',
       gap: spacing.sm,
       marginTop: spacing.lg,
+    },
+
+    emptyAction: {
+      marginTop: spacing.md,
+      alignSelf: 'stretch',
     },
   })

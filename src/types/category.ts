@@ -8,4 +8,13 @@ export interface Category {
   order_index: number
   is_active: boolean
   created_at: string
+  updated_at?: string | null
+}
+
+export type CategoryLanguage = 'en' | 'fil'
+
+export type CategoryCopy = {
+  en: string
+  fil: string
+  accent: string
 }

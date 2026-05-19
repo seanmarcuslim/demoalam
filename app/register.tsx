@@ -6,6 +6,7 @@ import {
   ScrollView,
   StyleSheet,
   TextInput,
+  type TextInputProps,
   TouchableOpacity,
   View,
 } from 'react-native'
@@ -15,7 +16,12 @@ import { useAuth } from '../src/hooks/useAuth'
 import { useSettingsStore } from '../src/stores/settingsStore'
 import { useTheme } from '../src/hooks/useTheme'
 import { spacing } from '../src/theme/spacing'
+import type { ThemeColors } from '../src/theme/colors'
 import SafeText from '../src/components/ui/SafeText'
+
+type InputRowProps = TextInputProps & {
+  icon: keyof typeof Ionicons.glyphMap
+}
 
 export default function RegisterScreen() {
   const { signUp, isLoading } = useAuth()
@@ -67,10 +73,10 @@ export default function RegisterScreen() {
       )
 
       router.replace('/(tabs)')
-    } catch (error: any) {
+    } catch (error: unknown) {
       Alert.alert(
         isFilipino ? 'Hindi makapag-register' : 'Register failed',
-        error.message || (isFilipino ? 'Subukan muli.' : 'Please try again.')
+        getErrorMessage(error, isFilipino ? 'Subukan muli.' : 'Please try again.')
       )
     }
   }
@@ -172,22 +178,26 @@ export default function RegisterScreen() {
     </KeyboardAvoidingView>
   )
 
-  function InputRow(props: any) {
+  function InputRow({ icon, style, ...textInputProps }: InputRowProps) {
     return (
       <View style={styles.inputRow}>
-        <Ionicons name={props.icon} size={19} color={colors.textMuted} />
+        <Ionicons name={icon} size={19} color={colors.textMuted} />
         <TextInput
-          style={styles.input}
+          style={[styles.input, style]}
           placeholderTextColor={colors.textLight}
           autoCapitalize="none"
-          {...props}
+          {...textInputProps}
         />
       </View>
     )
   }
 }
 
-const createStyles = (colors: any) =>
+function getErrorMessage(error: unknown, fallback: string) {
+  return error instanceof Error ? error.message : fallback
+}
+
+const createStyles = (colors: ThemeColors) =>
   StyleSheet.create({
     flex: {
       flex: 1,

@@ -1,0 +1,1 @@
+-- Replaced by 20260519131500_create_trending_guides_with_category_rpc.sql.

@@ -1,6 +1,7 @@
 import {
   ActivityIndicator,
   Alert,
+  Linking,
   RefreshControl,
   ScrollView,
   Share,
@@ -20,34 +21,28 @@ import { useSettingsStore } from '../../src/stores/settingsStore'
 import { translations } from '../../src/utils/translations'
 import { useTheme } from '../../src/hooks/useTheme'
 import { spacing } from '../../src/theme/spacing'
+import type { ThemeColors } from '../../src/theme/colors'
 import SafeText from '../../src/components/ui/SafeText'
 import Badge from '../../src/components/ui/Badge'
 import GuideCard from '../../src/components/guide/GuideCard'
-import { Guide } from '../../src/types/guide'
+import {
+  Guide,
+  GuideOfficialSource,
+  GuideSection,
+  GuideSectionType,
+} from '../../src/types/guide'
+import { Category } from '../../src/types/category'
 import { useFeedbackStore } from '../../src/stores/feedbackStore'
 import Skeleton from '../../src/components/ui/Skeleton'
-
-type GuideSection = {
-  id?: string
-  section_type?: 'what_to_know' | 'mistake' | 'step' | 'warning' | 'tip' | 'related'
-  order_index?: number
-  content_en?: {
-    title?: string
-    body?: string
-    step_number?: number
-    severity?: 'low' | 'medium' | 'high'
-  }
-  content_fil?: {
-    title?: string
-    body?: string
-    step_number?: number
-    severity?: 'low' | 'medium' | 'high'
-  }
-}
+import { getCategoryAccent } from '../../src/lib/categoryVisuals'
+import { analyticsService } from '../../src/services/analyticsService'
 
 export default function GuideDetailsScreen() {
   const { id } = useLocalSearchParams()
   const guideId = Array.isArray(id) ? id[0] : id
+  const cachedGuide = useSavedStore((state) =>
+    guideId ? state.cachedGuides[guideId] : undefined
+  )
 
   const {
     data: guide,
@@ -56,10 +51,12 @@ export default function GuideDetailsScreen() {
     refetch,
     isRefetching,
   } = useGuide(guideId)
-  const { data: categoryGuides = [] } = useGuides(guide?.category_id)
+  const activeGuide = guide || cachedGuide
+  const { data: categoryGuides = [] } = useGuides(activeGuide?.category_id)
 
   const isGuest = useSessionStore((state) => state.isGuest)
   const toggleSave = useSavedStore((state) => state.toggleSave)
+  const saveGuide = useSavedStore((state) => state.save)
   const addToHistory = useHistoryStore((state) => state.addToHistory)
   const { language } = useSettingsStore()
   const { colors } = useTheme()
@@ -68,24 +65,24 @@ export default function GuideDetailsScreen() {
   const showFeedback = useFeedbackStore((state) => state.show)
 
   const isSaved = useSavedStore((state) =>
-    guide ? state.isSaved(guide.id) : false
+    activeGuide ? state.isSaved(activeGuide.id) : false
   )
   const isGuideSaved = useSavedStore((state) => state.isSaved)
 
-  const getTitle = (item: any) =>
+  const getTitle = (item: Guide) =>
     language === 'fil' ? item.title_fil : item.title_en
 
-  const getTagline = (item: any) =>
+  const getTagline = (item: Guide) =>
     language === 'fil' ? item.tagline_fil : item.tagline_en
 
-  const getCategoryName = (item: any) =>
+  const getCategoryName = (item: Category) =>
     language === 'fil' ? item.name_fil : item.name_en
 
   const getSectionContent = (section: GuideSection) =>
     language === 'fil' ? section.content_fil : section.content_en
 
   const handleSave = () => {
-    if (!guide) return
+    if (!activeGuide) return
 
     if (isGuest) {
       Alert.alert(
@@ -107,7 +104,7 @@ export default function GuideDetailsScreen() {
       return
     }
 
-    toggleSave(guide)
+    toggleSave(activeGuide)
     showFeedback(
       isSaved
         ? language === 'fil'
@@ -121,20 +118,36 @@ export default function GuideDetailsScreen() {
   }
 
   const handleShare = async () => {
-    if (!guide) return
+    if (!activeGuide) return
 
     await Share.share({
-      message: `${getTitle(guide)}\n\n${getTagline(guide)}\n\nDemoAlam`,
+      message: `${getTitle(activeGuide)}\n\n${getTagline(activeGuide)}\n\nDemoAlam`,
     })
   }
 
   useEffect(() => {
-    if (guide) {
-      addToHistory(guide)
+    if (activeGuide) {
+      addToHistory(activeGuide)
     }
-  }, [guide, addToHistory])
+  }, [activeGuide, addToHistory])
 
-  if (isLoading) {
+  useEffect(() => {
+    if (guide && isSaved) {
+      saveGuide(guide)
+    }
+  }, [guide, isSaved, saveGuide])
+
+  useEffect(() => {
+    if (!guide?.id) {
+      return
+    }
+
+    analyticsService.logGuideView(guide.id).catch(() => {
+      // Analytics should never interrupt guide reading.
+    })
+  }, [guide?.id])
+
+  if (isLoading && !cachedGuide) {
     return (
       <ScrollView style={styles.container} contentContainerStyle={styles.content}>
         <View style={styles.hero}>
@@ -167,7 +180,7 @@ export default function GuideDetailsScreen() {
     )
   }
 
-  if (error || !guide) {
+  if (!activeGuide) {
     return (
       <ScrollView
         style={styles.container}
@@ -192,15 +205,20 @@ export default function GuideDetailsScreen() {
     )
   }
 
-  const categoryColor = guide.category?.color || colors.primary
-  const guideStyles = createStyles(colors, guide.is_urgent ? colors.danger : categoryColor)
-  const sections = [...(guide.sections || [])].sort(
-    (a: any, b: any) => (a.order_index || 0) - (b.order_index || 0)
+  const categoryColor = getCategoryAccent(activeGuide.category, colors.primary)
+  const isShowingCachedGuide = !guide && !!cachedGuide
+  const guideStyles = createStyles(
+    colors,
+    activeGuide.is_urgent ? colors.danger : categoryColor
   )
+  const sections = [...(activeGuide.sections || [])].sort(
+    (a: GuideSection, b: GuideSection) => (a.order_index || 0) - (b.order_index || 0)
+  )
+  const officialSources = activeGuide.official_sources || []
   const relatedGuides = categoryGuides
-    .filter((item: Guide) => item.id !== guide.id)
+    .filter((item: Guide) => item.id !== activeGuide.id)
     .slice(0, 3)
-  const updatedLabel = formatUpdatedDate(guide.updated_at || guide.published_at)
+  const updatedLabel = formatUpdatedDate(activeGuide.updated_at || activeGuide.published_at)
 
   return (
     <ScrollView
@@ -251,40 +269,60 @@ export default function GuideDetailsScreen() {
         <View style={styles.heroBody}>
           <Badge
             label={
-              guide.category
-                ? getCategoryName(guide.category)
+              activeGuide.category
+                ? getCategoryName(activeGuide.category)
                 : language === 'fil'
                   ? 'Guide'
                   : 'Guide'
             }
-            icon={guide.category?.icon}
+            icon={activeGuide.category?.icon}
             color={categoryColor}
           />
 
           <SafeText variant="h1" color="surface" style={styles.title}>
-            {getTitle(guide)}
+            {getTitle(activeGuide)}
           </SafeText>
 
           <SafeText variant="body" color="surface" style={styles.tagline}>
-            {getTagline(guide)}
+            {getTagline(activeGuide)}
           </SafeText>
 
           <View style={styles.metaGrid}>
             <MetaPill
               icon="time-outline"
-              label={`${guide.read_time_min} ${language === 'fil' ? 'minuto' : 'min'}`}
+              label={`${activeGuide.read_time_min} ${language === 'fil' ? 'minuto' : 'min'}`}
             />
-            {guide.estimated_cost ? (
-              <MetaPill icon="wallet-outline" label={guide.estimated_cost} />
+            {activeGuide.estimated_cost ? (
+              <MetaPill icon="wallet-outline" label={activeGuide.estimated_cost} />
             ) : null}
-            {guide.difficulty ? (
-              <MetaPill icon="speedometer-outline" label={guide.difficulty} />
+            {activeGuide.difficulty ? (
+              <MetaPill icon="speedometer-outline" label={activeGuide.difficulty} />
             ) : null}
           </View>
         </View>
       </View>
 
-      {guide.is_urgent ? (
+      {isShowingCachedGuide ? (
+        <View style={styles.offlineCard}>
+          <View style={styles.offlineIcon}>
+            <Ionicons name="cloud-offline-outline" size={19} color={colors.warning} />
+          </View>
+
+          <View style={styles.offlineCopy}>
+            <SafeText variant="label" color="warning" weight="700">
+              {language === 'fil' ? 'Saved offline copy' : 'Saved offline copy'}
+            </SafeText>
+
+            <SafeText variant="bodyMd" color="muted" style={styles.offlineText}>
+              {language === 'fil'
+                ? 'Ito ang naka-save na version sa phone mo. Mag-online ulit para ma-refresh ang latest details.'
+                : 'This is the version saved on your phone. Go online again to refresh the latest details.'}
+            </SafeText>
+          </View>
+        </View>
+      ) : null}
+
+      {activeGuide.is_urgent ? (
         <View style={styles.warningCard}>
           <View style={styles.warningIcon}>
             <Ionicons name="warning" size={20} color={colors.danger} />
@@ -328,17 +366,17 @@ export default function GuideDetailsScreen() {
           <TrustItem
             icon="time-outline"
             label={language === 'fil' ? 'Oras' : 'Time'}
-            value={guide.estimated_time || `${guide.read_time_min} min`}
+            value={activeGuide.estimated_time || `${activeGuide.read_time_min} min`}
           />
           <TrustItem
             icon="wallet-outline"
             label={language === 'fil' ? 'Gastos' : 'Cost'}
-            value={guide.estimated_cost || (language === 'fil' ? 'Depende' : 'Varies')}
+            value={activeGuide.estimated_cost || (language === 'fil' ? 'Depende' : 'Varies')}
           />
           <TrustItem
             icon="speedometer-outline"
             label={language === 'fil' ? 'Level' : 'Level'}
-            value={guide.difficulty || (language === 'fil' ? 'Madali' : 'Easy')}
+            value={activeGuide.difficulty || (language === 'fil' ? 'Madali' : 'Easy')}
           />
         </View>
 
@@ -350,6 +388,59 @@ export default function GuideDetailsScreen() {
               : 'When money, IDs, or government documents are involved, still verify with the official office, app, or website.'}
           </SafeText>
         </View>
+      </View>
+
+      <View style={styles.sourceCard}>
+        <View style={styles.sourceHeader}>
+          <View style={styles.sourceIcon}>
+            <Ionicons name="checkmark-done-circle" size={20} color={colors.success} />
+          </View>
+
+          <View style={styles.sourceCopy}>
+            <SafeText variant="h3" weight="700">
+              {language === 'fil' ? 'Trust check' : 'Trust check'}
+            </SafeText>
+
+            <SafeText variant="caption" color="muted" style={styles.sourceSubtitle}>
+              {language === 'fil'
+                ? 'Ginawa para makatulong, hindi para palitan ang official advice.'
+                : 'Built to help, not to replace official advice.'}
+            </SafeText>
+          </View>
+        </View>
+
+        <View style={styles.sourceRows}>
+          <TrustCheckRow
+            icon="calendar-clear-outline"
+            label={language === 'fil' ? 'Huling update' : 'Last checked'}
+            value={updatedLabel}
+          />
+          <TrustCheckRow
+            icon="language-outline"
+            label={language === 'fil' ? 'Wika' : 'Language'}
+            value={language === 'fil' ? 'Filipino + English' : 'English + Filipino'}
+          />
+          <TrustCheckRow
+            icon="person-outline"
+            label={language === 'fil' ? 'Para kanino' : 'For'}
+            value={language === 'fil' ? 'Everyday Filipino users' : 'Everyday Filipino users'}
+          />
+        </View>
+
+        {officialSources.length > 0 ? (
+          <View style={styles.officialSources}>
+            <SafeText variant="label" color="muted" weight="700" style={styles.officialSourcesTitle}>
+              {language === 'fil' ? 'Official sources' : 'Official sources'}
+            </SafeText>
+
+            {officialSources.map((source) => (
+              <OfficialSourceRow
+                key={source.url}
+                source={source}
+              />
+            ))}
+          </View>
+        ) : null}
       </View>
 
       <View style={styles.sectionContainer}>
@@ -374,9 +465,13 @@ export default function GuideDetailsScreen() {
         ) : (
           <View style={styles.emptyCard}>
             <SafeText color="muted" style={styles.emptyText}>
-              {language === 'fil'
-                ? 'Wala pang available na content para sa guide na ito.'
-                : 'No content is available for this guide yet.'}
+              {isShowingCachedGuide
+                ? language === 'fil'
+                  ? 'Summary pa lang ang naka-cache. Buksan ulit ito kapag online para ma-save ang buong guide.'
+                  : 'Only the summary is cached. Open this again while online to save the full guide.'
+                : language === 'fil'
+                  ? 'Wala pang available na content para sa guide na ito.'
+                  : 'No content is available for this guide yet.'}
             </SafeText>
           </View>
         )}
@@ -494,7 +589,7 @@ export default function GuideDetailsScreen() {
           ? colors.success
           : colors.primary
 
-    const icon = isWarning
+    const icon: keyof typeof Ionicons.glyphMap = isWarning
       ? 'alert-circle'
       : isMistake
         ? 'close-circle'
@@ -541,7 +636,7 @@ export default function GuideDetailsScreen() {
                 {stepNumber}
               </SafeText>
             ) : (
-              <Ionicons name={icon as any} size={19} color={color} />
+              <Ionicons name={icon} size={19} color={color} />
             )}
           </View>
 
@@ -597,7 +692,7 @@ export default function GuideDetailsScreen() {
     )
   }
 
-  function getSectionLabel(type: string) {
+  function getSectionLabel(type: GuideSectionType) {
     if (type === 'step') return language === 'fil' ? 'Step' : 'Step'
     if (type === 'warning') return language === 'fil' ? 'Babala' : 'Warning'
     if (type === 'mistake') return language === 'fil' ? 'Iwasan' : 'Avoid'
@@ -627,6 +722,74 @@ export default function GuideDetailsScreen() {
     )
   }
 
+  function TrustCheckRow({
+    icon,
+    label,
+    value,
+  }: {
+    icon: keyof typeof Ionicons.glyphMap
+    label: string
+    value: string
+  }) {
+    return (
+      <View style={styles.sourceRow}>
+        <View style={styles.sourceRowIcon}>
+          <Ionicons name={icon} size={17} color={colors.success} />
+        </View>
+        <View style={styles.sourceRowCopy}>
+          <SafeText variant="caption" color="muted">
+            {label}
+          </SafeText>
+          <SafeText variant="bodyMd" weight="700">
+            {value}
+          </SafeText>
+        </View>
+      </View>
+    )
+  }
+
+  function OfficialSourceRow({
+    source,
+  }: {
+    source: GuideOfficialSource
+  }) {
+    const openSource = () => {
+      Linking.openURL(source.url).catch(() => {
+        showFeedback(
+          language === 'fil'
+            ? 'Hindi mabuksan ang source ngayon'
+            : 'Unable to open source right now',
+          'info'
+        )
+      })
+    }
+
+    return (
+      <TouchableOpacity
+        activeOpacity={0.86}
+        style={styles.officialSourceRow}
+        onPress={openSource}
+      >
+        <View style={styles.sourceRowIcon}>
+          <Ionicons name="open-outline" size={17} color={colors.primary} />
+        </View>
+
+        <View style={styles.sourceRowCopy}>
+          <SafeText variant="bodyMd" weight="700" numberOfLines={1}>
+            {source.title}
+          </SafeText>
+          {source.publisher ? (
+            <SafeText variant="caption" color="muted" numberOfLines={1}>
+              {source.publisher}
+            </SafeText>
+          ) : null}
+        </View>
+
+        <Ionicons name="chevron-forward" size={17} color={colors.textLight} />
+      </TouchableOpacity>
+    )
+  }
+
   function formatUpdatedDate(value?: string | null) {
     if (!value) {
       return language === 'fil' ? 'Hindi pa alam' : 'Unknown'
@@ -644,7 +807,7 @@ export default function GuideDetailsScreen() {
   }
 }
 
-const createStyles = (colors: any, heroColor: string) =>
+const createStyles = (colors: ThemeColors, heroColor: string) =>
   StyleSheet.create({
     container: {
       flex: 1,
@@ -775,6 +938,35 @@ const createStyles = (colors: any, heroColor: string) =>
       marginTop: spacing.xs,
     },
 
+    offlineCard: {
+      marginHorizontal: spacing.md,
+      marginTop: spacing.lg,
+      borderRadius: 16,
+      borderWidth: 1,
+      borderColor: `${colors.warning}35`,
+      backgroundColor: colors.warningLight,
+      padding: spacing.md,
+      flexDirection: 'row',
+      gap: spacing.md,
+    },
+
+    offlineIcon: {
+      width: 38,
+      height: 38,
+      borderRadius: 19,
+      backgroundColor: colors.surface,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+
+    offlineCopy: {
+      flex: 1,
+    },
+
+    offlineText: {
+      marginTop: spacing.xs,
+    },
+
     trustCard: {
       marginHorizontal: spacing.md,
       marginTop: spacing.lg,
@@ -835,6 +1027,93 @@ const createStyles = (colors: any, heroColor: string) =>
     },
 
     officialText: {
+      flex: 1,
+    },
+
+    sourceCard: {
+      marginHorizontal: spacing.md,
+      marginTop: spacing.md,
+      borderRadius: 18,
+      backgroundColor: colors.surface,
+      borderWidth: 1,
+      borderColor: colors.border,
+      padding: spacing.md,
+    },
+
+    sourceHeader: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: spacing.md,
+      marginBottom: spacing.md,
+    },
+
+    sourceIcon: {
+      width: 42,
+      height: 42,
+      borderRadius: 15,
+      backgroundColor: colors.successLight,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+
+    sourceCopy: {
+      flex: 1,
+    },
+
+    sourceSubtitle: {
+      marginTop: 2,
+    },
+
+    sourceRows: {
+      gap: spacing.sm,
+    },
+
+    officialSources: {
+      marginTop: spacing.md,
+      paddingTop: spacing.md,
+      borderTopWidth: 1,
+      borderTopColor: colors.border,
+      gap: spacing.sm,
+    },
+
+    officialSourcesTitle: {
+      textTransform: 'uppercase',
+    },
+
+    sourceRow: {
+      minHeight: 56,
+      borderRadius: 14,
+      backgroundColor: colors.surfaceSecondary,
+      paddingHorizontal: spacing.md,
+      paddingVertical: spacing.sm,
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: spacing.md,
+    },
+
+    officialSourceRow: {
+      minHeight: 58,
+      borderRadius: 14,
+      borderWidth: 1,
+      borderColor: colors.border,
+      backgroundColor: colors.surface,
+      paddingHorizontal: spacing.md,
+      paddingVertical: spacing.sm,
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: spacing.md,
+    },
+
+    sourceRowIcon: {
+      width: 32,
+      height: 32,
+      borderRadius: 16,
+      backgroundColor: colors.surface,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+
+    sourceRowCopy: {
       flex: 1,
     },
 

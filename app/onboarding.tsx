@@ -10,6 +10,7 @@ import { useOnboardingStore } from '../src/stores/onboardingStore'
 import { useSettingsStore } from '../src/stores/settingsStore'
 import { useTheme } from '../src/hooks/useTheme'
 import { spacing } from '../src/theme/spacing'
+import type { ThemeColors } from '../src/theme/colors'
 import SafeText from '../src/components/ui/SafeText'
 
 const VALUE_POINTS = [
@@ -172,7 +173,7 @@ export default function OnboardingScreen() {
   )
 }
 
-const createStyles = (colors: any) =>
+const createStyles = (colors: ThemeColors) =>
   StyleSheet.create({
     container: {
       flex: 1,

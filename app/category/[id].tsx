@@ -1,5 +1,4 @@
 import {
-  ActivityIndicator,
   FlatList,
   RefreshControl,
   StyleSheet,
@@ -15,10 +14,13 @@ import { useSettingsStore } from '../../src/stores/settingsStore'
 import { translations } from '../../src/utils/translations'
 import { useTheme } from '../../src/hooks/useTheme'
 import { spacing } from '../../src/theme/spacing'
+import type { ThemeColors } from '../../src/theme/colors'
 import SafeText from '../../src/components/ui/SafeText'
 import GuideCard from '../../src/components/guide/GuideCard'
 import Badge from '../../src/components/ui/Badge'
 import { Guide } from '../../src/types/guide'
+import { Category } from '../../src/types/category'
+import { getCategoryAccent } from '../../src/lib/categoryVisuals'
 
 const CATEGORY_RECOMMENDATIONS: Record<string, string[]> = {
   ids: ['gov', 'work'],
@@ -39,6 +41,7 @@ export default function CategoryDetailsScreen() {
   const {
     data: guides = [],
     isLoading,
+    isError,
     refetch,
     isRefetching,
   } = useGuides(categoryId)
@@ -55,7 +58,7 @@ export default function CategoryDetailsScreen() {
   const currentCategory =
     categories.find((cat) => cat.id === categoryId) || guides[0]?.category
   const firstCategory = currentCategory
-  const categoryColor = firstCategory?.color || colors.primary
+  const categoryColor = getCategoryAccent(firstCategory, colors.primary)
   const categoryIcon = firstCategory?.icon || '📚'
   const styles = createStyles(colors, categoryColor)
   const suggestedCategories = getSuggestedCategories()
@@ -74,7 +77,7 @@ export default function CategoryDetailsScreen() {
     })
   }
 
-  const getCategoryName = (category: any) =>
+  const getCategoryName = (category: Category) =>
     language === 'fil' ? category.name_fil : category.name_en
 
   const renderHeader = () => (
@@ -160,35 +163,52 @@ export default function CategoryDetailsScreen() {
       ListEmptyComponent={
         <View style={styles.emptyCard}>
           <View style={styles.emptyIcon}>
-            <Ionicons name="file-tray-outline" size={30} color={colors.primary} />
+            <Ionicons
+              name={isError ? 'cloud-offline-outline' : 'file-tray-outline'}
+              size={30}
+              color={isError ? colors.warning : colors.primary}
+            />
           </View>
 
           <SafeText variant="h3" weight="700" style={styles.emptyTitle}>
-            {language === 'fil' ? 'Wala pang guides' : 'No guides yet'}
+            {isError
+              ? language === 'fil'
+                ? 'Hindi ma-load ang guides'
+                : 'Unable to load guides'
+              : language === 'fil'
+                ? 'Wala pang guides'
+                : 'No guides yet'}
           </SafeText>
 
           <SafeText variant="bodyMd" color="muted" style={styles.emptyText}>
-            {language === 'fil'
-              ? 'Wala pang guides sa category na ito. Subukan ang ibang category muna.'
-              : 'There are no guides under this category yet. Try another category first.'}
+            {isError
+              ? language === 'fil'
+                ? 'I-check ang internet connection o subukan ulit.'
+                : 'Check your internet connection or try again.'
+              : language === 'fil'
+                ? 'Wala pang guides sa category na ito. Subukan ang ibang category muna.'
+                : 'There are no guides under this category yet. Try another category first.'}
           </SafeText>
 
-          {suggestedCategories.length > 0 ? (
+          {!isError && suggestedCategories.length > 0 ? (
             <View style={styles.suggestionBlock}>
               <SafeText variant="caption" color="muted" style={styles.suggestionLabel}>
                 {language === 'fil' ? 'Subukan muna' : 'Try instead'}
               </SafeText>
 
               <View style={styles.suggestionRow}>
-                {suggestedCategories.map((cat) => (
+                {suggestedCategories.map((cat) => {
+                  const accent = getCategoryAccent(cat, colors.primary)
+
+                  return (
                   <TouchableOpacity
                     key={cat.id}
                     activeOpacity={0.86}
                     style={[
                       styles.suggestionChip,
                       {
-                        borderColor: `${cat.color}35`,
-                        backgroundColor: `${cat.color}12`,
+                        borderColor: `${accent}35`,
+                        backgroundColor: `${accent}12`,
                       },
                     ]}
                     onPress={() => openCategory(cat.id, getCategoryName(cat))}
@@ -197,35 +217,50 @@ export default function CategoryDetailsScreen() {
                     <SafeText
                       variant="caption"
                       weight="700"
-                      style={{ color: cat.color }}
+                      style={{ color: accent }}
                     >
                       {getCategoryName(cat)}
                     </SafeText>
                   </TouchableOpacity>
-                ))}
+                  )
+                })}
               </View>
             </View>
           ) : null}
 
-          <TouchableOpacity
-            activeOpacity={0.86}
-            style={styles.searchAction}
-            onPress={() => router.push('/search')}
-          >
-            <SafeText color="primary" weight="700">
-              {language === 'fil' ? 'Mag-search ng guide' : 'Search guides'}
-            </SafeText>
-          </TouchableOpacity>
+          {isError ? (
+            <TouchableOpacity
+              activeOpacity={0.86}
+              style={styles.emptyAction}
+              onPress={() => refetch()}
+            >
+              <SafeText color="surface" weight="700">
+                {language === 'fil' ? 'Subukan ulit' : 'Try again'}
+              </SafeText>
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity
+              activeOpacity={0.86}
+              style={styles.searchAction}
+              onPress={() => router.push('/search')}
+            >
+              <SafeText color="primary" weight="700">
+                {language === 'fil' ? 'Mag-search ng guide' : 'Search guides'}
+              </SafeText>
+            </TouchableOpacity>
+          )}
 
-          <TouchableOpacity
-            activeOpacity={0.86}
-            style={styles.emptyAction}
-            onPress={() => router.back()}
-          >
-            <SafeText color="surface" weight="700">
-              {language === 'fil' ? 'Bumalik sa categories' : 'Back to categories'}
-            </SafeText>
-          </TouchableOpacity>
+          {!isError ? (
+            <TouchableOpacity
+              activeOpacity={0.86}
+              style={styles.emptyAction}
+              onPress={() => router.back()}
+            >
+              <SafeText color="surface" weight="700">
+                {language === 'fil' ? 'Bumalik sa categories' : 'Back to categories'}
+              </SafeText>
+            </TouchableOpacity>
+          ) : null}
         </View>
       }
       contentContainerStyle={styles.content}
@@ -267,7 +302,7 @@ export default function CategoryDetailsScreen() {
   }
 }
 
-const createStyles = (colors: any, heroColor: string) =>
+const createStyles = (colors: ThemeColors, heroColor: string) =>
   StyleSheet.create({
     content: {
       backgroundColor: colors.background,

@@ -69,7 +69,7 @@ export default function AppButton({
     >
       {loading ? (
         <ActivityIndicator
-          color={colors.surface}
+          color="#FFFFFF"
         />
       ) : (
         <Text style={getTextStyle()}>
@@ -110,7 +110,7 @@ const createStyles = (colors: ThemeColors) =>
 
     primaryText: {
       ...typography.body,
-      color: colors.surface,
+      color: '#FFFFFF',
       fontWeight: '700',
     },
 

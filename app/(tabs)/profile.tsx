@@ -7,6 +7,7 @@ import {
   View,
 } from 'react-native'
 import { router } from 'expo-router'
+import Constants from 'expo-constants'
 import { Ionicons } from '@expo/vector-icons'
 import { useSettingsStore } from '../../src/stores/settingsStore'
 import { useSavedStore } from '../../src/stores/savedStore'
@@ -34,6 +35,7 @@ export default function ProfileScreen() {
   const { signOut, isLoading } = useAuth()
   const t = translations[language]
   const styles = createStyles(colors)
+  const appVersion = Constants.expoConfig?.version || '1.0.0'
 
   const handleLogout = async () => {
     try {
@@ -238,7 +240,7 @@ export default function ProfileScreen() {
               : '"I wish I knew this earlier."'}
           </SafeText>
           <SafeText variant="caption" color="light" style={styles.appVersion}>
-            Version 1.0.0
+            Version {appVersion}
           </SafeText>
         </View>
       </View>

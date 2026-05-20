@@ -27,7 +27,7 @@ export default function SafeText({
     text: colors.text,
     muted: colors.textMuted,
     light: colors.textLight,
-    surface: colors.surface,
+    surface: '#FFFFFF',
     primary: colors.primary,
     danger: colors.danger,
     success: colors.success,

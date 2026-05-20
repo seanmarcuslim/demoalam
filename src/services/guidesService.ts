@@ -104,7 +104,8 @@ export const guidesService = {
       })
 
     if (error) {
-      throwServiceError('Error fetching trending guides:', error)
+      // Trending is optional. If the RPC is not migrated yet, Home falls back to regular guides.
+      return []
     }
 
     return data || []

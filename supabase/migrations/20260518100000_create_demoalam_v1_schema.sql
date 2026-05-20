@@ -20,8 +20,8 @@ create table if not exists public.guides (
   title_fil text not null,
   tagline_en text not null,
   tagline_fil text not null,
-  keywords_en text[],
-  keywords_fil text[],
+  keywords_en text,
+  keywords_fil text,
   official_sources jsonb not null default '[]'::jsonb,
   is_featured boolean default false,
   is_urgent boolean default false,
@@ -77,8 +77,8 @@ begin
     to_tsvector('english', coalesce(new.tagline_en, '')) ||
     to_tsvector('simple', coalesce(new.title_fil, '')) ||
     to_tsvector('simple', coalesce(new.tagline_fil, '')) ||
-    to_tsvector('simple', coalesce(array_to_string(new.keywords_en, ' '), '')) ||
-    to_tsvector('simple', coalesce(array_to_string(new.keywords_fil, ' '), '')) ||
+    to_tsvector('simple', coalesce(new.keywords_en, '')) ||
+    to_tsvector('simple', coalesce(new.keywords_fil, '')) ||
     to_tsvector('simple', coalesce(array_to_string(new.tags, ' '), ''));
   return new;
 end;

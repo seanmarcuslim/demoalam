@@ -31,8 +31,8 @@ export interface Guide {
   tagline_en: string
   tagline_fil: string
 
-  keywords_en?: string[] | null
-  keywords_fil?: string[] | null
+  keywords_en?: string | null
+  keywords_fil?: string | null
   official_sources?: GuideOfficialSource[] | null
 
   is_featured: boolean
@@ -85,4 +85,8 @@ export interface SectionContent {
   step_number?: number
 
   severity?: SectionSeverity
+
+  items?: string[]
+
+  sample?: string
 }

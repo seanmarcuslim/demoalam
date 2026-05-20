@@ -343,15 +343,15 @@ export default function GuideDetailsScreen() {
       <View style={styles.trustCard}>
         <View style={styles.trustHeader}>
           <View style={styles.trustIcon}>
-            <Ionicons name="shield-checkmark" size={20} color={colors.primary} />
+            <Ionicons name="shield-checkmark" size={17} color={colors.primary} />
           </View>
           <View style={styles.trustCopy}>
-            <SafeText variant="h3" weight="700">
-              {language === 'fil' ? 'Bago ka kumilos' : 'Before you act'}
+            <SafeText variant="label" weight="700" style={styles.compactCardTitle}>
+              {language === 'fil' ? 'Suriin muna' : 'Quick check'}
             </SafeText>
             <SafeText variant="caption" color="muted" style={styles.trustSubtitle}>
               {language === 'fil'
-                ? 'Quick check para iwas sayang oras, pera, o maling pila.'
+                ? 'Tingnan ang oras, gastos, at source bago kumilos.'
                 : 'A quick check to avoid wasted time, money, or wrong steps.'}
             </SafeText>
           </View>
@@ -360,7 +360,7 @@ export default function GuideDetailsScreen() {
         <View style={styles.trustGrid}>
           <TrustItem
             icon="calendar-outline"
-            label={language === 'fil' ? 'Updated' : 'Updated'}
+            label={language === 'fil' ? 'Na-update' : 'Updated'}
             value={updatedLabel}
           />
           <TrustItem
@@ -375,7 +375,7 @@ export default function GuideDetailsScreen() {
           />
           <TrustItem
             icon="speedometer-outline"
-            label={language === 'fil' ? 'Level' : 'Level'}
+            label={language === 'fil' ? 'Antas' : 'Level'}
             value={activeGuide.difficulty || (language === 'fil' ? 'Madali' : 'Easy')}
           />
         </View>
@@ -390,49 +390,27 @@ export default function GuideDetailsScreen() {
         </View>
       </View>
 
-      <View style={styles.sourceCard}>
-        <View style={styles.sourceHeader}>
-          <View style={styles.sourceIcon}>
-            <Ionicons name="checkmark-done-circle" size={20} color={colors.success} />
+      {officialSources.length > 0 ? (
+        <View style={styles.sourceCard}>
+          <View style={styles.sourceHeader}>
+            <View style={styles.sourceIcon}>
+              <Ionicons name="checkmark-done-circle" size={17} color={colors.success} />
+            </View>
+
+            <View style={styles.sourceCopy}>
+              <SafeText variant="label" weight="700" style={styles.compactCardTitle}>
+                {language === 'fil' ? 'Official na sources' : 'Official sources'}
+              </SafeText>
+
+              <SafeText variant="caption" color="muted" style={styles.sourceSubtitle}>
+                {language === 'fil'
+                  ? 'Helpful guide ito, pero official links pa rin ang final reference.'
+                  : 'This guide helps you prepare; official links remain the final reference.'}
+              </SafeText>
+            </View>
           </View>
 
-          <View style={styles.sourceCopy}>
-            <SafeText variant="h3" weight="700">
-              {language === 'fil' ? 'Trust check' : 'Trust check'}
-            </SafeText>
-
-            <SafeText variant="caption" color="muted" style={styles.sourceSubtitle}>
-              {language === 'fil'
-                ? 'Ginawa para makatulong, hindi para palitan ang official advice.'
-                : 'Built to help, not to replace official advice.'}
-            </SafeText>
-          </View>
-        </View>
-
-        <View style={styles.sourceRows}>
-          <TrustCheckRow
-            icon="calendar-clear-outline"
-            label={language === 'fil' ? 'Huling update' : 'Last checked'}
-            value={updatedLabel}
-          />
-          <TrustCheckRow
-            icon="language-outline"
-            label={language === 'fil' ? 'Wika' : 'Language'}
-            value={language === 'fil' ? 'Filipino + English' : 'English + Filipino'}
-          />
-          <TrustCheckRow
-            icon="person-outline"
-            label={language === 'fil' ? 'Para kanino' : 'For'}
-            value={language === 'fil' ? 'Everyday Filipino users' : 'Everyday Filipino users'}
-          />
-        </View>
-
-        {officialSources.length > 0 ? (
           <View style={styles.officialSources}>
-            <SafeText variant="label" color="muted" weight="700" style={styles.officialSourcesTitle}>
-              {language === 'fil' ? 'Official sources' : 'Official sources'}
-            </SafeText>
-
             {officialSources.map((source) => (
               <OfficialSourceRow
                 key={source.url}
@@ -440,8 +418,8 @@ export default function GuideDetailsScreen() {
               />
             ))}
           </View>
-        ) : null}
-      </View>
+        </View>
+      ) : null}
 
       <View style={styles.sectionContainer}>
         {sections.length > 0 ? (
@@ -601,6 +579,8 @@ export default function GuideDetailsScreen() {
 
     const content = getSectionContent(section)
     const stepNumber = content?.step_number || index + 1
+    const checklistItems = content?.items || []
+    const sample = content?.sample
 
     const toneStyle = {
       backgroundColor: isWarning
@@ -662,6 +642,37 @@ export default function GuideDetailsScreen() {
           {body}
         </SafeText>
 
+        {checklistItems.length > 0 ? (
+          <View style={styles.checklistBox}>
+            <SafeText variant="label" weight="700" style={styles.checklistTitle}>
+              {language === 'fil' ? 'Checklist' : 'Checklist'}
+            </SafeText>
+
+            {checklistItems.map((item) => (
+              <View key={item} style={styles.checklistRow}>
+                <Ionicons name="checkmark-circle" size={16} color={colors.success} />
+                <SafeText variant="bodyMd" color="muted" style={styles.checklistText}>
+                  {item}
+                </SafeText>
+              </View>
+            ))}
+          </View>
+        ) : null}
+
+        {sample ? (
+          <View style={styles.sampleBox}>
+            <View style={styles.sampleHeader}>
+              <Ionicons name="chatbox-ellipses-outline" size={16} color={colors.primary} />
+              <SafeText variant="label" color="primary" weight="700">
+                {language === 'fil' ? 'Sample na pwede itanong' : 'Sample you can ask'}
+              </SafeText>
+            </View>
+            <SafeText variant="bodyMd" color="muted" style={styles.sampleText}>
+              {sample}
+            </SafeText>
+          </View>
+        ) : null}
+
         {isStep ? (
           <View style={styles.actionHint}>
             <Ionicons name="checkmark-circle" size={17} color={colors.success} />
@@ -718,32 +729,6 @@ export default function GuideDetailsScreen() {
         <SafeText variant="bodyMd" weight="700" numberOfLines={1}>
           {value}
         </SafeText>
-      </View>
-    )
-  }
-
-  function TrustCheckRow({
-    icon,
-    label,
-    value,
-  }: {
-    icon: keyof typeof Ionicons.glyphMap
-    label: string
-    value: string
-  }) {
-    return (
-      <View style={styles.sourceRow}>
-        <View style={styles.sourceRowIcon}>
-          <Ionicons name={icon} size={17} color={colors.success} />
-        </View>
-        <View style={styles.sourceRowCopy}>
-          <SafeText variant="caption" color="muted">
-            {label}
-          </SafeText>
-          <SafeText variant="bodyMd" weight="700">
-            {value}
-          </SafeText>
-        </View>
       </View>
     )
   }
@@ -969,25 +954,25 @@ const createStyles = (colors: ThemeColors, heroColor: string) =>
 
     trustCard: {
       marginHorizontal: spacing.md,
-      marginTop: spacing.lg,
-      borderRadius: 18,
+      marginTop: spacing.md,
+      borderRadius: 14,
       backgroundColor: colors.surface,
       borderWidth: 1,
       borderColor: colors.border,
-      padding: spacing.md,
+      padding: spacing.sm + spacing.xs,
     },
 
     trustHeader: {
       flexDirection: 'row',
       alignItems: 'center',
-      gap: spacing.md,
-      marginBottom: spacing.md,
+      gap: spacing.sm,
+      marginBottom: spacing.sm,
     },
 
     trustIcon: {
-      width: 42,
-      height: 42,
-      borderRadius: 15,
+      width: 32,
+      height: 32,
+      borderRadius: 12,
       backgroundColor: colors.primaryLight,
       alignItems: 'center',
       justifyContent: 'center',
@@ -998,29 +983,29 @@ const createStyles = (colors: ThemeColors, heroColor: string) =>
     },
 
     trustSubtitle: {
-      marginTop: 2,
+      marginTop: 1,
     },
 
     trustGrid: {
       flexDirection: 'row',
       flexWrap: 'wrap',
-      gap: spacing.sm,
+      gap: spacing.xs,
     },
 
     trustItem: {
-      width: '48%',
-      minHeight: 82,
-      borderRadius: 14,
+      width: '49%',
+      minHeight: 64,
+      borderRadius: 12,
       backgroundColor: colors.surfaceSecondary,
-      padding: spacing.md,
+      padding: spacing.sm,
       justifyContent: 'space-between',
     },
 
     officialNote: {
-      marginTop: spacing.md,
-      borderRadius: 14,
+      marginTop: spacing.sm,
+      borderRadius: 12,
       backgroundColor: colors.warningLight,
-      padding: spacing.md,
+      padding: spacing.sm,
       flexDirection: 'row',
       alignItems: 'flex-start',
       gap: spacing.sm,
@@ -1033,24 +1018,24 @@ const createStyles = (colors: ThemeColors, heroColor: string) =>
     sourceCard: {
       marginHorizontal: spacing.md,
       marginTop: spacing.md,
-      borderRadius: 18,
+      borderRadius: 14,
       backgroundColor: colors.surface,
       borderWidth: 1,
       borderColor: colors.border,
-      padding: spacing.md,
+      padding: spacing.sm + spacing.xs,
     },
 
     sourceHeader: {
       flexDirection: 'row',
       alignItems: 'center',
-      gap: spacing.md,
-      marginBottom: spacing.md,
+      gap: spacing.sm,
+      marginBottom: spacing.sm,
     },
 
     sourceIcon: {
-      width: 42,
-      height: 42,
-      borderRadius: 15,
+      width: 32,
+      height: 32,
+      borderRadius: 12,
       backgroundColor: colors.successLight,
       alignItems: 'center',
       justifyContent: 'center',
@@ -1061,23 +1046,15 @@ const createStyles = (colors: ThemeColors, heroColor: string) =>
     },
 
     sourceSubtitle: {
-      marginTop: 2,
+      marginTop: 1,
     },
 
-    sourceRows: {
-      gap: spacing.sm,
+    compactCardTitle: {
+      textTransform: 'uppercase',
     },
 
     officialSources: {
-      marginTop: spacing.md,
-      paddingTop: spacing.md,
-      borderTopWidth: 1,
-      borderTopColor: colors.border,
       gap: spacing.sm,
-    },
-
-    officialSourcesTitle: {
-      textTransform: 'uppercase',
     },
 
     sourceRow: {
@@ -1092,22 +1069,22 @@ const createStyles = (colors: ThemeColors, heroColor: string) =>
     },
 
     officialSourceRow: {
-      minHeight: 58,
-      borderRadius: 14,
+      minHeight: 50,
+      borderRadius: 12,
       borderWidth: 1,
       borderColor: colors.border,
       backgroundColor: colors.surface,
-      paddingHorizontal: spacing.md,
+      paddingHorizontal: spacing.sm,
       paddingVertical: spacing.sm,
       flexDirection: 'row',
       alignItems: 'center',
-      gap: spacing.md,
+      gap: spacing.sm,
     },
 
     sourceRowIcon: {
-      width: 32,
-      height: 32,
-      borderRadius: 16,
+      width: 30,
+      height: 30,
+      borderRadius: 15,
       backgroundColor: colors.surface,
       alignItems: 'center',
       justifyContent: 'center',
@@ -1166,6 +1143,51 @@ const createStyles = (colors: ThemeColors, heroColor: string) =>
 
     sectionBody: {
       lineHeight: 24,
+    },
+
+    checklistBox: {
+      marginTop: spacing.md,
+      borderRadius: 12,
+      borderWidth: 1,
+      borderColor: colors.border,
+      backgroundColor: colors.surface,
+      padding: spacing.md,
+      gap: spacing.sm,
+    },
+
+    checklistTitle: {
+      textTransform: 'uppercase',
+    },
+
+    checklistRow: {
+      flexDirection: 'row',
+      alignItems: 'flex-start',
+      gap: spacing.sm,
+    },
+
+    checklistText: {
+      flex: 1,
+      lineHeight: 21,
+    },
+
+    sampleBox: {
+      marginTop: spacing.md,
+      borderRadius: 12,
+      borderWidth: 1,
+      borderColor: `${colors.primary}25`,
+      backgroundColor: colors.primaryLight,
+      padding: spacing.md,
+      gap: spacing.sm,
+    },
+
+    sampleHeader: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: spacing.sm,
+    },
+
+    sampleText: {
+      lineHeight: 22,
     },
 
     actionHint: {

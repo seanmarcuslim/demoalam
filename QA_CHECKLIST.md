@@ -43,6 +43,8 @@ Use this with Expo Go before considering a build ready.
 - Trust check card renders.
 - Official sources appear only when guide has sources.
 - Source links open browser.
+- Priority guides include concrete checklist or sample-style content.
+- Broad guide copy is rewritten into specific steps, mistakes, warnings, or tips.
 - Offline cached guide shows saved offline notice.
 - Empty cached summary explains how to refresh full guide.
 

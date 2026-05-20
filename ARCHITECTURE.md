@@ -71,8 +71,36 @@ Use:
 - clear disclaimers
 - scam warning treatment for urgent guides
 - offline copy notices
+- specific checklists and samples instead of broad advice
 
 Do not show official-source UI unless `official_sources` exists.
+
+## Content Architecture
+
+Guide content must be structured for action, not only reading.
+
+Use `guide_sections.section_type` intentionally:
+
+- `what_to_know`: the short explanation and user situation
+- `step`: ordered actions the user can follow
+- `mistake`: common failure points and false assumptions
+- `warning`: scam, money, safety, deadline, or eligibility risk
+- `tip`: practical shortcut, question to ask, or preparation note
+
+When a guide needs a checklist or sample, store it inside section JSONB content first. Prefer additive fields such as:
+
+```json
+{
+  "title": "Documents to prepare",
+  "body": "Bring these before going.",
+  "items": ["Valid ID", "Photocopy", "Reference number"],
+  "sample": "Hi, I want to confirm the accepted IDs before my appointment."
+}
+```
+
+The UI can initially render unknown fields conservatively, then later support checklist and sample blocks as first-class components.
+
+Priority guides should not ship with only one or two generic sections.
 
 ## Search Strategy
 

@@ -5,7 +5,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { router } from 'expo-router'
 import { Ionicons } from '@expo/vector-icons'
 import { useSearch } from '../../src/hooks/useSearch'
@@ -28,13 +28,14 @@ import EmptyState from '../../src/components/ui/EmptyState'
 import { getCategoryAccent } from '../../src/lib/categoryVisuals'
 
 const SUGGESTIONS = [
+  'DSWD AICS',
+  'batas',
+  'data privacy',
+  'consumer',
   'valid ID',
   'trabaho',
   'gcash scam',
   'NBI',
-  'rent',
-  'budget',
-  'SSS',
 ]
 
 export default function SearchScreen() {
@@ -65,6 +66,13 @@ export default function SearchScreen() {
   const styles = createStyles(colors)
 
   const showEmptySearch = searchTerm.trim().length === 0
+  const resultCategoryIds = useMemo(
+    () => new Set(results.map((guide) => guide.category_id)),
+    [results]
+  )
+  const visibleFilterCategories = showEmptySearch
+    ? categories
+    : categories.filter((cat) => resultCategoryIds.has(cat.id))
 
   const filteredResults = selectedCategory
     ? results.filter((guide) => guide.category_id === selectedCategory)
@@ -85,6 +93,11 @@ export default function SearchScreen() {
     })
   }
 
+  const updateSearchTerm = (term: string) => {
+    setSelectedCategory(null)
+    setSearchTerm(term)
+  }
+
   const commitSearch = (term: string) => {
     const cleanTerm = term.trim()
 
@@ -92,7 +105,7 @@ export default function SearchScreen() {
       addRecentSearch(cleanTerm)
     }
 
-    setSearchTerm(term)
+    updateSearchTerm(term)
   }
 
   const renderListHeader = () => {
@@ -169,7 +182,8 @@ export default function SearchScreen() {
               }`}
         </SafeText>
 
-        <View style={styles.filterRow}>
+        {results.length > 0 ? (
+          <View style={styles.filterRow}>
           <TouchableOpacity
             activeOpacity={0.84}
             style={[
@@ -187,9 +201,10 @@ export default function SearchScreen() {
             </SafeText>
           </TouchableOpacity>
 
-          {categories.map((cat) => {
+          {visibleFilterCategories.map((cat) => {
             const active = selectedCategory === cat.id
             const accent = getCategoryAccent(cat, colors.primary)
+            const count = results.filter((guide) => guide.category_id === cat.id).length
 
             return (
               <TouchableOpacity
@@ -213,12 +228,13 @@ export default function SearchScreen() {
                     color: active ? '#FFFFFF' : accent,
                   }}
                 >
-                  {language === 'fil' ? cat.name_fil : cat.name_en}
+                  {`${language === 'fil' ? cat.name_fil : cat.name_en} ${count}`}
                 </SafeText>
               </TouchableOpacity>
             )
           })}
-        </View>
+          </View>
+        ) : null}
       </View>
     )
   }
@@ -247,7 +263,7 @@ export default function SearchScreen() {
             }
             placeholderTextColor={colors.textLight}
             value={searchTerm}
-            onChangeText={setSearchTerm}
+            onChangeText={updateSearchTerm}
             onSubmitEditing={() => commitSearch(searchTerm)}
             autoCorrect={false}
             autoCapitalize="none"
@@ -257,7 +273,7 @@ export default function SearchScreen() {
           {searchTerm.length > 0 ? (
             <TouchableOpacity
               hitSlop={10}
-              onPress={() => setSearchTerm('')}
+              onPress={() => updateSearchTerm('')}
             >
               <Ionicons
                 name="close-circle"

@@ -47,7 +47,25 @@ DemoAlam helps Filipinos discover practical guidance for everyday tasks involvin
 - Filipino/English support
 - Offline-aware saved guides
 - Trust-first guide detail UX
+- Checklist-first practical guidance
+- Samples/templates when users need to copy, prepare, or verify something
 - Backend-driven content
+
+## Guide Content Standard
+
+DemoAlam guides should not stay broad explanations. Each important guide should help a user take action immediately.
+
+Every priority guide should include:
+
+- `what_to_know`: short context and who the guide is for
+- `step`: concrete steps in the order the user should do them
+- `mistake`: common mistakes, red flags, or things to avoid
+- `tip`: practical shortcut or decision rule
+- checklist content: documents, screenshots, questions, or items to prepare
+- sample content when useful: sample message, sample question to ask, sample checklist, sample budget split, sample warning script
+- official sources when the topic involves money, IDs, government, health, employment, or scams
+
+The content test is simple: after reading a guide, the user should know what to prepare, what to ask, what to avoid, and where to verify.
 
 ## Development
 
@@ -88,8 +106,9 @@ See [supabase/README.md](./supabase/README.md) for migration notes.
 
 ## Current Priorities
 
-1. Trust and source quality
-2. Offline saved guide reliability
-3. Search relevance
-4. Guide detail UX
-5. Performance on budget Android phones
+1. Upgrade priority guides with checklists, samples, and official sources
+2. Trust and source quality
+3. Search relevance for real user terms
+4. Offline saved guide reliability
+5. Guide detail UX for long practical content
+6. Performance on budget Android phones

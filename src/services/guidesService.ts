@@ -6,6 +6,57 @@ function toPlainTextQuery(query: string) {
   return query.trim().replace(/\s+/g, ' ')
 }
 
+function toIlikePattern(query: string) {
+  return `%${query.replace(/[%_]/g, '\\$&')}%`
+}
+
+function toSearchTerms(query: string) {
+  return query
+    .toLowerCase()
+    .split(/\s+/)
+    .map((term) => term.trim())
+    .filter((term) => term.length > 0)
+}
+
+function searchableText(guide: Guide) {
+  return [
+    guide.title_en,
+    guide.title_fil,
+    guide.tagline_en,
+    guide.tagline_fil,
+    guide.keywords_en,
+    guide.keywords_fil,
+    ...(guide.tags || []),
+    guide.category?.name_en,
+    guide.category?.name_fil,
+    guide.category?.slug,
+  ]
+    .filter(Boolean)
+    .join(' ')
+    .toLowerCase()
+}
+
+function matchesSearch(guide: Guide, query: string) {
+  const text = searchableText(guide)
+  const normalizedQuery = query.toLowerCase()
+  const terms = toSearchTerms(normalizedQuery)
+
+  return (
+    text.includes(normalizedQuery) ||
+    terms.every((term) => text.includes(term))
+  )
+}
+
+function uniqueGuides(guides: Guide[]) {
+  const byId = new Map<string, Guide>()
+
+  guides.forEach((guide) => {
+    byId.set(guide.id, guide)
+  })
+
+  return Array.from(byId.values())
+}
+
 export const guidesService = {
   async fetchGuides(
     categoryId?: string
@@ -120,6 +171,8 @@ export const guidesService = {
       return []
     }
 
+    const searchTerms = toSearchTerms(cleanQuery)
+
     const { data, error } =
       await supabase
         .from('guides')
@@ -139,6 +192,45 @@ export const guidesService = {
       throwServiceError('Error searching guides:', error)
     }
 
-    return data || []
+    const patterns = [cleanQuery, ...searchTerms]
+      .filter((term, index, items) => items.indexOf(term) === index)
+      .map(toIlikePattern)
+
+    const { data: fallbackData, error: fallbackError } =
+      await supabase
+        .from('guides')
+        .select(
+          '*, category:categories(*)'
+        )
+        .eq('is_published', true)
+        .or(
+          patterns.flatMap((pattern) => [
+            `title_en.ilike.${pattern}`,
+            `title_fil.ilike.${pattern}`,
+            `tagline_en.ilike.${pattern}`,
+            `tagline_fil.ilike.${pattern}`,
+            `keywords_en.ilike.${pattern}`,
+            `keywords_fil.ilike.${pattern}`,
+          ]).join(',')
+        )
+        .order('published_at', {
+          ascending: false,
+        })
+        .limit(20)
+
+    if (fallbackError) {
+      throwServiceError('Error searching guides:', fallbackError)
+    }
+
+    const allGuides = await guidesService.fetchGuides()
+    const localMatches = allGuides.filter((guide) =>
+      matchesSearch(guide, cleanQuery)
+    )
+
+    return uniqueGuides([
+      ...(data || []),
+      ...(fallbackData || []),
+      ...localMatches,
+    ]).slice(0, 20)
   },
 }

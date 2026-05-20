@@ -58,5 +58,17 @@ Guide Detail should always make clear:
 - whether official sources exist
 - that DemoAlam helps but does not replace official advice
 - when the user is seeing a saved offline copy
+- what the user should prepare before acting
+- what sample question, message, or checklist the user can reuse
 
 Official links should only appear when `official_sources` exists.
+
+## Checklist And Sample UI
+
+Guides should make practical parts easy to scan.
+
+- Use compact checklist rows for documents, requirements, and actions.
+- Use sample blocks for messages, questions to ask, warning scripts, or budget splits.
+- Keep samples visually quieter than warnings but easier to copy/read than normal paragraphs.
+- Avoid making checklist/sample blocks look like marketing cards.
+- Filipino copy should sound like everyday practical advice, not formal translated policy text.

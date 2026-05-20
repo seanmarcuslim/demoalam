@@ -81,19 +81,19 @@ values
     now()
   ),
   (
-    'government-appointment-basics',
+    'dswd-aics-assistance-checklist',
     (select id from public.categories where slug = 'gov'),
-    'How to prepare for a government appointment',
-    'Paano maghanda sa government appointment',
-    'Avoid wasted trips by checking forms, copies, IDs, and schedule rules first.',
-    'Iwas balik-balik sa opisina: i-check muna ang forms, photocopy, ID, at schedule rules.',
+    'DSWD AICS checklist for crisis financial assistance',
+    'DSWD AICS checklist para sa financial assistance',
+    'Know what AICS may cover, what to prepare, and how to avoid fake assistance posts.',
+    'Alamin kung ano ang pwedeng saklaw ng AICS, ano ang ihahanda, at paano umiwas sa fake assistance posts.',
+    true,
     false,
-    false,
-    3,
-    'madali',
-    '30 minuto',
-    'Libre',
-    array['government', 'appointment', 'forms', 'gobyerno', 'office', 'documents'],
+    6,
+    'katamtaman',
+    '30-60 minuto',
+    'Libre mag-check',
+    array['dswd', 'aics', 'financial assistance', 'medical assistance', 'burial assistance', 'transportation assistance', 'education assistance', 'food assistance', 'gobyerno', 'ayuda'],
     now()
   ),
   (
@@ -178,19 +178,19 @@ values
     now()
   ),
   (
-    'barangay-certificate-when-needed',
-    (select id from public.categories where slug = 'ids'),
-    'When a barangay certificate helps your application',
-    'Kailan nakakatulong ang barangay certificate',
-    'Use it as supporting proof for address, residency, or first-time applications.',
-    'Gamitin ito bilang supporting proof ng address, residency, o first-time applications.',
+    'everyday-rights-philippines-checklist',
+    (select id from public.categories where slug = 'gov'),
+    'Everyday rights in the Philippines many people miss',
+    'Everyday rights sa Pilipinas na madalas hindi alam',
+    'Know basic rights for shopping, work pay, personal data, and dealing with authorities.',
+    'Alamin ang basic rights sa pagbili, sweldo, personal data, at pakikipag-usap sa authorities.',
     false,
     false,
-    3,
-    'madali',
-    '30 minuto-1 araw',
-    'Libre-₱100',
-    array['barangay certificate', 'residency', 'proof of address', 'documents'],
+    6,
+    'katamtaman',
+    '20-30 minuto',
+    'Libre',
+    array['rights', 'law', 'consumer rights', 'labor rights', 'data privacy', 'bill of rights', 'philippines', 'karapatan', 'batas'],
     now()
   ),
   (
@@ -419,18 +419,18 @@ on conflict (slug) do update set
 
 update public.guides
 set
-  keywords_en = tags,
-  keywords_fil = tags,
+  keywords_en = array_to_string(tags, ' '),
+  keywords_fil = array_to_string(tags, ' '),
   updated_at = now()
 where slug in (
   'fast-valid-id',
   'gcash-scam-red-flags',
   'first-job-requirements',
-  'government-appointment-basics',
+  'dswd-aics-assistance-checklist',
   'lost-wallet-first-steps',
   'renting-first-time-checklist',
   'nbi-clearance-first-timers',
-  'barangay-certificate-when-needed',
+  'everyday-rights-philippines-checklist',
   'resume-no-experience',
   'job-interview-basic-answers',
   'bank-account-first-time',
@@ -458,6 +458,18 @@ set
         {"title":"PhilHealth Online Services","publisher":"PhilHealth","url":"https://www.philhealth.gov.ph/services"},
         {"title":"Pag-IBIG Fund","publisher":"Pag-IBIG Fund","url":"https://www.pagibigfund.gov.ph/"}
       ]'::jsonb
+    when 'dswd-aics-assistance-checklist' then
+      '[
+        {"title":"Assistance to Individuals in Crisis Situation","publisher":"DSWD","url":"https://www.dswd.gov.ph/assistance-to-individuals-in-crisis-situation/"},
+        {"title":"With defunded AKAP out, AICS to serve its 3.6M clients with Php63-B budget for 2026","publisher":"DSWD","url":"https://www.dswd.gov.ph/with-defunded-akap-out-aics-to-serve-its-3-6m-clients-with-php63-b-budget-for-2026-dswd-cip-official/"}
+      ]'::jsonb
+    when 'everyday-rights-philippines-checklist' then
+      '[
+        {"title":"Article III: Bill of Rights","publisher":"Supreme Court E-Library","url":"https://elibrary.judiciary.gov.ph/thebookshelf/showdocs/45/25549"},
+        {"title":"Workers Statutory Monetary Benefits Handbook","publisher":"National Wages and Productivity Commission","url":"https://nwpc.dole.gov.ph/wp-content/uploads/2024/11/Workers-Statutory-Monetary-Benefits-Handbook-2024-Edition.pdf"},
+        {"title":"Know your rights and responsibilities as consumers","publisher":"Department of Trade and Industry","url":"https://www.dti.gov.ph/dti-archives/dti-consumers-rights-responsibilities/"},
+        {"title":"Data Subject Rights","publisher":"National Privacy Commission","url":"https://privacy.gov.ph/data-subject-rights/"}
+      ]'::jsonb
     when 'phishing-link-checklist' then
       '[{"title":"GCash Help Center","publisher":"GCash Help Center","url":"https://help.gcash.com/hc/en-us/"}]'::jsonb
     else official_sources
@@ -465,6 +477,8 @@ set
   updated_at = now()
 where slug in (
   'gcash-scam-red-flags',
+  'dswd-aics-assistance-checklist',
+  'everyday-rights-philippines-checklist',
   'sss-number-first-job',
   'philhealth-pagibig-tin-basics',
   'phishing-link-checklist'
@@ -478,11 +492,11 @@ where guide_id in (
     'fast-valid-id',
     'gcash-scam-red-flags',
     'first-job-requirements',
-    'government-appointment-basics',
+    'dswd-aics-assistance-checklist',
     'lost-wallet-first-steps',
     'renting-first-time-checklist',
     'nbi-clearance-first-timers',
-    'barangay-certificate-when-needed',
+    'everyday-rights-philippines-checklist',
     'resume-no-experience',
     'job-interview-basic-answers',
     'bank-account-first-time',
@@ -544,11 +558,46 @@ values
     '{"title":"Humingi ng checklist sa company","body":"Bago gumastos, itanong sa HR kung anong documents ang kailangan agad at alin ang pwedeng ihabol after hiring.","step_number":1}'::jsonb
   ),
   (
-    (select id from public.guides where slug = 'government-appointment-basics'),
-    'step',
+    (select id from public.guides where slug = 'dswd-aics-assistance-checklist'),
+    'what_to_know',
     1,
-    '{"title":"Check the official page","body":"Confirm the office address, appointment time, accepted IDs, and whether photocopies are required before going.","step_number":1}'::jsonb,
-    '{"title":"I-check ang official page","body":"Kumpirmahin ang office address, appointment time, accepted IDs, at kung kailangan ng photocopy bago pumunta.","step_number":1}'::jsonb
+    '{"title":"What AICS may help with","body":"DSWD AICS is for people or families in crisis. It may provide support for medical, burial, transportation, education, food, or other urgent needs, depending on assessment and available guidelines."}'::jsonb,
+    '{"title":"Saan maaaring makatulong ang AICS","body":"Ang DSWD AICS ay para sa tao o pamilyang may crisis. Maaari itong tumulong sa medical, burial, transportation, education, food, o ibang urgent needs, depende sa assessment at kasalukuyang guidelines."}'::jsonb
+  ),
+  (
+    (select id from public.guides where slug = 'dswd-aics-assistance-checklist'),
+    'step',
+    2,
+    '{"title":"Identify the type of help you need","body":"Write down the exact need first: hospital bill, medicine, funeral cost, transportation, school expense, food, or another crisis expense. This helps you ask for the right assistance instead of asking vaguely for ayuda.","step_number":1,"items":["Medical assistance","Burial assistance","Transportation assistance","Educational assistance","Food or non-food assistance","Other crisis support"]}'::jsonb,
+    '{"title":"Alamin muna kung anong tulong ang kailangan","body":"Isulat muna ang eksaktong kailangan: hospital bill, gamot, funeral cost, pamasahe, school expense, pagkain, o ibang crisis expense. Mas malinaw ito kaysa basta humingi ng ayuda.","step_number":1,"items":["Medical assistance","Burial assistance","Transportation assistance","Educational assistance","Food o non-food assistance","Ibang crisis support"]}'::jsonb
+  ),
+  (
+    (select id from public.guides where slug = 'dswd-aics-assistance-checklist'),
+    'step',
+    3,
+    '{"title":"Prepare proof before going","body":"Requirements can vary by field office and assistance type, but start with valid ID, proof of crisis or billing, barangay certificate or referral if available, and contact details. Bring photocopies if you can.","step_number":2,"items":["Valid ID or supporting ID","Proof of bill, prescription, death certificate, enrollment, or travel need","Barangay certificate or referral if available","Contact number and address","Photocopies"]}'::jsonb,
+    '{"title":"Ihanda ang proof bago pumunta","body":"Nag-iiba ang requirements depende sa field office at assistance type, pero magsimula sa valid ID, proof ng crisis o billing, barangay certificate o referral kung meron, at contact details. Magdala ng photocopy kung kaya.","step_number":2,"items":["Valid ID o supporting ID","Proof ng bill, reseta, death certificate, enrollment, o travel need","Barangay certificate o referral kung meron","Contact number at address","Photocopies"]}'::jsonb
+  ),
+  (
+    (select id from public.guides where slug = 'dswd-aics-assistance-checklist'),
+    'step',
+    4,
+    '{"title":"Ask the office what applies to your case","body":"Use a clear question: I need help for [medical/burial/transportation/education/food]. What documents should I bring, and where should I submit them?","step_number":3,"sample":"Hello po. Magtatanong lang po sana ako tungkol sa DSWD AICS. Kailangan ko po ng tulong para sa medical bill. Ano po ang requirements at saan po ako dapat pumunta?"}'::jsonb,
+    '{"title":"Itanong kung ano ang applicable sa case mo","body":"Gumamit ng malinaw na tanong: Kailangan ko ng tulong para sa [medical/burial/transportation/education/food]. Anong documents ang dadalhin, at saan ito isusubmit?","step_number":3,"sample":"Hello po. Magtatanong lang po sana ako tungkol sa DSWD AICS. Kailangan ko po ng tulong para sa medical bill. Ano po ang requirements at saan po ako dapat pumunta?"}'::jsonb
+  ),
+  (
+    (select id from public.guides where slug = 'dswd-aics-assistance-checklist'),
+    'warning',
+    5,
+    '{"title":"Do not pay fixers or guaranteed approval pages","body":"AICS assistance is assessed by DSWD. Be careful with pages or people promising guaranteed approval, asking for processing fees, OTPs, account passwords, or private document uploads through random links.","severity":"high"}'::jsonb,
+    '{"title":"Huwag magbayad sa fixer o guaranteed approval pages","body":"Ina-assess ng DSWD ang AICS assistance. Mag-ingat sa pages o taong nangangako ng guaranteed approval, humihingi ng processing fee, OTP, account password, o private documents sa random links.","severity":"high"}'::jsonb
+  ),
+  (
+    (select id from public.guides where slug = 'dswd-aics-assistance-checklist'),
+    'mistake',
+    6,
+    '{"title":"Do not go without documents","body":"Many people waste a trip because they only bring a story, not proof. Bring IDs, billing documents, referrals, prescriptions, certificates, or anything that proves the crisis and the amount needed."}'::jsonb,
+    '{"title":"Huwag pumunta nang walang documents","body":"Maraming nasasayang ang punta dahil kwento lang ang dala, walang proof. Magdala ng IDs, billing documents, referrals, reseta, certificates, o kahit anong nagpapatunay ng crisis at kailangang halaga."}'::jsonb
   ),
   (
     (select id from public.guides where slug = 'lost-wallet-first-steps'),
@@ -579,11 +628,46 @@ values
     '{"title":"Huwag mag-book nang hindi chine-check ang valid IDs","body":"May branches na naghahanap ng accepted IDs. Maghanda ng higit sa isang ID o supporting document kung kaya."}'::jsonb
   ),
   (
-    (select id from public.guides where slug = 'barangay-certificate-when-needed'),
+    (select id from public.guides where slug = 'everyday-rights-philippines-checklist'),
     'what_to_know',
     1,
-    '{"title":"Use it as supporting proof","body":"A barangay certificate can support address or residency claims, but it does not replace every valid ID requirement."}'::jsonb,
-    '{"title":"Supporting proof ito","body":"Makakatulong ang barangay certificate bilang proof of address o residency, pero hindi nito pinapalitan lahat ng valid ID requirement."}'::jsonb
+    '{"title":"What this guide covers","body":"This is not legal advice. It is a practical checklist of everyday rights many Filipinos can use when buying products, working for pay, sharing personal data, or dealing with authorities."}'::jsonb,
+    '{"title":"Ano ang sakop ng guide na ito","body":"Hindi ito legal advice. Practical checklist ito ng everyday rights na magagamit ng maraming Pilipino kapag bumibili, nagtatrabaho, nagbibigay ng personal data, o humaharap sa authorities."}'::jsonb
+  ),
+  (
+    (select id from public.guides where slug = 'everyday-rights-philippines-checklist'),
+    'step',
+    2,
+    '{"title":"For defective products, do not stop at no return, no exchange","body":"If a product is defective or not as represented, keep the receipt, photos, messages, warranty card, and ask the store for the proper remedy. DTI consumer rights materials explain that consumers have rights to safety, information, choice, representation, redress, education, basic needs, and a healthy environment.","step_number":1,"items":["Receipt or proof of payment","Photo or video of defect","Chat/order details","Warranty card if any","Store name, branch, and date"]}'::jsonb,
+    '{"title":"Kung defective ang binili, huwag tumigil sa no return, no exchange","body":"Kung defective o iba sa sinabi ang produkto, itago ang resibo, photos, messages, warranty card, at humingi ng tamang remedy sa store. Ayon sa DTI consumer rights materials, may karapatan ang consumer sa safety, information, choice, representation, redress, education, basic needs, at healthy environment.","step_number":1,"items":["Resibo o proof of payment","Photo o video ng defect","Chat/order details","Warranty card kung meron","Pangalan ng store, branch, at date"]}'::jsonb
+  ),
+  (
+    (select id from public.guides where slug = 'everyday-rights-philippines-checklist'),
+    'step',
+    3,
+    '{"title":"For work pay, check the written basics","body":"Before resigning, accepting unpaid work, or ignoring missing pay, check your wage, overtime, rest day, holiday pay, service incentive leave, 13th month pay, and statutory deductions. Use DOLE/NWPC benefit references for the current rules.","step_number":2,"sample":"Hello po. Pwede po bang makahingi ng breakdown ng sahod ko, deductions, overtime/holiday pay kung meron, at 13th month computation?"}'::jsonb,
+    '{"title":"Sa sweldo at trabaho, i-check ang written basics","body":"Bago mag-resign, pumayag sa unpaid work, o palampasin ang kulang na sahod, i-check ang wage, overtime, rest day, holiday pay, service incentive leave, 13th month pay, at statutory deductions. Gamitin ang DOLE/NWPC references para sa current rules.","step_number":2,"sample":"Hello po. Pwede po bang makahingi ng breakdown ng sahod ko, deductions, overtime/holiday pay kung meron, at 13th month computation?"}'::jsonb
+  ),
+  (
+    (select id from public.guides where slug = 'everyday-rights-philippines-checklist'),
+    'step',
+    4,
+    '{"title":"For personal data, ask why it is needed","body":"Under data privacy rules, you have rights over your personal data, including being informed, accessing your data, correcting inaccurate data, objecting in certain cases, and filing a complaint with the National Privacy Commission.","step_number":3,"sample":"Para saan po gagamitin ang ID/photo/data ko, sino po ang may access, at paano po ito ide-delete kung hindi na kailangan?"}'::jsonb,
+    '{"title":"Sa personal data, itanong kung bakit kailangan","body":"Sa data privacy rules, may rights ka sa personal data mo, kasama ang right to be informed, access your data, correct inaccurate data, object in certain cases, at mag-file ng complaint sa National Privacy Commission.","step_number":3,"sample":"Para saan po gagamitin ang ID/photo/data ko, sino po ang may access, at paano po ito ide-delete kung hindi na kailangan?"}'::jsonb
+  ),
+  (
+    (select id from public.guides where slug = 'everyday-rights-philippines-checklist'),
+    'warning',
+    5,
+    '{"title":"If authorities are involved, stay calm and ask for basics","body":"The Bill of Rights protects people against unreasonable searches and seizures and protects due process. In risky situations, do not argue aggressively. Ask who is in charge, what the reason is, and contact family or legal help as soon as possible.","severity":"high"}'::jsonb,
+    '{"title":"Kung may authorities, kumalma at itanong ang basics","body":"Pinoprotektahan ng Bill of Rights ang tao laban sa unreasonable searches and seizures at pinoprotektahan ang due process. Sa risky situations, huwag makipagtalo nang agresibo. Itanong kung sino ang in charge, ano ang dahilan, at kontakin agad ang pamilya o legal help.","severity":"high"}'::jsonb
+  ),
+  (
+    (select id from public.guides where slug = 'everyday-rights-philippines-checklist'),
+    'mistake',
+    6,
+    '{"title":"Do not rely on viral legal posts alone","body":"Laws have details and exceptions. Use viral posts only as a starting point, then verify with official sources such as DTI, DOLE/NWPC, NPC, Supreme Court/Official Gazette, or a lawyer/public legal aid office."}'::jsonb,
+    '{"title":"Huwag umasa sa viral legal posts lang","body":"May details at exceptions ang batas. Gawing starting point lang ang viral posts, tapos i-verify sa official sources tulad ng DTI, DOLE/NWPC, NPC, Supreme Court/Official Gazette, o lawyer/public legal aid office."}'::jsonb
   ),
   (
     (select id from public.guides where slug = 'resume-no-experience'),

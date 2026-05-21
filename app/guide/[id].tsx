@@ -219,6 +219,12 @@ export default function GuideDetailsScreen() {
     .filter((item: Guide) => item.id !== activeGuide.id)
     .slice(0, 3)
   const updatedLabel = formatUpdatedDate(activeGuide.updated_at || activeGuide.published_at)
+  const sectionContents = sections.map((section) => getSectionContent(section))
+  const sourceCount = officialSources.length
+  const stepCount = sections.filter((section) => section.section_type === 'step').length
+  const warningCount = sections.filter((section) => section.section_type === 'warning').length
+  const hasChecklist = sectionContents.some((content) => (content?.items?.length ?? 0) > 0)
+  const hasSample = sectionContents.some((content) => Boolean(content?.sample))
 
   return (
     <ScrollView
@@ -364,6 +370,19 @@ export default function GuideDetailsScreen() {
             value={updatedLabel}
           />
           <TrustItem
+            icon="shield-checkmark-outline"
+            label={language === 'fil' ? 'Source' : 'Sources'}
+            value={
+              sourceCount > 0
+                ? language === 'fil'
+                  ? `${sourceCount} opisyal`
+                  : `${sourceCount} official`
+                : language === 'fil'
+                  ? 'I-verify pa'
+                  : 'Verify first'
+            }
+          />
+          <TrustItem
             icon="time-outline"
             label={language === 'fil' ? 'Oras' : 'Time'}
             value={activeGuide.estimated_time || `${activeGuide.read_time_min} min`}
@@ -378,6 +397,51 @@ export default function GuideDetailsScreen() {
             label={language === 'fil' ? 'Antas' : 'Level'}
             value={activeGuide.difficulty || (language === 'fil' ? 'Madali' : 'Easy')}
           />
+        </View>
+
+        <View style={styles.completenessBlock}>
+          <SafeText variant="label" weight="700" style={styles.completenessTitle}>
+            {language === 'fil' ? 'Kumpleto ba?' : 'Completeness check'}
+          </SafeText>
+
+          <View style={styles.completenessGrid}>
+            <CompletenessItem
+              done={sourceCount > 0}
+              label={language === 'fil' ? 'Opisyal na source' : 'Official sources'}
+            />
+            <CompletenessItem
+              done={hasChecklist}
+              label={language === 'fil' ? 'Checklist' : 'Checklist'}
+            />
+            <CompletenessItem
+              done={hasSample}
+              label={language === 'fil' ? 'Sample' : 'Sample'}
+            />
+            <CompletenessItem
+              done={stepCount > 0}
+              label={
+                stepCount > 0
+                  ? language === 'fil'
+                    ? `${stepCount} hakbang`
+                    : `${stepCount} steps`
+                  : language === 'fil'
+                    ? 'Hakbang'
+                    : 'Steps'
+              }
+            />
+            <CompletenessItem
+              done={warningCount > 0}
+              label={
+                warningCount > 0
+                  ? language === 'fil'
+                    ? `${warningCount} babala`
+                    : `${warningCount} warning`
+                  : language === 'fil'
+                    ? 'Babala'
+                    : 'Warnings'
+              }
+            />
+          </View>
         </View>
 
         <View style={styles.officialNote}>
@@ -739,6 +803,37 @@ export default function GuideDetailsScreen() {
     )
   }
 
+  function CompletenessItem({
+    done,
+    label,
+  }: {
+    done: boolean
+    label: string
+  }) {
+    return (
+      <View
+        style={[
+          styles.completenessItem,
+          done ? styles.completenessItemDone : styles.completenessItemPending,
+        ]}
+      >
+        <Ionicons
+          name={done ? 'checkmark-circle' : 'ellipse-outline'}
+          size={15}
+          color={done ? colors.success : colors.textLight}
+        />
+        <SafeText
+          variant="caption"
+          weight="700"
+          style={{ color: done ? colors.success : colors.textMuted }}
+          numberOfLines={1}
+        >
+          {label}
+        </SafeText>
+      </View>
+    )
+  }
+
   function OfficialSourceRow({
     source,
   }: {
@@ -1022,6 +1117,46 @@ const createStyles = (colors: ThemeColors, heroColor: string) =>
 
     officialText: {
       flex: 1,
+    },
+
+    completenessBlock: {
+      marginTop: spacing.sm,
+      borderRadius: 12,
+      borderWidth: 1,
+      borderColor: colors.border,
+      backgroundColor: colors.surface,
+      padding: spacing.sm,
+    },
+
+    completenessTitle: {
+      textTransform: 'uppercase',
+      marginBottom: spacing.sm,
+    },
+
+    completenessGrid: {
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+      gap: spacing.xs,
+    },
+
+    completenessItem: {
+      minHeight: 30,
+      borderRadius: 999,
+      borderWidth: 1,
+      paddingHorizontal: spacing.sm,
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: spacing.xs,
+    },
+
+    completenessItemDone: {
+      borderColor: `${colors.success}30`,
+      backgroundColor: colors.successLight,
+    },
+
+    completenessItemPending: {
+      borderColor: colors.border,
+      backgroundColor: colors.surfaceSecondary,
     },
 
     sourceCard: {

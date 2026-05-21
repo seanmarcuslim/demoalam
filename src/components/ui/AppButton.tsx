@@ -1,15 +1,14 @@
 import {
-  TouchableOpacity,
-  Text,
-  StyleSheet,
   ActivityIndicator,
   StyleProp,
+  StyleSheet,
+  TouchableOpacity,
   ViewStyle,
 } from 'react-native'
 import { useTheme } from '../../hooks/useTheme'
 import { spacing } from '../../theme/spacing'
-import { typography } from '../../theme/typography'
 import { ThemeColors } from '../../theme/colors'
+import SafeText from './SafeText'
 
 interface AppButtonProps {
   title: string
@@ -29,38 +28,20 @@ export default function AppButton({
   style,
 }: AppButtonProps) {
   const { colors } = useTheme()
-
   const styles = createStyles(colors)
 
-  const getButtonStyle = () => {
-    switch (variant) {
-      case 'secondary':
-        return styles.secondaryButton
-
-      case 'danger':
-        return styles.dangerButton
-
-      default:
-        return styles.primaryButton
-    }
-  }
-
-  const getTextStyle = () => {
-    switch (variant) {
-      case 'secondary':
-        return styles.secondaryText
-
-      default:
-        return styles.primaryText
-    }
-  }
+  const isSecondary = variant === 'secondary'
 
   return (
     <TouchableOpacity
       activeOpacity={0.85}
       style={[
         styles.button,
-        getButtonStyle(),
+        variant === 'danger'
+          ? styles.dangerButton
+          : isSecondary
+            ? styles.secondaryButton
+            : styles.primaryButton,
         disabled && styles.disabled,
         style,
       ]}
@@ -68,13 +49,15 @@ export default function AppButton({
       disabled={disabled || loading}
     >
       {loading ? (
-        <ActivityIndicator
-          color="#FFFFFF"
-        />
+        <ActivityIndicator color="#FFFFFF" />
       ) : (
-        <Text style={getTextStyle()}>
+        <SafeText
+          variant="bodyMd"
+          weight="700"
+          style={isSecondary ? styles.secondaryText : styles.primaryText}
+        >
           {title}
-        </Text>
+        </SafeText>
       )}
     </TouchableOpacity>
   )
@@ -83,7 +66,8 @@ export default function AppButton({
 const createStyles = (colors: ThemeColors) =>
   StyleSheet.create({
     button: {
-      borderRadius: 14,
+      minHeight: 48,
+      borderRadius: 12,
       paddingVertical: spacing.md,
       paddingHorizontal: spacing.lg,
       alignItems: 'center',
@@ -92,6 +76,11 @@ const createStyles = (colors: ThemeColors) =>
 
     primaryButton: {
       backgroundColor: colors.primary,
+      elevation: 2,
+      shadowColor: colors.shadow,
+      shadowOffset: { width: 0, height: 3 },
+      shadowOpacity: 0.12,
+      shadowRadius: 6,
     },
 
     secondaryButton: {
@@ -109,14 +98,10 @@ const createStyles = (colors: ThemeColors) =>
     },
 
     primaryText: {
-      ...typography.body,
       color: '#FFFFFF',
-      fontWeight: '700',
     },
 
     secondaryText: {
-      ...typography.body,
       color: colors.primary,
-      fontWeight: '700',
     },
   })

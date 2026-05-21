@@ -6,7 +6,7 @@ export function useSearch() {
   const [searchTerm, setSearchTerm] = useState('')
   const [debouncedTerm, setDebouncedTerm] = useState('')
 
-  // 300ms debounce — don't search on every keystroke
+  // 300ms debounce keeps typing responsive on low-end devices.
   useEffect(() => {
     const timer = setTimeout(() => {
       const cleanTerm = searchTerm.trim()

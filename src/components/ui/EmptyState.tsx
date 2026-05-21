@@ -1,8 +1,8 @@
-import { View, Text, StyleSheet } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 import { useTheme } from '../../hooks/useTheme'
 import { spacing } from '../../theme/spacing'
-import { typography } from '../../theme/typography'
 import { ThemeColors } from '../../theme/colors'
+import SafeText from './SafeText'
 
 interface EmptyStateProps {
   icon?: string
@@ -20,16 +20,16 @@ export default function EmptyState({
 
   return (
     <View style={styles.container}>
-      <Text style={styles.icon}>{icon}</Text>
+      <SafeText style={styles.icon}>{icon}</SafeText>
 
-      <Text style={styles.title}>
+      <SafeText variant="h3" weight="700" style={styles.title}>
         {title}
-      </Text>
+      </SafeText>
 
       {subtitle ? (
-        <Text style={styles.subtitle}>
+        <SafeText variant="bodyMd" color="muted" style={styles.subtitle}>
           {subtitle}
-        </Text>
+        </SafeText>
       ) : null}
     </View>
   )
@@ -40,7 +40,7 @@ const createStyles = (colors: ThemeColors) =>
     container: {
       alignItems: 'center',
       justifyContent: 'center',
-      padding: spacing.xxl,
+      padding: spacing.xl,
     },
 
     icon: {
@@ -49,16 +49,12 @@ const createStyles = (colors: ThemeColors) =>
     },
 
     title: {
-      ...typography.h3,
-      color: colors.text,
       textAlign: 'center',
       marginBottom: spacing.sm,
     },
 
     subtitle: {
-      ...typography.body,
-      color: colors.textMuted,
       textAlign: 'center',
-      lineHeight: 22,
+      maxWidth: 300,
     },
   })

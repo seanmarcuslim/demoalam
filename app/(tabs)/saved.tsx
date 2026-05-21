@@ -7,7 +7,6 @@ import { router } from 'expo-router'
 import { Ionicons } from '@expo/vector-icons'
 import { useSavedStore } from '../../src/stores/savedStore'
 import { useSettingsStore } from '../../src/stores/settingsStore'
-import { translations } from '../../src/utils/translations'
 import { useTheme } from '../../src/hooks/useTheme'
 import { spacing } from '../../src/theme/spacing'
 import type { ThemeColors } from '../../src/theme/colors'
@@ -31,7 +30,6 @@ export default function SavedScreen() {
   const { language } = useSettingsStore()
   const { colors } = useTheme()
 
-  const t = translations[language]
   const styles = createStyles(colors)
 
   const savedGuides = savedIds
@@ -39,6 +37,14 @@ export default function SavedScreen() {
     .filter(Boolean)
   const hasCachedGuides = savedGuides.length > 0
   const needsRefresh = savedIds.length > 0 && !hasCachedGuides
+  const savedCountLabel =
+    savedIds.length === 1
+      ? language === 'fil'
+        ? '1 gabay'
+        : '1 guide'
+      : language === 'fil'
+        ? `${savedIds.length} gabay`
+        : `${savedIds.length} guides`
 
   useEffect(() => {
     if (guides.length > 0 && savedIds.length > 0) {
@@ -56,9 +62,29 @@ export default function SavedScreen() {
   const renderHeader = () => (
     <View>
       <AppHeader
-        title={language === 'fil' ? 'Na-save Mo 🔖' : 'Saved Guides 🔖'}
-        subtitle={`${savedIds.length} ${t.savedCount}`}
+        title={language === 'fil' ? 'Na-save Mo' : 'Saved Guides'}
+        subtitle={
+          language === 'fil'
+            ? `${savedCountLabel} na pwede mong balikan kapag kailangan.`
+            : `${savedCountLabel} ready when you need them again.`
+        }
       />
+
+      <View style={styles.valueStrip}>
+        <View style={styles.valuePill}>
+          <Ionicons name="bookmark" size={15} color={colors.primary} />
+          <SafeText variant="caption" color="primary" weight="700">
+            {savedCountLabel}
+          </SafeText>
+        </View>
+
+        <View style={styles.valuePill}>
+          <Ionicons name="cloud-offline-outline" size={15} color={colors.success} />
+          <SafeText variant="caption" weight="700" style={{ color: colors.success }}>
+            {language === 'fil' ? 'Offline-ready' : 'Offline-ready'}
+          </SafeText>
+        </View>
+      </View>
 
       {hasCachedGuides ? (
         <AppCard style={styles.notice}>
@@ -74,8 +100,8 @@ export default function SavedScreen() {
             style={styles.noticeText}
           >
             {language === 'fil'
-              ? 'Naka-cache ang saved guides para madaling balikan.'
-              : 'Saved guides are cached so you can revisit them quickly.'}
+              ? 'Naka-cache ang saved guides para mas madaling balikan kahit mahina ang signal.'
+              : 'Saved guides are cached so they are easier to revisit when connection is weak.'}
           </SafeText>
         </AppCard>
       ) : null}
@@ -94,8 +120,8 @@ export default function SavedScreen() {
             style={styles.noticeText}
           >
             {language === 'fil'
-              ? 'May saved guides ka, pero kailangan munang mag-online para ma-refresh ang offline copies.'
-              : 'You have saved guides, but you need to go online once to refresh the offline copies.'}
+              ? 'May saved guides ka, pero kailangan munang mag-online para makuha ang offline copies.'
+              : 'You have saved guides, but you need to go online once to fetch the offline copies.'}
           </SafeText>
         </AppCard>
       ) : null}
@@ -117,7 +143,7 @@ export default function SavedScreen() {
                   ? 'I-refresh ang saved guides'
                   : 'Refresh saved guides'
                 : language === 'fil'
-                  ? 'Wala pang na-save'
+                  ? 'Wala ka pang saved guides'
                   : 'No saved guides yet'
             }
             subtitle={
@@ -126,8 +152,8 @@ export default function SavedScreen() {
                   ? 'Bumalik online at buksan ulit ang guides para ma-save ang latest offline copy.'
                   : 'Go online and reopen your guides to save the latest offline copy.'
                 : language === 'fil'
-                  ? 'I-tap ang bookmark sa kahit anong guide para mabilis mo itong balikan.'
-                  : 'Tap the bookmark on any guide so it is easy to revisit later.'
+                  ? 'I-save ang guides tungkol sa benefits, IDs, karapatan, o scam warnings para mabilis balikan.'
+                  : 'Save guides about benefits, IDs, rights, or scam warnings so they are easy to revisit.'
             }
           />
 
@@ -171,9 +197,29 @@ const createStyles = (colors: ThemeColors) =>
       paddingBottom: 140,
     },
 
+    valueStrip: {
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+      gap: spacing.sm,
+      paddingHorizontal: spacing.md,
+      paddingTop: spacing.md,
+    },
+
+    valuePill: {
+      minHeight: 34,
+      borderRadius: 999,
+      paddingHorizontal: spacing.md,
+      backgroundColor: colors.surface,
+      borderWidth: 1,
+      borderColor: colors.border,
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: spacing.xs,
+    },
+
     notice: {
       marginHorizontal: spacing.md,
-      marginTop: spacing.lg,
+      marginTop: spacing.md,
       backgroundColor: colors.successLight,
       borderWidth: 1,
       borderColor: `${colors.success}30`,

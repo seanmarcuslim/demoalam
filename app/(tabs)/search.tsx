@@ -29,13 +29,14 @@ import { getCategoryAccent } from '../../src/lib/categoryVisuals'
 
 const SUGGESTIONS = [
   'DSWD AICS',
+  'student aid',
+  'PhilHealth',
   'batas',
-  'data privacy',
-  'consumer',
+  'consumer rights',
+  'data privacy act',
   'valid ID',
-  'trabaho',
+  'first job',
   'gcash scam',
-  'NBI',
 ]
 
 export default function SearchScreen() {
@@ -123,6 +124,7 @@ export default function SearchScreen() {
 
                 <TouchableOpacity
                   activeOpacity={0.82}
+                  style={styles.clearButton}
                   onPress={clearRecentSearches}
                 >
                   <SafeText variant="caption" color="primary" weight="700">
@@ -148,6 +150,12 @@ export default function SearchScreen() {
           <AppCard>
             <SafeText variant="h3" weight="700">
               {language === 'fil' ? 'Subukan hanapin' : 'Try searching'}
+            </SafeText>
+
+            <SafeText variant="caption" color="muted" style={styles.cardHint}>
+              {language === 'fil'
+                ? 'Mga topic na madalas nakakalito o hindi naipapaliwanag nang malinaw.'
+                : 'Topics that are often confusing, hidden, or poorly explained.'}
             </SafeText>
 
             <View style={styles.suggestions}>
@@ -181,6 +189,19 @@ export default function SearchScreen() {
                 language === 'fil' ? 'nahanap' : 'found'
               }`}
         </SafeText>
+
+        <View style={styles.queryPill}>
+          <Ionicons name="search" size={14} color={colors.primary} />
+          <SafeText
+            variant="caption"
+            color="primary"
+            weight="700"
+            numberOfLines={1}
+            style={styles.queryText}
+          >
+            {searchTerm.trim()}
+          </SafeText>
+        </View>
 
         {results.length > 0 ? (
           <View style={styles.filterRow}>
@@ -242,11 +263,11 @@ export default function SearchScreen() {
   return (
     <View style={styles.container}>
       <AppHeader
-        title={`${t.search} 🔍`}
+        title={t.search}
         subtitle={
           language === 'fil'
-            ? 'Type mo lang ang kailangan mo. IDs, pera, trabaho, scam alerts.'
-            : 'Search practical guides about IDs, money, work, and scam alerts.'
+            ? 'Hanapin ang benefits, karapatan, IDs, trabaho, pera, at scam warnings.'
+            : 'Find guides about benefits, rights, IDs, work, money, and scam warnings.'
         }
       />
 
@@ -258,10 +279,12 @@ export default function SearchScreen() {
             style={styles.searchInput}
             placeholder={
               language === 'fil'
-                ? 'Halimbawa: valid ID, bank, scam...'
-                : 'Example: valid ID, bank, scam...'
+                ? 'Halimbawa: DSWD AICS, batas, valid ID...'
+                : 'Example: DSWD AICS, rights, valid ID...'
             }
             placeholderTextColor={colors.textLight}
+            selectionColor={colors.primary}
+            cursorColor={colors.primary}
             value={searchTerm}
             onChangeText={updateSearchTerm}
             onSubmitEditing={() => commitSearch(searchTerm)}
@@ -384,8 +407,8 @@ const createStyles = (colors: ThemeColors) =>
       backgroundColor: colors.primary,
       paddingHorizontal: spacing.lg,
       paddingBottom: spacing.lg,
-      borderBottomLeftRadius: 28,
-      borderBottomRightRadius: 28,
+      borderBottomLeftRadius: 24,
+      borderBottomRightRadius: 24,
     },
 
     searchBox: {
@@ -398,6 +421,11 @@ const createStyles = (colors: ThemeColors) =>
       flexDirection: 'row',
       alignItems: 'center',
       gap: spacing.sm,
+      elevation: 2,
+      shadowColor: colors.shadow,
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.08,
+      shadowRadius: 6,
     },
 
     searchInput: {
@@ -425,6 +453,20 @@ const createStyles = (colors: ThemeColors) =>
       gap: spacing.md,
     },
 
+    clearButton: {
+      minHeight: 34,
+      borderRadius: 999,
+      paddingHorizontal: spacing.sm,
+      alignItems: 'center',
+      justifyContent: 'center',
+      backgroundColor: colors.primaryLight,
+    },
+
+    cardHint: {
+      marginTop: spacing.xs,
+      maxWidth: 320,
+    },
+
     suggestions: {
       flexDirection: 'row',
       flexWrap: 'wrap',
@@ -436,6 +478,23 @@ const createStyles = (colors: ThemeColors) =>
       paddingHorizontal: spacing.md,
       paddingTop: spacing.lg,
       paddingBottom: spacing.md,
+    },
+
+    queryPill: {
+      alignSelf: 'flex-start',
+      minHeight: 32,
+      maxWidth: '100%',
+      borderRadius: 999,
+      paddingHorizontal: spacing.sm,
+      marginTop: spacing.sm,
+      backgroundColor: colors.primaryLight,
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: spacing.xs,
+    },
+
+    queryText: {
+      maxWidth: 260,
     },
 
     filterRow: {

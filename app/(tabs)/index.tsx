@@ -59,6 +59,11 @@ export default function HomeScreen() {
 
   const featuredGuide = featured[0]
   const trendingGuides = (trending.length > 0 ? trending : guides).slice(0, 4)
+  const visibleGuideCount = Math.max(guides.length, trendingGuides.length, recentGuides.length)
+  const visibleAlertCount = Math.max(
+    urgent.length,
+    guides.filter((guide) => guide.is_urgent).length
+  )
   const firstTimerGuides = guides
     .filter((guide) =>
       guide.tags?.some((tag) =>
@@ -161,6 +166,8 @@ export default function HomeScreen() {
   const renderHeader = () => (
     <View>
       <View style={styles.hero}>
+        <View style={styles.heroGlow} />
+
         <View style={styles.heroTop}>
           <View>
             <SafeText variant="caption" color="surface" style={styles.eyebrow}>
@@ -180,19 +187,19 @@ export default function HomeScreen() {
 
         <SafeText variant="bodyMd" color="surface" style={styles.heroSubtitle}>
           {language === 'fil'
-            ? 'Praktikal na gabay para sa ID, pera, trabaho, gobyerno, at iwas-scam.'
-            : 'Practical guides for IDs, money, work, government tasks, and scam safety.'}
+            ? 'Praktikal na gabay para sa benefits, karapatan, IDs, pera, trabaho, gobyerno, at iwas-scam.'
+            : 'Practical guides for benefits, rights, IDs, money, work, government tasks, and scam safety.'}
         </SafeText>
 
         <View style={styles.heroStats}>
           <View style={styles.statPill}>
             <SafeText variant="label" color="surface">
-              {guides.length || 0} {language === 'fil' ? 'guides' : 'guides'}
+              {visibleGuideCount} {language === 'fil' ? 'gabay' : 'guides'}
             </SafeText>
           </View>
           <View style={styles.statPill}>
             <SafeText variant="label" color="surface">
-              {urgent.length} {language === 'fil' ? 'alerts' : 'alerts'}
+              {visibleAlertCount} {language === 'fil' ? 'babala' : 'alerts'}
             </SafeText>
           </View>
         </View>
@@ -447,8 +454,19 @@ const createStyles = (colors: ThemeColors) =>
       paddingHorizontal: spacing.lg,
       paddingTop: spacing.xxl,
       paddingBottom: spacing.lg,
-      borderBottomLeftRadius: 28,
-      borderBottomRightRadius: 28,
+      borderBottomLeftRadius: 24,
+      borderBottomRightRadius: 24,
+      overflow: 'hidden',
+    },
+
+    heroGlow: {
+      position: 'absolute',
+      right: -48,
+      top: -52,
+      width: 152,
+      height: 152,
+      borderRadius: 76,
+      backgroundColor: 'rgba(255,255,255,0.13)',
     },
 
     heroTop: {

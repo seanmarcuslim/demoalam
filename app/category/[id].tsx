@@ -21,17 +21,20 @@ import Badge from '../../src/components/ui/Badge'
 import { Guide } from '../../src/types/guide'
 import { Category } from '../../src/types/category'
 import { getCategoryAccent } from '../../src/lib/categoryVisuals'
+import LoadingFeed from '../../src/components/layout/LoadingFeed'
 
 const CATEGORY_RECOMMENDATIONS: Record<string, string[]> = {
   ids: ['gov', 'work'],
   work: ['ids', 'money'],
-  money: ['scams', 'work'],
-  gov: ['ids', 'emergency'],
-  scams: ['money', 'emergency'],
-  emergency: ['scams', 'gov'],
+  money: ['gov', 'scams'],
+  gov: ['ids', 'healthcare'],
+  healthcare: ['gov', 'emergency'],
+  education: ['work', 'gov'],
+  scams: ['digital-safety', 'money'],
+  'digital-safety': ['scams', 'emergency'],
+  emergency: ['healthcare', 'digital-safety'],
   adulting: ['money', 'work'],
 }
-import LoadingFeed from '../../src/components/layout/LoadingFeed'
 
 export default function CategoryDetailsScreen() {
   const { id, name } = useLocalSearchParams()
@@ -80,9 +83,17 @@ export default function CategoryDetailsScreen() {
   const getCategoryName = (category: Category) =>
     language === 'fil' ? category.name_fil : category.name_en
 
+  const getGuideCountLabel = (count: number) => {
+    if (count === 0) return language === 'fil' ? 'Wala pang gabay' : 'No guides yet'
+    if (count === 1) return language === 'fil' ? '1 gabay' : '1 guide'
+    return language === 'fil' ? `${count} gabay` : `${count} guides`
+  }
+
   const renderHeader = () => (
     <View>
       <View style={styles.hero}>
+        <View style={styles.heroGlow} />
+
         <View style={styles.navRow}>
           <TouchableOpacity
             activeOpacity={0.82}
@@ -98,7 +109,7 @@ export default function CategoryDetailsScreen() {
         </View>
 
         <SafeText variant="caption" color="surface" style={styles.eyebrow}>
-          {language === 'fil' ? 'Category guides' : 'Category guides'}
+          {language === 'fil' ? 'Mga gabay sa paksa' : 'Topic guides'}
         </SafeText>
 
         <SafeText variant="h1" color="surface" style={styles.title}>
@@ -107,20 +118,20 @@ export default function CategoryDetailsScreen() {
 
         <SafeText variant="bodyMd" color="surface" style={styles.subtitle}>
           {language === 'fil'
-            ? 'Mga gabay na pinagsama para mabilis mong mahanap ang kailangan.'
-            : 'A focused set of guides so you can get to the useful answer faster.'}
+            ? 'Mga gabay na pinili para mas mabilis makita ang dapat gawin.'
+            : 'A focused set of guides built around what you may need next.'}
         </SafeText>
 
         <View style={styles.metaRow}>
           <View style={styles.statPill}>
             <SafeText variant="label" color="surface">
-              {guides.length} {language === 'fil' ? 'guides' : 'guides'}
+              {getGuideCountLabel(guides.length)}
             </SafeText>
           </View>
 
           <View style={styles.statPill}>
             <SafeText variant="label" color="surface">
-              {language === 'fil' ? 'Offline-save ready' : 'Offline-save ready'}
+              {language === 'fil' ? 'Pwedeng i-save' : 'Save-ready'}
             </SafeText>
           </View>
         </View>
@@ -129,12 +140,12 @@ export default function CategoryDetailsScreen() {
       <View style={styles.listIntro}>
         <View>
           <SafeText variant="h3" weight="700">
-            {language === 'fil' ? 'Basahin ang kailangan' : 'Read what you need'}
+            {language === 'fil' ? 'Mga available na gabay' : 'Available guides'}
           </SafeText>
           <SafeText variant="caption" color="muted" style={styles.introSubtitle}>
             {language === 'fil'
-              ? 'I-save ang importanteng guide para balikan mamaya.'
-              : 'Save important guides so you can return to them later.'}
+              ? 'Piliin ang guide na pinakakapit sa sitwasyon mo.'
+              : 'Choose the guide that fits your situation best.'}
           </SafeText>
         </View>
 
@@ -326,38 +337,49 @@ const createStyles = (colors: ThemeColors, heroColor: string) =>
       paddingHorizontal: spacing.lg,
       paddingTop: spacing.xl,
       paddingBottom: spacing.lg,
-      borderBottomLeftRadius: 28,
-      borderBottomRightRadius: 28,
+      borderBottomLeftRadius: 24,
+      borderBottomRightRadius: 24,
+      overflow: 'hidden',
+    },
+
+    heroGlow: {
+      position: 'absolute',
+      right: -46,
+      top: -48,
+      width: 150,
+      height: 150,
+      borderRadius: 75,
+      backgroundColor: 'rgba(255,255,255,0.14)',
     },
 
     navRow: {
       flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'center',
-      marginBottom: spacing.lg,
+      marginBottom: spacing.md,
     },
 
     iconButton: {
-      width: 42,
-      height: 42,
-      borderRadius: 21,
+      width: 40,
+      height: 40,
+      borderRadius: 20,
       backgroundColor: colors.surface,
       alignItems: 'center',
       justifyContent: 'center',
     },
 
     categoryMark: {
-      width: 64,
-      height: 64,
-      borderRadius: 22,
+      width: 58,
+      height: 58,
+      borderRadius: 20,
       backgroundColor: colors.surface,
       alignItems: 'center',
       justifyContent: 'center',
-      marginBottom: spacing.md,
+      marginBottom: spacing.sm,
     },
 
     categoryMarkIcon: {
-      fontSize: 32,
+      fontSize: 30,
     },
 
     eyebrow: {
@@ -394,8 +416,8 @@ const createStyles = (colors: ThemeColors, heroColor: string) =>
 
     listIntro: {
       paddingHorizontal: spacing.md,
-      paddingTop: spacing.lg,
-      paddingBottom: spacing.md,
+      paddingTop: spacing.md,
+      paddingBottom: spacing.sm,
       flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'flex-start',

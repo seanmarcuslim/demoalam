@@ -5,7 +5,10 @@ export const CATEGORY_ACCENTS: Record<string, string> = {
   work: '#267A4D',
   money: '#D9902F',
   gov: '#6D5BA8',
+  healthcare: '#2F8F83',
+  education: '#4F73C7',
   scams: '#C83E3A',
+  'digital-safety': '#3A7CA5',
   emergency: '#B86B16',
   adulting: '#2F8277',
 }

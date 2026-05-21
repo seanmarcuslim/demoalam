@@ -2,6 +2,8 @@
 
 DemoAlam should feel practical, trustworthy, calm, and easy to read.
 
+DemoAlam should also feel like it is respectfully uncovering useful public knowledge, not sensationalizing poverty, government aid, or scams. The tone should be firm against fixers and misinformation while staying calm and helpful for users who may be stressed.
+
 ## Visual Direction
 
 - Professional, not playful-first.
@@ -72,3 +74,13 @@ Guides should make practical parts easy to scan.
 - Keep samples visually quieter than warnings but easier to copy/read than normal paragraphs.
 - Avoid making checklist/sample blocks look like marketing cards.
 - Filipino copy should sound like everyday practical advice, not formal translated policy text.
+
+## Public Aid And Rights Tone
+
+For financial aid, rights, laws, and anti-fixer content:
+
+- avoid hype words like guaranteed, instant, secret, or free money
+- use careful wording such as may help, check eligibility, verify with the office, and requirements may change
+- make official source links visually clear
+- make anti-fixer warnings prominent but not panic-inducing
+- keep the user feeling capable, not ashamed for not knowing

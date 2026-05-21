@@ -70,6 +70,8 @@ export default function ProfileScreen() {
       showsVerticalScrollIndicator={false}
     >
       <View style={styles.hero}>
+        <View style={styles.heroGlow} />
+
         <View style={styles.avatar}>
           <Ionicons
             name={isGuest ? 'person-outline' : 'checkmark-circle'}
@@ -91,8 +93,8 @@ export default function ProfileScreen() {
         <SafeText variant="bodyMd" color="surface" style={styles.heroSubtitle}>
           {isGuest
             ? language === 'fil'
-              ? 'Mabilis magbasa, walang kailangang account.'
-              : 'Read quickly without needing an account.'
+              ? 'Magbasa agad. Walang account na kailangan.'
+              : 'Read immediately. No account required.'
             : email}
         </SafeText>
 
@@ -117,8 +119,8 @@ export default function ProfileScreen() {
           <View style={styles.panel}>
             <SafeText variant="bodyMd" color="muted" style={styles.panelCopy}>
               {language === 'fil'
-                ? 'Optional ang account. Mag-login lang kung gusto mong i-sync ang saved guides sa future.'
-                : 'Accounts are optional. Log in only if you want future sync for saved guides.'}
+                ? 'Optional ang account. Pwede kang matuto at mag-save muna bilang guest.'
+                : 'Accounts are optional. You can learn and save guides first as a guest.'}
             </SafeText>
 
             <TouchableOpacity
@@ -229,7 +231,7 @@ export default function ProfileScreen() {
 
         <View style={styles.aboutCard}>
           <View style={styles.aboutIcon}>
-            <SafeText variant="h2">💡</SafeText>
+            <SafeText variant="h2">{'\u{1F4A1}'}</SafeText>
           </View>
           <SafeText variant="h2" color="primary">
             DemoAlam
@@ -238,6 +240,11 @@ export default function ProfileScreen() {
             {language === 'fil'
               ? '"Sayang, ngayon ko lang nalaman."'
               : '"I wish I knew this earlier."'}
+          </SafeText>
+          <SafeText variant="bodyMd" color="muted" style={styles.appMission}>
+            {language === 'fil'
+              ? 'Ginawa para gawing mas malinaw ang benefits, karapatan, proseso, at babala na dapat mas madaling makita ng bawat Pilipino.'
+              : 'Built to make public benefits, rights, processes, and warnings easier for Filipinos to understand and act on.'}
           </SafeText>
           <SafeText variant="caption" color="light" style={styles.appVersion}>
             Version {appVersion}
@@ -295,9 +302,20 @@ const createStyles = (colors: ThemeColors) =>
       paddingHorizontal: spacing.lg,
       paddingTop: spacing.xxl,
       paddingBottom: spacing.lg,
-      borderBottomLeftRadius: 28,
-      borderBottomRightRadius: 28,
+      borderBottomLeftRadius: 24,
+      borderBottomRightRadius: 24,
       alignItems: 'center',
+      overflow: 'hidden',
+    },
+
+    heroGlow: {
+      position: 'absolute',
+      right: -48,
+      top: -52,
+      width: 152,
+      height: 152,
+      borderRadius: 76,
+      backgroundColor: 'rgba(255,255,255,0.13)',
     },
 
     avatar: {
@@ -351,7 +369,7 @@ const createStyles = (colors: ThemeColors) =>
 
     panel: {
       backgroundColor: colors.surface,
-      borderRadius: 16,
+      borderRadius: 14,
       borderWidth: 1,
       borderColor: colors.border,
       padding: spacing.md,
@@ -393,7 +411,7 @@ const createStyles = (colors: ThemeColors) =>
 
     settingRow: {
       backgroundColor: colors.surface,
-      borderRadius: 16,
+      borderRadius: 14,
       borderWidth: 1,
       borderColor: colors.border,
       padding: spacing.md,
@@ -405,7 +423,7 @@ const createStyles = (colors: ThemeColors) =>
 
     resetRow: {
       backgroundColor: colors.surface,
-      borderRadius: 16,
+      borderRadius: 14,
       borderWidth: 1,
       borderColor: colors.border,
       padding: spacing.md,
@@ -433,7 +451,7 @@ const createStyles = (colors: ThemeColors) =>
 
     aboutCard: {
       backgroundColor: colors.surface,
-      borderRadius: 18,
+      borderRadius: 14,
       borderWidth: 1,
       borderColor: colors.border,
       padding: spacing.lg,
@@ -454,6 +472,12 @@ const createStyles = (colors: ThemeColors) =>
       textAlign: 'center',
       marginTop: spacing.sm,
       fontStyle: 'italic',
+    },
+
+    appMission: {
+      textAlign: 'center',
+      marginTop: spacing.md,
+      maxWidth: 330,
     },
 
     appVersion: {

@@ -1,8 +1,8 @@
-import { View, Text, StyleSheet } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 import { useTheme } from '../../hooks/useTheme'
 import { spacing } from '../../theme/spacing'
-import { typography } from '../../theme/typography'
 import type { ThemeColors } from '../../theme/colors'
+import SafeText from './SafeText'
 
 interface AppHeaderProps {
   title: string
@@ -16,24 +16,18 @@ export default function AppHeader({
   centered = false,
 }: AppHeaderProps) {
   const { colors } = useTheme()
-
   const styles = createStyles(colors)
 
   return (
-    <View
-      style={[
-        styles.header,
-        centered && styles.centered,
-      ]}
-    >
-      <Text style={styles.title}>
+    <View style={[styles.header, centered && styles.centered]}>
+      <SafeText variant="h1" color="surface" style={styles.title}>
         {title}
-      </Text>
+      </SafeText>
 
       {subtitle ? (
-        <Text style={styles.subtitle}>
+        <SafeText variant="bodyMd" color="surface" style={styles.subtitle}>
           {subtitle}
-        </Text>
+        </SafeText>
       ) : null}
     </View>
   )
@@ -43,8 +37,9 @@ const createStyles = (colors: ThemeColors) =>
   StyleSheet.create({
     header: {
       backgroundColor: colors.primary,
-      padding: spacing.lg,
+      paddingHorizontal: spacing.lg,
       paddingTop: spacing.xxl,
+      paddingBottom: spacing.lg,
       borderBottomLeftRadius: 24,
       borderBottomRightRadius: 24,
     },
@@ -54,13 +49,12 @@ const createStyles = (colors: ThemeColors) =>
     },
 
     title: {
-      ...typography.h1,
-      color: '#FFFFFF',
+      maxWidth: 360,
     },
 
     subtitle: {
-      ...typography.body,
-      color: colors.primaryLight,
-      marginTop: spacing.xs,
+      opacity: 0.9,
+      marginTop: spacing.sm,
+      maxWidth: 360,
     },
   })

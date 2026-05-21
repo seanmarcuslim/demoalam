@@ -42,10 +42,25 @@ const CATEGORY_COPY: Record<string, CategoryCopy> = {
     fil: 'Government forms, benefits, opisina, at appointments',
     accent: '#6D5BA8',
   },
+  healthcare: {
+    en: 'Medical access, benefits, hospital documents, and patient support',
+    fil: 'Medical access, benefits, hospital documents, at patient support',
+    accent: '#2F8F83',
+  },
+  education: {
+    en: 'Scholarships, school documents, student aid, and learning pathways',
+    fil: 'Scholarships, school documents, student aid, at learning pathways',
+    accent: '#4F73C7',
+  },
   scams: {
     en: 'Red flags before sending money or personal information',
     fil: 'Warning signs bago magpadala ng pera o personal info',
     accent: '#C83E3A',
+  },
+  'digital-safety': {
+    en: 'Protect accounts, e-wallets, passwords, phones, and online identity',
+    fil: 'Proteksyon sa accounts, e-wallets, passwords, phone, at online identity',
+    accent: '#3A7CA5',
   },
   emergency: {
     en: 'Fast actions for urgent documents, safety, and help',
@@ -106,14 +121,16 @@ export default function CategoriesScreen() {
     guides.filter((guide) => guide.category_id === categoryId).length
 
   const getCountLabel = (count: number) => {
-    if (count === 0) return 'Coming soon'
-    if (count === 1) return '1 guide'
-    return `${count} guides`
+    if (count === 0) return language === 'fil' ? 'Susunod' : 'Coming soon'
+    if (count === 1) return language === 'fil' ? '1 gabay' : '1 guide'
+    return language === 'fil' ? `${count} gabay` : `${count} guides`
   }
 
   const renderHeader = () => (
     <View>
       <View style={styles.hero}>
+        <View style={styles.heroGlow} />
+
         <View style={styles.heroTop}>
           <View style={styles.heroIcon}>
             <Ionicons name="albums" size={25} color={colors.primary} />
@@ -130,8 +147,8 @@ export default function CategoriesScreen() {
               style={styles.heroSubtitle}
             >
               {language === 'fil'
-                ? 'Practical na lugar para magsimula kapag hindi mo alam ang unang step.'
-                : 'Practical starting points when you do not know the first step yet.'}
+                ? 'Hanapin ang tamang guide bago pumila, magbayad, o magbigay ng personal info.'
+                : 'Find the right guide before you line up, pay, or share personal information.'}
             </SafeText>
           </View>
         </View>
@@ -139,13 +156,15 @@ export default function CategoriesScreen() {
         <View style={styles.statRow}>
           <View style={styles.statPill}>
             <SafeText variant="label" color="surface">
-              {categoryTotal} categories
+              {language === 'fil'
+                ? `${categoryTotal} paksa`
+                : `${categoryTotal} topics`}
             </SafeText>
           </View>
 
           <View style={styles.statPill}>
             <SafeText variant="label" color="surface">
-              Mobile-first
+              {language === 'fil' ? 'Praktikal' : 'Practical'}
             </SafeText>
           </View>
         </View>
@@ -160,8 +179,8 @@ export default function CategoriesScreen() {
 
         <SafeText variant="caption" color="muted" style={styles.introText}>
           {language === 'fil'
-            ? 'Bawat banner ay shortcut papunta sa focused guides.'
-            : 'Each banner is a shortcut into focused guides.'}
+            ? 'Mas mabilis magsimula kapag malinaw ang topic.'
+            : 'A clear topic makes the next step easier.'}
         </SafeText>
       </View>
     </View>
@@ -251,6 +270,7 @@ export default function CategoriesScreen() {
 
         const guideCount = getGuideCount(item.id)
         const hasGuides = guideCount > 0
+        const position = String(index + 1).padStart(2, '0')
 
         return (
           <AppCard
@@ -263,6 +283,13 @@ export default function CategoriesScreen() {
             ]}
             onPress={() => openCategory(item.id, getCategoryName(item))}
           >
+            <View
+              style={[
+                styles.bannerTone,
+                { backgroundColor: `${accent}0F` },
+              ]}
+            />
+
             <View style={[styles.bannerStripe, { backgroundColor: accent }]} />
 
             <View
@@ -275,6 +302,18 @@ export default function CategoriesScreen() {
             </View>
 
             <View style={styles.bannerCopy}>
+              <View style={styles.eyebrowRow}>
+                <SafeText variant="label" style={{ color: accent }}>
+                  {position}
+                </SafeText>
+
+                {!hasGuides ? (
+                  <SafeText variant="caption" color="light">
+                    {language === 'fil' ? 'Pinaplano' : 'Planned'}
+                  </SafeText>
+                ) : null}
+              </View>
+
               <View style={styles.bannerTitleRow}>
                 <SafeText
                   variant="h3"
@@ -283,10 +322,6 @@ export default function CategoriesScreen() {
                   style={{ color: accent }}
                 >
                   {getCategoryName(item)}
-                </SafeText>
-
-                <SafeText variant="caption" color="light">
-                  {String(index + 1).padStart(2, '0')}
                 </SafeText>
               </View>
 
@@ -356,14 +391,25 @@ const createStyles = (colors: ThemeColors) =>
     },
 
     hero: {
-      minHeight: 214,
+      minHeight: 198,
       backgroundColor: colors.primary,
       paddingHorizontal: spacing.lg,
       paddingTop: spacing.xxl,
       paddingBottom: spacing.lg,
-      borderBottomLeftRadius: 28,
-      borderBottomRightRadius: 28,
+      borderBottomLeftRadius: 24,
+      borderBottomRightRadius: 24,
       justifyContent: 'space-between',
+      overflow: 'hidden',
+    },
+
+    heroGlow: {
+      position: 'absolute',
+      right: -44,
+      top: -42,
+      width: 142,
+      height: 142,
+      borderRadius: 71,
+      backgroundColor: 'rgba(255,255,255,0.12)',
     },
 
     heroTop: {
@@ -411,8 +457,8 @@ const createStyles = (colors: ThemeColors) =>
 
     sectionIntro: {
       paddingHorizontal: spacing.md,
-      paddingTop: spacing.lg,
-      paddingBottom: spacing.md,
+      paddingTop: spacing.md,
+      paddingBottom: spacing.sm,
     },
 
     introText: {
@@ -421,11 +467,20 @@ const createStyles = (colors: ThemeColors) =>
 
     banner: {
       marginHorizontal: spacing.md,
-      minHeight: 132,
+      minHeight: 124,
       borderWidth: 1,
       overflow: 'hidden',
       flexDirection: 'row',
       alignItems: 'center',
+      paddingVertical: spacing.md,
+    },
+
+    bannerTone: {
+      position: 'absolute',
+      left: 0,
+      right: 0,
+      top: 0,
+      bottom: 0,
     },
 
     bannerStripe: {
@@ -437,16 +492,16 @@ const createStyles = (colors: ThemeColors) =>
     },
 
     iconContainer: {
-      width: 66,
-      height: 66,
-      borderRadius: 22,
+      width: 60,
+      height: 60,
+      borderRadius: 20,
       alignItems: 'center',
       justifyContent: 'center',
       marginRight: spacing.md,
     },
 
     categoryIcon: {
-      fontSize: 32,
+      fontSize: 30,
     },
 
     bannerCopy: {
@@ -461,8 +516,15 @@ const createStyles = (colors: ThemeColors) =>
       gap: spacing.sm,
     },
 
+    eyebrowRow: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      marginBottom: 2,
+    },
+
     description: {
-      marginTop: spacing.sm,
+      marginTop: spacing.xs,
     },
 
     countPill: {
@@ -474,9 +536,9 @@ const createStyles = (colors: ThemeColors) =>
     },
 
     arrowButton: {
-      width: 38,
-      height: 38,
-      borderRadius: 19,
+      width: 36,
+      height: 36,
+      borderRadius: 18,
       alignItems: 'center',
       justifyContent: 'center',
       marginLeft: spacing.sm,

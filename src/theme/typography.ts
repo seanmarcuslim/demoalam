@@ -1,5 +1,5 @@
 export const typography = {
-  h1: { fontSize: 26, fontWeight: '700' as const, lineHeight: 34 },
+  h1: { fontSize: 27, fontWeight: '700' as const, lineHeight: 35 },
   h2: { fontSize: 22, fontWeight: '700' as const, lineHeight: 30 },
   h3: { fontSize: 18, fontWeight: '600' as const, lineHeight: 26 },
   body: { fontSize: 16, fontWeight: '400' as const, lineHeight: 24 },

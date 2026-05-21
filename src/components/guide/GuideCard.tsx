@@ -38,7 +38,9 @@ function GuideCard({
       : guide.category.name_en
     : ''
   const categoryColor = getCategoryAccent(guide.category, colors.primary)
+  const accentColor = guide.is_urgent ? colors.danger : categoryColor
   const hasOfficialSources = (guide.official_sources?.length ?? 0) > 0
+  const urgentLabel = language === 'fil' ? 'Babala' : 'Scam Alert'
 
   const handleSave = () => {
     onSave()
@@ -60,16 +62,21 @@ function GuideCard({
       style={styles.card}
       onPress={onPress}
     >
+      <View style={[styles.accentBar, { backgroundColor: accentColor }]} />
+
       <View style={styles.topRow}>
         <Badge
-          label={guide.is_urgent ? 'Scam Alert' : categoryName}
+          label={guide.is_urgent ? urgentLabel : categoryName}
           icon={guide.is_urgent ? '🚨' : guide.category?.icon}
-          color={guide.is_urgent ? colors.danger : categoryColor}
+          color={accentColor}
         />
 
         <TouchableOpacity
           hitSlop={10}
-          style={styles.saveButton}
+          style={[
+            styles.saveButton,
+            isSaved && styles.saveButtonActive,
+          ]}
           onPress={handleSave}
         >
           <Ionicons
@@ -117,7 +124,7 @@ function GuideCard({
                 weight="700"
                 style={{ color: colors.success }}
               >
-                {language === 'fil' ? 'Source' : 'Source'}
+                {language === 'fil' ? 'May source' : 'Verified'}
               </SafeText>
             </View>
           ) : null}
@@ -144,11 +151,20 @@ const createStyles = (colors: ThemeColors, urgent: boolean, compact: boolean) =>
       padding: spacing.md,
       marginBottom: spacing.md,
       minHeight: compact ? 136 : 164,
+      overflow: 'hidden',
       elevation: 3,
       shadowColor: colors.shadow,
       shadowOffset: { width: 0, height: 2 },
       shadowOpacity: 0.08,
       shadowRadius: 6,
+    },
+
+    accentBar: {
+      position: 'absolute',
+      left: 0,
+      top: 0,
+      bottom: 0,
+      width: 4,
     },
 
     topRow: {
@@ -165,6 +181,10 @@ const createStyles = (colors: ThemeColors, urgent: boolean, compact: boolean) =>
       alignItems: 'center',
       justifyContent: 'center',
       backgroundColor: colors.surfaceSecondary,
+    },
+
+    saveButtonActive: {
+      backgroundColor: colors.accentLight,
     },
 
     title: {

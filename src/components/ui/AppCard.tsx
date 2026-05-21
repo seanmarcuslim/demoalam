@@ -48,17 +48,19 @@ const createStyles = (colors: ThemeColors) =>
   StyleSheet.create({
     card: {
       backgroundColor: colors.surface,
-      borderRadius: 16,
+      borderRadius: 14,
+      borderWidth: 1,
+      borderColor: colors.border,
       padding: spacing.md,
       marginBottom: spacing.md,
 
-      elevation: 3,
+      elevation: 2,
       shadowColor: colors.shadow,
       shadowOffset: {
         width: 0,
         height: 2,
       },
-      shadowOpacity: 0.08,
-      shadowRadius: 4,
+      shadowOpacity: 0.06,
+      shadowRadius: 6,
     },
   })

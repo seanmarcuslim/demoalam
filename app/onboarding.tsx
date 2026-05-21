@@ -89,6 +89,8 @@ export default function OnboardingScreen() {
       </View>
 
       <View style={styles.hero}>
+        <View style={styles.heroGlow} />
+
         <View style={styles.logoMark}>
           <SafeText variant="h1">💡</SafeText>
         </View>
@@ -105,8 +107,8 @@ export default function OnboardingScreen() {
 
         <SafeText variant="bodyMd" color="surface" style={styles.subtitle}>
           {isFilipino
-            ? 'Praktikal na gabay para hindi ka malito sa ID, pera, trabaho, gobyerno, at scam alerts.'
-            : 'Practical guides for IDs, money, work, government tasks, and scam alerts.'}
+            ? 'Praktikal na gabay para sa benefits, karapatan, IDs, pera, trabaho, gobyerno, at scam alerts.'
+            : 'Practical guides for benefits, rights, IDs, money, work, government tasks, and scam alerts.'}
         </SafeText>
       </View>
 
@@ -212,11 +214,21 @@ const createStyles = (colors: ThemeColors) =>
 
     hero: {
       backgroundColor: colors.primary,
-      borderRadius: 28,
+      borderRadius: 24,
       padding: spacing.lg,
       minHeight: 310,
       justifyContent: 'flex-end',
       overflow: 'hidden',
+    },
+
+    heroGlow: {
+      position: 'absolute',
+      right: -50,
+      top: -54,
+      width: 154,
+      height: 154,
+      borderRadius: 77,
+      backgroundColor: 'rgba(255,255,255,0.13)',
     },
 
     logoMark: {

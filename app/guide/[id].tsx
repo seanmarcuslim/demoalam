@@ -644,9 +644,15 @@ export default function GuideDetailsScreen() {
 
         {checklistItems.length > 0 ? (
           <View style={styles.checklistBox}>
-            <SafeText variant="label" weight="700" style={styles.checklistTitle}>
-              {language === 'fil' ? 'Checklist' : 'Checklist'}
-            </SafeText>
+            <View style={styles.checklistHeader}>
+              <SafeText variant="label" weight="700" style={styles.checklistTitle}>
+                {language === 'fil' ? 'Checklist' : 'Checklist'}
+              </SafeText>
+
+              <SafeText variant="caption" color="muted">
+                {checklistItems.length}
+              </SafeText>
+            </View>
 
             {checklistItems.map((item) => (
               <View key={item} style={styles.checklistRow}>
@@ -836,7 +842,7 @@ const createStyles = (colors: ThemeColors, heroColor: string) =>
       backgroundColor: heroColor,
       paddingHorizontal: spacing.lg,
       paddingTop: spacing.xl,
-      paddingBottom: spacing.lg,
+      paddingBottom: spacing.xl,
       borderBottomLeftRadius: 28,
       borderBottomRightRadius: 28,
     },
@@ -869,10 +875,12 @@ const createStyles = (colors: ThemeColors, heroColor: string) =>
     title: {
       marginTop: spacing.md,
       marginBottom: spacing.sm,
+      maxWidth: 370,
     },
 
     tagline: {
       opacity: 0.9,
+      maxWidth: 380,
     },
 
     metaGrid: {
@@ -955,11 +963,11 @@ const createStyles = (colors: ThemeColors, heroColor: string) =>
     trustCard: {
       marginHorizontal: spacing.md,
       marginTop: spacing.md,
-      borderRadius: 14,
+      borderRadius: 12,
       backgroundColor: colors.surface,
       borderWidth: 1,
       borderColor: colors.border,
-      padding: spacing.sm + spacing.xs,
+      padding: spacing.md,
     },
 
     trustHeader: {
@@ -993,8 +1001,9 @@ const createStyles = (colors: ThemeColors, heroColor: string) =>
     },
 
     trustItem: {
-      width: '49%',
-      minHeight: 64,
+      flexBasis: '48.8%',
+      flexGrow: 1,
+      minHeight: 66,
       borderRadius: 12,
       backgroundColor: colors.surfaceSecondary,
       padding: spacing.sm,
@@ -1018,11 +1027,11 @@ const createStyles = (colors: ThemeColors, heroColor: string) =>
     sourceCard: {
       marginHorizontal: spacing.md,
       marginTop: spacing.md,
-      borderRadius: 14,
+      borderRadius: 12,
       backgroundColor: colors.surface,
       borderWidth: 1,
       borderColor: colors.border,
-      padding: spacing.sm + spacing.xs,
+      padding: spacing.md,
     },
 
     sourceHeader: {
@@ -1096,16 +1105,16 @@ const createStyles = (colors: ThemeColors, heroColor: string) =>
 
     sectionContainer: {
       padding: spacing.md,
-      paddingTop: spacing.lg,
+      paddingTop: spacing.md,
     },
 
     sectionCard: {
       backgroundColor: colors.surface,
-      borderRadius: 16,
+      borderRadius: 14,
       borderWidth: 1,
       borderLeftWidth: 4,
       borderColor: colors.border,
-      padding: spacing.lg,
+      padding: spacing.md,
       marginBottom: spacing.md,
       elevation: 2,
       shadowColor: colors.shadow,
@@ -1117,7 +1126,7 @@ const createStyles = (colors: ThemeColors, heroColor: string) =>
     sectionHeader: {
       flexDirection: 'row',
       alignItems: 'flex-start',
-      gap: spacing.md,
+      gap: spacing.sm,
       marginBottom: spacing.md,
     },
 
@@ -1150,8 +1159,15 @@ const createStyles = (colors: ThemeColors, heroColor: string) =>
       borderRadius: 12,
       borderWidth: 1,
       borderColor: colors.border,
-      backgroundColor: colors.surface,
+      backgroundColor: colors.surfaceSecondary,
       padding: spacing.md,
+      gap: spacing.sm,
+    },
+
+    checklistHeader: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
       gap: spacing.sm,
     },
 
@@ -1195,7 +1211,7 @@ const createStyles = (colors: ThemeColors, heroColor: string) =>
       borderRadius: 12,
       paddingHorizontal: spacing.md,
       paddingVertical: spacing.sm,
-      backgroundColor: 'rgba(255,255,255,0.55)',
+      backgroundColor: colors.surfaceSecondary,
       flexDirection: 'row',
       alignItems: 'center',
       gap: spacing.sm,

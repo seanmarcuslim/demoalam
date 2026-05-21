@@ -5,11 +5,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 interface SettingsStore {
   language: 'en' | 'fil'
   theme: 'light' | 'dark'
-  hasSeenOnboarding: boolean
   setLanguage: (lang: 'en' | 'fil') => void
   setTheme: (theme: 'light' | 'dark') => void
   toggleTheme: () => void
-  markOnboardingSeen: () => void
 }
 
 export const useSettingsStore = create<SettingsStore>()(
@@ -17,7 +15,6 @@ export const useSettingsStore = create<SettingsStore>()(
     (set, get) => ({
       language: 'fil',
       theme: 'light',
-      hasSeenOnboarding: false,
 
       setLanguage: (lang) => set({ language: lang }),
 
@@ -27,8 +24,6 @@ export const useSettingsStore = create<SettingsStore>()(
         set({
           theme: get().theme === 'light' ? 'dark' : 'light',
         }),
-
-      markOnboardingSeen: () => set({ hasSeenOnboarding: true }),
     }),
     {
       name: 'app-settings',

@@ -1,8 +1,8 @@
-import { View, Text, ActivityIndicator, StyleSheet } from 'react-native'
+import { ActivityIndicator, StyleSheet, View } from 'react-native'
 import { useTheme } from '../../hooks/useTheme'
 import { spacing } from '../../theme/spacing'
-import { typography } from '../../theme/typography'
 import { ThemeColors } from '../../theme/colors'
+import SafeText from './SafeText'
 
 interface LoadingScreenProps {
   message?: string
@@ -16,14 +16,11 @@ export default function LoadingScreen({
 
   return (
     <View style={styles.container}>
-      <ActivityIndicator
-        size="large"
-        color={colors.primary}
-      />
+      <ActivityIndicator size="large" color={colors.primary} />
 
-      <Text style={styles.message}>
+      <SafeText variant="bodyMd" color="muted" style={styles.message}>
         {message}
-      </Text>
+      </SafeText>
     </View>
   )
 }
@@ -39,8 +36,6 @@ const createStyles = (colors: ThemeColors) =>
     },
 
     message: {
-      ...typography.body,
-      color: colors.textMuted,
       marginTop: spacing.md,
       textAlign: 'center',
     },

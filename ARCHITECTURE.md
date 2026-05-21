@@ -75,6 +75,22 @@ Use:
 
 Do not show official-source UI unless `official_sources` exists.
 
+## Public Benefit And Anti-Fixer Strategy
+
+DemoAlam exists to reveal useful public information that many Filipinos miss because the process is unclear, poorly disseminated, or distorted by fixers and fake pages.
+
+For government aid, rights, and financial-benefit topics:
+
+- require official sources before publishing
+- include what the program may help with
+- include who it is for and who it is not for when known
+- include what documents to prepare
+- include what question to ask the office, school, employer, hospital, or agency
+- include red flags for fixers, fake pages, guaranteed approval claims, and processing-fee scams
+- avoid promising eligibility, approval, payout amount, or processing time unless directly sourced
+
+DSWD financial assistance should be a content cluster, not a single broad guide.
+
 ## Content Architecture
 
 Guide content must be structured for action, not only reading.

@@ -1,12 +1,12 @@
 export const lightColors = {
   // Brand
-  primary: '#2563A9',
+  primary: '#245F9F',
   primaryDark: '#173F73',
-  primaryLight: '#EAF2FC',
+  primaryLight: '#EAF3FC',
 
   // Accent
-  accent: '#D9902F',
-  accentLight: '#FFF3D8',
+  accent: '#C98624',
+  accentLight: '#FFF4DC',
 
   // Semantic
   danger: '#C83E3A',
@@ -24,9 +24,9 @@ export const lightColors = {
   textLight: '#8E9AA6',
 
   // Backgrounds
-  background: '#F6F8FB',
+  background: '#F7F9FC',
   surface: '#FFFFFF',
-  surfaceSecondary: '#EEF3F7',
+  surfaceSecondary: '#EFF4F8',
   surfaceHover: '#E5ECF3',
 
   // Borders
@@ -39,13 +39,13 @@ export const lightColors = {
 
 export const darkColors = {
   // Brand
-  primary: '#6EA8E8',
-  primaryDark: '#2F5F9A',
-  primaryLight: '#D7E9FF',
+  primary: '#3D7EB8',
+  primaryDark: '#274D7D',
+  primaryLight: '#173552',
 
   // Accent
-  accent: '#E5B65B',
-  accentLight: '#3B2F1D',
+  accent: '#E2B456',
+  accentLight: '#3A2D18',
 
   // Semantic
   danger: '#F07C78',
@@ -63,10 +63,10 @@ export const darkColors = {
   textLight: '#82909C',
 
   // Backgrounds
-  background: '#10161C',
-  surface: '#18212A',
-  surfaceSecondary: '#202B35',
-  surfaceHover: '#293643',
+  background: '#0F151B',
+  surface: '#18212B',
+  surfaceSecondary: '#202B36',
+  surfaceHover: '#2A3744',
 
   // Borders
   border: '#31404E',

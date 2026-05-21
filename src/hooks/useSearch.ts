@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { guidesService } from '../services/guidesService'
+import { defaultNetworkMode } from '../lib/query'
 
 export function useSearch() {
   const [searchTerm, setSearchTerm] = useState('')
@@ -25,7 +26,7 @@ export function useSearch() {
     queryFn: () => guidesService.searchGuides(debouncedTerm),
     enabled: debouncedTerm.length > 1,
     staleTime: 1000 * 60 * 2,
-    networkMode: 'offlineFirst',
+    networkMode: defaultNetworkMode,
   })
 
   return {

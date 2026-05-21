@@ -1,12 +1,13 @@
 import { useQuery } from '@tanstack/react-query'
 import { guidesService } from '../services/guidesService'
+import { defaultNetworkMode } from '../lib/query'
 
 export function useGuides(categoryId?: string) {
   return useQuery({
     queryKey: ['guides', categoryId],
     queryFn: () => guidesService.fetchGuides(categoryId),
     staleTime: 1000 * 60 * 5,
-    networkMode: 'offlineFirst',
+    networkMode: defaultNetworkMode,
   })
 }
 
@@ -15,7 +16,7 @@ export function useFeaturedGuides() {
     queryKey: ['guides', 'featured'],
     queryFn: () => guidesService.fetchFeatured(),
     staleTime: 1000 * 60 * 5,
-    networkMode: 'offlineFirst',
+    networkMode: defaultNetworkMode,
   })
 }
 
@@ -24,7 +25,7 @@ export function useUrgentGuides() {
     queryKey: ['guides', 'urgent'],
     queryFn: () => guidesService.fetchUrgent(),
     staleTime: 1000 * 60 * 5,
-    networkMode: 'offlineFirst',
+    networkMode: defaultNetworkMode,
   })
 }
 
@@ -33,7 +34,7 @@ export function useTrendingGuides() {
     queryKey: ['guides', 'trending'],
     queryFn: () => guidesService.fetchTrending(),
     staleTime: 1000 * 60 * 5,
-    networkMode: 'offlineFirst',
+    networkMode: defaultNetworkMode,
   })
 }
 
@@ -43,6 +44,6 @@ export function useGuide(id: string) {
     queryFn: () => guidesService.fetchGuide(id),
     staleTime: 1000 * 60 * 5,
     enabled: !!id,
-    networkMode: 'offlineFirst',
+    networkMode: defaultNetworkMode,
   })
 }

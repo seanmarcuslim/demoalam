@@ -125,17 +125,17 @@ export default function GuideDetailsScreen() {
     })
   }
 
-  useEffect(() => {
-    if (activeGuide) {
-      addToHistory(activeGuide)
-    }
-  }, [activeGuide, addToHistory])
+useEffect(() => {
+  if (activeGuide) {
+    addToHistory(activeGuide)
+  }
+}, [activeGuide?.id])
 
-  useEffect(() => {
-    if (guide && isSaved) {
-      saveGuide(guide)
-    }
-  }, [guide, isSaved, saveGuide])
+useEffect(() => {
+  if (guide && isSaved) {
+    saveGuide(guide)
+  }
+}, [guide?.id, isSaved])
 
   useEffect(() => {
     if (!guide?.id) {

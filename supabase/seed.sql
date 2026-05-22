@@ -4,7 +4,7 @@ values
   ('gov', 'Government', 'Gobyerno', '🏛️', '#6D5BA8', 2),
   ('money', 'Money', 'Pera', '💸', '#D9902F', 3),
   ('work', 'Work', 'Trabaho', '💼', '#267A4D', 4),
-  ('healthcare', 'Healthcare', 'Healthcare', '⚕️', '#2F8F83', 5),
+  ('healthcare', 'Healthcare', 'Kalusugan', '⚕️', '#2F8F83', 5),
   ('education', 'Education', 'Edukasyon', '🎓', '#4F73C7', 6),
   ('scams', 'Scams', 'Scam Alerts', '🚨', '#C83E3A', 7),
   ('digital-safety', 'Digital Safety', 'Digital Safety', '🛡️', '#3A7CA5', 8),

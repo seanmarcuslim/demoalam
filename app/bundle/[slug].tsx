@@ -14,18 +14,34 @@ import { Ionicons } from '@expo/vector-icons'
 
 import SafeText from '../../src/components/ui/SafeText'
 import LoadingFeed from '../../src/components/layout/LoadingFeed'
+
 import { useGuideBundle } from '../../src/hooks/useGuideBundles'
 import { useTheme } from '../../src/hooks/useTheme'
+
+import { useSettingsStore } from '../../src/stores/settingsStore'
+
 import { spacing } from '../../src/theme/spacing'
 import type { ThemeColors } from '../../src/theme/colors'
 
 export default function BundleDetailsScreen() {
   const { slug } = useLocalSearchParams()
-  const bundleSlug = typeof slug === 'string' ? slug : slug?.[0]
+
+  const bundleSlug =
+    typeof slug === 'string'
+      ? slug
+      : slug?.[0]
+
   const { colors } = useTheme()
+
+  const { language } =
+    useSettingsStore()
+
   const styles = createStyles(colors)
 
-  const { data: bundle, isLoading } = useGuideBundle(bundleSlug)
+  const {
+    data: bundle,
+    isLoading,
+  } = useGuideBundle(bundleSlug)
 
   if (isLoading) {
     return <LoadingFeed count={3} />
@@ -35,11 +51,23 @@ export default function BundleDetailsScreen() {
     return (
       <View style={styles.empty}>
         <SafeText variant="h3" weight="700">
-          Bundle not found
+          {language === 'fil'
+            ? 'Hindi makita ang bundle'
+            : 'Bundle not found'}
         </SafeText>
       </View>
     )
   }
+
+  const title =
+    language === 'fil'
+      ? bundle.title_fil
+      : bundle.title_en
+
+  const description =
+    language === 'fil'
+      ? bundle.description_fil
+      : bundle.description_en
 
   return (
     <FlatList
@@ -49,20 +77,33 @@ export default function BundleDetailsScreen() {
       ListHeaderComponent={
         <View style={styles.hero}>
           <View style={styles.badge}>
-            <SafeText variant="caption" weight="700">
-              Guided preparedness
+            <SafeText
+              variant="caption"
+              weight="700"
+            >
+              {language === 'fil'
+                ? 'Gabay na paghahanda'
+                : 'Guided preparedness'}
             </SafeText>
           </View>
 
-          <SafeText variant="h1" weight="700" style={styles.title}>
-            {bundle.title_en}
+          <SafeText
+            variant="h1"
+            weight="700"
+            style={styles.title}
+          >
+            {title}
           </SafeText>
 
-          {bundle.description_en ? (
-            <SafeText variant="bodyMd" color="muted" style={styles.description}>
-              {bundle.description_en}
+          {!!description && (
+            <SafeText
+              variant="bodyMd"
+              color="muted"
+              style={styles.description}
+            >
+              {description}
             </SafeText>
-          ) : null}
+          )}
 
           <View style={styles.orderNote}>
             <Ionicons
@@ -71,8 +112,14 @@ export default function BundleDetailsScreen() {
               color={colors.primary}
             />
 
-            <SafeText variant="caption" color="muted" style={styles.orderNoteText}>
-              Follow this order first. Secure access, reduce risk, then recover documents.
+            <SafeText
+              variant="caption"
+              color="muted"
+              style={styles.orderNoteText}
+            >
+              {language === 'fil'
+                ? 'Sundin muna ang tamang pagkakasunod. Siguraduhin muna ang access at bawasan ang risk bago mag-recover ng documents.'
+                : 'Follow this order first. Secure access, reduce risk, then recover documents.'}
             </SafeText>
           </View>
         </View>
@@ -82,56 +129,92 @@ export default function BundleDetailsScreen() {
           activeOpacity={0.88}
           style={styles.guideCard}
           onPress={() => {
-            if (!item.guide?.id) return
+            if (!item.guide?.id) {
+              return
+            }
 
             router.push({
               pathname: '/guide/[id]',
-              params: { id: item.guide.id },
+              params: {
+                id: item.guide.id,
+              },
             })
           }}
         >
           <View style={styles.stepCircle}>
-            <SafeText variant="caption" weight="700">
-              {index === 0 ? 'START' : index + 1}
+            <SafeText
+              variant="caption"
+              weight="700"
+            >
+              {index === 0
+                ? language === 'fil'
+                  ? 'UNA'
+                  : 'START'
+                : index + 1}
             </SafeText>
           </View>
 
           <View style={styles.guideContent}>
-            <SafeText variant="h3" weight="700">
-              {item.guide?.title_en}
+            <SafeText
+              variant="h3"
+              weight="700"
+            >
+              {language === 'fil'
+                ? item.guide?.title_fil
+                : item.guide?.title_en}
             </SafeText>
 
-            {item.reason_en ? (
-              <SafeText variant="bodyMd" color="muted" style={styles.reason}>
-                {item.reason_en}
+            {!!item.reason_en && (
+              <SafeText
+                variant="bodyMd"
+                color="muted"
+                style={styles.reason}
+              >
+                {language === 'fil'
+                  ? item.reason_fil
+                  : item.reason_en}
               </SafeText>
-            ) : null}
+            )}
 
             <View style={styles.metaRow}>
               {item.guide?.is_urgent ? (
                 <View style={styles.urgentPill}>
-                  <SafeText variant="caption" weight="700">
-                    Urgent
+                  <SafeText
+                    variant="caption"
+                    weight="700"
+                  >
+                    {language === 'fil'
+                      ? 'Urgent'
+                      : 'Urgent'}
                   </SafeText>
                 </View>
               ) : null}
 
               <View style={styles.metaPill}>
-                <SafeText variant="caption" weight="700">
+                <SafeText
+                  variant="caption"
+                  weight="700"
+                >
                   {item.guide?.read_time_min || '?'} min
                 </SafeText>
               </View>
             </View>
           </View>
 
-          <Ionicons name="chevron-forward" size={20} color={colors.textMuted} />
+          <Ionicons
+            name="chevron-forward"
+            size={20}
+            color={colors.textMuted}
+          />
         </TouchableOpacity>
       )}
     />
   )
 }
 
-const createStyles = (colors: ThemeColors) =>
+const createStyles = (
+  colors: ThemeColors
+) =>
   StyleSheet.create({
     content: {
       padding: spacing.lg,
@@ -145,7 +228,8 @@ const createStyles = (colors: ThemeColors) =>
 
     badge: {
       alignSelf: 'flex-start',
-      backgroundColor: colors.primaryLight,
+      backgroundColor:
+        colors.primaryLight,
       borderRadius: 999,
       paddingHorizontal: 12,
       paddingVertical: 8,
@@ -194,7 +278,8 @@ const createStyles = (colors: ThemeColors) =>
       height: 34,
       paddingHorizontal: 10,
       borderRadius: 999,
-      backgroundColor: colors.primaryLight,
+      backgroundColor:
+        colors.primaryLight,
       alignItems: 'center',
       justifyContent: 'center',
       marginTop: 2,
@@ -218,14 +303,16 @@ const createStyles = (colors: ThemeColors) =>
 
     metaPill: {
       borderRadius: 999,
-      backgroundColor: colors.surfaceSecondary,
+      backgroundColor:
+        colors.surfaceSecondary,
       paddingHorizontal: 12,
       paddingVertical: 7,
     },
 
     urgentPill: {
       borderRadius: 999,
-      backgroundColor: colors.dangerLight,
+      backgroundColor:
+        colors.dangerLight,
       paddingHorizontal: 12,
       paddingVertical: 7,
     },
@@ -234,6 +321,7 @@ const createStyles = (colors: ThemeColors) =>
       flex: 1,
       justifyContent: 'center',
       alignItems: 'center',
-      backgroundColor: colors.background,
+      backgroundColor:
+        colors.background,
     },
   })

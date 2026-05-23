@@ -160,6 +160,83 @@ const SEARCH_ALIASES: Record<string, string[]> = {
     'household validation',
     'dswd',
   ],
+  national: [
+    'national id',
+    'philsys',
+    'philid',
+    'ephilid',
+    'digital national id',
+    'trn',
+    'valid id',
+  ],
+  philsys: [
+    'national id',
+    'philid',
+    'ephilid',
+    'digital national id',
+    'trn',
+    'transaction reference number',
+  ],
+  philid: [
+    'national id',
+    'philsys',
+    'ephilid',
+    'digital national id',
+    'trn',
+  ],
+  ephilid: [
+    'national id',
+    'philsys',
+    'philid',
+    'digital national id',
+    'valid id',
+  ],
+  trn: [
+    'transaction reference number',
+    'national id',
+    'philsys',
+    'philid',
+    'registration slip',
+  ],
+  otp: [
+    'phishing',
+    'scam',
+    'mpin',
+    'password',
+    'account takeover',
+    'stolen phone',
+    'sim',
+  ],
+  mpin: [
+    'otp',
+    'phishing',
+    'scam',
+    'password',
+    'gcash',
+    'maya',
+  ],
+  sim: [
+    'otp',
+    'stolen phone',
+    'lost phone',
+    'phone stolen',
+    'account access',
+  ],
+  phone: [
+    'stolen phone',
+    'lost phone',
+    'sim',
+    'otp',
+    'gcash',
+    'maya',
+  ],
+  nanakaw: [
+    'stolen',
+    'stolen phone',
+    'lost phone',
+    'phone stolen',
+    'wallet',
+  ],
 }
 
 function expandSearchTerms(query: string) {
@@ -341,6 +418,58 @@ function scoreGuide(guide: Guide, query: string) {
   if (cleanQuery.includes('philhealth')) {
     if (title.includes('philhealth')) {
       score += 90
+    }
+  }
+
+  // NATIONAL ID / PHILSYS PRIORITY
+  if (
+    cleanQuery.includes('national id') ||
+    cleanQuery.includes('philsys') ||
+    cleanQuery.includes('philid') ||
+    cleanQuery.includes('ephilid') ||
+    cleanQuery.includes('trn')
+  ) {
+    if (
+      title.includes('national id') ||
+      keywords.includes('philsys') ||
+      keywords.includes('philid') ||
+      keywords.includes('trn')
+    ) {
+      score += 95
+    }
+  }
+
+  // OTP / ACCOUNT TAKEOVER PRIORITY
+  if (
+    cleanQuery.includes('otp') ||
+    cleanQuery.includes('mpin') ||
+    cleanQuery.includes('password')
+  ) {
+    if (
+      title.includes('phishing') ||
+      title.includes('stolen') ||
+      keywords.includes('account takeover') ||
+      keywords.includes('otp')
+    ) {
+      score += 75
+    }
+  }
+
+  // STOLEN PHONE / SIM PRIORITY
+  if (
+    cleanQuery.includes('stolen phone') ||
+    cleanQuery.includes('lost phone') ||
+    cleanQuery.includes('phone stolen') ||
+    cleanQuery.includes('nanakaw') ||
+    cleanQuery.includes('sim')
+  ) {
+    if (
+      title.includes('phone') ||
+      keywords.includes('stolen phone') ||
+      keywords.includes('lost phone') ||
+      keywords.includes('sim')
+    ) {
+      score += 85
     }
   }
 

@@ -4,14 +4,21 @@ import { router } from 'expo-router'
 
 import type { GuideBundleWithItems } from '../../types/bundle'
 import SafeText from '../ui/SafeText'
+import { useSettingsStore } from '../../stores/settingsStore'
 
 interface BundleCardProps {
   bundle: GuideBundleWithItems
 }
 
 export function BundleCard({ bundle }: BundleCardProps) {
+  const { language } = useSettingsStore()
+
   const guideCount = bundle.items.length
   const urgentCount = bundle.items.filter((item) => item.guide?.is_urgent).length
+
+  const title = language === 'fil' ? bundle.title_fil : bundle.title_en
+  const description =
+    language === 'fil' ? bundle.description_fil : bundle.description_en
 
   return (
     <TouchableOpacity
@@ -48,7 +55,7 @@ export function BundleCard({ bundle }: BundleCardProps) {
           }}
         >
           <SafeText variant="caption" weight="700">
-            Preparedness Bundle
+            {language === 'fil' ? 'Gabay na paghahanda' : 'Preparedness Bundle'}
           </SafeText>
         </View>
 
@@ -56,16 +63,16 @@ export function BundleCard({ bundle }: BundleCardProps) {
       </View>
 
       <SafeText variant="h3" weight="700" style={{ marginBottom: 10 }}>
-        {bundle.title_en}
+        {title}
       </SafeText>
 
-      {bundle.description_en ? (
+      {description ? (
         <SafeText
           variant="bodyMd"
           color="muted"
           style={{ marginBottom: 14, lineHeight: 24 }}
         >
-          {bundle.description_en}
+          {description}
         </SafeText>
       ) : null}
 
@@ -79,7 +86,7 @@ export function BundleCard({ bundle }: BundleCardProps) {
           }}
         >
           <SafeText variant="caption" weight="700">
-            {guideCount} guides
+            {guideCount} {language === 'fil' ? 'gabay' : 'guides'}
           </SafeText>
         </View>
 

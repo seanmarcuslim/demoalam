@@ -1,3 +1,5 @@
+import { BundleCard } from '../../src/components/bundles/BundleCard'
+import { useFeaturedGuideBundles } from '../../src/hooks/useGuideBundles'
 import {
   FlatList,
   RefreshControl,
@@ -81,6 +83,7 @@ export default function HomeScreen() {
     isRefetching,
   } = useGuides()
   const { data: featured = [] } = useFeaturedGuides()
+  const { data: featuredBundles = [] } = useFeaturedGuideBundles()
   const { data: urgent = [] } = useUrgentGuides()
   const { data: trending = [] } = useTrendingGuides()
   const { data: categories = [] } = useCategories()
@@ -294,7 +297,23 @@ export default function HomeScreen() {
           })}
         </ScrollView>
       </View>
+{featuredBundles.length > 0 ? (
+  <View style={styles.section}>
+    <SafeText variant="h3" weight="700">
+      {language === 'fil' ? 'Maghanda para dito' : 'Guided preparedness'}
+    </SafeText>
 
+    <SafeText variant="caption" color="muted" style={styles.sectionSubtitle}>
+      {language === 'fil'
+        ? 'Sunod-sunod na guides para sa stressful na sitwasyon.'
+        : 'Step-by-step guides for stressful situations.'}
+    </SafeText>
+
+    {featuredBundles.map((bundle) => (
+      <BundleCard key={bundle.id} bundle={bundle} />
+    ))}
+  </View>
+) : null}
       {featuredGuide ? (
         <TouchableOpacity
           activeOpacity={0.88}

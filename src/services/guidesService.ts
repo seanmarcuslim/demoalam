@@ -1,3 +1,4 @@
+import type { GuideBundleWithItems } from '../types/bundle'
 import { supabase } from './supabase'
 import { Guide } from '../types/guide'
 import { throwServiceError } from './serviceErrors'
@@ -667,4 +668,60 @@ export const guidesService = {
       ...localMatches,
     ]), cleanQuery).slice(0, 20)
   },
+
+  async fetchFeaturedBundles(): Promise<GuideBundleWithItems[]> {
+    const { data, error } = await supabase
+      .from('guide_bundles')
+      .select(
+        `
+        *,
+        items:guide_bundle_items(
+          *,
+          guide:guides(
+            *,
+            category:categories(*)
+          )
+        )
+      `
+      )
+      .eq('is_published', true)
+      .eq('is_featured', true)
+      .order('order_index', { ascending: true })
+      .order('order_index', {
+        referencedTable: 'guide_bundle_items',
+        ascending: true,
+      })
+
+    if (error) {
+      throwServiceError('Error fetching guide bundles:', error)
+    }
+
+return (data || []) as GuideBundleWithItems[]
+},
+
+async fetchBundleBySlug(slug: string): Promise<GuideBundleWithItems | null> {
+  const { data, error } = await supabase
+    .from('guide_bundles')
+    .select(
+      `
+      *,
+      items:guide_bundle_items(
+        *,
+        guide:guides(
+          *,
+          category:categories(*)
+        )
+      )
+    `
+    )
+    .eq('slug', slug)
+    .eq('is_published', true)
+    .single()
+
+  if (error) {
+    throwServiceError('Error fetching guide bundle:', error)
+  }
+
+  return data as GuideBundleWithItems
+},
 }

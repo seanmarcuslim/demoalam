@@ -65,6 +65,11 @@ export default function CategoryDetailsScreen() {
   const categoryIcon = firstCategory?.icon || '📚'
   const styles = createStyles(colors, categoryColor)
   const suggestedCategories = getSuggestedCategories()
+  const officialGuideCount = guides.filter(
+    (guide) => (guide.official_sources?.length ?? 0) > 0
+  ).length
+  const urgentGuideCount = guides.filter((guide) => guide.is_urgent).length
+  const startHereGuides = guides.slice(0, 3)
 
   const openGuide = (guideId: string) => {
     router.push({
@@ -131,9 +136,25 @@ export default function CategoryDetailsScreen() {
 
           <View style={styles.statPill}>
             <SafeText variant="label" color="surface">
-              {language === 'fil' ? 'Pwedeng i-save' : 'Save-ready'}
+              {officialGuideCount > 0
+                ? language === 'fil'
+                  ? `${officialGuideCount} may source`
+                  : `${officialGuideCount} sourced`
+                : language === 'fil'
+                  ? 'Pwedeng i-save'
+                  : 'Save-ready'}
             </SafeText>
           </View>
+
+          {urgentGuideCount > 0 ? (
+            <View style={styles.statPill}>
+              <SafeText variant="label" color="surface">
+                {language === 'fil'
+                  ? `${urgentGuideCount} babala`
+                  : `${urgentGuideCount} alerts`}
+              </SafeText>
+            </View>
+          ) : null}
         </View>
       </View>
 
@@ -155,6 +176,58 @@ export default function CategoryDetailsScreen() {
           color={categoryColor}
         />
       </View>
+
+      {startHereGuides.length > 0 ? (
+        <View style={styles.startHereBlock}>
+          <SafeText variant="label" weight="700" style={styles.startHereTitle}>
+            {language === 'fil' ? 'Unahin ito' : 'Start here'}
+          </SafeText>
+
+          <View style={styles.startHereRow}>
+            {startHereGuides.map((guide) => {
+              const title = language === 'fil' ? guide.title_fil : guide.title_en
+              const sourceCount = guide.official_sources?.length ?? 0
+
+              return (
+                <TouchableOpacity
+                  key={guide.id}
+                  activeOpacity={0.86}
+                  style={[
+                    styles.startHereChip,
+                    {
+                      borderColor: `${categoryColor}35`,
+                      backgroundColor: `${categoryColor}10`,
+                    },
+                  ]}
+                  onPress={() => openGuide(guide.id)}
+                >
+                  <SafeText
+                    variant="caption"
+                    weight="700"
+                    style={{ color: categoryColor }}
+                    numberOfLines={2}
+                  >
+                    {title}
+                  </SafeText>
+
+                  <View style={styles.startHereMeta}>
+                    <Ionicons
+                      name={sourceCount > 0 ? 'shield-checkmark' : 'time-outline'}
+                      size={13}
+                      color={sourceCount > 0 ? colors.success : colors.textLight}
+                    />
+                    <SafeText variant="caption" color="muted" numberOfLines={1}>
+                      {sourceCount > 0
+                        ? `${sourceCount} ${sourceCount === 1 ? 'source' : 'sources'}`
+                        : `${guide.read_time_min} ${language === 'fil' ? 'minuto' : 'min'}`}
+                    </SafeText>
+                  </View>
+                </TouchableOpacity>
+              )
+            })}
+          </View>
+        </View>
+      ) : null}
     </View>
   )
 
@@ -427,6 +500,38 @@ const createStyles = (colors: ThemeColors, heroColor: string) =>
     introSubtitle: {
       marginTop: spacing.xs,
       maxWidth: 230,
+    },
+
+    startHereBlock: {
+      paddingHorizontal: spacing.md,
+      paddingBottom: spacing.md,
+    },
+
+    startHereTitle: {
+      textTransform: 'uppercase',
+      marginBottom: spacing.sm,
+      color: colors.textMuted,
+    },
+
+    startHereRow: {
+      flexDirection: 'row',
+      gap: spacing.sm,
+    },
+
+    startHereChip: {
+      flex: 1,
+      minHeight: 86,
+      borderRadius: 12,
+      borderWidth: 1,
+      padding: spacing.sm,
+      justifyContent: 'space-between',
+    },
+
+    startHereMeta: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: spacing.xs,
+      marginTop: spacing.sm,
     },
 
     emptyCard: {

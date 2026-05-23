@@ -38,8 +38,8 @@ const CATEGORY_COPY: Record<string, CategoryCopy> = {
     accent: '#D9902F',
   },
   gov: {
-    en: 'Government forms, benefits, offices, and appointments',
-    fil: 'Government forms, benefits, opisina, at appointments',
+    en: 'Aid, benefits, forms, offices, and appointments',
+    fil: 'Ayuda, benefits, forms, opisina, at appointments',
     accent: '#6D5BA8',
   },
   healthcare: {

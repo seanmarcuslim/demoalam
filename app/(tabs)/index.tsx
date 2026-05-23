@@ -31,6 +31,42 @@ import { Category } from '../../src/types/category'
 import LoadingFeed from '../../src/components/layout/LoadingFeed'
 import { getCategoryAccent } from '../../src/lib/categoryVisuals'
 
+const GOVERNMENT_AID_TERMS = [
+  'dswd',
+  'aics',
+  'social pension',
+  'walang gutom',
+  '4ps',
+  'emergency cash transfer',
+  'sustainable livelihood',
+  'livelihood assistance',
+  'student cash for work',
+  'cash-for-work',
+  'tara basa',
+  'kalahi',
+]
+
+const guideSearchText = (guide: Guide) =>
+  [
+    guide.slug,
+    guide.title_en,
+    guide.title_fil,
+    guide.tagline_en,
+    guide.tagline_fil,
+    guide.keywords_en,
+    guide.keywords_fil,
+    ...(guide.tags || []),
+  ]
+    .filter(Boolean)
+    .join(' ')
+    .toLowerCase()
+
+const isGovernmentAidGuide = (guide: Guide) => {
+  const searchText = guideSearchText(guide)
+
+  return GOVERNMENT_AID_TERMS.some((term) => searchText.includes(term))
+}
+
 export default function HomeScreen() {
   const { colors } = useTheme()
   const { language } = useSettingsStore()
@@ -76,6 +112,9 @@ export default function HomeScreen() {
   const moneyGuides = guides
     .filter((guide) => guide.category?.slug === 'money')
     .slice(0, 4)
+  const governmentAidGuides = guides
+    .filter(isGovernmentAidGuide)
+    .slice(0, 8)
   const governmentGuides = guides
     .filter((guide) => guide.category?.slug === 'gov')
     .slice(0, 4)
@@ -356,11 +395,21 @@ export default function HomeScreen() {
       })}
 
       {renderCuratedSection({
+        title: language === 'fil' ? 'DSWD at Ayuda Guides' : 'DSWD & Aid Guides',
+        subtitle:
+          language === 'fil'
+            ? 'AICS, 4Ps, Social Pension, Walang Gutom, ECT, at SLP'
+            : 'AICS, 4Ps, Social Pension, Walang Gutom, ECT, and SLP',
+        items: governmentAidGuides,
+        icon: '\u{1F3DB}\uFE0F',
+      })}
+
+      {renderCuratedSection({
         title: language === 'fil' ? 'Government Basics' : 'Government Basics',
         subtitle:
           language === 'fil'
-            ? 'Para hindi sayang ang punta sa opisina'
-            : 'Avoid wasted trips to government offices',
+            ? 'Benefits, forms, opisina, at appointments'
+            : 'Benefits, forms, offices, and appointments',
         items: governmentGuides,
         icon: '🏛️',
       })}

@@ -402,13 +402,13 @@ export default function GuideDetailsScreen() {
 
         <View style={styles.completenessBlock}>
           <SafeText variant="label" weight="700" style={styles.completenessTitle}>
-            {language === 'fil' ? 'Kumpleto ba?' : 'Completeness check'}
+            {language === 'fil' ? 'Kasama sa guide' : 'Guide includes'}
           </SafeText>
 
           <View style={styles.completenessGrid}>
             <CompletenessItem
               done={sourceCount > 0}
-              label={language === 'fil' ? 'Opisyal na sanggunian' : 'Official sources'}
+              label={language === 'fil' ? 'Sanggunian' : 'Sources'}
             />
             <CompletenessItem
               done={hasChecklist}
@@ -763,12 +763,15 @@ export default function GuideDetailsScreen() {
     return (
       <View style={styles.trustItem}>
         <Ionicons name={icon} size={17} color={colors.primary} />
-        <SafeText variant="caption" color="muted">
-          {label}
-        </SafeText>
-        <SafeText variant="bodyMd" weight="700" numberOfLines={1}>
-          {value}
-        </SafeText>
+
+        <View style={styles.trustItemCopy}>
+          <SafeText variant="caption" color="muted" numberOfLines={1}>
+            {label}
+          </SafeText>
+          <SafeText variant="caption" weight="700" numberOfLines={1}>
+            {value}
+          </SafeText>
+        </View>
       </View>
     )
   }
@@ -1047,18 +1050,18 @@ const createStyles = (colors: ThemeColors, heroColor: string) =>
     trustCard: {
       marginHorizontal: spacing.md,
       marginTop: spacing.md,
-      borderRadius: 12,
+      borderRadius: 14,
       backgroundColor: colors.surface,
       borderWidth: 1,
       borderColor: colors.border,
-      padding: spacing.md,
+      padding: spacing.sm,
     },
 
     trustHeader: {
       flexDirection: 'row',
       alignItems: 'center',
       gap: spacing.sm,
-      marginBottom: spacing.sm,
+      marginBottom: spacing.xs,
     },
 
     trustIcon: {
@@ -1087,11 +1090,18 @@ const createStyles = (colors: ThemeColors, heroColor: string) =>
     trustItem: {
       flexBasis: '48.8%',
       flexGrow: 1,
-      minHeight: 66,
+      minHeight: 46,
       borderRadius: 12,
       backgroundColor: colors.surfaceSecondary,
-      padding: spacing.sm,
-      justifyContent: 'space-between',
+      paddingHorizontal: spacing.sm,
+      paddingVertical: spacing.xs,
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: spacing.xs,
+    },
+
+    trustItemCopy: {
+      flex: 1,
     },
 
     officialNote: {
@@ -1111,15 +1121,13 @@ const createStyles = (colors: ThemeColors, heroColor: string) =>
     completenessBlock: {
       marginTop: spacing.sm,
       borderRadius: 12,
-      borderWidth: 1,
-      borderColor: colors.border,
-      backgroundColor: colors.surface,
+      backgroundColor: colors.surfaceSecondary,
       padding: spacing.sm,
     },
 
     completenessTitle: {
       textTransform: 'uppercase',
-      marginBottom: spacing.sm,
+      marginBottom: spacing.xs,
     },
 
     completenessGrid: {

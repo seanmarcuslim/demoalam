@@ -469,8 +469,8 @@ export default function GuideDetailsScreen() {
 
               <SafeText variant="caption" color="muted" style={styles.sourceSubtitle}>
                 {language === 'fil'
-                  ? 'Gabay ito para makapaghanda, pero ang opisyal na sanggunian pa rin ang panghuling batayan.'
-                  : 'This guide helps you prepare; official links remain the final reference.'}
+                  ? 'I-tap para buksan ang opisyal na page. Iwasan ang screenshots, reposts, at fixer links.'
+                  : 'Tap to open the official page. Avoid screenshots, reposts, and fixer links.'}
               </SafeText>
             </View>
           </View>
@@ -807,6 +807,8 @@ export default function GuideDetailsScreen() {
   }: {
     source: GuideOfficialSource
   }) {
+    const sourceDomain = getSourceDomain(source.url)
+
     const openSource = () => {
       Linking.openURL(source.url).catch(() => {
         showFeedback(
@@ -825,23 +827,52 @@ export default function GuideDetailsScreen() {
         onPress={openSource}
       >
         <View style={styles.sourceRowIcon}>
-          <Ionicons name="open-outline" size={17} color={colors.primary} />
+          <Ionicons name="shield-checkmark" size={17} color={colors.success} />
         </View>
 
         <View style={styles.sourceRowCopy}>
           <SafeText variant="bodyMd" weight="700" numberOfLines={1}>
             {source.title}
           </SafeText>
-          {source.publisher ? (
-            <SafeText variant="caption" color="muted" numberOfLines={1}>
-              {source.publisher}
-            </SafeText>
-          ) : null}
+
+          <View style={styles.sourceMetaRow}>
+            {source.publisher ? (
+              <View style={styles.publisherPill}>
+                <SafeText
+                  variant="caption"
+                  weight="700"
+                  style={{ color: colors.success }}
+                  numberOfLines={1}
+                >
+                  {source.publisher}
+                </SafeText>
+              </View>
+            ) : null}
+
+            {sourceDomain ? (
+              <SafeText
+                variant="caption"
+                color="muted"
+                numberOfLines={1}
+                style={styles.sourceDomain}
+              >
+                {sourceDomain}
+              </SafeText>
+            ) : null}
+          </View>
         </View>
 
-        <Ionicons name="chevron-forward" size={17} color={colors.textLight} />
+        <Ionicons name="open-outline" size={17} color={colors.textLight} />
       </TouchableOpacity>
     )
+  }
+
+  function getSourceDomain(url: string) {
+    try {
+      return new URL(url).hostname.replace(/^www\./, '')
+    } catch {
+      return ''
+    }
   }
 
   function formatUpdatedDate(value?: string | null) {
@@ -1158,12 +1189,12 @@ const createStyles = (colors: ThemeColors, heroColor: string) =>
     },
 
     officialSourceRow: {
-      minHeight: 50,
+      minHeight: 64,
       borderRadius: 12,
       borderWidth: 1,
       borderColor: colors.border,
-      backgroundColor: colors.surface,
-      paddingHorizontal: spacing.sm,
+      backgroundColor: colors.surfaceSecondary,
+      paddingHorizontal: spacing.md,
       paddingVertical: spacing.sm,
       flexDirection: 'row',
       alignItems: 'center',
@@ -1171,15 +1202,35 @@ const createStyles = (colors: ThemeColors, heroColor: string) =>
     },
 
     sourceRowIcon: {
-      width: 30,
-      height: 30,
-      borderRadius: 15,
-      backgroundColor: colors.surface,
+      width: 32,
+      height: 32,
+      borderRadius: 16,
+      backgroundColor: colors.successLight,
       alignItems: 'center',
       justifyContent: 'center',
     },
 
     sourceRowCopy: {
+      flex: 1,
+    },
+
+    sourceMetaRow: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: spacing.xs,
+      marginTop: spacing.xs,
+    },
+
+    publisherPill: {
+      maxWidth: '62%',
+      minHeight: 22,
+      borderRadius: 999,
+      backgroundColor: colors.successLight,
+      paddingHorizontal: spacing.sm,
+      justifyContent: 'center',
+    },
+
+    sourceDomain: {
       flex: 1,
     },
 

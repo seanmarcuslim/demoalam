@@ -1,42 +1,63 @@
-import {
-  FlatList,
-  StyleSheet,
-  View,
-} from 'react-native'
+import { FlatList, StyleSheet, View } from 'react-native'
 import { router } from 'expo-router'
 import { Ionicons } from '@expo/vector-icons'
+import { useEffect } from 'react'
+
 import { useSavedStore } from '../../src/stores/savedStore'
 import { useSettingsStore } from '../../src/stores/settingsStore'
 import { useTheme } from '../../src/hooks/useTheme'
+import { useGuides } from '../../src/hooks/useGuides'
 import { spacing } from '../../src/theme/spacing'
 import type { ThemeColors } from '../../src/theme/colors'
+import type { Guide } from '../../src/types/guide'
+
 import SafeText from '../../src/components/ui/SafeText'
 import GuideCard from '../../src/components/guide/GuideCard'
-import AppHeader from '../../src/components/ui/AppHeader'
 import AppCard from '../../src/components/ui/AppCard'
 import AppButton from '../../src/components/ui/AppButton'
 import EmptyState from '../../src/components/ui/EmptyState'
-import { useGuides } from '../../src/hooks/useGuides'
-import { useEffect } from 'react'
 
 export default function SavedScreen() {
-  const {
-    savedIds,
-    cachedGuides,
-    toggleSave,
-    hydrateSavedGuides,
-  } = useSavedStore()
+  const { savedIds, cachedGuides, toggleSave, hydrateSavedGuides } =
+    useSavedStore()
+
   const { data: guides = [] } = useGuides()
   const { language } = useSettingsStore()
   const { colors } = useTheme()
-
   const styles = createStyles(colors)
 
   const savedGuides = savedIds
     .map((id) => cachedGuides[id])
-    .filter(Boolean)
+    .filter((guide): guide is Guide => Boolean(guide))
+
   const hasCachedGuides = savedGuides.length > 0
   const needsRefresh = savedIds.length > 0 && !hasCachedGuides
+
+  const urgentCount = savedGuides.filter((guide) => guide.is_urgent).length
+  const offlineCount = savedGuides.filter(
+    (guide) => guide.sections?.length
+  ).length
+  const sourceCount = savedGuides.filter(
+    (guide) => (guide.official_sources?.length ?? 0) > 0
+  ).length
+
+  const priorityGuides = savedGuides
+    .filter((guide) => {
+      const title = `${guide.title_en} ${guide.title_fil}`.toLowerCase()
+      const categorySlug = guide.category?.slug?.toLowerCase() || ''
+
+      return (
+        guide.is_urgent ||
+        categorySlug.includes('scam') ||
+        categorySlug.includes('emergency') ||
+        title.includes('wallet') ||
+        title.includes('stolen') ||
+        title.includes('scam') ||
+        title.includes('phishing')
+      )
+    })
+    .slice(0, 3)
+
   const savedCountLabel =
     savedIds.length === 1
       ? language === 'fil'
@@ -61,72 +82,107 @@ export default function SavedScreen() {
 
   const renderHeader = () => (
     <View>
-      <AppHeader
-        title={language === 'fil' ? 'Na-save Mo' : 'Saved Guides'}
-        subtitle={
-          language === 'fil'
-            ? `${savedCountLabel} na pwede mong balikan kapag kailangan.`
-            : `${savedCountLabel} ready when you need them again.`
-        }
-      />
-
-      <View style={styles.valueStrip}>
-        <View style={styles.valuePill}>
-          <Ionicons name="bookmark" size={15} color={colors.primary} />
-          <SafeText variant="caption" color="primary" weight="700">
-            {savedCountLabel}
-          </SafeText>
+      <View style={styles.hero}>
+        <View style={styles.heroIcon}>
+          <Ionicons name="library" size={22} color={colors.primary} />
         </View>
 
-        <View style={styles.valuePill}>
-          <Ionicons name="cloud-offline-outline" size={15} color={colors.success} />
-          <SafeText variant="caption" weight="700" style={{ color: colors.success }}>
-            {language === 'fil' ? 'Offline-ready' : 'Offline-ready'}
-          </SafeText>
+        <SafeText variant="h1" weight="700">
+          {language === 'fil' ? 'Naka-save para balikan' : 'Saved for later'}
+        </SafeText>
+
+        <SafeText variant="bodyMd" color="muted" style={styles.heroSubtitle}>
+          {language === 'fil'
+            ? 'Mahahalagang guide na madaling balikan kahit mahina ang signal o stressful ang sitwasyon.'
+            : 'Important guides you can quickly return to during emergencies, weak signal, or stressful situations.'}
+        </SafeText>
+
+        <View style={styles.summaryRow}>
+          <SummaryPill label={savedCountLabel} icon="bookmark" />
+          <SummaryPill label={`${offlineCount} offline`} icon="cloud-offline" />
+          <SummaryPill label={`${sourceCount} sources`} icon="shield-checkmark" />
+          <SummaryPill label={`${urgentCount} urgent`} icon="warning" />
         </View>
       </View>
 
       {hasCachedGuides ? (
         <AppCard style={styles.notice}>
-          <Ionicons
-            name="cloud-offline-outline"
-            size={19}
-            color={colors.success}
-          />
+          <Ionicons name="cloud-offline-outline" size={19} color={colors.success} />
 
-          <SafeText
-            variant="bodyMd"
-            color="muted"
-            style={styles.noticeText}
-          >
+          <SafeText variant="bodyMd" color="muted" style={styles.noticeText}>
             {language === 'fil'
-              ? 'Naka-cache ang saved guides para mas madaling balikan kahit mahina ang signal.'
-              : 'Saved guides are cached so they are easier to revisit when connection is weak.'}
+              ? 'Naka-save ang guides sa device para mas madaling balikan kapag kailangan.'
+              : 'Saved guides stay easier to revisit when you need them again.'}
           </SafeText>
         </AppCard>
       ) : null}
 
       {needsRefresh ? (
         <AppCard style={styles.refreshNotice}>
-          <Ionicons
-            name="sync-circle-outline"
-            size={22}
-            color={colors.warning}
-          />
+          <Ionicons name="sync-circle-outline" size={22} color={colors.warning} />
 
-          <SafeText
-            variant="bodyMd"
-            color="muted"
-            style={styles.noticeText}
-          >
+          <SafeText variant="bodyMd" color="muted" style={styles.noticeText}>
             {language === 'fil'
               ? 'May saved guides ka, pero kailangan munang mag-online para makuha ang offline copies.'
               : 'You have saved guides, but you need to go online once to fetch the offline copies.'}
           </SafeText>
         </AppCard>
       ) : null}
+
+      {priorityGuides.length > 0 ? (
+        <View style={styles.prioritySection}>
+          <SafeText variant="h3" weight="700">
+            {language === 'fil'
+              ? 'Mahalagang balikan agad'
+              : 'Important to return to quickly'}
+          </SafeText>
+
+          <SafeText variant="caption" color="muted" style={styles.sectionSubtitle}>
+            {language === 'fil'
+              ? 'Para sa emergency, scam, o stressful na sitwasyon.'
+              : 'For emergencies, scams, or stressful situations.'}
+          </SafeText>
+
+          {priorityGuides.map((item) => (
+            <GuideCard
+              key={`priority-${item.id}`}
+              guide={item}
+              language={language}
+              isSaved
+              onPress={() => openGuide(item.id)}
+              onSave={() => toggleSave(item)}
+              compact
+            />
+          ))}
+        </View>
+      ) : null}
+
+      {savedGuides.length > 0 ? (
+        <View style={styles.allSavedHeader}>
+          <SafeText variant="h3" weight="700">
+            {language === 'fil' ? 'Lahat ng naka-save' : 'All saved guides'}
+          </SafeText>
+        </View>
+      ) : null}
     </View>
   )
+
+  function SummaryPill({
+    label,
+    icon,
+  }: {
+    label: string
+    icon: keyof typeof Ionicons.glyphMap
+  }) {
+    return (
+      <View style={styles.summaryPill}>
+        <Ionicons name={icon} size={14} color={colors.primary} />
+        <SafeText variant="caption" weight="700">
+          {label}
+        </SafeText>
+      </View>
+    )
+  }
 
   return (
     <FlatList
@@ -152,8 +208,8 @@ export default function SavedScreen() {
                   ? 'Bumalik online at buksan ulit ang guides para ma-save ang latest offline copy.'
                   : 'Go online and reopen your guides to save the latest offline copy.'
                 : language === 'fil'
-                  ? 'I-save ang guides tungkol sa benefits, IDs, karapatan, o scam warnings para mabilis balikan.'
-                  : 'Save guides about benefits, IDs, rights, or scam warnings so they are easy to revisit.'
+                  ? 'I-save ang guides tungkol sa ayuda, IDs, karapatan, health, o scam warnings para mabilis balikan.'
+                  : 'Save guides about aid, IDs, rights, health, or scam warnings so they are easy to revisit.'
             }
           />
 
@@ -197,21 +253,43 @@ const createStyles = (colors: ThemeColors) =>
       paddingBottom: 140,
     },
 
-    valueStrip: {
+    hero: {
+      paddingHorizontal: spacing.md,
+      paddingTop: spacing.xl,
+      paddingBottom: spacing.md,
+    },
+
+    heroIcon: {
+      width: 46,
+      height: 46,
+      borderRadius: 16,
+      backgroundColor: colors.primaryLight,
+      alignItems: 'center',
+      justifyContent: 'center',
+      marginBottom: spacing.md,
+    },
+
+    heroSubtitle: {
+      marginTop: spacing.sm,
+      lineHeight: 22,
+      maxWidth: 440,
+    },
+
+    summaryRow: {
       flexDirection: 'row',
       flexWrap: 'wrap',
       gap: spacing.sm,
-      paddingHorizontal: spacing.md,
-      paddingTop: spacing.md,
+      marginTop: spacing.md,
     },
 
-    valuePill: {
+    summaryPill: {
       minHeight: 34,
       borderRadius: 999,
-      paddingHorizontal: spacing.md,
-      backgroundColor: colors.surface,
       borderWidth: 1,
       borderColor: colors.border,
+      backgroundColor: colors.surfaceSecondary,
+      paddingHorizontal: spacing.md,
+      paddingVertical: spacing.sm,
       flexDirection: 'row',
       alignItems: 'center',
       gap: spacing.xs,
@@ -234,13 +312,29 @@ const createStyles = (colors: ThemeColors) =>
 
     refreshNotice: {
       marginHorizontal: spacing.md,
-      marginTop: spacing.lg,
+      marginTop: spacing.md,
       backgroundColor: colors.warningLight,
       borderWidth: 1,
       borderColor: `${colors.warning}30`,
       flexDirection: 'row',
       alignItems: 'center',
       gap: spacing.sm,
+    },
+
+    prioritySection: {
+      paddingHorizontal: spacing.md,
+      paddingTop: spacing.lg,
+    },
+
+    sectionSubtitle: {
+      marginTop: spacing.xs,
+      marginBottom: spacing.md,
+    },
+
+    allSavedHeader: {
+      paddingHorizontal: spacing.md,
+      paddingTop: spacing.lg,
+      paddingBottom: spacing.sm,
     },
 
     emptyCard: {

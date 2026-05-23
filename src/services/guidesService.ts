@@ -219,34 +219,133 @@ function uniqueGuides(guides: Guide[]) {
 
 function scoreGuide(guide: Guide, query: string) {
   const text = searchableText(guide)
-  const title = `${guide.title_en} ${guide.title_fil}`.toLowerCase()
-  const keywords = `${guide.keywords_en || ''} ${guide.keywords_fil || ''}`.toLowerCase()
+
+  const title =
+    `${guide.title_en} ${guide.title_fil}`.toLowerCase()
+
+  const keywords =
+    `${guide.keywords_en || ''} ${guide.keywords_fil || ''}`.toLowerCase()
+
+  const categorySlug =
+    guide.category?.slug?.toLowerCase() || ''
+
   const cleanQuery = query.toLowerCase()
+
   const directTerms = toSearchTerms(cleanQuery)
+
   const expandedTerms = expandSearchTerms(cleanQuery)
+
+  const readTime = guide.read_time_min || 999
+
+  const officialSourceCount =
+    guide.official_sources?.length || 0
 
   let score = 0
 
-  if (title.includes(cleanQuery)) score += 20
-  if (text.includes(cleanQuery)) score += 12
+  // EXACT QUERY MATCHES
+  if (title.includes(cleanQuery)) score += 100
 
+  if (keywords.includes(cleanQuery)) score += 60
+
+  if (text.includes(cleanQuery)) score += 40
+
+  // DIRECT TERM MATCHES
   directTerms.forEach((term) => {
-    if (title.includes(term)) score += 8
-    if (keywords.includes(term)) score += 5
-    if (text.includes(term)) score += 3
+    if (title.includes(term)) score += 20
+
+    if (keywords.includes(term)) score += 12
+
+    if (text.includes(term)) score += 6
   })
 
+  // EXPANDED SEARCH TERMS
   expandedTerms.forEach((term) => {
-    if (keywords.includes(term)) score += 2
-    if (text.includes(term)) score += 1
+    if (keywords.includes(term)) score += 4
+
+    if (text.includes(term)) score += 2
   })
 
-  if (guide.is_urgent) score += 2
-  if (guide.is_featured) score += 1
+  // TRUST BOOSTS
+  if (officialSourceCount > 0) {
+    score += 35
+  }
+
+  // URGENT GUIDE BOOST
+  if (guide.is_urgent) {
+    score += 30
+  }
+
+  // FEATURED GUIDE BOOST
+  if (guide.is_featured) {
+    score += 15
+  }
+
+  // SHORT PRACTICAL GUIDE BOOST
+  if (readTime <= 6) {
+    score += 10
+  }
+
+  // CATEGORY RELEVANCE
+  if (categorySlug.includes(cleanQuery)) {
+    score += 20
+  }
+
+  // SCAM / PHISHING PRIORITY
+  if (
+    cleanQuery.includes('scam') ||
+    cleanQuery.includes('phishing')
+  ) {
+    if (
+      categorySlug.includes('scam') ||
+      title.includes('phishing') ||
+      title.includes('scam')
+    ) {
+      score += 80
+    }
+  }
+
+  // AYUDA / DSWD PRIORITY
+  if (
+    cleanQuery.includes('ayuda') ||
+    cleanQuery.includes('dswd')
+  ) {
+    if (
+      title.includes('dswd') ||
+      categorySlug.includes('government')
+    ) {
+      score += 70
+    }
+  }
+
+  // LOST WALLET / LOST IDS PRIORITY
+  if (
+    cleanQuery.includes('wallet') ||
+    cleanQuery.includes('lost')
+  ) {
+    if (
+      title.includes('wallet') ||
+      guide.is_urgent
+    ) {
+      score += 70
+    }
+  }
+
+  // NBI PRIORITY
+  if (cleanQuery.includes('nbi')) {
+    if (title.includes('nbi')) {
+      score += 90
+    }
+  }
+
+  // PHILHEALTH PRIORITY
+  if (cleanQuery.includes('philhealth')) {
+    if (title.includes('philhealth')) {
+      score += 90
+    }
+  }
 
   return score
 }
-
 function sortBySearchRelevance(guides: Guide[], query: string) {
   return [...guides].sort((first, second) => {
     const scoreDifference =

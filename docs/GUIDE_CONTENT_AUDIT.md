@@ -1,0 +1,216 @@
+# DemoAlam Guide Content Audit
+
+Date: 2026-05-23
+
+## Executive Decision
+
+DemoAlam should prioritize guide quality standardization before adding more large features.
+
+The product is strongest when a guide feels like a calm, practical decision helper: clear priority order, checklist, common mistakes, warnings, sample questions, and official sources. The current app already supports this structure, but not every guide has reached that quality bar yet.
+
+## Audit Standard
+
+Each important guide should be scored against these requirements:
+
+- Specific user problem: one clear real-life situation, not a broad article topic.
+- First action: tells the user what to do first when stressed or confused.
+- Priority order: helps users avoid wasting time on low-impact steps.
+- Checklist: concrete items users can prepare or verify.
+- Mistakes: common errors, fixer traps, scams, or wasted trips.
+- Warning: visible risk guidance for money, documents, privacy, or identity.
+- Sample question/script: gives users exact words to ask an office, bank, school, or support channel.
+- Official sources: at least one credible source when government, legal, money, health, or safety advice is involved.
+- Filipino readability: everyday language, but not sloppy Taglish.
+- Anti-fixer stance: users should be guided toward official channels and verification.
+
+## Current Strongest Guides
+
+These guides are closest to the DemoAlam product standard:
+
+1. `student-financial-aid-philippines-checklist`
+   - Status: Strong
+   - Why: Specific, high-impact, source-backed, has program sorting, eligibility checks, scam warnings, and sample message.
+   - Keep improving: add more region/LGU caveats later, but avoid making it too long.
+
+2. `dswd-aics-assistance-checklist`
+   - Status: Strong
+   - Why: Very aligned with the mission: hidden public assistance, anti-fixer, practical requirements, and official sources.
+   - Keep improving: add a better priority matrix for medical, burial, transport, education, and food assistance.
+
+3. `medical-emergency-documents`
+   - Status: Strong
+   - Why: Clear practical use case, good emotional fit, strong checklist behavior.
+   - Keep improving: add a "what to ask billing/social service" checklist.
+
+4. `phone-stolen-first-hour`
+   - Status: Strong
+   - Why: Urgent, highly actionable, protects money, accounts, SIM, and identity.
+   - Keep improving: add SIM replacement documents and account recovery sample questions.
+
+5. `phishing-link-checklist`
+   - Status: Strong
+   - Why: Fits digital safety and scam prevention well. Good red-flag structure.
+   - Keep improving: add screenshots/examples later only if we can do it safely and clearly.
+
+6. `fake-job-offer-red-flags`
+   - Status: Strong
+   - Why: High exploitation risk, very practical, strong anti-scam fit.
+   - Keep improving: add OFW/local job distinction if guide gets too broad.
+
+7. `nbi-clearance-first-timers`
+   - Status: Strong
+   - Why: Specific, official-source driven, strong first-time jobseeker angle.
+   - Keep improving: keep updated because fees/processes may change.
+
+8. `loan-red-flags-before-borrowing`
+   - Status: Strong
+   - Why: Protects users from financial harm and data abuse.
+   - Keep improving: add clearer "do not install if..." checklist.
+
+## Acceptable But Needs Upgrade
+
+These guides are useful, but should be upgraded to the richer guide standard.
+
+1. `everyday-rights-philippines-checklist`
+   - Issue: High-value topic, but naturally broad.
+   - Decision: Keep, but split later if it becomes too dense.
+   - Upgrade: add separate checklist blocks for consumer, labor, data privacy, and police/barangay interaction.
+
+2. `philhealth-pagibig-tin-basics`
+   - Issue: Useful, but may overlap with first-job requirements and SSS guide.
+   - Decision: Keep as a first-job government numbers hub.
+   - Upgrade: add "what HR handles vs what you handle yourself."
+
+3. `first-job-requirements`
+   - Issue: Good beginner topic, but currently thinner than newer guides.
+   - Decision: Keep.
+   - Upgrade: add checklist, HR sample question, and common mistakes.
+
+4. `resume-no-experience`
+   - Issue: Useful for students, but less mission-critical than government/money/scam guides.
+   - Decision: Keep as support content.
+   - Upgrade: add sample resume bullets and "do not fake experience" warning.
+
+5. `gcash-scam-red-flags`
+   - Issue: Important, but may overlap with phishing and phone-stolen guides.
+   - Decision: Keep only if upgraded into a GCash-specific scam guide.
+   - Upgrade: add fake support, send-money pressure, QR/payment reversal scams, OTP/MPIN warnings.
+
+6. `lost-wallet-first-steps`
+   - Issue: Live guide appears upgraded, but make sure the final SQL is captured in a repo migration.
+   - Decision: Keep.
+   - Upgrade: repository must contain the same rich content that exists in Supabase.
+
+## Weakest Or Lowest-Leverage Guides
+
+These are candidates to upgrade, merge, or replace.
+
+1. `payday-budget-simple-split`
+   - Issue: Useful but generic. Many apps/articles already cover this.
+   - Decision: Replace or upgrade later.
+   - Better direction: "What to do when salary is short before payday" or "Debt payment priority checklist."
+
+2. `first-time-utility-bills`
+   - Issue: Practical but thin.
+   - Decision: Upgrade only if it becomes a broader "avoid disconnection/fees" guide.
+   - Better direction: "Meralco/water/internet bill checklist before due date."
+
+3. `moving-out-budget`
+   - Issue: Similar to renting guide; could become duplicate adulting content.
+   - Decision: Merge with renting or make it much more specific.
+
+4. `renting-first-time-checklist`
+   - Issue: Useful but currently thin.
+   - Decision: Upgrade if kept.
+   - Better direction: "Boarding house/rent red flags before paying deposit."
+
+5. `job-interview-basic-answers`
+   - Issue: Useful, but less unique to DemoAlam.
+   - Decision: Low priority.
+   - Better direction: keep only if it includes Filipino first-job scripts and exploitation warnings.
+
+6. `bank-account-first-time`
+   - Issue: Useful but likely too generic unless it explains fees, maintaining balance, IDs, and scams.
+   - Decision: Upgrade or replace.
+   - Better direction: "Bank account vs e-wallet: what first-time workers should know."
+
+7. `sss-number-first-job`
+   - Issue: May duplicate `philhealth-pagibig-tin-basics`.
+   - Decision: Merge into the first-job government numbers guide unless it becomes a full SSS-specific guide.
+
+8. `fast-valid-id`
+   - Issue: Potential overlap with NBI and other ID guides.
+   - Decision: Verify if still published. If published, upgrade or replace.
+   - Better direction: "Best first valid ID path when you have no ID yet."
+
+## Technical Debt Warnings
+
+1. Empty migration file
+   - File: `supabase/migrations/20260522040000_add_official_sources_to_guides.sql`
+   - Risk: Confusing migration history.
+   - Decision: Leave for now if already tracked locally, but do not rely on it.
+
+2. Live database drift risk
+   - Some guide upgrades may have been pasted directly into Supabase SQL Editor.
+   - Risk: Supabase production can become ahead of the repo.
+   - Decision: Every SQL applied manually should also exist as a migration file.
+
+3. Uneven guide completeness
+   - New guides have 6-11 sections. Older guides have 1-2 sections.
+   - Risk: users may feel quality drops between screens.
+   - Decision: upgrade the weakest published guides before adding new feature systems.
+
+4. Filipino copy consistency
+   - Recent UI copy cleanup improved labels.
+   - Remaining risk: guide body copy still uses mixed terms.
+   - Decision: allow common terms like OTP, SIM, e-wallet, and online loan; reduce awkward verbs like "I-check" when possible.
+
+## Recommended Next Work
+
+Priority 1: Capture live guide SQL in repo
+- Priority: Critical
+- MVP necessity: Required
+- Complexity: 2/10
+- Reason: prevents Supabase/live content from drifting away from GitHub.
+
+Priority 2: Upgrade `gcash-scam-red-flags`
+- Priority: High
+- MVP necessity: Required
+- Complexity: 4/10
+- Reason: high user risk, high PH relevance, strong viral/search potential.
+
+Priority 3: Add DSWD financial aid guide cluster
+- Priority: Critical
+- MVP necessity: Required
+- Complexity: 5/10
+- Reason: active government aid programs are high-impact, frequently misunderstood, and vulnerable to fake posts/fixers.
+- Reference plan: `docs/DSWD_FINANCIAL_AID_ROADMAP.md`
+
+Priority 4: Upgrade or replace `bank-account-first-time`
+- Priority: High
+- MVP necessity: Required
+- Complexity: 4/10
+- Reason: first-time workers need money safety guidance, not just account opening.
+
+Priority 5: Merge/upgrade adulting rent guides
+- Priority: Medium
+- MVP necessity: Optional
+- Complexity: 5/10
+- Reason: useful, but lower urgency than scams, aid, IDs, emergency, and money safety.
+
+Priority 6: Create guide content standard
+- Priority: High
+- MVP necessity: Required
+- Complexity: 3/10
+- Reason: prevents future content from becoming broad, generic, or inconsistent.
+
+## Product Direction Decision
+
+Approved direction:
+DemoAlam should focus on hidden-in-plain-sight public benefits, scam prevention, document readiness, first-job systems, health/emergency preparation, and rights awareness.
+
+Rejected direction:
+Do not become a generic life hacks or blog article app.
+
+Postponed:
+AI assistant, push notifications, community reports, monetization, and personalization should wait until the guide quality floor is consistently high.

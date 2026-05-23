@@ -1,5 +1,6 @@
+import SampleBlock from '../../src/components/guide/SampleBlock'
+import ChecklistBlock from '../../src/components/guide/ChecklistBlock'
 import {
-  ActivityIndicator,
   Alert,
   Linking,
   RefreshControl,
@@ -125,17 +126,17 @@ export default function GuideDetailsScreen() {
     })
   }
 
-useEffect(() => {
-  if (activeGuide) {
-    addToHistory(activeGuide)
-  }
-}, [activeGuide?.id])
+  useEffect(() => {
+    if (activeGuide) {
+      addToHistory(activeGuide)
+    }
+  }, [activeGuide?.id])
 
-useEffect(() => {
-  if (guide && isSaved) {
-    saveGuide(guide)
-  }
-}, [guide?.id, isSaved])
+  useEffect(() => {
+    if (guide && isSaved) {
+      saveGuide(guide)
+    }
+  }, [guide?.id, isSaved])
 
   useEffect(() => {
     if (!guide?.id) {
@@ -357,7 +358,7 @@ useEffect(() => {
             </SafeText>
             <SafeText variant="caption" color="muted" style={styles.trustSubtitle}>
               {language === 'fil'
-                ? 'Tingnan ang oras, gastos, at source bago kumilos.'
+                ? 'Tingnan ang oras, gastos, at sanggunian bago kumilos.'
                 : 'A quick check to avoid wasted time, money, or wrong steps.'}
             </SafeText>
           </View>
@@ -371,7 +372,7 @@ useEffect(() => {
           />
           <TrustItem
             icon="shield-checkmark-outline"
-            label={language === 'fil' ? 'Source' : 'Sources'}
+            label={language === 'fil' ? 'Sanggunian' : 'Sources'}
             value={
               sourceCount > 0
                 ? language === 'fil'
@@ -407,15 +408,15 @@ useEffect(() => {
           <View style={styles.completenessGrid}>
             <CompletenessItem
               done={sourceCount > 0}
-              label={language === 'fil' ? 'Opisyal na source' : 'Official sources'}
+              label={language === 'fil' ? 'Opisyal na sanggunian' : 'Official sources'}
             />
             <CompletenessItem
               done={hasChecklist}
-              label={language === 'fil' ? 'Checklist' : 'Checklist'}
+              label={language === 'fil' ? 'Listahan' : 'Checklist'}
             />
             <CompletenessItem
               done={hasSample}
-              label={language === 'fil' ? 'Sample' : 'Sample'}
+              label={language === 'fil' ? 'Halimbawa' : 'Sample'}
             />
             <CompletenessItem
               done={stepCount > 0}
@@ -463,12 +464,12 @@ useEffect(() => {
 
             <View style={styles.sourceCopy}>
               <SafeText variant="label" weight="700" style={styles.compactCardTitle}>
-                {language === 'fil' ? 'Official na sources' : 'Official sources'}
+                {language === 'fil' ? 'Opisyal na sanggunian' : 'Official sources'}
               </SafeText>
 
               <SafeText variant="caption" color="muted" style={styles.sourceSubtitle}>
                 {language === 'fil'
-                  ? 'Helpful guide ito, pero official links pa rin ang final reference.'
+                  ? 'Gabay ito para makapaghanda, pero ang opisyal na sanggunian pa rin ang panghuling batayan.'
                   : 'This guide helps you prepare; official links remain the final reference.'}
               </SafeText>
             </View>
@@ -691,7 +692,7 @@ useEffect(() => {
               </SafeText>
               {isWarning ? (
                 <SafeText variant="label" color="danger" weight="700">
-                  {language === 'fil' ? 'I-check muna' : 'Check first'}
+                  {language === 'fil' ? 'Suriin muna' : 'Check first'}
                 </SafeText>
               ) : null}
             </View>
@@ -706,42 +707,9 @@ useEffect(() => {
           {body}
         </SafeText>
 
-        {checklistItems.length > 0 ? (
-          <View style={styles.checklistBox}>
-            <View style={styles.checklistHeader}>
-              <SafeText variant="label" weight="700" style={styles.checklistTitle}>
-                {language === 'fil' ? 'Checklist' : 'Checklist'}
-              </SafeText>
+        <ChecklistBlock items={checklistItems} language={language} />
 
-              <SafeText variant="caption" color="muted">
-                {checklistItems.length}
-              </SafeText>
-            </View>
-
-            {checklistItems.map((item) => (
-              <View key={item} style={styles.checklistRow}>
-                <Ionicons name="checkmark-circle" size={16} color={colors.success} />
-                <SafeText variant="bodyMd" color="muted" style={styles.checklistText}>
-                  {item}
-                </SafeText>
-              </View>
-            ))}
-          </View>
-        ) : null}
-
-        {sample ? (
-          <View style={styles.sampleBox}>
-            <View style={styles.sampleHeader}>
-              <Ionicons name="chatbox-ellipses-outline" size={16} color={colors.primary} />
-              <SafeText variant="label" color="primary" weight="700">
-                {language === 'fil' ? 'Sample na pwede itanong' : 'Sample you can ask'}
-              </SafeText>
-            </View>
-            <SafeText variant="bodyMd" color="muted" style={styles.sampleText}>
-              {sample}
-            </SafeText>
-          </View>
-        ) : null}
+        <SampleBlock sample={sample} language={language} />
 
         {isStep ? (
           <View style={styles.actionHint}>
@@ -756,7 +724,7 @@ useEffect(() => {
           <View style={styles.actionHint}>
             <Ionicons name="alert-circle" size={17} color={colors.warning} />
             <SafeText variant="caption" color="muted" weight="700">
-              {language === 'fil' ? 'Common na sayang oras' : 'Common time-waster'}
+              {language === 'fil' ? 'Madalas makasayang oras' : 'Common time-waster'}
             </SafeText>
           </View>
         ) : null}
@@ -765,7 +733,7 @@ useEffect(() => {
           <View style={styles.actionHint}>
             <Ionicons name="sparkles" size={17} color={colors.success} />
             <SafeText variant="caption" color="muted" weight="700">
-              {language === 'fil' ? 'Tip para mas madali' : 'Tip to make this easier'}
+              {language === 'fil' ? 'Para mas madali' : 'Tip to make this easier'}
             </SafeText>
           </View>
         ) : null}
@@ -774,7 +742,7 @@ useEffect(() => {
   }
 
   function getSectionLabel(type: GuideSectionType) {
-    if (type === 'step') return language === 'fil' ? 'Step' : 'Step'
+    if (type === 'step') return language === 'fil' ? 'Hakbang' : 'Step'
     if (type === 'warning') return language === 'fil' ? 'Babala' : 'Warning'
     if (type === 'mistake') return language === 'fil' ? 'Iwasan' : 'Avoid'
     if (type === 'tip') return language === 'fil' ? 'Tip' : 'Tip'
@@ -902,18 +870,6 @@ const createStyles = (colors: ThemeColors, heroColor: string) =>
 
     content: {
       paddingBottom: 140,
-    },
-
-    centered: {
-      flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
-      padding: spacing.xl,
-      backgroundColor: colors.background,
-    },
-
-    loadingText: {
-      marginTop: spacing.md,
     },
 
     errorContent: {
@@ -1201,17 +1157,6 @@ const createStyles = (colors: ThemeColors, heroColor: string) =>
       gap: spacing.sm,
     },
 
-    sourceRow: {
-      minHeight: 56,
-      borderRadius: 14,
-      backgroundColor: colors.surfaceSecondary,
-      paddingHorizontal: spacing.md,
-      paddingVertical: spacing.sm,
-      flexDirection: 'row',
-      alignItems: 'center',
-      gap: spacing.md,
-    },
-
     officialSourceRow: {
       minHeight: 50,
       borderRadius: 12,
@@ -1287,58 +1232,6 @@ const createStyles = (colors: ThemeColors, heroColor: string) =>
 
     sectionBody: {
       lineHeight: 24,
-    },
-
-    checklistBox: {
-      marginTop: spacing.md,
-      borderRadius: 12,
-      borderWidth: 1,
-      borderColor: colors.border,
-      backgroundColor: colors.surfaceSecondary,
-      padding: spacing.md,
-      gap: spacing.sm,
-    },
-
-    checklistHeader: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'space-between',
-      gap: spacing.sm,
-    },
-
-    checklistTitle: {
-      textTransform: 'uppercase',
-    },
-
-    checklistRow: {
-      flexDirection: 'row',
-      alignItems: 'flex-start',
-      gap: spacing.sm,
-    },
-
-    checklistText: {
-      flex: 1,
-      lineHeight: 21,
-    },
-
-    sampleBox: {
-      marginTop: spacing.md,
-      borderRadius: 12,
-      borderWidth: 1,
-      borderColor: `${colors.primary}25`,
-      backgroundColor: colors.primaryLight,
-      padding: spacing.md,
-      gap: spacing.sm,
-    },
-
-    sampleHeader: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      gap: spacing.sm,
-    },
-
-    sampleText: {
-      lineHeight: 22,
     },
 
     actionHint: {

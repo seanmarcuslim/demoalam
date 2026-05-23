@@ -67,6 +67,29 @@ export default function SavedScreen() {
         ? `${savedIds.length} gabay`
         : `${savedIds.length} guides`
 
+  const offlineCountLabel =
+    offlineCount === 1
+      ? language === 'fil'
+        ? '1 offline'
+        : '1 offline'
+      : language === 'fil'
+        ? `${offlineCount} offline`
+        : `${offlineCount} offline`
+
+  const sourceCountLabel =
+    sourceCount === 1
+      ? '1 source'
+      : `${sourceCount} sources`
+
+  const urgentCountLabel =
+    urgentCount === 1
+      ? language === 'fil'
+        ? '1 urgent'
+        : '1 urgent'
+      : language === 'fil'
+        ? `${urgentCount} urgent`
+        : `${urgentCount} urgent`
+
   useEffect(() => {
     if (guides.length > 0 && savedIds.length > 0) {
       hydrateSavedGuides(guides)
@@ -99,9 +122,9 @@ export default function SavedScreen() {
 
         <View style={styles.summaryRow}>
           <SummaryPill label={savedCountLabel} icon="bookmark" />
-          <SummaryPill label={`${offlineCount} offline`} icon="cloud-offline" />
-          <SummaryPill label={`${sourceCount} sources`} icon="shield-checkmark" />
-          <SummaryPill label={`${urgentCount} urgent`} icon="warning" />
+          <SummaryPill label={offlineCountLabel} icon="cloud-offline" />
+          <SummaryPill label={sourceCountLabel} icon="shield-checkmark" />
+          <SummaryPill label={urgentCountLabel} icon="warning" />
         </View>
       </View>
 

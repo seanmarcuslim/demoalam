@@ -18,8 +18,166 @@ function toSearchTerms(query: string) {
     .filter((term) => term.length > 0)
 }
 
+const SEARCH_ALIASES: Record<string, string[]> = {
+  ayuda: [
+    'dswd',
+    'aics',
+    'assistance',
+    'cash assistance',
+    'financial aid',
+    'benefits',
+    'social pension',
+    '4ps',
+    'walang gutom',
+    'emergency cash transfer',
+    'livelihood',
+  ],
+  aid: [
+    'ayuda',
+    'assistance',
+    'dswd',
+    'aics',
+    'benefits',
+    'cash assistance',
+    'financial aid',
+  ],
+  assistance: [
+    'ayuda',
+    'dswd',
+    'aics',
+    'cash assistance',
+    'financial aid',
+    'social pension',
+  ],
+  benefits: [
+    'ayuda',
+    'assistance',
+    'dswd',
+    '4ps',
+    'social pension',
+    'philhealth',
+    'pagibig',
+    'sss',
+  ],
+  dswd: [
+    'ayuda',
+    'aics',
+    '4ps',
+    'walang gutom',
+    'social pension',
+    'emergency cash transfer',
+    'sustainable livelihood',
+    'student cash for work',
+  ],
+  aics: [
+    'dswd',
+    'ayuda',
+    'cash assistance',
+    'medical assistance',
+    'educational assistance',
+    'burial assistance',
+    'transportation assistance',
+  ],
+  pension: [
+    'social pension',
+    'senior citizen',
+    'elderly',
+    'older persons',
+    'dswd',
+  ],
+  senior: [
+    'social pension',
+    'senior citizen',
+    'elderly',
+    'older persons',
+    'dswd',
+  ],
+  gutom: [
+    'walang gutom',
+    'food credits',
+    'food stamp',
+    'dswd',
+    'beneficiary',
+  ],
+  food: [
+    'walang gutom',
+    'food credits',
+    'food stamp',
+    'dswd',
+  ],
+  livelihood: [
+    'sustainable livelihood',
+    'slp',
+    'negosyo',
+    'capital',
+    'employment',
+    'dswd',
+  ],
+  negosyo: [
+    'livelihood',
+    'sustainable livelihood',
+    'slp',
+    'capital',
+    'dswd',
+  ],
+  student: [
+    'student aid',
+    'cash-for-work',
+    'cash for work',
+    'tara basa',
+    'educational assistance',
+    'scholarship',
+    'dswd',
+  ],
+  estudyante: [
+    'student',
+    'student aid',
+    'cash-for-work',
+    'educational assistance',
+    'scholarship',
+    'dswd',
+  ],
+  calamity: [
+    'disaster',
+    'emergency cash transfer',
+    'ect',
+    'evacuation',
+    'relief',
+    'dswd',
+  ],
+  disaster: [
+    'calamity',
+    'emergency cash transfer',
+    'ect',
+    'evacuation',
+    'relief',
+    'dswd',
+  ],
+  '4ps': [
+    'pantawid',
+    'pantawid pamilya',
+    'conditional cash transfer',
+    'household validation',
+    'dswd',
+  ],
+}
+
+function expandSearchTerms(query: string) {
+  const cleanQuery = query.toLowerCase()
+  const baseTerms = [cleanQuery, ...toSearchTerms(cleanQuery)]
+  const expandedTerms = baseTerms.flatMap((term) => [
+    term,
+    ...(SEARCH_ALIASES[term] || []),
+  ])
+
+  return expandedTerms.filter(
+    (term, index, items) => term.length > 1 && items.indexOf(term) === index
+  )
+}
+
 function searchableText(guide: Guide) {
   return [
+    guide.slug,
     guide.title_en,
     guide.title_fil,
     guide.tagline_en,
@@ -40,10 +198,12 @@ function matchesSearch(guide: Guide, query: string) {
   const text = searchableText(guide)
   const normalizedQuery = query.toLowerCase()
   const terms = toSearchTerms(normalizedQuery)
+  const expandedTerms = expandSearchTerms(normalizedQuery)
 
   return (
     text.includes(normalizedQuery) ||
-    terms.every((term) => text.includes(term))
+    terms.every((term) => text.includes(term)) ||
+    expandedTerms.some((term) => text.includes(term))
   )
 }
 
@@ -55,6 +215,52 @@ function uniqueGuides(guides: Guide[]) {
   })
 
   return Array.from(byId.values())
+}
+
+function scoreGuide(guide: Guide, query: string) {
+  const text = searchableText(guide)
+  const title = `${guide.title_en} ${guide.title_fil}`.toLowerCase()
+  const keywords = `${guide.keywords_en || ''} ${guide.keywords_fil || ''}`.toLowerCase()
+  const cleanQuery = query.toLowerCase()
+  const directTerms = toSearchTerms(cleanQuery)
+  const expandedTerms = expandSearchTerms(cleanQuery)
+
+  let score = 0
+
+  if (title.includes(cleanQuery)) score += 20
+  if (text.includes(cleanQuery)) score += 12
+
+  directTerms.forEach((term) => {
+    if (title.includes(term)) score += 8
+    if (keywords.includes(term)) score += 5
+    if (text.includes(term)) score += 3
+  })
+
+  expandedTerms.forEach((term) => {
+    if (keywords.includes(term)) score += 2
+    if (text.includes(term)) score += 1
+  })
+
+  if (guide.is_urgent) score += 2
+  if (guide.is_featured) score += 1
+
+  return score
+}
+
+function sortBySearchRelevance(guides: Guide[], query: string) {
+  return [...guides].sort((first, second) => {
+    const scoreDifference =
+      scoreGuide(second, query) - scoreGuide(first, query)
+
+    if (scoreDifference !== 0) {
+      return scoreDifference
+    }
+
+    return (
+      new Date(second.published_at).getTime() -
+      new Date(first.published_at).getTime()
+    )
+  })
 }
 
 export const guidesService = {
@@ -171,7 +377,7 @@ export const guidesService = {
       return []
     }
 
-    const searchTerms = toSearchTerms(cleanQuery)
+    const searchTerms = expandSearchTerms(cleanQuery)
 
     const { data, error } =
       await supabase
@@ -227,10 +433,10 @@ export const guidesService = {
       matchesSearch(guide, cleanQuery)
     )
 
-    return uniqueGuides([
+    return sortBySearchRelevance(uniqueGuides([
       ...(data || []),
       ...(fallbackData || []),
       ...localMatches,
-    ]).slice(0, 20)
+    ]), cleanQuery).slice(0, 20)
   },
 }

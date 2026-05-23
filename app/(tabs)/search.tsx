@@ -28,14 +28,15 @@ import EmptyState from '../../src/components/ui/EmptyState'
 import { getCategoryAccent } from '../../src/lib/categoryVisuals'
 
 const SUGGESTIONS = [
+  'ayuda',
   'DSWD AICS',
+  '4Ps',
+  'Walang Gutom',
   'student aid',
-  'PhilHealth',
+  'livelihood',
+  'social pension',
   'batas',
   'consumer rights',
-  'data privacy act',
-  'valid ID',
-  'first job',
   'gcash scam',
 ]
 

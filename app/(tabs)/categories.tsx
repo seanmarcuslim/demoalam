@@ -23,8 +23,8 @@ import { getCategoryAccent } from '../../src/lib/categoryVisuals'
 
 const CATEGORY_COPY: Record<string, CategoryCopy> = {
   ids: {
-    en: 'Valid IDs, documents, and first-time requirements',
-    fil: 'Valid IDs, dokumento, at first-time requirements',
+    en: 'Valid IDs, document recovery, and first-time requirements',
+    fil: 'Valid IDs, document recovery, at first-time requirements',
     accent: '#2563A9',
   },
   work: {
@@ -33,28 +33,28 @@ const CATEGORY_COPY: Record<string, CategoryCopy> = {
     accent: '#267A4D',
   },
   money: {
-    en: 'Banking, e-wallets, fees, loans, and everyday money moves',
-    fil: 'Bank, e-wallet, fees, utang, at pang-araw-araw na pera',
+    en: 'Banking, e-wallets, loans, fees, benefits, and cash aid',
+    fil: 'Bank, e-wallets, utang, fees, benefits, at cash aid',
     accent: '#D9902F',
   },
   gov: {
-    en: 'Aid, benefits, forms, offices, and appointments',
-    fil: 'Ayuda, benefits, forms, opisina, at appointments',
+    en: 'DSWD aid, benefits, forms, offices, and appointments',
+    fil: 'DSWD ayuda, benefits, forms, opisina, at appointments',
     accent: '#6D5BA8',
   },
   healthcare: {
-    en: 'Medical access, benefits, hospital documents, and patient support',
-    fil: 'Medical access, benefits, hospital documents, at patient support',
+    en: 'Medical access, PhilHealth, hospital documents, and patient support',
+    fil: 'Medical access, PhilHealth, hospital documents, at patient support',
     accent: '#2F8F83',
   },
   education: {
-    en: 'Scholarships, school documents, student aid, and learning pathways',
-    fil: 'Scholarships, school documents, student aid, at learning pathways',
+    en: 'Scholarships, school documents, DSWD student aid, and pathways',
+    fil: 'Scholarships, school documents, DSWD student aid, at pathways',
     accent: '#4F73C7',
   },
   scams: {
-    en: 'Red flags before sending money or personal information',
-    fil: 'Warning signs bago magpadala ng pera o personal info',
+    en: 'Red flags before sending money, OTPs, or personal information',
+    fil: 'Warning signs bago magpadala ng pera, OTP, o personal info',
     accent: '#C83E3A',
   },
   'digital-safety': {
@@ -71,6 +71,51 @@ const CATEGORY_COPY: Record<string, CategoryCopy> = {
     en: 'Practical life tasks no one explained clearly',
     fil: 'Practical life tasks na bihirang ipaliwanag nang malinaw',
     accent: '#2F8277',
+  },
+}
+
+const CATEGORY_SIGNALS: Record<
+  string,
+  {
+    en: string
+    fil: string
+    tone: 'priority' | 'urgent'
+  }
+> = {
+  gov: {
+    en: 'High impact',
+    fil: 'Mahalaga',
+    tone: 'priority',
+  },
+  money: {
+    en: 'High impact',
+    fil: 'Mahalaga',
+    tone: 'priority',
+  },
+  healthcare: {
+    en: 'High impact',
+    fil: 'Mahalaga',
+    tone: 'priority',
+  },
+  education: {
+    en: 'High impact',
+    fil: 'Mahalaga',
+    tone: 'priority',
+  },
+  'digital-safety': {
+    en: 'Protection',
+    fil: 'Proteksyon',
+    tone: 'priority',
+  },
+  scams: {
+    en: 'Warning',
+    fil: 'Babala',
+    tone: 'urgent',
+  },
+  emergency: {
+    en: 'Urgent',
+    fil: 'Urgent',
+    tone: 'urgent',
   },
 }
 
@@ -91,6 +136,7 @@ export default function CategoriesScreen() {
   const t = translations[language]
   const styles = createStyles(colors)
   const categoryTotal = categories.length || Object.keys(CATEGORY_COPY).length
+  const priorityTotal = categories.filter((cat) => CATEGORY_SIGNALS[cat.slug]).length
 
   const openCategory = (id: string, name: string) => {
     router.push({
@@ -124,6 +170,19 @@ export default function CategoriesScreen() {
     if (count === 0) return language === 'fil' ? 'Susunod' : 'Coming soon'
     if (count === 1) return language === 'fil' ? '1 gabay' : '1 guide'
     return language === 'fil' ? `${count} gabay` : `${count} guides`
+  }
+
+  const getCategorySignal = (cat: Category) => {
+    const signal = CATEGORY_SIGNALS[cat.slug]
+
+    if (!signal) {
+      return null
+    }
+
+    return {
+      label: language === 'fil' ? signal.fil : signal.en,
+      tone: signal.tone,
+    }
   }
 
   const renderHeader = () => (
@@ -164,7 +223,9 @@ export default function CategoriesScreen() {
 
           <View style={styles.statPill}>
             <SafeText variant="label" color="surface">
-              {language === 'fil' ? 'Praktikal' : 'Practical'}
+              {language === 'fil'
+                ? `${priorityTotal} mahalaga`
+                : `${priorityTotal} priority`}
             </SafeText>
           </View>
         </View>
@@ -271,6 +332,7 @@ export default function CategoriesScreen() {
         const guideCount = getGuideCount(item.id)
         const hasGuides = guideCount > 0
         const position = String(index + 1).padStart(2, '0')
+        const signal = getCategorySignal(item)
 
         return (
           <AppCard
@@ -338,25 +400,54 @@ export default function CategoriesScreen() {
                 {getCategoryDescription(item)}
               </SafeText>
 
-              <View
-                style={[
-                  styles.countPill,
-                  {
-                    backgroundColor: hasGuides
-                      ? `${accent}16`
-                      : colors.surfaceSecondary,
-                  },
-                ]}
-              >
-                <SafeText
-                  variant="caption"
-                  weight="700"
-                  style={{
-                    color: hasGuides ? accent : colors.textMuted,
-                  }}
+              <View style={styles.categoryMetaRow}>
+                <View
+                  style={[
+                    styles.countPill,
+                    {
+                      backgroundColor: hasGuides
+                        ? `${accent}16`
+                        : colors.surfaceSecondary,
+                    },
+                  ]}
                 >
-                  {getCountLabel(guideCount)}
-                </SafeText>
+                  <SafeText
+                    variant="caption"
+                    weight="700"
+                    style={{
+                      color: hasGuides ? accent : colors.textMuted,
+                    }}
+                  >
+                    {getCountLabel(guideCount)}
+                  </SafeText>
+                </View>
+
+                {signal ? (
+                  <View
+                    style={[
+                      styles.signalPill,
+                      {
+                        backgroundColor:
+                          signal.tone === 'urgent'
+                            ? colors.dangerLight
+                            : colors.primaryLight,
+                      },
+                    ]}
+                  >
+                    <SafeText
+                      variant="caption"
+                      weight="700"
+                      style={{
+                        color:
+                          signal.tone === 'urgent'
+                            ? colors.danger
+                            : colors.primary,
+                      }}
+                    >
+                      {signal.label}
+                    </SafeText>
+                  </View>
+                ) : null}
               </View>
             </View>
 
@@ -532,7 +623,21 @@ const createStyles = (colors: ThemeColors) =>
       borderRadius: 999,
       paddingHorizontal: spacing.sm,
       paddingVertical: spacing.xs,
+    },
+
+    categoryMetaRow: {
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+      alignItems: 'center',
+      gap: spacing.xs,
       marginTop: spacing.sm,
+    },
+
+    signalPill: {
+      alignSelf: 'flex-start',
+      borderRadius: 999,
+      paddingHorizontal: spacing.sm,
+      paddingVertical: spacing.xs,
     },
 
     arrowButton: {

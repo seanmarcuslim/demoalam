@@ -445,14 +445,16 @@ export default function GuideDetailsScreen() {
           </View>
         </View>
 
-        <View style={styles.officialNote}>
-          <Ionicons name="information-circle" size={17} color={colors.warning} />
-          <SafeText variant="caption" color="muted" style={styles.officialText}>
-            {language === 'fil'
-              ? 'Kung pera, ID, o government document ang involved, i-verify pa rin sa official office, app, o website.'
-              : 'When money, IDs, or government documents are involved, still verify with the official office, app, or website.'}
-          </SafeText>
-        </View>
+        {officialSources.length === 0 ? (
+          <View style={styles.officialNote}>
+            <Ionicons name="information-circle" size={17} color={colors.warning} />
+            <SafeText variant="caption" color="muted" style={styles.officialText}>
+              {language === 'fil'
+                ? 'Kung pera, ID, o government document ang involved, i-verify sa official office, app, o website.'
+                : 'When money, IDs, or government documents are involved, verify with the official office, app, or website.'}
+            </SafeText>
+          </View>
+        ) : null}
       </View>
 
       {officialSources.length > 0 ? (

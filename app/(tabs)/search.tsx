@@ -40,6 +40,33 @@ const SUGGESTIONS = [
   'gcash scam',
 ]
 
+const SUGGESTION_GROUPS = [
+  {
+    title_en: 'Aid & benefits',
+    title_fil: 'Ayuda at benefits',
+    subtitle_en: 'Start here for DSWD, cash assistance, and public programs.',
+    subtitle_fil: 'Unahin ito para sa DSWD, cash assistance, at public programs.',
+    colorKey: 'primary' as const,
+    items: ['ayuda', 'DSWD AICS', '4Ps', 'Walang Gutom', 'social pension'],
+  },
+  {
+    title_en: 'Rights & protection',
+    title_fil: 'Karapatan at proteksyon',
+    subtitle_en: 'Useful when money, accounts, privacy, or complaints are involved.',
+    subtitle_fil: 'Useful kapag pera, account, privacy, o reklamo ang involved.',
+    colorKey: 'danger' as const,
+    items: ['batas', 'consumer rights', 'data privacy act', 'gcash scam'],
+  },
+  {
+    title_en: 'Student & livelihood',
+    title_fil: 'Student at kabuhayan',
+    subtitle_en: 'Find education aid, cash-for-work, and livelihood support.',
+    subtitle_fil: 'Hanapin ang education aid, cash-for-work, at kabuhayan support.',
+    colorKey: 'accent' as const,
+    items: ['student aid', 'livelihood', 'scholarship', 'cash-for-work'],
+  },
+]
+
 export default function SearchScreen() {
   const {
     searchTerm,
@@ -148,29 +175,58 @@ export default function SearchScreen() {
             </AppCard>
           ) : null}
 
-          <AppCard>
+          <View style={styles.discoveryIntro}>
             <SafeText variant="h3" weight="700">
-              {language === 'fil' ? 'Subukan hanapin' : 'Try searching'}
-            </SafeText>
-
-            <SafeText variant="caption" color="muted" style={styles.cardHint}>
               {language === 'fil'
-                ? 'Mga topic na madalas nakakalito o hindi naipapaliwanag nang malinaw.'
-                : 'Topics that are often confusing, hidden, or poorly explained.'}
+                ? 'Ano ang kailangan mong malinawan?'
+                : 'What do you need clarified?'}
             </SafeText>
 
-            <View style={styles.suggestions}>
-              {SUGGESTIONS.map((item) => (
-                <TouchableOpacity
-                  key={item}
-                  activeOpacity={0.84}
-                  onPress={() => commitSearch(item)}
-                >
-                  <Badge label={item} color={colors.primary} />
-                </TouchableOpacity>
-              ))}
-            </View>
-          </AppCard>
+            <SafeText variant="bodyMd" color="muted" style={styles.cardHint}>
+              {language === 'fil'
+                ? 'Maghanap gamit ang simpleng salita. DemoAlam hahanapin ang mas tamang guide.'
+                : 'Search in plain words. DemoAlam will look for the closest useful guide.'}
+            </SafeText>
+          </View>
+
+          {SUGGESTION_GROUPS.map((group) => {
+            const groupColor = colors[group.colorKey]
+
+            return (
+              <AppCard key={group.title_en} style={styles.suggestionGroup}>
+                <View style={styles.groupHeader}>
+                  <View
+                    style={[
+                      styles.groupAccent,
+                      { backgroundColor: groupColor },
+                    ]}
+                  />
+
+                  <View style={styles.groupCopy}>
+                    <SafeText variant="h3" weight="700">
+                      {language === 'fil' ? group.title_fil : group.title_en}
+                    </SafeText>
+
+                    <SafeText variant="caption" color="muted" style={styles.cardHint}>
+                      {language === 'fil' ? group.subtitle_fil : group.subtitle_en}
+                    </SafeText>
+                  </View>
+                </View>
+
+                <View style={styles.suggestions}>
+                  {group.items.map((item) => (
+                    <TouchableOpacity
+                      key={item}
+                      activeOpacity={0.84}
+                      onPress={() => commitSearch(item)}
+                    >
+                      <Badge label={item} color={groupColor} />
+                    </TouchableOpacity>
+                  ))}
+                </View>
+              </AppCard>
+            )
+          })}
         </View>
       )
     }
@@ -445,6 +501,31 @@ const createStyles = (colors: ThemeColors) =>
 
     recentBlock: {
       marginBottom: spacing.lg,
+    },
+
+    discoveryIntro: {
+      marginBottom: spacing.md,
+    },
+
+    suggestionGroup: {
+      marginBottom: spacing.md,
+    },
+
+    groupHeader: {
+      flexDirection: 'row',
+      alignItems: 'flex-start',
+      gap: spacing.sm,
+    },
+
+    groupAccent: {
+      width: 4,
+      minHeight: 46,
+      borderRadius: 999,
+      marginTop: 2,
+    },
+
+    groupCopy: {
+      flex: 1,
     },
 
     recentHeader: {

@@ -39,7 +39,14 @@ function GuideCard({
     : ''
   const categoryColor = getCategoryAccent(guide.category, colors.primary)
   const accentColor = guide.is_urgent ? colors.danger : categoryColor
-  const hasOfficialSources = (guide.official_sources?.length ?? 0) > 0
+  const officialSourceCount = guide.official_sources?.length ?? 0
+  const hasOfficialSources = officialSourceCount > 0
+  const sourceLabel =
+    officialSourceCount > 1
+      ? `${officialSourceCount} sources`
+      : language === 'fil'
+        ? 'May source'
+        : 'Verified'
   const urgentLabel = language === 'fil' ? 'Babala' : 'Scam Alert'
 
   const handleSave = () => {
@@ -124,7 +131,7 @@ function GuideCard({
                 weight="700"
                 style={{ color: colors.success }}
               >
-                {language === 'fil' ? 'May source' : 'Verified'}
+                {sourceLabel}
               </SafeText>
             </View>
           ) : null}

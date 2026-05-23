@@ -157,11 +157,13 @@ export default function HomeScreen() {
     subtitle,
     items,
     icon,
+    priority = false,
   }: {
     title: string
     subtitle: string
     items: Guide[]
     icon: string
+    priority?: boolean
   }) => {
     if (items.length === 0) {
       return null
@@ -169,8 +171,16 @@ export default function HomeScreen() {
 
     return (
       <View style={styles.section}>
-        <View style={styles.sectionHeaderRow}>
+        <View style={[styles.sectionHeaderRow, priority && styles.priorityHeaderRow]}>
           <View>
+            {priority ? (
+              <View style={styles.priorityPill}>
+                <SafeText variant="caption" color="primary" weight="700">
+                  {language === 'fil' ? 'Unahin kung kailangan' : 'Start here if needed'}
+                </SafeText>
+              </View>
+            ) : null}
+
             <SafeText variant="h3" weight="700">
               {icon} {title}
             </SafeText>
@@ -226,8 +236,8 @@ export default function HomeScreen() {
 
         <SafeText variant="bodyMd" color="surface" style={styles.heroSubtitle}>
           {language === 'fil'
-            ? 'Praktikal na gabay para sa benefits, karapatan, IDs, pera, trabaho, gobyerno, at iwas-scam.'
-            : 'Practical guides for benefits, rights, IDs, money, work, government tasks, and scam safety.'}
+            ? 'Praktikal na gabay para sa ayuda, benefits, karapatan, IDs, pera, trabaho, gobyerno, at iwas-scam.'
+            : 'Practical guides for aid, benefits, rights, IDs, money, work, government tasks, and scam safety.'}
         </SafeText>
 
         <View style={styles.heroStats}>
@@ -361,6 +371,17 @@ export default function HomeScreen() {
       ) : null}
 
       {renderCuratedSection({
+        title: language === 'fil' ? 'DSWD at Ayuda Guides' : 'DSWD & Aid Guides',
+        subtitle:
+          language === 'fil'
+            ? 'Alamin muna ang tamang programa bago magtanong, magpasa, o maniwala sa post.'
+            : 'Check the right program before asking, applying, or trusting a post.',
+        items: governmentAidGuides,
+        icon: '\u{1F3DB}\uFE0F',
+        priority: true,
+      })}
+
+      {renderCuratedSection({
         title: language === 'fil' ? 'Trending Ngayon' : 'Trending Now',
         subtitle:
           trending.length > 0
@@ -392,16 +413,6 @@ export default function HomeScreen() {
             : 'Before paying, borrowing, or opening an account',
         items: moneyGuides,
         icon: '💸',
-      })}
-
-      {renderCuratedSection({
-        title: language === 'fil' ? 'DSWD at Ayuda Guides' : 'DSWD & Aid Guides',
-        subtitle:
-          language === 'fil'
-            ? 'AICS, 4Ps, Social Pension, Walang Gutom, ECT, at SLP'
-            : 'AICS, 4Ps, Social Pension, Walang Gutom, ECT, and SLP',
-        items: governmentAidGuides,
-        icon: '\u{1F3DB}\uFE0F',
       })}
 
       {renderCuratedSection({
@@ -575,6 +586,22 @@ const createStyles = (colors: ThemeColors) =>
 
     sectionHeaderRow: {
       marginBottom: spacing.md,
+    },
+
+    priorityHeaderRow: {
+      borderLeftWidth: 4,
+      borderLeftColor: colors.primary,
+      paddingLeft: spacing.sm,
+    },
+
+    priorityPill: {
+      alignSelf: 'flex-start',
+      minHeight: 24,
+      borderRadius: 999,
+      backgroundColor: colors.primaryLight,
+      paddingHorizontal: spacing.sm,
+      justifyContent: 'center',
+      marginBottom: spacing.xs,
     },
 
     sectionSubtitle: {

@@ -185,7 +185,7 @@ export default function HomeScreen() {
             ) : null}
 
             <SafeText variant="h3" weight="700">
-              {icon} {title}
+              {icon ? `${icon} ${title}` : title}
             </SafeText>
             <SafeText variant="caption" color="muted" style={styles.sectionSubtitle}>
               {subtitle}
@@ -233,7 +233,7 @@ export default function HomeScreen() {
           </View>
 
           <View style={styles.logoMark}>
-            <SafeText variant="h2" color="primary">💡</SafeText>
+            <Ionicons name="bulb-outline" size={25} color={colors.primary} />
           </View>
         </View>
 
@@ -321,7 +321,7 @@ export default function HomeScreen() {
           onPress={() => openGuide(featuredGuide.id)}
         >
           <View style={styles.featuredCopy}>
-            <Badge label={t.featured} icon="⭐" color={colors.accent} />
+            <Badge label={t.featured} color={colors.accent} />
             <SafeText variant="h2" color="surface" style={styles.featuredTitle} numberOfLines={2}>
               {getTitle(featuredGuide)}
             </SafeText>
@@ -340,7 +340,7 @@ export default function HomeScreen() {
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
             <SafeText variant="h3" weight="700">
-              🚨 {t.scamAlerts}
+              {t.scamAlerts}
             </SafeText>
             <SafeText variant="caption" color="muted">
               {language === 'fil' ? 'Basahin muna bago magpadala' : 'Read before sending money'}
@@ -365,7 +365,7 @@ export default function HomeScreen() {
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
             <SafeText variant="h3" weight="700">
-              👀 {t.recentlyViewed}
+              {t.recentlyViewed}
             </SafeText>
           </View>
 
@@ -396,7 +396,7 @@ export default function HomeScreen() {
             ? 'Alamin muna ang tamang programa bago magtanong, magpasa, o maniwala sa post.'
             : 'Check the right program before asking, applying, or trusting a post.',
         items: governmentAidGuides,
-        icon: '\u{1F3DB}\uFE0F',
+        icon: '',
         priority: true,
       })}
 
@@ -411,7 +411,7 @@ export default function HomeScreen() {
               ? 'Mga guide na magandang unahin'
               : 'Useful guides to start with',
         items: trendingGuides,
-        icon: '↗',
+        icon: '',
       })}
 
       {renderCuratedSection({
@@ -421,7 +421,7 @@ export default function HomeScreen() {
             ? 'Unang trabaho, unang ID, unang requirements'
             : 'First job, first ID, first requirements',
         items: firstTimerGuides,
-        icon: '🧭',
+        icon: '',
       })}
 
       {renderCuratedSection({
@@ -431,7 +431,7 @@ export default function HomeScreen() {
             ? 'Bago magbayad, umutang, o mag-open ng account'
             : 'Before paying, borrowing, or opening an account',
         items: moneyGuides,
-        icon: '💸',
+        icon: '',
       })}
 
       {renderCuratedSection({
@@ -441,12 +441,12 @@ export default function HomeScreen() {
             ? 'Benefits, forms, opisina, at appointments'
             : 'Benefits, forms, offices, and appointments',
         items: governmentGuides,
-        icon: '🏛️',
+        icon: '',
       })}
 
       <View style={styles.sectionHeaderBlock}>
         <SafeText variant="h3" weight="700">
-          📚 {t.allGuides}
+          {t.allGuides}
         </SafeText>
         <SafeText variant="caption" color="muted">
           {language === 'fil' ? 'Para sa first-timers at everyday decisions' : 'For first-timers and everyday decisions'}

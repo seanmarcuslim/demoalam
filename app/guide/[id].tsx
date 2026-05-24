@@ -48,10 +48,10 @@ export default function GuideDetailsScreen() {
   const {
     data: guide,
     isLoading,
-    error,
     refetch,
     isRefetching,
   } = useGuide(guideId)
+
   const activeGuide = guide || cachedGuide
   const { data: categoryGuides = [] } = useGuides(activeGuide?.category_id)
 
@@ -81,6 +81,70 @@ export default function GuideDetailsScreen() {
 
   const getSectionContent = (section: GuideSection) =>
     language === 'fil' ? section.content_fil : section.content_en
+
+  const getDifficultyLabel = (value?: string | null) => {
+    if (!value) {
+      return language === 'fil' ? 'Hindi nakasaad' : 'Not specified'
+    }
+
+    const normalized = value.toLowerCase()
+
+    if (normalized === 'katamtaman') {
+      return language === 'fil' ? 'Katamtaman' : 'Moderate'
+    }
+
+    if (normalized === 'madali') {
+      return language === 'fil' ? 'Madali' : 'Easy'
+    }
+
+    if (normalized === 'mahirap') {
+      return language === 'fil' ? 'Mahirap' : 'Hard'
+    }
+
+    return value
+  }
+
+  const getCostLabel = (value?: string | null) => {
+    if (!value) {
+      return language === 'fil' ? 'Hindi nakasaad' : 'Not specified'
+    }
+
+    const normalized = value.toLowerCase()
+
+    if (normalized === 'kadalasang libre') {
+      return language === 'fil' ? 'Kadalasang libre' : 'Usually free'
+    }
+
+    if (normalized === 'libre kung official') {
+      return language === 'fil'
+        ? 'Libre kung official'
+        : 'Free through official channels'
+    }
+
+    if (normalized.includes('depende')) {
+      return language === 'fil' ? value : 'Depends on the issue'
+    }
+
+    return value
+  }
+
+  const getTimeLabel = (value?: string | null) => {
+    if (!value) {
+      return language === 'fil' ? 'Hindi nakasaad' : 'Not specified'
+    }
+
+    const normalized = value.toLowerCase()
+
+    if (normalized.includes('depende')) {
+      return language === 'fil' ? value : 'Depends on the issue'
+    }
+
+    if (normalized.includes('minuto')) {
+      return language === 'fil' ? value : value.replace('minuto', 'min')
+    }
+
+    return value
+  }
 
   const handleSave = () => {
     if (!activeGuide) return
@@ -139,9 +203,7 @@ export default function GuideDetailsScreen() {
   }, [guide?.id, isSaved])
 
   useEffect(() => {
-    if (!guide?.id) {
-      return
-    }
+    if (!guide?.id) return
 
     analyticsService.logGuideView(guide.id).catch(() => {
       // Analytics should never interrupt guide reading.
@@ -278,9 +340,7 @@ export default function GuideDetailsScreen() {
             label={
               activeGuide.category
                 ? getCategoryName(activeGuide.category)
-                : language === 'fil'
-                  ? 'Guide'
-                  : 'Guide'
+                : 'Guide'
             }
             icon={activeGuide.category?.icon}
             color={categoryColor}
@@ -299,11 +359,19 @@ export default function GuideDetailsScreen() {
               icon="time-outline"
               label={`${activeGuide.read_time_min} ${language === 'fil' ? 'minuto' : 'min'}`}
             />
+
             {activeGuide.estimated_cost ? (
-              <MetaPill icon="wallet-outline" label={activeGuide.estimated_cost} />
+              <MetaPill
+                icon="wallet-outline"
+                label={getCostLabel(activeGuide.estimated_cost)}
+              />
             ) : null}
+
             {activeGuide.difficulty ? (
-              <MetaPill icon="speedometer-outline" label={activeGuide.difficulty} />
+              <MetaPill
+                icon="speedometer-outline"
+                label={getDifficultyLabel(activeGuide.difficulty)}
+              />
             ) : null}
           </View>
         </View>
@@ -336,11 +404,12 @@ export default function GuideDetailsScreen() {
           </View>
           <View style={styles.warningCopy}>
             <SafeText variant="label" color="danger" weight="700">
-              {language === 'fil' ? 'Mahalagang Babala' : 'Important Warning'}
+              {language === 'fil' ? 'Mahalagang Paalala' : 'Important Warning'}
             </SafeText>
+
             <SafeText variant="bodyMd" color="muted" style={styles.warningText}>
               {language === 'fil'
-                ? 'Basahin muna ang guide bago magpadala ng pera, OTP, o personal information.'
+                ? 'Basahin muna ito bago magpadala ng pera, OTP, o personal na impormasyon.'
                 : 'Read this guide before sending money, OTPs, or personal information.'}
             </SafeText>
           </View>
@@ -376,8 +445,8 @@ export default function GuideDetailsScreen() {
             value={
               sourceCount > 0
                 ? language === 'fil'
-                  ? `${sourceCount} opisyal`
-                  : `${sourceCount} official`
+                  ? `${sourceCount} opisyal na source`
+                  : `${sourceCount} official sources`
                 : language === 'fil'
                   ? 'I-verify pa'
                   : 'Verify first'
@@ -386,23 +455,25 @@ export default function GuideDetailsScreen() {
           <TrustItem
             icon="time-outline"
             label={language === 'fil' ? 'Oras' : 'Time'}
-            value={activeGuide.estimated_time || `${activeGuide.read_time_min} min`}
+            value={getTimeLabel(
+              activeGuide.estimated_time || `${activeGuide.read_time_min} min`
+            )}
           />
           <TrustItem
             icon="wallet-outline"
             label={language === 'fil' ? 'Gastos' : 'Cost'}
-            value={activeGuide.estimated_cost || (language === 'fil' ? 'Depende' : 'Varies')}
+            value={getCostLabel(activeGuide.estimated_cost)}
           />
           <TrustItem
             icon="speedometer-outline"
             label={language === 'fil' ? 'Antas' : 'Level'}
-            value={activeGuide.difficulty || (language === 'fil' ? 'Madali' : 'Easy')}
+            value={getDifficultyLabel(activeGuide.difficulty)}
           />
         </View>
 
         <View style={styles.completenessBlock}>
           <SafeText variant="label" weight="700" style={styles.completenessTitle}>
-            {language === 'fil' ? 'Kasama sa guide' : 'Guide includes'}
+            {language === 'fil' ? 'Nilalaman ng guide' : 'Guide includes'}
           </SafeText>
 
           <View style={styles.completenessGrid}>
@@ -466,9 +537,8 @@ export default function GuideDetailsScreen() {
 
             <View style={styles.sourceCopy}>
               <SafeText variant="label" weight="700" style={styles.compactCardTitle}>
-                {language === 'fil' ? 'Opisyal na sanggunian' : 'Official sources'}
+                {language === 'fil' ? 'Opisyal na source' : 'Official sources'}
               </SafeText>
-
               <SafeText variant="caption" color="muted" style={styles.sourceSubtitle}>
                 {language === 'fil'
                   ? 'I-tap para buksan ang opisyal na page. Iwasan ang screenshots, reposts, at fixer links.'
@@ -479,10 +549,7 @@ export default function GuideDetailsScreen() {
 
           <View style={styles.officialSources}>
             {officialSources.map((source) => (
-              <OfficialSourceRow
-                key={source.url}
-                source={source}
-              />
+              <OfficialSourceRow key={source.url} source={source} />
             ))}
           </View>
         </View>

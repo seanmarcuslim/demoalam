@@ -395,14 +395,20 @@ function scoreGuide(guide: Guide, query: string) {
     }
   }
 
-  // LOST WALLET / LOST IDS PRIORITY
+  // LOST WALLET / LOST PHONE / LOST IDS PRIORITY
   if (
+    cleanQuery.includes('lost wallet') ||
     cleanQuery.includes('wallet') ||
-    cleanQuery.includes('lost')
+    cleanQuery.includes('lost id') ||
+    cleanQuery.includes('lost phone') ||
+    cleanQuery.includes('stolen phone')
   ) {
     if (
       title.includes('wallet') ||
-      guide.is_urgent
+      title.includes('phone') ||
+      keywords.includes('lost wallet') ||
+      keywords.includes('lost phone') ||
+      keywords.includes('valid id')
     ) {
       score += 70
     }
@@ -696,32 +702,32 @@ export const guidesService = {
       throwServiceError('Error fetching guide bundles:', error)
     }
 
-return (data || []) as GuideBundleWithItems[]
-},
+    return (data || []) as GuideBundleWithItems[]
+  },
 
-async fetchBundleBySlug(slug: string): Promise<GuideBundleWithItems | null> {
-  const { data, error } = await supabase
-    .from('guide_bundles')
-    .select(
-      `
-      *,
-      items:guide_bundle_items(
+  async fetchBundleBySlug(slug: string): Promise<GuideBundleWithItems | null> {
+    const { data, error } = await supabase
+      .from('guide_bundles')
+      .select(
+        `
         *,
-        guide:guides(
+        items:guide_bundle_items(
           *,
-          category:categories(*)
+          guide:guides(
+            *,
+            category:categories(*)
+          )
         )
+      `
       )
-    `
-    )
-    .eq('slug', slug)
-    .eq('is_published', true)
-    .single()
+      .eq('slug', slug)
+      .eq('is_published', true)
+      .single()
 
-  if (error) {
-    throwServiceError('Error fetching guide bundle:', error)
-  }
+    if (error) {
+      throwServiceError('Error fetching guide bundle:', error)
+    }
 
-  return data as GuideBundleWithItems
-},
+    return data as GuideBundleWithItems
+  },
 }

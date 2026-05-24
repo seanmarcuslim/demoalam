@@ -2,11 +2,15 @@ import { Tabs } from 'expo-router'
 import { Ionicons } from '@expo/vector-icons'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useTheme } from '../../src/hooks/useTheme'
+import { useSettingsStore } from '../../src/stores/settingsStore'
+import { translations } from '../../src/utils/translations'
 
 export default function TabLayout() {
   const insets = useSafeAreaInsets()
 
-  const { colors, isDark } = useTheme()
+  const { colors } = useTheme()
+  const { language } = useSettingsStore()
+  const t = translations[language]
 
   return (
     <Tabs
@@ -46,7 +50,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Home',
+          title: t.home,
           tabBarIcon: ({ color, size }) => (
             <Ionicons
               name="home"
@@ -60,7 +64,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="categories"
         options={{
-          title: 'Categories',
+          title: t.categories,
           tabBarIcon: ({ color, size }) => (
             <Ionicons
               name="grid"
@@ -74,7 +78,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="search"
         options={{
-          title: 'Search',
+          title: t.search,
           tabBarIcon: ({ color, size }) => (
             <Ionicons
               name="search"
@@ -88,7 +92,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="saved"
         options={{
-          title: 'Saved',
+          title: t.saved,
           tabBarIcon: ({ color, size }) => (
             <Ionicons
               name="bookmark"
@@ -102,7 +106,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="profile"
         options={{
-          title: 'Profile',
+          title: t.profile,
           tabBarIcon: ({ color, size }) => (
             <Ionicons
               name="person"

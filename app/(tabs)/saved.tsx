@@ -70,24 +70,28 @@ export default function SavedScreen() {
   const offlineCountLabel =
     offlineCount === 1
       ? language === 'fil'
-        ? '1 offline'
+        ? '1 pang-offline'
         : '1 offline'
       : language === 'fil'
-        ? `${offlineCount} offline`
+        ? `${offlineCount} pang-offline`
         : `${offlineCount} offline`
 
   const sourceCountLabel =
     sourceCount === 1
-      ? '1 source'
-      : `${sourceCount} sources`
+      ? language === 'fil'
+        ? '1 sanggunian'
+        : '1 source'
+      : language === 'fil'
+        ? `${sourceCount} sanggunian`
+        : `${sourceCount} sources`
 
   const urgentCountLabel =
     urgentCount === 1
       ? language === 'fil'
-        ? '1 urgent'
+        ? '1 babala'
         : '1 urgent'
       : language === 'fil'
-        ? `${urgentCount} urgent`
+        ? `${urgentCount} babala`
         : `${urgentCount} urgent`
 
   useEffect(() => {

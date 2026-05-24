@@ -42,13 +42,13 @@ function GuideCard({
   const officialSourceCount = guide.official_sources?.length ?? 0
   const hasOfficialSources = officialSourceCount > 0
   const sourceLabel =
-  officialSourceCount > 1
-    ? language === 'fil'
-      ? `${officialSourceCount} opisyal na source`
-      : `${officialSourceCount} official sources`
-    : language === 'fil'
-      ? 'Opisyal na source'
-      : 'Verified source'
+    officialSourceCount > 1
+      ? language === 'fil'
+        ? `${officialSourceCount} opisyal na source`
+        : `${officialSourceCount} official sources`
+      : language === 'fil'
+        ? 'Opisyal na source'
+        : 'Verified source'
   const urgentLabel = language === 'fil' ? 'Babala' : 'Scam Alert'
 
   const handleSave = () => {
@@ -76,7 +76,7 @@ function GuideCard({
       <View style={styles.topRow}>
         <Badge
           label={guide.is_urgent ? urgentLabel : categoryName}
-          icon={guide.is_urgent ? '🚨' : guide.category?.icon}
+          icon={guide.is_urgent ? '!' : guide.category?.icon}
           color={accentColor}
         />
 

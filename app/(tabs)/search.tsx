@@ -28,6 +28,10 @@ import EmptyState from '../../src/components/ui/EmptyState'
 import { getCategoryAccent } from '../../src/lib/categoryVisuals'
 
 const SUGGESTIONS = [
+  'first job',
+  'resume',
+  'interview',
+  'payroll',
   'ayuda',
   'DSWD AICS',
   '4Ps',
@@ -41,6 +45,14 @@ const SUGGESTIONS = [
 ]
 
 const SUGGESTION_GROUPS = [
+  {
+    title_en: 'First job flow',
+    title_fil: 'Unang trabaho',
+    subtitle_en: 'Resume, interview, requirements, payroll, and payday basics.',
+    subtitle_fil: 'Resume, interview, requirements, payroll, at payday basics.',
+    colorKey: 'success' as const,
+    items: ['first job', 'resume', 'interview', 'job requirements', 'payroll'],
+  },
   {
     title_en: 'Aid & benefits',
     title_fil: 'Ayuda at benefits',
@@ -168,7 +180,7 @@ export default function SearchScreen() {
                     activeOpacity={0.84}
                     onPress={() => commitSearch(item)}
                   >
-                    <Badge label={item} color={colors.accent} icon="🕘" />
+                    <Badge label={item} color={colors.accent} />
                   </TouchableOpacity>
                 ))}
               </View>
@@ -397,7 +409,7 @@ export default function SearchScreen() {
           ) : showNoResults ? (
             <AppCard style={styles.emptyCard}>
               <EmptyState
-                icon="🔎"
+                icon="?"
                 title={
                   language === 'fil'
                     ? 'Walang resulta'

@@ -62,7 +62,7 @@ export default function CategoryDetailsScreen() {
     categories.find((cat) => cat.id === categoryId) || guides[0]?.category
   const firstCategory = currentCategory
   const categoryColor = getCategoryAccent(firstCategory, colors.primary)
-  const categoryIcon = firstCategory?.icon || '📚'
+  const categoryIcon = firstCategory?.icon || 'Guide'
   const styles = createStyles(colors, categoryColor)
   const suggestedCategories = getSuggestedCategories()
   const officialGuideCount = guides.filter(

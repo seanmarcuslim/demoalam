@@ -238,6 +238,89 @@ const SEARCH_ALIASES: Record<string, string[]> = {
     'phone stolen',
     'wallet',
   ],
+  trabaho: [
+    'work',
+    'job',
+    'first job',
+    'requirements',
+    'resume',
+    'interview',
+    'sss',
+    'payroll',
+  ],
+  work: [
+    'trabaho',
+    'job',
+    'first job',
+    'requirements',
+    'resume',
+    'interview',
+    'payroll',
+  ],
+  job: [
+    'trabaho',
+    'work',
+    'first job',
+    'requirements',
+    'resume',
+    'interview',
+    'payroll',
+  ],
+  resume: [
+    'cv',
+    'biodata',
+    'no experience',
+    'fresh graduate',
+    'first job',
+    'job application',
+  ],
+  cv: [
+    'resume',
+    'biodata',
+    'job application',
+    'first job',
+  ],
+  biodata: [
+    'resume',
+    'cv',
+    'job application',
+    'first job',
+  ],
+  interview: [
+    'job interview',
+    'first job',
+    'answers',
+    'hr',
+    'expected salary',
+  ],
+  sweldo: [
+    'salary',
+    'payday',
+    'budget',
+    'payroll',
+    'bank account',
+  ],
+  sahod: [
+    'salary',
+    'payday',
+    'budget',
+    'payroll',
+    'bank account',
+  ],
+  salary: [
+    'sweldo',
+    'sahod',
+    'payday',
+    'budget',
+    'payroll',
+  ],
+  payroll: [
+    'salary',
+    'sweldo',
+    'bank account',
+    'first job',
+    'requirements',
+  ],
 }
 
 function expandSearchTerms(query: string) {
@@ -425,6 +508,61 @@ function scoreGuide(guide: Guide, query: string) {
   if (cleanQuery.includes('philhealth')) {
     if (title.includes('philhealth')) {
       score += 90
+    }
+  }
+
+  // FIRST JOB FLOW PRIORITY
+  if (
+    cleanQuery.includes('first job') ||
+    cleanQuery.includes('trabaho') ||
+    cleanQuery.includes('work') ||
+    cleanQuery.includes('job')
+  ) {
+    if (
+      title.includes('first job') ||
+      keywords.includes('first job') ||
+      keywords.includes('resume') ||
+      keywords.includes('interview') ||
+      keywords.includes('requirements') ||
+      keywords.includes('payroll')
+    ) {
+      score += 65
+    }
+  }
+
+  // RESUME / INTERVIEW PRIORITY
+  if (
+    cleanQuery.includes('resume') ||
+    cleanQuery.includes('cv') ||
+    cleanQuery.includes('biodata') ||
+    cleanQuery.includes('interview')
+  ) {
+    if (
+      title.includes('resume') ||
+      title.includes('interview') ||
+      keywords.includes('resume') ||
+      keywords.includes('interview')
+    ) {
+      score += 85
+    }
+  }
+
+  // PAYDAY / PAYROLL PRIORITY
+  if (
+    cleanQuery.includes('payday') ||
+    cleanQuery.includes('payroll') ||
+    cleanQuery.includes('sweldo') ||
+    cleanQuery.includes('sahod') ||
+    cleanQuery.includes('salary')
+  ) {
+    if (
+      title.includes('payday') ||
+      title.includes('bank account') ||
+      keywords.includes('payday') ||
+      keywords.includes('payroll') ||
+      keywords.includes('bank account')
+    ) {
+      score += 70
     }
   }
 

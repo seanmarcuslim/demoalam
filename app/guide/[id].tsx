@@ -25,7 +25,9 @@ import type { ThemeColors } from '../../src/theme/colors'
 import SafeText from '../../src/components/ui/SafeText'
 import Badge from '../../src/components/ui/Badge'
 import GuideCard from '../../src/components/guide/GuideCard'
+import GuideCompletenessItem from '../../src/components/guide/GuideCompletenessItem'
 import GuideMetaPill from '../../src/components/guide/GuideMetaPill'
+import GuideTrustItem from '../../src/components/guide/GuideTrustItem'
 import OfficialSourceRow from '../../src/components/guide/OfficialSourceRow'
 import {
   Guide,
@@ -425,12 +427,12 @@ export default function GuideDetailsScreen() {
         </View>
 
         <View style={styles.trustGrid}>
-          <TrustItem
+          <GuideTrustItem
             icon="calendar-outline"
             label={guideLabels.updated}
             value={updatedLabel}
           />
-          <TrustItem
+          <GuideTrustItem
             icon="shield-checkmark-outline"
             label={guideLabels.sources}
             value={
@@ -439,19 +441,19 @@ export default function GuideDetailsScreen() {
                 : guideLabels.verifyFirst
             }
           />
-          <TrustItem
+          <GuideTrustItem
             icon="time-outline"
             label={guideLabels.time}
             value={getTimeLabel(
               activeGuide.estimated_time || `${activeGuide.read_time_min} min`
             )}
           />
-          <TrustItem
+          <GuideTrustItem
             icon="wallet-outline"
             label={guideLabels.cost}
             value={getCostLabel(activeGuide.estimated_cost)}
           />
-          <TrustItem
+          <GuideTrustItem
             icon="speedometer-outline"
             label={guideLabels.level}
             value={getDifficultyLabel(activeGuide.difficulty)}
@@ -464,19 +466,19 @@ export default function GuideDetailsScreen() {
           </SafeText>
 
           <View style={styles.completenessGrid}>
-            <CompletenessItem
+            <GuideCompletenessItem
               done={sourceCount > 0}
               label={guideLabels.sources}
             />
-            <CompletenessItem
+            <GuideCompletenessItem
               done={hasChecklist}
               label={guideLabels.checklist}
             />
-            <CompletenessItem
+            <GuideCompletenessItem
               done={hasSample}
               label={guideLabels.sample}
             />
-            <CompletenessItem
+            <GuideCompletenessItem
               done={stepCount > 0}
               label={
                 stepCount > 0
@@ -484,7 +486,7 @@ export default function GuideDetailsScreen() {
                   : guideLabels.stepsFallback
               }
             />
-            <CompletenessItem
+            <GuideCompletenessItem
               done={warningCount > 0}
               label={
                 warningCount > 0
@@ -775,62 +777,6 @@ export default function GuideDetailsScreen() {
     return guideLabels.whatToKnow
   }
 
-  function TrustItem({
-    icon,
-    label,
-    value,
-  }: {
-    icon: keyof typeof Ionicons.glyphMap
-    label: string
-    value: string
-  }) {
-    return (
-      <View style={styles.trustItem}>
-        <Ionicons name={icon} size={17} color={colors.primary} />
-
-        <View style={styles.trustItemCopy}>
-          <SafeText variant="caption" color="muted" numberOfLines={1}>
-            {label}
-          </SafeText>
-          <SafeText variant="caption" weight="700" numberOfLines={1}>
-            {value}
-          </SafeText>
-        </View>
-      </View>
-    )
-  }
-
-  function CompletenessItem({
-    done,
-    label,
-  }: {
-    done: boolean
-    label: string
-  }) {
-    return (
-      <View
-        style={[
-          styles.completenessItem,
-          done ? styles.completenessItemDone : styles.completenessItemPending,
-        ]}
-      >
-        <Ionicons
-          name={done ? 'checkmark-circle' : 'ellipse-outline'}
-          size={15}
-          color={done ? colors.success : colors.textLight}
-        />
-        <SafeText
-          variant="caption"
-          weight="700"
-          style={{ color: done ? colors.success : colors.textMuted }}
-          numberOfLines={1}
-        >
-          {label}
-        </SafeText>
-      </View>
-    )
-  }
-
   function formatUpdatedDate(value?: string | null) {
     if (!value) {
       return guideLabels.unknown
@@ -1026,23 +972,6 @@ const createStyles = (colors: ThemeColors, heroColor: string) =>
       gap: spacing.xs,
     },
 
-    trustItem: {
-      flexBasis: '48.8%',
-      flexGrow: 1,
-      minHeight: 46,
-      borderRadius: 12,
-      backgroundColor: colors.surfaceSecondary,
-      paddingHorizontal: spacing.sm,
-      paddingVertical: spacing.xs,
-      flexDirection: 'row',
-      alignItems: 'center',
-      gap: spacing.xs,
-    },
-
-    trustItemCopy: {
-      flex: 1,
-    },
-
     officialNote: {
       marginTop: spacing.sm,
       borderRadius: 12,
@@ -1073,26 +1002,6 @@ const createStyles = (colors: ThemeColors, heroColor: string) =>
       flexDirection: 'row',
       flexWrap: 'wrap',
       gap: spacing.xs,
-    },
-
-    completenessItem: {
-      minHeight: 30,
-      borderRadius: 999,
-      borderWidth: 1,
-      paddingHorizontal: spacing.sm,
-      flexDirection: 'row',
-      alignItems: 'center',
-      gap: spacing.xs,
-    },
-
-    completenessItemDone: {
-      borderColor: `${colors.success}30`,
-      backgroundColor: colors.successLight,
-    },
-
-    completenessItemPending: {
-      borderColor: colors.border,
-      backgroundColor: colors.surfaceSecondary,
     },
 
     sourceCard: {

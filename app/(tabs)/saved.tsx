@@ -58,6 +58,11 @@ export default function SavedScreen() {
     })
     .slice(0, 3)
 
+  const priorityGuideIds = new Set(priorityGuides.map((guide) => guide.id))
+  const remainingGuides = savedGuides.filter(
+    (guide) => !priorityGuideIds.has(guide.id)
+  )
+
   const savedCountLabel =
     savedIds.length === 1
       ? language === 'fil'
@@ -184,10 +189,16 @@ export default function SavedScreen() {
         </View>
       ) : null}
 
-      {savedGuides.length > 0 ? (
+      {remainingGuides.length > 0 ? (
         <View style={styles.allSavedHeader}>
           <SafeText variant="h3" weight="700">
-            {language === 'fil' ? 'Lahat ng naka-save' : 'All saved guides'}
+            {priorityGuides.length > 0
+              ? language === 'fil'
+                ? 'Iba pang naka-save'
+                : 'More saved guides'
+              : language === 'fil'
+                ? 'Lahat ng naka-save'
+                : 'All saved guides'}
           </SafeText>
         </View>
       ) : null}
@@ -213,47 +224,49 @@ export default function SavedScreen() {
 
   return (
     <FlatList
-      data={savedGuides}
+      data={remainingGuides}
       keyExtractor={(item) => item.id}
       ListHeaderComponent={renderHeader}
       ListEmptyComponent={
-        <AppCard style={styles.emptyCard}>
-          <EmptyState
-            icon={needsRefresh ? '↻' : '🔖'}
-            title={
-              needsRefresh
-                ? language === 'fil'
-                  ? 'I-refresh ang saved guides'
-                  : 'Refresh saved guides'
-                : language === 'fil'
-                  ? 'Wala ka pang saved guides'
-                  : 'No saved guides yet'
-            }
-            subtitle={
-              needsRefresh
-                ? language === 'fil'
-                  ? 'Bumalik online at buksan ulit ang guides para ma-save ang latest offline copy.'
-                  : 'Go online and reopen your guides to save the latest offline copy.'
-                : language === 'fil'
-                  ? 'I-save ang guides tungkol sa ayuda, IDs, karapatan, health, o scam warnings para mabilis balikan.'
-                  : 'Save guides about aid, IDs, rights, health, or scam warnings so they are easy to revisit.'
-            }
-          />
+        savedGuides.length > 0 ? null : (
+          <AppCard style={styles.emptyCard}>
+            <EmptyState
+              iconName={needsRefresh ? 'sync-circle-outline' : 'bookmark-outline'}
+              title={
+                needsRefresh
+                  ? language === 'fil'
+                    ? 'I-refresh ang saved guides'
+                    : 'Refresh saved guides'
+                  : language === 'fil'
+                    ? 'Wala ka pang saved guides'
+                    : 'No saved guides yet'
+              }
+              subtitle={
+                needsRefresh
+                  ? language === 'fil'
+                    ? 'Bumalik online at buksan ulit ang guides para ma-save ang latest offline copy.'
+                    : 'Go online and reopen your guides to save the latest offline copy.'
+                  : language === 'fil'
+                    ? 'I-save ang guides tungkol sa ayuda, IDs, karapatan, health, o scam warnings para mabilis balikan.'
+                    : 'Save guides about aid, IDs, rights, health, or scam warnings so they are easy to revisit.'
+              }
+            />
 
-          <AppButton
-            title={
-              needsRefresh
-                ? language === 'fil'
-                  ? 'Pumunta sa Home'
-                  : 'Go to Home'
-                : language === 'fil'
-                  ? 'Mag-browse ng guides'
-                  : 'Browse guides'
-            }
-            onPress={() => router.push('/')}
-            style={styles.emptyAction}
-          />
-        </AppCard>
+            <AppButton
+              title={
+                needsRefresh
+                  ? language === 'fil'
+                    ? 'Pumunta sa Home'
+                    : 'Go to Home'
+                  : language === 'fil'
+                    ? 'Mag-browse ng guides'
+                    : 'Browse guides'
+              }
+              onPress={() => router.push('/')}
+              style={styles.emptyAction}
+            />
+          </AppCard>
+        )
       }
       contentContainerStyle={styles.content}
       showsVerticalScrollIndicator={false}

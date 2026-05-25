@@ -321,6 +321,71 @@ const SEARCH_ALIASES: Record<string, string[]> = {
     'first job',
     'requirements',
   ],
+  rent: [
+    'renting',
+    'apartment',
+    'bedspace',
+    'deposit',
+    'moving out',
+    'landlord',
+  ],
+  apartment: [
+    'rent',
+    'renting',
+    'bedspace',
+    'deposit',
+    'utilities',
+  ],
+  bedspace: [
+    'rent',
+    'renting',
+    'apartment',
+    'utilities',
+    'moving out',
+  ],
+  upa: [
+    'rent',
+    'renting',
+    'apartment',
+    'deposit',
+  ],
+  bumukod: [
+    'moving out',
+    'rent',
+    'budget',
+    'utilities',
+    'adulting',
+  ],
+  utilities: [
+    'utility bills',
+    'electricity',
+    'water',
+    'internet',
+    'kuryente',
+    'tubig',
+  ],
+  kuryente: [
+    'electricity',
+    'utility bills',
+    'meralco',
+    'disconnection',
+  ],
+  tubig: [
+    'water',
+    'utility bills',
+    'maynilad',
+    'disconnection',
+  ],
+  meralco: [
+    'electricity',
+    'kuryente',
+    'utility bills',
+  ],
+  maynilad: [
+    'water',
+    'tubig',
+    'utility bills',
+  ],
 }
 
 function expandSearchTerms(query: string) {
@@ -563,6 +628,35 @@ function scoreGuide(guide: Guide, query: string) {
       keywords.includes('bank account')
     ) {
       score += 70
+    }
+  }
+
+  // RENTING / MOVING OUT / UTILITIES PRIORITY
+  if (
+    cleanQuery.includes('rent') ||
+    cleanQuery.includes('apartment') ||
+    cleanQuery.includes('bedspace') ||
+    cleanQuery.includes('upa') ||
+    cleanQuery.includes('moving out') ||
+    cleanQuery.includes('bumukod') ||
+    cleanQuery.includes('utility') ||
+    cleanQuery.includes('utilities') ||
+    cleanQuery.includes('kuryente') ||
+    cleanQuery.includes('tubig') ||
+    cleanQuery.includes('meralco') ||
+    cleanQuery.includes('maynilad')
+  ) {
+    if (
+      title.includes('renting') ||
+      title.includes('moving out') ||
+      title.includes('utility') ||
+      keywords.includes('renting') ||
+      keywords.includes('moving out') ||
+      keywords.includes('utility bills') ||
+      keywords.includes('kuryente') ||
+      keywords.includes('tubig')
+    ) {
+      score += 75
     }
   }
 

@@ -6,7 +6,7 @@ import { useEffect } from 'react'
 import { useSavedStore } from '../../src/stores/savedStore'
 import { useSettingsStore } from '../../src/stores/settingsStore'
 import { useTheme } from '../../src/hooks/useTheme'
-import { useGuides } from '../../src/hooks/useGuides'
+import { useGuides, useSavedGuideDetails } from '../../src/hooks/useGuides'
 import { spacing } from '../../src/theme/spacing'
 import type { ThemeColors } from '../../src/theme/colors'
 import type { Guide } from '../../src/types/guide'
@@ -22,6 +22,7 @@ export default function SavedScreen() {
     useSavedStore()
 
   const { data: guides = [] } = useGuides()
+  const { data: savedGuideDetails = [] } = useSavedGuideDetails(savedIds)
   const { language } = useSettingsStore()
   const { colors } = useTheme()
   const styles = createStyles(colors)
@@ -104,6 +105,12 @@ export default function SavedScreen() {
       hydrateSavedGuides(guides)
     }
   }, [guides, hydrateSavedGuides, savedIds.length])
+
+  useEffect(() => {
+    if (savedGuideDetails.length > 0) {
+      hydrateSavedGuides(savedGuideDetails)
+    }
+  }, [savedGuideDetails, hydrateSavedGuides])
 
   const openGuide = (id: string) => {
     router.push({

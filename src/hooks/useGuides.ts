@@ -47,3 +47,15 @@ export function useGuide(id: string) {
     networkMode: defaultNetworkMode,
   })
 }
+
+export function useSavedGuideDetails(ids: string[]) {
+  const sortedIds = [...ids].sort()
+
+  return useQuery({
+    queryKey: ['guides', 'saved-details', sortedIds],
+    queryFn: () => guidesService.fetchGuidesByIds(sortedIds),
+    staleTime: 1000 * 60 * 5,
+    enabled: sortedIds.length > 0,
+    networkMode: defaultNetworkMode,
+  })
+}

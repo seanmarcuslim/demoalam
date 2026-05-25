@@ -909,6 +909,33 @@ export const guidesService = {
     return data
   },
 
+  async fetchGuidesByIds(
+    ids: string[]
+  ): Promise<Guide[]> {
+    if (ids.length === 0) {
+      return []
+    }
+
+    const { data, error } =
+      await supabase
+        .from('guides')
+        .select(
+          '*, category:categories(*), sections:guide_sections(*)'
+        )
+        .in('id', ids)
+        .eq('is_published', true)
+        .order('order_index', {
+          referencedTable: 'guide_sections',
+          ascending: true,
+        })
+
+    if (error) {
+      throwServiceError('Error fetching saved guide details:', error)
+    }
+
+    return data || []
+  },
+
   async fetchFeatured(): Promise<Guide[]> {
     const { data, error } =
       await supabase

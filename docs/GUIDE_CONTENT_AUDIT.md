@@ -167,42 +167,46 @@ These are candidates to upgrade, merge, or replace.
 
 ## Recommended Next Work
 
-Priority 1: Capture live guide SQL in repo
+Architecture now comes before more content expansion.
+
+Reference roadmap:
+`docs/PROJECT_ROADMAP.md`
+
+Priority 1: Extract guide detail blocks
 - Priority: Critical
+- MVP necessity: Required
+- Complexity: 5/10
+- Reason: `app/guide/[id].tsx` is now the largest and riskiest screen. New guide quality work will be safer after reusable guide blocks are extracted.
+
+Priority 2: Centralize localization
+- Priority: High
+- MVP necessity: Required
+- Complexity: 5/10
+- Reason: bilingual UI copy is scattered across screens. This creates language drift and inconsistent Filipino/English labels.
+
+Priority 3: Split search relevance logic
+- Priority: High
+- MVP necessity: Required
+- Complexity: 4/10
+- Reason: search aliases and scoring have grown inside `guidesService.ts`. Search should become easier to maintain before more guide clusters are added.
+
+Priority 4: Fix bundle UI theme consistency
+- Priority: Medium-High
 - MVP necessity: Required
 - Complexity: 2/10
-- Reason: prevents Supabase/live content from drifting away from GitHub.
+- Reason: bundle UI currently has hardcoded colors and should follow the app theme.
 
-Priority 2: Upgrade `gcash-scam-red-flags`
-- Priority: High
-- MVP necessity: Required
-- Complexity: 4/10
-- Reason: high user risk, high PH relevance, strong viral/search potential.
-
-Priority 3: Add DSWD financial aid guide cluster
-- Priority: Critical
-- MVP necessity: Required
-- Complexity: 5/10
-- Reason: active government aid programs are high-impact, frequently misunderstood, and vulnerable to fake posts/fixers.
-- Reference plan: `docs/DSWD_FINANCIAL_AID_ROADMAP.md`
-
-Priority 4: Upgrade or replace `bank-account-first-time`
-- Priority: High
-- MVP necessity: Required
-- Complexity: 4/10
-- Reason: first-time workers need money safety guidance, not just account opening.
-
-Priority 5: Merge/upgrade adulting rent guides
+Priority 5: Extract category config
 - Priority: Medium
-- MVP necessity: Optional
-- Complexity: 5/10
-- Reason: useful, but lower urgency than scams, aid, IDs, emergency, and money safety.
-
-Priority 6: Create guide content standard
-- Priority: High
 - MVP necessity: Required
 - Complexity: 3/10
-- Reason: prevents future content from becoming broad, generic, or inconsistent.
+- Reason: category copy and signals should not live inside the Categories screen.
+
+Priority 6: Resume guide cluster upgrades
+- Priority: High
+- MVP necessity: Required
+- Complexity: 4-6/10
+- Reason: after architecture stabilization, strengthen existing categories with high-impact guide clusters instead of adding new categories.
 
 ## Product Direction Decision
 

@@ -386,6 +386,89 @@ const SEARCH_ALIASES: Record<string, string[]> = {
     'tubig',
     'utility bills',
   ],
+  loan: [
+    'online lending',
+    'loan app',
+    'ola',
+    'utang',
+    'pautang',
+    'debt',
+    'harassment',
+    'collection',
+  ],
+  utang: [
+    'loan',
+    'online lending',
+    'loan app',
+    'ola',
+    'pautang',
+    'debt',
+  ],
+  pautang: [
+    'loan',
+    'online lending',
+    'loan app',
+    'utang',
+    'ola',
+  ],
+  ola: [
+    'online lending',
+    'loan app',
+    'loan',
+    'utang',
+    'harassment',
+  ],
+  harassment: [
+    'online lending',
+    'loan app',
+    'collection',
+    'data privacy',
+  ],
+  recruiter: [
+    'fake job',
+    'job scam',
+    'illegal recruitment',
+    'placement fee',
+    'ofw',
+    'dmw',
+  ],
+  recruitment: [
+    'fake job',
+    'job scam',
+    'illegal recruitment',
+    'placement fee',
+    'ofw',
+    'dmw',
+  ],
+  ofw: [
+    'fake job',
+    'job scam',
+    'illegal recruitment',
+    'placement fee',
+    'dmw',
+    'poea',
+  ],
+  'job scam': [
+    'fake job',
+    'recruiter',
+    'illegal recruitment',
+    'placement fee',
+    'training fee',
+  ],
+  'fake job': [
+    'job scam',
+    'recruiter',
+    'illegal recruitment',
+    'placement fee',
+    'training fee',
+  ],
+  'placement fee': [
+    'fake job',
+    'job scam',
+    'illegal recruitment',
+    'recruiter',
+    'ofw',
+  ],
 }
 
 function expandSearchTerms(query: string) {
@@ -527,6 +610,48 @@ function scoreGuide(guide: Guide, query: string) {
       title.includes('scam')
     ) {
       score += 80
+    }
+  }
+
+  // LOAN APP / ONLINE LENDING PRIORITY
+  if (
+    cleanQuery.includes('loan') ||
+    cleanQuery.includes('utang') ||
+    cleanQuery.includes('pautang') ||
+    cleanQuery.includes('ola') ||
+    cleanQuery.includes('online lending') ||
+    cleanQuery.includes('harassment')
+  ) {
+    if (
+      title.includes('loan') ||
+      keywords.includes('online lending') ||
+      keywords.includes('loan app') ||
+      keywords.includes('utang') ||
+      keywords.includes('harassment')
+    ) {
+      score += 90
+    }
+  }
+
+  // FAKE JOB / RECRUITMENT SCAM PRIORITY
+  if (
+    cleanQuery.includes('fake job') ||
+    cleanQuery.includes('job scam') ||
+    cleanQuery.includes('recruiter') ||
+    cleanQuery.includes('recruitment') ||
+    cleanQuery.includes('placement fee') ||
+    cleanQuery.includes('ofw') ||
+    cleanQuery.includes('poea') ||
+    cleanQuery.includes('dmw')
+  ) {
+    if (
+      title.includes('fake job') ||
+      keywords.includes('job scam') ||
+      keywords.includes('illegal recruitment') ||
+      keywords.includes('placement fee') ||
+      keywords.includes('ofw')
+    ) {
+      score += 90
     }
   }
 

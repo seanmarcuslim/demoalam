@@ -35,6 +35,8 @@ const SUGGESTIONS = [
   'rent',
   'utility bills',
   'moving out',
+  'loan app',
+  'fake job',
   'ayuda',
   'DSWD AICS',
   '4Ps',
@@ -79,6 +81,14 @@ const SUGGESTION_GROUPS = [
     subtitle_fil: 'Useful kapag pera, account, privacy, o reklamo ang involved.',
     colorKey: 'danger' as const,
     items: ['batas', 'consumer rights', 'data privacy act', 'gcash scam'],
+  },
+  {
+    title_en: 'Scam checks',
+    title_fil: 'Scam checks',
+    subtitle_en: 'Loan apps, fake recruiters, e-wallet scams, and phishing.',
+    subtitle_fil: 'Loan apps, fake recruiters, e-wallet scams, at phishing.',
+    colorKey: 'danger' as const,
+    items: ['loan app', 'fake job', 'job scam', 'recruiter', 'gcash scam'],
   },
   {
     title_en: 'Student & livelihood',

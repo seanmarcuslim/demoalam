@@ -2,7 +2,6 @@ import SampleBlock from '../../src/components/guide/SampleBlock'
 import ChecklistBlock from '../../src/components/guide/ChecklistBlock'
 import {
   Alert,
-  Linking,
   RefreshControl,
   ScrollView,
   Share,
@@ -26,9 +25,10 @@ import type { ThemeColors } from '../../src/theme/colors'
 import SafeText from '../../src/components/ui/SafeText'
 import Badge from '../../src/components/ui/Badge'
 import GuideCard from '../../src/components/guide/GuideCard'
+import GuideMetaPill from '../../src/components/guide/GuideMetaPill'
+import OfficialSourceRow from '../../src/components/guide/OfficialSourceRow'
 import {
   Guide,
-  GuideOfficialSource,
   GuideSection,
   GuideSectionType,
 } from '../../src/types/guide'
@@ -352,20 +352,20 @@ export default function GuideDetailsScreen() {
           </SafeText>
 
           <View style={styles.metaGrid}>
-            <MetaPill
+            <GuideMetaPill
               icon="time-outline"
               label={`${activeGuide.read_time_min} ${guideLabels.minute}`}
             />
 
             {activeGuide.estimated_cost ? (
-              <MetaPill
+              <GuideMetaPill
                 icon="wallet-outline"
                 label={getCostLabel(activeGuide.estimated_cost)}
               />
             ) : null}
 
             {activeGuide.difficulty ? (
-              <MetaPill
+              <GuideMetaPill
                 icon="speedometer-outline"
                 label={getDifficultyLabel(activeGuide.difficulty)}
               />
@@ -524,7 +524,13 @@ export default function GuideDetailsScreen() {
 
           <View style={styles.officialSources}>
             {officialSources.map((source) => (
-              <OfficialSourceRow key={source.url} source={source} />
+              <OfficialSourceRow
+                key={source.url}
+                source={source}
+                onOpenError={() =>
+                  showFeedback(guideLabels.unableToOpenSource, 'info')
+                }
+              />
             ))}
           </View>
         </View>
@@ -626,17 +632,6 @@ export default function GuideDetailsScreen() {
       )}
     </ScrollView>
   )
-
-  function MetaPill({ icon, label }: { icon: keyof typeof Ionicons.glyphMap; label: string }) {
-    return (
-      <View style={styles.metaPill}>
-        <Ionicons name={icon} size={15} color="#FFFFFF" />
-        <SafeText variant="caption" color="surface" weight="700">
-          {label}
-        </SafeText>
-      </View>
-    )
-  }
 
   function SectionCard({
     section,
@@ -836,74 +831,6 @@ export default function GuideDetailsScreen() {
     )
   }
 
-  function OfficialSourceRow({
-    source,
-  }: {
-    source: GuideOfficialSource
-  }) {
-    const sourceDomain = getSourceDomain(source.url)
-
-    const openSource = () => {
-      Linking.openURL(source.url).catch(() => {
-        showFeedback(guideLabels.unableToOpenSource, 'info')
-      })
-    }
-
-    return (
-      <TouchableOpacity
-        activeOpacity={0.86}
-        style={styles.officialSourceRow}
-        onPress={openSource}
-      >
-        <View style={styles.sourceRowIcon}>
-          <Ionicons name="shield-checkmark" size={17} color={colors.success} />
-        </View>
-
-        <View style={styles.sourceRowCopy}>
-          <SafeText variant="bodyMd" weight="700" numberOfLines={1}>
-            {source.title}
-          </SafeText>
-
-          <View style={styles.sourceMetaRow}>
-            {source.publisher ? (
-              <View style={styles.publisherPill}>
-                <SafeText
-                  variant="caption"
-                  weight="700"
-                  style={{ color: colors.success }}
-                  numberOfLines={1}
-                >
-                  {source.publisher}
-                </SafeText>
-              </View>
-            ) : null}
-
-            {sourceDomain ? (
-              <SafeText
-                variant="caption"
-                color="muted"
-                numberOfLines={1}
-                style={styles.sourceDomain}
-              >
-                {sourceDomain}
-              </SafeText>
-            ) : null}
-          </View>
-        </View>
-
-        <Ionicons name="open-outline" size={17} color={colors.textLight} />
-      </TouchableOpacity>
-    )
-  }
-
-  function getSourceDomain(url: string) {
-    try {
-      return new URL(url).hostname.replace(/^www\./, '')
-    } catch {
-      return ''
-    }
-  }
-
   function formatUpdatedDate(value?: string | null) {
     if (!value) {
       return guideLabels.unknown
@@ -999,18 +926,6 @@ const createStyles = (colors: ThemeColors, heroColor: string) =>
       flexWrap: 'wrap',
       gap: spacing.sm,
       marginTop: spacing.lg,
-    },
-
-    metaPill: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      gap: spacing.xs,
-      borderRadius: 999,
-      borderWidth: 1,
-      borderColor: 'rgba(255,255,255,0.25)',
-      backgroundColor: 'rgba(255,255,255,0.12)',
-      paddingHorizontal: spacing.md,
-      paddingVertical: spacing.sm,
     },
 
     warningCard: {
@@ -1220,52 +1135,6 @@ const createStyles = (colors: ThemeColors, heroColor: string) =>
 
     officialSources: {
       gap: spacing.sm,
-    },
-
-    officialSourceRow: {
-      minHeight: 64,
-      borderRadius: 12,
-      borderWidth: 1,
-      borderColor: colors.border,
-      backgroundColor: colors.surfaceSecondary,
-      paddingHorizontal: spacing.md,
-      paddingVertical: spacing.sm,
-      flexDirection: 'row',
-      alignItems: 'center',
-      gap: spacing.sm,
-    },
-
-    sourceRowIcon: {
-      width: 32,
-      height: 32,
-      borderRadius: 16,
-      backgroundColor: colors.successLight,
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
-
-    sourceRowCopy: {
-      flex: 1,
-    },
-
-    sourceMetaRow: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      gap: spacing.xs,
-      marginTop: spacing.xs,
-    },
-
-    publisherPill: {
-      maxWidth: '62%',
-      minHeight: 22,
-      borderRadius: 999,
-      backgroundColor: colors.successLight,
-      paddingHorizontal: spacing.sm,
-      justifyContent: 'center',
-    },
-
-    sourceDomain: {
-      flex: 1,
     },
 
     sectionContainer: {

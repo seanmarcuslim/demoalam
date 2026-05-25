@@ -1,5 +1,3 @@
-import SampleBlock from '../../src/components/guide/SampleBlock'
-import ChecklistBlock from '../../src/components/guide/ChecklistBlock'
 import {
   Alert,
   RefreshControl,
@@ -27,12 +25,12 @@ import Badge from '../../src/components/ui/Badge'
 import GuideCard from '../../src/components/guide/GuideCard'
 import GuideCompletenessItem from '../../src/components/guide/GuideCompletenessItem'
 import GuideMetaPill from '../../src/components/guide/GuideMetaPill'
+import GuideSectionCard from '../../src/components/guide/GuideSectionCard'
 import GuideTrustItem from '../../src/components/guide/GuideTrustItem'
 import OfficialSourceRow from '../../src/components/guide/OfficialSourceRow'
 import {
   Guide,
   GuideSection,
-  GuideSectionType,
 } from '../../src/types/guide'
 import { Category } from '../../src/types/category'
 import { useFeedbackStore } from '../../src/stores/feedbackStore'
@@ -287,6 +285,17 @@ export default function GuideDetailsScreen() {
     warningCount === 1
       ? guideLabels.warningCountSingular
       : guideLabels.warningCountPlural
+  const sectionCardLabels = {
+    avoid: guideLabels.avoid,
+    checkFirst: guideLabels.checkFirst,
+    commonTimeWaster: guideLabels.commonTimeWaster,
+    doBeforeMovingOn: guideLabels.doBeforeMovingOn,
+    step: guideLabels.step,
+    tip: guideLabels.tip,
+    tipToMakeEasier: guideLabels.tipToMakeEasier,
+    warning: guideLabels.warning,
+    whatToKnow: guideLabels.whatToKnow,
+  }
 
   return (
     <ScrollView
@@ -543,12 +552,14 @@ export default function GuideDetailsScreen() {
           sections.map((section: GuideSection, index: number) => {
             const content = getSectionContent(section)
             return (
-              <SectionCard
+              <GuideSectionCard
                 key={section.id || index}
                 section={section}
                 index={index}
                 title={content?.title || `Section ${index + 1}`}
                 body={content?.body || guideLabels.emptySectionBody}
+                language={language}
+                labels={sectionCardLabels}
               />
             )
           })
@@ -634,148 +645,6 @@ export default function GuideDetailsScreen() {
       )}
     </ScrollView>
   )
-
-  function SectionCard({
-    section,
-    index,
-    title,
-    body,
-  }: {
-    section: GuideSection
-    index: number
-    title: string
-    body: string
-  }) {
-    const type = section.section_type || 'what_to_know'
-    const isWarning = type === 'warning'
-    const isStep = type === 'step'
-    const isMistake = type === 'mistake'
-    const isTip = type === 'tip'
-
-    const color = isWarning
-      ? colors.danger
-      : isMistake
-        ? colors.warning
-        : isTip
-          ? colors.success
-          : colors.primary
-
-    const icon: keyof typeof Ionicons.glyphMap = isWarning
-      ? 'alert-circle'
-      : isMistake
-        ? 'close-circle'
-        : isTip
-          ? 'bulb'
-          : isStep
-            ? 'list-circle'
-            : 'information-circle'
-
-    const content = getSectionContent(section)
-    const stepNumber = content?.step_number || index + 1
-    const checklistItems = content?.items || []
-    const sample = content?.sample
-
-    const toneStyle = {
-      backgroundColor: isWarning
-        ? colors.dangerLight
-        : isMistake
-          ? colors.warningLight
-          : isTip
-            ? colors.successLight
-            : colors.surface,
-      borderColor: isWarning
-        ? `${colors.danger}35`
-        : isMistake
-          ? `${colors.warning}35`
-          : isTip
-            ? `${colors.success}35`
-            : colors.border,
-    }
-
-    return (
-      <View
-        style={[
-          styles.sectionCard,
-          toneStyle,
-          {
-            borderLeftColor: color,
-          },
-        ]}
-      >
-        <View style={styles.sectionHeader}>
-          <View style={[styles.sectionIcon, { backgroundColor: `${color}18` }]}>
-            {isStep ? (
-              <SafeText variant="label" weight="700" style={{ color }}>
-                {stepNumber}
-              </SafeText>
-            ) : (
-              <Ionicons name={icon} size={19} color={color} />
-            )}
-          </View>
-
-          <View style={styles.sectionTitleWrap}>
-            <View style={styles.sectionLabelRow}>
-              <SafeText variant="label" weight="700" style={{ color }}>
-                {getSectionLabel(type)}
-              </SafeText>
-              {isWarning ? (
-                <SafeText variant="label" color="danger" weight="700">
-                  {guideLabels.checkFirst}
-                </SafeText>
-              ) : null}
-            </View>
-
-            <SafeText variant="h3" weight="700">
-              {title}
-            </SafeText>
-          </View>
-        </View>
-
-        <SafeText variant="body" color="muted" style={styles.sectionBody}>
-          {body}
-        </SafeText>
-
-        <ChecklistBlock items={checklistItems} language={language} />
-
-        <SampleBlock sample={sample} language={language} />
-
-        {isStep ? (
-          <View style={styles.actionHint}>
-            <Ionicons name="checkmark-circle" size={17} color={colors.success} />
-            <SafeText variant="caption" color="muted" weight="700">
-              {guideLabels.doBeforeMovingOn}
-            </SafeText>
-          </View>
-        ) : null}
-
-        {isMistake ? (
-          <View style={styles.actionHint}>
-            <Ionicons name="alert-circle" size={17} color={colors.warning} />
-            <SafeText variant="caption" color="muted" weight="700">
-              {guideLabels.commonTimeWaster}
-            </SafeText>
-          </View>
-        ) : null}
-
-        {isTip ? (
-          <View style={styles.actionHint}>
-            <Ionicons name="sparkles" size={17} color={colors.success} />
-            <SafeText variant="caption" color="muted" weight="700">
-              {guideLabels.tipToMakeEasier}
-            </SafeText>
-          </View>
-        ) : null}
-      </View>
-    )
-  }
-
-  function getSectionLabel(type: GuideSectionType) {
-    if (type === 'step') return guideLabels.step
-    if (type === 'warning') return guideLabels.warning
-    if (type === 'mistake') return guideLabels.avoid
-    if (type === 'tip') return guideLabels.tip
-    return guideLabels.whatToKnow
-  }
 
   function formatUpdatedDate(value?: string | null) {
     if (!value) {
@@ -1064,48 +933,6 @@ const createStyles = (colors: ThemeColors, heroColor: string) =>
       shadowOffset: { width: 0, height: 2 },
       shadowOpacity: 0.07,
       shadowRadius: 5,
-    },
-
-    sectionHeader: {
-      flexDirection: 'row',
-      alignItems: 'flex-start',
-      gap: spacing.sm,
-      marginBottom: spacing.md,
-    },
-
-    sectionIcon: {
-      width: 40,
-      height: 40,
-      borderRadius: 20,
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
-
-    sectionTitleWrap: {
-      flex: 1,
-    },
-
-    sectionLabelRow: {
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      gap: spacing.sm,
-      marginBottom: spacing.xs,
-    },
-
-    sectionBody: {
-      lineHeight: 24,
-    },
-
-    actionHint: {
-      marginTop: spacing.md,
-      borderRadius: 12,
-      paddingHorizontal: spacing.md,
-      paddingVertical: spacing.sm,
-      backgroundColor: colors.surfaceSecondary,
-      flexDirection: 'row',
-      alignItems: 'center',
-      gap: spacing.sm,
     },
 
     skeletonTitle: {

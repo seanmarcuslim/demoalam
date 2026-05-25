@@ -222,32 +222,43 @@ export default function SearchScreen() {
             </SafeText>
           </View>
 
-          {SUGGESTION_GROUPS.map((group) => {
+          {SUGGESTION_GROUPS.map((group, index) => {
             const groupColor = colors[group.colorKey]
+            const compact = index > 1
+            const visibleItems = compact ? group.items.slice(0, 4) : group.items
 
             return (
-              <AppCard key={group.title_en} style={styles.suggestionGroup}>
+              <AppCard
+                key={group.title_en}
+                style={[
+                  styles.suggestionGroup,
+                  compact && styles.suggestionGroupCompact,
+                ]}
+              >
                 <View style={styles.groupHeader}>
                   <View
                     style={[
                       styles.groupAccent,
+                      compact && styles.groupAccentCompact,
                       { backgroundColor: groupColor },
                     ]}
                   />
 
                   <View style={styles.groupCopy}>
-                    <SafeText variant="h3" weight="700">
+                    <SafeText variant={compact ? 'body' : 'h3'} weight="700">
                       {language === 'fil' ? group.title_fil : group.title_en}
                     </SafeText>
 
-                    <SafeText variant="caption" color="muted" style={styles.cardHint}>
-                      {language === 'fil' ? group.subtitle_fil : group.subtitle_en}
-                    </SafeText>
+                    {!compact ? (
+                      <SafeText variant="caption" color="muted" style={styles.cardHint}>
+                        {language === 'fil' ? group.subtitle_fil : group.subtitle_en}
+                      </SafeText>
+                    ) : null}
                   </View>
                 </View>
 
-                <View style={styles.suggestions}>
-                  {group.items.map((item) => (
+                <View style={[styles.suggestions, compact && styles.suggestionsCompact]}>
+                  {visibleItems.map((item) => (
                     <TouchableOpacity
                       key={item}
                       activeOpacity={0.84}
@@ -544,6 +555,11 @@ const createStyles = (colors: ThemeColors) =>
       marginBottom: spacing.md,
     },
 
+    suggestionGroupCompact: {
+      marginBottom: spacing.sm,
+      paddingVertical: spacing.md,
+    },
+
     groupHeader: {
       flexDirection: 'row',
       alignItems: 'flex-start',
@@ -555,6 +571,10 @@ const createStyles = (colors: ThemeColors) =>
       minHeight: 46,
       borderRadius: 999,
       marginTop: 2,
+    },
+
+    groupAccentCompact: {
+      minHeight: 28,
     },
 
     groupCopy: {
@@ -587,6 +607,10 @@ const createStyles = (colors: ThemeColors) =>
       flexWrap: 'wrap',
       gap: spacing.sm,
       marginTop: spacing.md,
+    },
+
+    suggestionsCompact: {
+      marginTop: spacing.sm,
     },
 
     resultsHeader: {

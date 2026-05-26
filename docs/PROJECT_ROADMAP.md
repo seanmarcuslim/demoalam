@@ -299,7 +299,16 @@ Adulting must not become a junk drawer. Only keep guides that reduce confusion, 
 
 Priority: HIGH
 
-Potential guides:
+Status: Active
+
+Current anchor:
+
+- `road-accident-first-steps`
+  - Added as the first Emergency cluster anchor guide.
+  - Focus: safety first, 911/local responders, evidence, police/traffic reporting, insurance caution, and anti-pressure settlement guidance.
+  - Search support added for `road accident`, `road crash`, `car accident`, `motorcycle accident`, `traffic accident`, `police report`, and `insurance claim`.
+
+Potential next guides:
 
 - Road accident first steps
 - Motorcycle safety checklist

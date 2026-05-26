@@ -290,6 +290,35 @@ Do not add more DSWD content yet. Watch for real user search misses, then add ta
 Approved direction:
 DemoAlam should focus on hidden-in-plain-sight public benefits, scam prevention, document readiness, first-job systems, health/emergency preparation, and rights awareness.
 
+## Emergency Cluster Progress
+
+Status: Active after Work cluster closeout
+
+Decision:
+Emergency should focus on calm first actions, safety, documentation, official reporting, and avoiding panic settlements or scam/fixer pressure.
+
+Completed initial Emergency move:
+
+- Added `road-accident-first-steps` as the Emergency anchor for crashes.
+- It covers first 2 minutes, evidence, reporting guidance, insurance caution, common mistakes, documentation checklist, sample call/message, and official sources.
+- Search support added for `road accident`, `road crash`, `car accident`, `motorcycle accident`, `traffic accident`, `police report`, and `insurance claim`.
+
+Next Emergency candidates:
+
+1. `medical-emergency-documents`
+   - Already strong, but should be verified against the current guide standard.
+
+2. `phone-stolen-first-hour`
+   - Already strong and urgent.
+   - Keep as Digital Safety/Emergency bridge.
+
+3. `lost-wallet-first-steps`
+   - Already strong and urgent.
+   - Keep as identity/money emergency bridge.
+
+4. Disaster preparedness guide
+   - Future candidate only after road accident guide is verified.
+
 ## Money Cluster Progress
 
 Status: Active after DSWD core sprint

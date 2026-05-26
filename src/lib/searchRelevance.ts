@@ -266,6 +266,30 @@ function scoreGuide(guide: Guide, query: string) {
   }
 
   if (
+    cleanQuery.includes('road accident') ||
+    cleanQuery.includes('road crash') ||
+    cleanQuery.includes('car accident') ||
+    cleanQuery.includes('motorcycle accident') ||
+    cleanQuery.includes('traffic accident') ||
+    cleanQuery.includes('police report') ||
+    cleanQuery.includes('insurance claim') ||
+    cleanQuery.includes('incident report') ||
+    cleanQuery.includes('blotter')
+  ) {
+    if (
+      slug === 'road-accident-first-steps' ||
+      title.includes('road accident') ||
+      title.includes('road crash') ||
+      keywords.includes('road accident') ||
+      keywords.includes('road crash') ||
+      keywords.includes('police report') ||
+      keywords.includes('insurance claim')
+    ) {
+      score += slug === 'road-accident-first-steps' ? 130 : 85
+    }
+  }
+
+  if (
     cleanQuery.includes('lost wallet') ||
     cleanQuery.includes('wallet') ||
     cleanQuery.includes('lost id') ||

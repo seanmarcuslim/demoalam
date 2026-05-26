@@ -29,15 +29,24 @@ import GuideMetaPill from '../../src/components/guide/GuideMetaPill'
 import GuideOfficialSourcesCard from '../../src/components/guide/GuideOfficialSourcesCard'
 import GuideSectionCard from '../../src/components/guide/GuideSectionCard'
 import GuideTrustItem from '../../src/components/guide/GuideTrustItem'
-import {
+import type {
   Guide,
   GuideSection,
 } from '../../src/types/guide'
-import { Category } from '../../src/types/category'
 import { useFeedbackStore } from '../../src/stores/feedbackStore'
 import Skeleton from '../../src/components/ui/Skeleton'
 import { getCategoryAccent } from '../../src/lib/categoryVisuals'
 import { analyticsService } from '../../src/services/analyticsService'
+import {
+  formatGuideUpdatedDate,
+  getGuideCategoryName,
+  getGuideCostLabel,
+  getGuideDifficultyLabel,
+  getGuideSectionContent,
+  getGuideTagline,
+  getGuideTimeLabel,
+  getGuideTitle,
+} from '../../src/lib/guideDisplay'
 
 export default function GuideDetailsScreen() {
   const { id } = useLocalSearchParams()
@@ -73,78 +82,25 @@ export default function GuideDetailsScreen() {
   const isGuideSaved = useSavedStore((state) => state.isSaved)
 
   const getTitle = (item: Guide) =>
-    language === 'fil' ? item.title_fil : item.title_en
+    getGuideTitle(item, language)
 
   const getTagline = (item: Guide) =>
-    language === 'fil' ? item.tagline_fil : item.tagline_en
+    getGuideTagline(item, language)
 
-  const getCategoryName = (item: Category) =>
-    language === 'fil' ? item.name_fil : item.name_en
+  const getCategoryName = (item: Guide['category']) =>
+    item ? getGuideCategoryName(item, language) : guideLabels.unknown
 
   const getSectionContent = (section: GuideSection) =>
-    language === 'fil' ? section.content_fil : section.content_en
+    getGuideSectionContent(section, language)
 
-  const getDifficultyLabel = (value?: string | null) => {
-    if (!value) {
-      return guideLabels.notSpecified
-    }
+  const getDifficultyLabel = (value?: string | null) =>
+    getGuideDifficultyLabel(value, guideLabels)
 
-    const normalized = value.toLowerCase()
+  const getCostLabel = (value?: string | null) =>
+    getGuideCostLabel(value, guideLabels, language)
 
-    if (normalized === 'katamtaman') {
-      return guideLabels.moderate
-    }
-
-    if (normalized === 'madali') {
-      return guideLabels.easy
-    }
-
-    if (normalized === 'mahirap') {
-      return guideLabels.hard
-    }
-
-    return value
-  }
-
-  const getCostLabel = (value?: string | null) => {
-    if (!value) {
-      return guideLabels.notSpecified
-    }
-
-    const normalized = value.toLowerCase()
-
-    if (normalized === 'kadalasang libre') {
-      return guideLabels.usuallyFree
-    }
-
-    if (normalized === 'libre kung official') {
-      return guideLabels.freeOfficial
-    }
-
-    if (normalized.includes('depende')) {
-      return language === 'fil' ? value : guideLabels.dependsOnIssue
-    }
-
-    return value
-  }
-
-  const getTimeLabel = (value?: string | null) => {
-    if (!value) {
-      return guideLabels.notSpecified
-    }
-
-    const normalized = value.toLowerCase()
-
-    if (normalized.includes('depende')) {
-      return language === 'fil' ? value : guideLabels.dependsOnIssue
-    }
-
-    if (normalized.includes('minuto')) {
-      return language === 'fil' ? value : value.replace('minuto', 'min')
-    }
-
-    return value
-  }
+  const getTimeLabel = (value?: string | null) =>
+    getGuideTimeLabel(value, guideLabels, language)
 
   const handleSave = () => {
     if (!activeGuide) return
@@ -607,19 +563,7 @@ export default function GuideDetailsScreen() {
   )
 
   function formatUpdatedDate(value?: string | null) {
-    if (!value) {
-      return guideLabels.unknown
-    }
-
-    try {
-      return new Intl.DateTimeFormat(language === 'fil' ? 'fil-PH' : 'en-US', {
-        month: 'short',
-        day: 'numeric',
-        year: 'numeric',
-      }).format(new Date(value))
-    } catch {
-      return guideLabels.unknown
-    }
+    return formatGuideUpdatedDate(value, guideLabels, language)
   }
 }
 

@@ -69,6 +69,7 @@ function scoreGuide(guide: Guide, query: string) {
   const title = `${guide.title_en} ${guide.title_fil}`.toLowerCase()
   const keywords =
     `${guide.keywords_en || ''} ${guide.keywords_fil || ''}`.toLowerCase()
+  const slug = guide.slug.toLowerCase()
   const categorySlug = guide.category?.slug?.toLowerCase() || ''
   const cleanQuery = query.toLowerCase()
   const directTerms = toSearchTerms(cleanQuery)
@@ -125,6 +126,20 @@ function scoreGuide(guide: Guide, query: string) {
       keywords.includes('harassment')
     ) {
       score += 90
+    }
+  }
+
+  if (
+    cleanQuery.includes('loan app') ||
+    cleanQuery.includes('online lending') ||
+    cleanQuery.includes('ola')
+  ) {
+    if (
+      slug === 'loan-red-flags-before-borrowing' ||
+      title.includes('online loan') ||
+      title.includes('loan red flags')
+    ) {
+      score += 120
     }
   }
 

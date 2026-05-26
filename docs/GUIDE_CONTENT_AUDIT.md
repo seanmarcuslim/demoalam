@@ -321,7 +321,16 @@ Next Money candidates:
 
 3. `loan-red-flags-before-borrowing`
    - Already strong.
+   - Money path audit confirmed `utang` surfaces it correctly.
+   - Search ranking was tightened so `loan app`, `online lending`, and `OLA` prefer this guide over general payday/shortfall guidance.
    - Later improvement: add a clearer "do not install if..." visual checklist if UI supports it.
+
+Money category audit:
+
+- Category contains a coherent harm-reduction set: first bank account, salary shortfall, online loan red flags, and DSWD livelihood support.
+- `gcash scam` is discoverable through Search and Scams/Digital Safety, even though it is not in Money.
+- Search verified for `utang`, `loan app`, `gcash scam`, `kulang sweldo`, `bank account`, and `maintaining balance`.
+- Decision: Money is strong enough for MVP. Do not add another Money guide immediately.
 
 Rejected direction:
 Do not become a generic life hacks or blog article app.

@@ -354,8 +354,9 @@ Next Work candidates:
    - Next action: Do not rewrite now.
 
 2. `job-interview-basic-answers`
-   - Low-medium priority.
-   - Improve only if focused on first-job scripts, salary expectation safety, availability, and avoiding exploitative offers.
+   - Current inspection: Already strong enough for MVP. It covers real stories, answer structure, common first-job questions, questions to ask the interviewer, mistakes, prep checklist, and suspicious-offer protection.
+   - Completed polish: Filipino title/metadata improved, warning title strengthened, and search support added for `first job interview`, `interview answers`, `expected salary`, `tell me about yourself`, and `why should we hire you`.
+   - Next action: Do not rewrite now.
 
 3. `fake-job-offer-red-flags`
    - Already strong.

@@ -320,19 +320,34 @@ function scoreGuide(guide: Guide, query: string) {
     cleanQuery.includes('first resume') ||
     cleanQuery.includes('resume fresh graduate') ||
     cleanQuery.includes('resume student') ||
-    cleanQuery.includes('interview')
+    cleanQuery.includes('interview') ||
+    cleanQuery.includes('job interview') ||
+    cleanQuery.includes('first job interview') ||
+    cleanQuery.includes('interview answers') ||
+    cleanQuery.includes('expected salary') ||
+    cleanQuery.includes('salary expectation') ||
+    cleanQuery.includes('tell me about yourself') ||
+    cleanQuery.includes('why should we hire you')
   ) {
     if (
       slug === 'resume-no-experience' ||
+      slug === 'job-interview-basic-answers' ||
       title.includes('resume') ||
       title.includes('interview') ||
       keywords.includes('resume') ||
       keywords.includes('no experience') ||
       keywords.includes('walang experience') ||
       keywords.includes('fresh graduate') ||
-      keywords.includes('interview')
+      keywords.includes('interview') ||
+      keywords.includes('expected salary') ||
+      keywords.includes('tell me about yourself') ||
+      keywords.includes('why should we hire you')
     ) {
-      score += slug === 'resume-no-experience' ? 115 : 85
+      score +=
+        slug === 'resume-no-experience' ||
+        slug === 'job-interview-basic-answers'
+          ? 115
+          : 85
     }
   }
 

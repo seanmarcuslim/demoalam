@@ -26,79 +26,10 @@ import AppCard from '../../src/components/ui/AppCard'
 import AppButton from '../../src/components/ui/AppButton'
 import EmptyState from '../../src/components/ui/EmptyState'
 import { getCategoryAccent } from '../../src/lib/categoryVisuals'
-
-const SUGGESTIONS = [
-  'first job',
-  'resume',
-  'interview',
-  'payroll',
-  'rent',
-  'utility bills',
-  'moving out',
-  'loan app',
-  'fake job',
-  'ayuda',
-  'DSWD AICS',
-  '4Ps',
-  'Walang Gutom',
-  'student aid',
-  'livelihood',
-  'social pension',
-  'batas',
-  'consumer rights',
-  'gcash scam',
-]
-
-const SUGGESTION_GROUPS = [
-  {
-    title_en: 'First job flow',
-    title_fil: 'Unang trabaho',
-    subtitle_en: 'Resume, interview, requirements, payroll, and payday basics.',
-    subtitle_fil: 'Resume, interview, requirements, payroll, at payday basics.',
-    colorKey: 'success' as const,
-    items: ['first job', 'resume', 'interview', 'job requirements', 'payroll'],
-  },
-  {
-    title_en: 'Adulting basics',
-    title_fil: 'Adulting basics',
-    subtitle_en: 'Rent, utility bills, moving out, and first home decisions.',
-    subtitle_fil: 'Rent, utility bills, pagbukod, at first home decisions.',
-    colorKey: 'accent' as const,
-    items: ['rent', 'utility bills', 'moving out', 'kuryente', 'tubig'],
-  },
-  {
-    title_en: 'Aid & benefits',
-    title_fil: 'Ayuda at benefits',
-    subtitle_en: 'Start here for DSWD, cash assistance, and public programs.',
-    subtitle_fil: 'Unahin ito para sa DSWD, cash assistance, at public programs.',
-    colorKey: 'primary' as const,
-    items: ['ayuda', 'DSWD AICS', '4Ps', 'Walang Gutom', 'social pension'],
-  },
-  {
-    title_en: 'Rights & protection',
-    title_fil: 'Karapatan at proteksyon',
-    subtitle_en: 'Useful when money, accounts, privacy, or complaints are involved.',
-    subtitle_fil: 'Useful kapag pera, account, privacy, o reklamo ang involved.',
-    colorKey: 'danger' as const,
-    items: ['batas', 'consumer rights', 'data privacy act', 'gcash scam'],
-  },
-  {
-    title_en: 'Scam checks',
-    title_fil: 'Scam checks',
-    subtitle_en: 'Loan apps, fake recruiters, e-wallet scams, and phishing.',
-    subtitle_fil: 'Loan apps, fake recruiters, e-wallet scams, at phishing.',
-    colorKey: 'danger' as const,
-    items: ['loan app', 'fake job', 'job scam', 'recruiter', 'gcash scam'],
-  },
-  {
-    title_en: 'Student & livelihood',
-    title_fil: 'Student at kabuhayan',
-    subtitle_en: 'Find education aid, cash-for-work, and livelihood support.',
-    subtitle_fil: 'Hanapin ang education aid, cash-for-work, at kabuhayan support.',
-    colorKey: 'accent' as const,
-    items: ['student aid', 'livelihood', 'scholarship', 'cash-for-work'],
-  },
-]
+import {
+  SEARCH_SUGGESTION_GROUPS,
+  SEARCH_SUGGESTIONS,
+} from '../../src/lib/searchSuggestions'
 
 export default function SearchScreen() {
   const {
@@ -217,7 +148,7 @@ export default function SearchScreen() {
             </SafeText>
           </View>
 
-          {SUGGESTION_GROUPS.map((group, index) => {
+          {SEARCH_SUGGESTION_GROUPS.map((group, index) => {
             const groupColor = colors[group.colorKey]
             const compact = index > 1
             const visibleItems = compact ? group.items.slice(0, 4) : group.items
@@ -424,7 +355,7 @@ export default function SearchScreen() {
               />
 
               <View style={styles.emptySuggestions}>
-                {SUGGESTIONS.slice(0, 4).map((item) => (
+                {SEARCH_SUGGESTIONS.slice(0, 4).map((item) => (
                   <TouchableOpacity
                     key={item}
                     activeOpacity={0.84}

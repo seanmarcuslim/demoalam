@@ -301,6 +301,8 @@ Completed initial Money move:
 
 - Upgraded `payday-budget-simple-split` into a shortfall/prioritization guide for users whose salary is not enough before payday.
 - Added search support for `kulang sweldo`, `kulang sahod`, `petsa de peligro`, `salary short`, and `before payday`.
+- Verified in Expo Web after SQL apply: `kulang sweldo`, `petsa de peligro`, and `before payday` surface the upgraded guide.
+- Verified guide rendering: warning, checklist, sample message, and priority steps display correctly.
 
 Next Money candidates:
 

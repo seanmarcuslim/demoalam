@@ -23,6 +23,7 @@ import type { ThemeColors } from '../../src/theme/colors'
 import SafeText from '../../src/components/ui/SafeText'
 import Badge from '../../src/components/ui/Badge'
 import GuideCard from '../../src/components/guide/GuideCard'
+import GuideCalloutCard from '../../src/components/guide/GuideCalloutCard'
 import GuideCompletenessItem from '../../src/components/guide/GuideCompletenessItem'
 import GuideMetaPill from '../../src/components/guide/GuideMetaPill'
 import GuideOfficialSourcesCard from '../../src/components/guide/GuideOfficialSourcesCard'
@@ -386,38 +387,19 @@ export default function GuideDetailsScreen() {
       </View>
 
       {isShowingCachedGuide ? (
-        <View style={styles.offlineCard}>
-          <View style={styles.offlineIcon}>
-            <Ionicons name="cloud-offline-outline" size={19} color={colors.warning} />
-          </View>
-
-          <View style={styles.offlineCopy}>
-            <SafeText variant="label" color="warning" weight="700">
-              {guideLabels.offlineCopyTitle}
-            </SafeText>
-
-            <SafeText variant="bodyMd" color="muted" style={styles.offlineText}>
-              {guideLabels.offlineCopyMessage}
-            </SafeText>
-          </View>
-        </View>
+        <GuideCalloutCard
+          variant="offline"
+          title={guideLabels.offlineCopyTitle}
+          body={guideLabels.offlineCopyMessage}
+        />
       ) : null}
 
       {activeGuide.is_urgent ? (
-        <View style={styles.warningCard}>
-          <View style={styles.warningIcon}>
-            <Ionicons name="warning" size={20} color={colors.danger} />
-          </View>
-          <View style={styles.warningCopy}>
-            <SafeText variant="label" color="danger" weight="700">
-              {guideLabels.importantWarning}
-            </SafeText>
-
-            <SafeText variant="bodyMd" color="muted" style={styles.warningText}>
-              {guideLabels.urgentWarningMessage}
-            </SafeText>
-          </View>
-        </View>
+        <GuideCalloutCard
+          variant="warning"
+          title={guideLabels.importantWarning}
+          body={guideLabels.urgentWarningMessage}
+        />
       ) : null}
 
       <View style={styles.trustCard}>
@@ -719,64 +701,6 @@ const createStyles = (colors: ThemeColors, heroColor: string) =>
       flexWrap: 'wrap',
       gap: spacing.sm,
       marginTop: spacing.lg,
-    },
-
-    warningCard: {
-      marginHorizontal: spacing.md,
-      marginTop: spacing.lg,
-      borderRadius: 16,
-      borderWidth: 1,
-      borderColor: `${colors.danger}35`,
-      backgroundColor: colors.dangerLight,
-      padding: spacing.md,
-      flexDirection: 'row',
-      gap: spacing.md,
-    },
-
-    warningIcon: {
-      width: 38,
-      height: 38,
-      borderRadius: 19,
-      backgroundColor: colors.surface,
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
-
-    warningCopy: {
-      flex: 1,
-    },
-
-    warningText: {
-      marginTop: spacing.xs,
-    },
-
-    offlineCard: {
-      marginHorizontal: spacing.md,
-      marginTop: spacing.lg,
-      borderRadius: 16,
-      borderWidth: 1,
-      borderColor: `${colors.warning}35`,
-      backgroundColor: colors.warningLight,
-      padding: spacing.md,
-      flexDirection: 'row',
-      gap: spacing.md,
-    },
-
-    offlineIcon: {
-      width: 38,
-      height: 38,
-      borderRadius: 19,
-      backgroundColor: colors.surface,
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
-
-    offlineCopy: {
-      flex: 1,
-    },
-
-    offlineText: {
-      marginTop: spacing.xs,
     },
 
     trustCard: {

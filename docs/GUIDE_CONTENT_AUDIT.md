@@ -349,7 +349,9 @@ Completed initial Work move:
 Next Work candidates:
 
 1. `resume-no-experience`
-   - Upgrade only if it becomes practical and specific: truthful resume bullets, student projects, volunteer work, certificates, and no-fake-experience warning.
+   - Current inspection: Already strong enough for MVP. It covers truthful proof, school/projects/community experience, simple sections, action-plus-proof bullets, common mistakes, one-page checklist, and a sample summary.
+   - Completed discovery polish: added stronger support for `walang experience`, `first resume`, `resume fresh graduate`, and `resume student`.
+   - Next action: Do not rewrite now.
 
 2. `job-interview-basic-answers`
    - Low-medium priority.

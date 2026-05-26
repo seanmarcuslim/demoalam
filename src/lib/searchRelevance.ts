@@ -315,15 +315,24 @@ function scoreGuide(guide: Guide, query: string) {
     cleanQuery.includes('resume') ||
     cleanQuery.includes('cv') ||
     cleanQuery.includes('biodata') ||
+    cleanQuery.includes('no experience') ||
+    cleanQuery.includes('walang experience') ||
+    cleanQuery.includes('first resume') ||
+    cleanQuery.includes('resume fresh graduate') ||
+    cleanQuery.includes('resume student') ||
     cleanQuery.includes('interview')
   ) {
     if (
+      slug === 'resume-no-experience' ||
       title.includes('resume') ||
       title.includes('interview') ||
       keywords.includes('resume') ||
+      keywords.includes('no experience') ||
+      keywords.includes('walang experience') ||
+      keywords.includes('fresh graduate') ||
       keywords.includes('interview')
     ) {
-      score += 85
+      score += slug === 'resume-no-experience' ? 115 : 85
     }
   }
 

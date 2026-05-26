@@ -29,45 +29,14 @@ import Badge from '../../src/components/ui/Badge'
 import AppButton from '../../src/components/ui/AppButton'
 import GuideCard from '../../src/components/guide/GuideCard'
 import { Guide } from '../../src/types/guide'
-import { Category } from '../../src/types/category'
 import LoadingFeed from '../../src/components/layout/LoadingFeed'
 import { getCategoryAccent } from '../../src/lib/categoryVisuals'
-
-const GOVERNMENT_AID_TERMS = [
-  'dswd',
-  'aics',
-  'social pension',
-  'walang gutom',
-  '4ps',
-  'emergency cash transfer',
-  'sustainable livelihood',
-  'livelihood assistance',
-  'student cash for work',
-  'cash-for-work',
-  'tara basa',
-  'kalahi',
-]
-
-const guideSearchText = (guide: Guide) =>
-  [
-    guide.slug,
-    guide.title_en,
-    guide.title_fil,
-    guide.tagline_en,
-    guide.tagline_fil,
-    guide.keywords_en,
-    guide.keywords_fil,
-    ...(guide.tags || []),
-  ]
-    .filter(Boolean)
-    .join(' ')
-    .toLowerCase()
-
-const isGovernmentAidGuide = (guide: Guide) => {
-  const searchText = guideSearchText(guide)
-
-  return GOVERNMENT_AID_TERMS.some((term) => searchText.includes(term))
-}
+import { isGovernmentAidGuide } from '../../src/lib/guideCollections'
+import {
+  getGuideCategoryName,
+  getGuideTagline,
+  getGuideTitle,
+} from '../../src/lib/guideDisplay'
 
 export default function HomeScreen() {
   const { colors } = useTheme()
@@ -138,13 +107,13 @@ export default function HomeScreen() {
   }
 
   const getTitle = (guide: Guide) =>
-    language === 'fil' ? guide.title_fil : guide.title_en
+    getGuideTitle(guide, language)
 
   const getTagline = (guide: Guide) =>
-    language === 'fil' ? guide.tagline_fil : guide.tagline_en
+    getGuideTagline(guide, language)
 
-  const getCategoryName = (category: Category) =>
-    language === 'fil' ? category.name_fil : category.name_en
+  const getCategoryName = (category: NonNullable<Guide['category']>) =>
+    getGuideCategoryName(category, language)
 
   const renderGuide = ({ item }: { item: Guide }) => (
     <GuideCard

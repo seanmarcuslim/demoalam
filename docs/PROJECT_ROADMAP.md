@@ -250,13 +250,22 @@ Keep these practical and anti-exploitation. Avoid generic finance-blog tone.
 
 Priority: HIGH
 
-Status: Active
+Status: MVP-ready core completed
 
 Current anchor:
 
 - `first-job-requirements`
   - Polished as the Work entry guide.
   - Search support added for everyday terms like `unang trabaho`, `pre employment requirements`, `HR requirements`, `first time jobseeker`, `free NBI`, and `SSS PhilHealth Pag-IBIG TIN`.
+
+Completed support/protection guides:
+
+- `resume-no-experience`
+- `job-interview-basic-answers`
+- `fake-job-offer-red-flags`
+
+Decision:
+Do not add more Work guides immediately. Move to Emergency or Adulting so the app does not become uneven.
 
 Potential next guides:
 

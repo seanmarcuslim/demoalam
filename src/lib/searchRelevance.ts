@@ -146,21 +146,31 @@ function scoreGuide(guide: Guide, query: string) {
   if (
     cleanQuery.includes('fake job') ||
     cleanQuery.includes('job scam') ||
+    cleanQuery.includes('illegal recruitment') ||
     cleanQuery.includes('recruiter') ||
     cleanQuery.includes('recruitment') ||
     cleanQuery.includes('placement fee') ||
+    cleanQuery.includes('processing fee') ||
+    cleanQuery.includes('training fee') ||
+    cleanQuery.includes('work abroad') ||
+    cleanQuery.includes('tourist visa') ||
     cleanQuery.includes('ofw') ||
     cleanQuery.includes('poea') ||
     cleanQuery.includes('dmw')
   ) {
     if (
+      slug === 'fake-job-offer-red-flags' ||
       title.includes('fake job') ||
       keywords.includes('job scam') ||
       keywords.includes('illegal recruitment') ||
       keywords.includes('placement fee') ||
+      keywords.includes('processing fee') ||
+      keywords.includes('training fee') ||
+      keywords.includes('work abroad') ||
+      keywords.includes('tourist visa') ||
       keywords.includes('ofw')
     ) {
-      score += 90
+      score += slug === 'fake-job-offer-red-flags' ? 120 : 90
     }
   }
 

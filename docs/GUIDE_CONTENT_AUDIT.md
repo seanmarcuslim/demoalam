@@ -359,8 +359,19 @@ Next Work candidates:
    - Next action: Do not rewrite now.
 
 3. `fake-job-offer-red-flags`
-   - Already strong.
-   - Keep as the scam-facing Work guide.
+   - Current inspection: Already strong enough for MVP. It covers recruiter verification, fees, tourist-visa/work-abroad red flags, official channels, mistakes, checklist, sample verification message, and official sources.
+   - Completed polish: improved Filipino title/tagline and discovery support for `illegal recruitment`, `processing fee`, `training fee`, `work abroad`, and `tourist visa`.
+   - Decision: Keep as the scam-facing Work guide.
+
+Work cluster closeout:
+
+- `first-job-requirements`: MVP-ready anchor guide.
+- `resume-no-experience`: MVP-ready support guide.
+- `job-interview-basic-answers`: MVP-ready support guide.
+- `fake-job-offer-red-flags`: MVP-ready protection guide.
+
+Decision:
+Work is strong enough for MVP. Do not add more Work guides until another category cluster catches up.
 
 Rejected direction:
 Do not become a generic life hacks or blog article app.

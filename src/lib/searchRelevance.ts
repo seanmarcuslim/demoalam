@@ -318,19 +318,45 @@ function scoreGuide(guide: Guide, query: string) {
 
   if (
     cleanQuery.includes('lost wallet') ||
+    cleanQuery.includes('nawala wallet') ||
+    cleanQuery.includes('nanakaw wallet') ||
+    cleanQuery.includes('stolen wallet') ||
+    cleanQuery.includes('freeze card') ||
+    cleanQuery.includes('block card') ||
+    cleanQuery.includes('affidavit of loss') ||
     cleanQuery.includes('wallet') ||
     cleanQuery.includes('lost id') ||
+    cleanQuery.includes('nawala id') ||
     cleanQuery.includes('lost phone') ||
-    cleanQuery.includes('stolen phone')
+    cleanQuery.includes('stolen phone') ||
+    cleanQuery.includes('nanakaw phone') ||
+    cleanQuery.includes('nawala phone') ||
+    cleanQuery.includes('nawala cellphone') ||
+    cleanQuery.includes('lost sim') ||
+    cleanQuery.includes('sim replacement') ||
+    cleanQuery.includes('imei')
   ) {
     if (
+      slug === 'lost-wallet-first-steps' ||
+      slug === 'phone-stolen-first-hour' ||
       title.includes('wallet') ||
       title.includes('phone') ||
       keywords.includes('lost wallet') ||
+      keywords.includes('nawala wallet') ||
+      keywords.includes('stolen wallet') ||
+      keywords.includes('affidavit of loss') ||
       keywords.includes('lost phone') ||
+      keywords.includes('stolen phone') ||
+      keywords.includes('nanakaw phone') ||
+      keywords.includes('sim replacement') ||
+      keywords.includes('imei') ||
       keywords.includes('valid id')
     ) {
-      score += 70
+      score +=
+        slug === 'lost-wallet-first-steps' ||
+        slug === 'phone-stolen-first-hour'
+          ? 105
+          : 70
     }
   }
 
@@ -577,16 +603,28 @@ function scoreGuide(guide: Guide, query: string) {
     cleanQuery.includes('stolen phone') ||
     cleanQuery.includes('lost phone') ||
     cleanQuery.includes('phone stolen') ||
+    cleanQuery.includes('nanakaw phone') ||
+    cleanQuery.includes('nawala phone') ||
+    cleanQuery.includes('nawala cellphone') ||
+    cleanQuery.includes('lost sim') ||
+    cleanQuery.includes('sim replacement') ||
+    cleanQuery.includes('imei') ||
     cleanQuery.includes('nanakaw') ||
     cleanQuery.includes('sim')
   ) {
     if (
+      slug === 'phone-stolen-first-hour' ||
       title.includes('phone') ||
       keywords.includes('stolen phone') ||
       keywords.includes('lost phone') ||
+      keywords.includes('nanakaw phone') ||
+      keywords.includes('nawala cellphone') ||
+      keywords.includes('lost sim') ||
+      keywords.includes('sim replacement') ||
+      keywords.includes('imei') ||
       keywords.includes('sim')
     ) {
-      score += 85
+      score += slug === 'phone-stolen-first-hour' ? 120 : 85
     }
   }
 

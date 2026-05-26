@@ -312,6 +312,13 @@ Polished support guides:
 
 - `medical-emergency-documents`
   - Improved title/copy, warning strength, document safety checklist, and search discovery for hospital/PhilHealth/HMO/billing/social-service terms.
+- `phone-stolen-first-hour`
+  - Search discovery strengthened for Filipino lost/stolen phone, lost SIM, SIM replacement, and IMEI terms.
+- `lost-wallet-first-steps`
+  - Search discovery strengthened for Filipino lost wallet, freeze/block card, affidavit of loss, and lost ID terms.
+
+Decision:
+Emergency is strong enough for MVP after verification. Move next to Adulting or Healthcare.
 
 Potential next guides:
 

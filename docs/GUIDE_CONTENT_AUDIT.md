@@ -313,10 +313,22 @@ Next Emergency candidates:
 2. `phone-stolen-first-hour`
    - Already strong and urgent.
    - Keep as Digital Safety/Emergency bridge.
+   - Completed discovery polish: added stronger support for `nanakaw phone`, `nawala phone`, `nawala cellphone`, `lost SIM`, `SIM replacement`, and `IMEI`.
 
 3. `lost-wallet-first-steps`
    - Already strong and urgent.
    - Keep as identity/money emergency bridge.
+   - Completed discovery polish: added stronger support for `nawala wallet`, `nanakaw wallet`, `freeze card`, `block card`, `affidavit of loss`, `lost ID`, and `nawala ID`.
+
+Emergency cluster closeout:
+
+- `road-accident-first-steps`: MVP-ready anchor guide.
+- `medical-emergency-documents`: MVP-ready support guide.
+- `phone-stolen-first-hour`: MVP-ready urgent guide.
+- `lost-wallet-first-steps`: MVP-ready urgent guide.
+
+Decision:
+Emergency is strong enough for MVP. Do not add more Emergency guides until Adulting or Healthcare catches up.
 
 4. Disaster preparedness guide
    - Future candidate only after road accident guide is verified.

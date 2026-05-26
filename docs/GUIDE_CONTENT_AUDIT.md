@@ -314,10 +314,10 @@ Next Money candidates:
    - Search ranking was tightened for GCash-specific intent.
 
 2. `bank-account-first-time`
-   - Upgraded in repo migration.
+   - Upgraded and applied.
    - New direction: first-account choice, fees, maintaining balance, Basic Deposit Account, payroll use, PDIC awareness, and account-rental/money-mule safety.
    - Search support added for `unang bank account`, `first bank account`, `payroll account`, `basic deposit account`, `BDA`, `maintaining balance`, `no maintaining balance`, `dormancy fee`, and `PDIC`.
-   - Next action: apply SQL in Supabase and verify in Expo Web.
+   - Expo Web verification: live guide renders Basic Deposit Account, maintaining balance, account-rental warning, PDIC, and sample branch/chat questions.
 
 3. `loan-red-flags-before-borrowing`
    - Already strong.

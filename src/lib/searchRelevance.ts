@@ -303,11 +303,21 @@ function scoreGuide(guide: Guide, query: string) {
     cleanQuery.includes('payroll') ||
     cleanQuery.includes('sweldo') ||
     cleanQuery.includes('sahod') ||
-    cleanQuery.includes('salary')
+    cleanQuery.includes('salary') ||
+    cleanQuery.includes('kulang sweldo') ||
+    cleanQuery.includes('kulang sahod') ||
+    cleanQuery.includes('petsa de peligro') ||
+    cleanQuery.includes('before payday') ||
+    cleanQuery.includes('salary short')
   ) {
     if (
       title.includes('payday') ||
+      title.includes('salary short') ||
+      title.includes('kulang ang sweldo') ||
       title.includes('bank account') ||
+      keywords.includes('cash short') ||
+      keywords.includes('shortfall') ||
+      keywords.includes('petsa de peligro') ||
       keywords.includes('payday') ||
       keywords.includes('payroll') ||
       keywords.includes('bank account')

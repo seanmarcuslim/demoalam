@@ -106,9 +106,10 @@ These guides are useful, but should be upgraded to the richer guide standard.
 These are candidates to upgrade, merge, or replace.
 
 1. `payday-budget-simple-split`
-   - Issue: Useful but generic. Many apps/articles already cover this.
-   - Decision: Replace or upgrade later.
-   - Better direction: "What to do when salary is short before payday" or "Debt payment priority checklist."
+   - Issue: Previously useful but generic. Many apps/articles already cover ordinary budget splits.
+   - Decision: Upgraded into a higher-impact shortfall guide.
+   - New direction: "Salary short before payday: what to prioritize first."
+   - Why: Better fits DemoAlam because it helps users avoid panic borrowing, loan-app traps, missed essentials, and debt spirals.
 
 2. `first-time-utility-bills`
    - Issue: Practical but thin.
@@ -288,6 +289,32 @@ Do not add more DSWD content yet. Watch for real user search misses, then add ta
 
 Approved direction:
 DemoAlam should focus on hidden-in-plain-sight public benefits, scam prevention, document readiness, first-job systems, health/emergency preparation, and rights awareness.
+
+## Money Cluster Progress
+
+Status: Active after DSWD core sprint
+
+Decision:
+Strengthen Money through harm-reduction guides before adding generic financial literacy content.
+
+Completed initial Money move:
+
+- Upgraded `payday-budget-simple-split` into a shortfall/prioritization guide for users whose salary is not enough before payday.
+- Added search support for `kulang sweldo`, `kulang sahod`, `petsa de peligro`, `salary short`, and `before payday`.
+
+Next Money candidates:
+
+1. `gcash-scam-red-flags`
+   - Improve differentiation from general phishing.
+   - Add more GCash-specific send-money, fake support, QR, refund, and wrong-send safety logic.
+
+2. `bank-account-first-time`
+   - Polish Filipino title and simplify beginner wording.
+   - Keep bank fees, maintaining balance, Basic Deposit Account, and money-mule warnings.
+
+3. `loan-red-flags-before-borrowing`
+   - Already strong.
+   - Later improvement: add a clearer "do not install if..." visual checklist if UI supports it.
 
 Rejected direction:
 Do not become a generic life hacks or blog article app.

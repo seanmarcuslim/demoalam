@@ -290,6 +290,13 @@ function scoreGuide(guide: Guide, query: string) {
   }
 
   if (
+    cleanQuery.includes('philhealth benefits') ||
+    cleanQuery.includes('hospital bill') ||
+    cleanQuery.includes('case rate') ||
+    cleanQuery.includes('philhealth mdr') ||
+    cleanQuery.includes('member data record') ||
+    cleanQuery.includes('claim form 1') ||
+    cleanQuery.includes('discharge billing') ||
     cleanQuery.includes('medical emergency') ||
     cleanQuery.includes('hospital documents') ||
     cleanQuery.includes('hospital emergency') ||
@@ -302,9 +309,17 @@ function scoreGuide(guide: Guide, query: string) {
     cleanQuery.includes('social service')
   ) {
     if (
+      slug === 'philhealth-hospital-benefits-checklist' ||
       slug === 'medical-emergency-documents' ||
+      title.includes('philhealth') ||
+      title.includes('hospital bill') ||
       title.includes('medical emergency') ||
       title.includes('hospital') ||
+      keywords.includes('philhealth benefits') ||
+      keywords.includes('hospital bill') ||
+      keywords.includes('case rate') ||
+      keywords.includes('member data record') ||
+      keywords.includes('claim form') ||
       keywords.includes('medical emergency') ||
       keywords.includes('hospital') ||
       keywords.includes('philhealth') ||
@@ -312,7 +327,11 @@ function scoreGuide(guide: Guide, query: string) {
       keywords.includes('billing') ||
       keywords.includes('social service')
     ) {
-      score += slug === 'medical-emergency-documents' ? 125 : 80
+      score +=
+        slug === 'philhealth-hospital-benefits-checklist' ||
+        slug === 'medical-emergency-documents'
+          ? 125
+          : 80
     }
   }
 

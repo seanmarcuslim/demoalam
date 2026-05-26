@@ -333,6 +333,32 @@ Emergency is strong enough for MVP. Do not add more Emergency guides until Adult
 4. Disaster preparedness guide
    - Future candidate only after road accident guide is verified.
 
+## Healthcare Cluster Progress
+
+Status: Active after Emergency closeout
+
+Decision:
+Healthcare should focus on access, benefits, documents, billing clarity, official channels, and preparation. Avoid diagnosis, treatment instructions, or medical claims.
+
+Completed initial Healthcare move:
+
+- Added `philhealth-hospital-benefits-checklist` as the Healthcare anchor guide.
+- It explains PhilHealth as a benefit/deduction process, not guaranteed cash or full bill coverage.
+- It covers hospital billing questions, documents, case rate clarification, HMO/company benefit coordination, social service options, common mistakes, checklist items, and sample questions.
+- Official sources are limited to PhilHealth pages.
+- Search support added for `philhealth benefits`, `hospital bill`, `case rate`, `PhilHealth MDR`, `Member Data Record`, `Claim Form 1`, and `discharge billing`.
+
+Next Healthcare candidates:
+
+1. PhilHealth YAKAP/Konsulta guide
+   - Needs current-source verification before writing.
+
+2. Medicine price/generic medicine checklist
+   - Useful, but must avoid medical advice and focus only on safe purchasing and official verification.
+
+3. Public hospital social service desk guide
+   - High fit for DemoAlam if written as practical assistance navigation.
+
 ## Money Cluster Progress
 
 Status: Active after DSWD core sprint

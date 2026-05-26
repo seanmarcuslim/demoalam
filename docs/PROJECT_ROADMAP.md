@@ -331,6 +331,28 @@ Potential next guides:
 Rule:
 Write for stressful situations. Prioritize first actions, safety, documentation, and official reporting.
 
+### Healthcare Cluster
+
+Priority: HIGH
+
+Status: Active
+
+Current anchor:
+
+- `philhealth-hospital-benefits-checklist`
+  - Added as the first Healthcare cluster anchor guide.
+  - Focus: hospital billing clarity, PhilHealth benefit questions, documents, HMO/company benefit coordination, social service options, and anti-fixer guidance.
+  - Search support added for `philhealth benefits`, `hospital bill`, `case rate`, `PhilHealth MDR`, `Claim Form 1`, and `discharge billing`.
+
+Potential next guides:
+
+- PhilHealth YAKAP/Konsulta guide
+- Public hospital social service desk guide
+- Generic medicine and medicine-price checklist
+
+Rule:
+Healthcare content must guide access and preparation, not diagnosis or treatment. Use official/current sources for every health-related program claim.
+
 ### DSWD / Government Aid Cluster
 
 Priority: CRITICAL - CORE SPRINT COMPLETED

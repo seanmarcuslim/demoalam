@@ -7,6 +7,7 @@ import { useSavedStore } from '../../src/stores/savedStore'
 import { useSettingsStore } from '../../src/stores/settingsStore'
 import { useTheme } from '../../src/hooks/useTheme'
 import { useGuides, useSavedGuideDetails } from '../../src/hooks/useGuides'
+import { translations } from '../../src/utils/translations'
 import { spacing } from '../../src/theme/spacing'
 import type { ThemeColors } from '../../src/theme/colors'
 import type { Guide } from '../../src/types/guide'
@@ -25,6 +26,7 @@ export default function SavedScreen() {
   const { data: savedGuideDetails = [] } = useSavedGuideDetails(savedIds)
   const { language } = useSettingsStore()
   const { colors } = useTheme()
+  const labels = translations[language].savedScreen
   const styles = createStyles(colors)
 
   const savedGuides = savedIds
@@ -66,39 +68,23 @@ export default function SavedScreen() {
 
   const savedCountLabel =
     savedIds.length === 1
-      ? language === 'fil'
-        ? '1 gabay'
-        : '1 guide'
-      : language === 'fil'
-        ? `${savedIds.length} gabay`
-        : `${savedIds.length} guides`
+      ? labels.guideSingular
+      : `${savedIds.length} ${labels.guidePlural}`
 
   const offlineCountLabel =
     offlineCount === 1
-      ? language === 'fil'
-        ? '1 pang-offline'
-        : '1 offline'
-      : language === 'fil'
-        ? `${offlineCount} pang-offline`
-        : `${offlineCount} offline`
+      ? labels.offlineSingular
+      : `${offlineCount} ${labels.offlinePlural}`
 
   const sourceCountLabel =
     sourceCount === 1
-      ? language === 'fil'
-        ? '1 sanggunian'
-        : '1 source'
-      : language === 'fil'
-        ? `${sourceCount} sanggunian`
-        : `${sourceCount} sources`
+      ? labels.sourceSingular
+      : `${sourceCount} ${labels.sourcePlural}`
 
   const urgentCountLabel =
     urgentCount === 1
-      ? language === 'fil'
-        ? '1 babala'
-        : '1 urgent'
-      : language === 'fil'
-        ? `${urgentCount} babala`
-        : `${urgentCount} urgent`
+      ? labels.urgentSingular
+      : `${urgentCount} ${labels.urgentPlural}`
 
   useEffect(() => {
     if (guides.length > 0 && savedIds.length > 0) {
@@ -127,13 +113,11 @@ export default function SavedScreen() {
         </View>
 
         <SafeText variant="h1" weight="700">
-          {language === 'fil' ? 'Naka-save para balikan' : 'Saved for later'}
+          {labels.heroTitle}
         </SafeText>
 
         <SafeText variant="bodyMd" color="muted" style={styles.heroSubtitle}>
-          {language === 'fil'
-            ? 'Mahahalagang guide na madaling balikan kahit mahina ang signal o stressful ang sitwasyon.'
-            : 'Important guides you can quickly return to during emergencies, weak signal, or stressful situations.'}
+          {labels.heroSubtitle}
         </SafeText>
 
         <View style={styles.summaryRow}>
@@ -149,9 +133,7 @@ export default function SavedScreen() {
           <Ionicons name="cloud-offline-outline" size={19} color={colors.success} />
 
           <SafeText variant="bodyMd" color="muted" style={styles.noticeText}>
-            {language === 'fil'
-              ? 'Naka-save ang guides sa device para mas madaling balikan kapag kailangan.'
-              : 'Saved guides stay easier to revisit when you need them again.'}
+            {labels.offlineNotice}
           </SafeText>
         </AppCard>
       ) : null}
@@ -161,9 +143,7 @@ export default function SavedScreen() {
           <Ionicons name="sync-circle-outline" size={22} color={colors.warning} />
 
           <SafeText variant="bodyMd" color="muted" style={styles.noticeText}>
-            {language === 'fil'
-              ? 'May saved guides ka, pero kailangan munang mag-online para makuha ang offline copies.'
-              : 'You have saved guides, but you need to go online once to fetch the offline copies.'}
+            {labels.refreshNotice}
           </SafeText>
         </AppCard>
       ) : null}
@@ -171,15 +151,11 @@ export default function SavedScreen() {
       {priorityGuides.length > 0 ? (
         <View style={styles.prioritySection}>
           <SafeText variant="h3" weight="700">
-            {language === 'fil'
-              ? 'Mahalagang balikan agad'
-              : 'Important to return to quickly'}
+            {labels.priorityTitle}
           </SafeText>
 
           <SafeText variant="caption" color="muted" style={styles.sectionSubtitle}>
-            {language === 'fil'
-              ? 'Para sa emergency, scam, o stressful na sitwasyon.'
-              : 'For emergencies, scams, or stressful situations.'}
+            {labels.prioritySubtitle}
           </SafeText>
 
           {priorityGuides.map((item) => (
@@ -199,13 +175,7 @@ export default function SavedScreen() {
       {remainingGuides.length > 0 ? (
         <View style={styles.allSavedHeader}>
           <SafeText variant="h3" weight="700">
-            {priorityGuides.length > 0
-              ? language === 'fil'
-                ? 'Iba pang naka-save'
-                : 'More saved guides'
-              : language === 'fil'
-                ? 'Lahat ng naka-save'
-                : 'All saved guides'}
+            {priorityGuides.length > 0 ? labels.moreSaved : labels.allSaved}
           </SafeText>
         </View>
       ) : null}
@@ -241,33 +211,21 @@ export default function SavedScreen() {
               iconName={needsRefresh ? 'sync-circle-outline' : 'bookmark-outline'}
               title={
                 needsRefresh
-                  ? language === 'fil'
-                    ? 'I-refresh ang saved guides'
-                    : 'Refresh saved guides'
-                  : language === 'fil'
-                    ? 'Wala ka pang saved guides'
-                    : 'No saved guides yet'
+                  ? labels.refreshTitle
+                  : labels.emptyTitle
               }
               subtitle={
                 needsRefresh
-                  ? language === 'fil'
-                    ? 'Bumalik online at buksan ulit ang guides para ma-save ang latest offline copy.'
-                    : 'Go online and reopen your guides to save the latest offline copy.'
-                  : language === 'fil'
-                    ? 'I-save ang guides tungkol sa ayuda, IDs, karapatan, health, o scam warnings para mabilis balikan.'
-                    : 'Save guides about aid, IDs, rights, health, or scam warnings so they are easy to revisit.'
+                  ? labels.refreshSubtitle
+                  : labels.emptySubtitle
               }
             />
 
             <AppButton
               title={
                 needsRefresh
-                  ? language === 'fil'
-                    ? 'Pumunta sa Home'
-                    : 'Go to Home'
-                  : language === 'fil'
-                    ? 'Mag-browse ng guides'
-                    : 'Browse guides'
+                  ? labels.goHome
+                  : labels.browseGuides
               }
               onPress={() => router.push('/')}
               style={styles.emptyAction}

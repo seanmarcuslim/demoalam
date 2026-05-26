@@ -34,6 +34,7 @@ export default function ProfileScreen() {
   const { resetOnboarding } = useOnboardingStore()
   const { signOut, isLoading } = useAuth()
   const t = translations[language]
+  const labels = t.profileScreen
   const styles = createStyles(colors)
   const appVersion = Constants.expoConfig?.version || '1.0.0'
 
@@ -42,18 +43,13 @@ export default function ProfileScreen() {
       await signOut()
 
       Alert.alert(
-        language === 'fil' ? 'Naka-logout' : 'Logged out',
-        language === 'fil'
-          ? 'Nagba-browse ka na ngayon bilang bisita.'
-          : 'You are now browsing as guest.'
+        labels.loggedOutTitle,
+        labels.loggedOutMessage
       )
     } catch (error: unknown) {
       Alert.alert(
-        language === 'fil' ? 'Hindi ma-logout' : 'Logout failed',
-        getErrorMessage(
-          error,
-          language === 'fil' ? 'Subukan muli.' : 'Please try again.'
-        )
+        labels.logoutFailedTitle,
+        getErrorMessage(error, labels.tryAgain)
       )
     }
   }
@@ -81,21 +77,11 @@ export default function ProfileScreen() {
         </View>
 
         <SafeText variant="h1" color="surface" style={styles.heroTitle}>
-          {isGuest
-            ? language === 'fil'
-              ? 'Guest mode'
-              : 'Guest mode'
-            : language === 'fil'
-              ? 'Naka-login'
-              : 'Logged in'}
+          {isGuest ? labels.guestMode : labels.loggedIn}
         </SafeText>
 
         <SafeText variant="bodyMd" color="surface" style={styles.heroSubtitle}>
-          {isGuest
-            ? language === 'fil'
-              ? 'Magbasa agad. Walang account na kailangan.'
-              : 'Read immediately. No account required.'
-            : email}
+          {isGuest ? labels.guestSubtitle : email}
         </SafeText>
 
         <View style={styles.heroStats}>
@@ -104,7 +90,7 @@ export default function ProfileScreen() {
               {savedIds.length}
             </SafeText>
             <SafeText variant="caption" color="surface" style={styles.statLabel}>
-              {language === 'fil' ? 'Na-save' : 'Saved'}
+              {labels.savedStat}
             </SafeText>
           </View>
         </View>
@@ -118,9 +104,7 @@ export default function ProfileScreen() {
         {isGuest ? (
           <View style={styles.panel}>
             <SafeText variant="bodyMd" color="muted" style={styles.panelCopy}>
-              {language === 'fil'
-                ? 'Optional ang account. Pwede kang matuto at mag-save muna bilang guest.'
-                : 'Accounts are optional. You can learn and save guides first as a guest.'}
+              {labels.guestAccountCopy}
             </SafeText>
 
             <TouchableOpacity
@@ -154,9 +138,7 @@ export default function ProfileScreen() {
             <Ionicons name="log-out-outline" size={18} color="#FFFFFF" />
             <SafeText color="surface" weight="700">
               {isLoading
-                ? language === 'fil'
-                  ? 'Naglo-logout...'
-                  : 'Logging out...'
+                ? labels.loggingOut
                 : t.logout}
             </SafeText>
           </TouchableOpacity>
@@ -165,12 +147,12 @@ export default function ProfileScreen() {
 
       <View style={styles.section}>
         <SafeText variant="h3" weight="700" style={styles.sectionTitle}>
-          {language === 'fil' ? 'Mga Setting' : 'Settings'}
+          {labels.settings}
         </SafeText>
 
         <SettingRow
           icon="language-outline"
-          title={language === 'fil' ? 'Wika' : 'Language'}
+          title={labels.language}
           subtitle={language === 'fil' ? 'Filipino' : 'English'}
           right={
             <Switch
@@ -212,12 +194,10 @@ export default function ProfileScreen() {
           </View>
           <View style={styles.rowCopy}>
             <SafeText weight="700">
-              {language === 'fil' ? 'I-reset ang Onboarding' : 'Reset Onboarding'}
+              {labels.resetOnboarding}
             </SafeText>
             <SafeText variant="caption" color="muted" style={styles.rowSubtitle}>
-              {language === 'fil'
-                ? 'Balikan ang unang gabay ng app.'
-                : 'See the first-launch intro again.'}
+              {labels.resetOnboardingSubtitle}
             </SafeText>
           </View>
           <Ionicons name="chevron-forward" size={18} color={colors.textLight} />
@@ -226,7 +206,7 @@ export default function ProfileScreen() {
 
       <View style={styles.section}>
         <SafeText variant="h3" weight="700" style={styles.sectionTitle}>
-          {language === 'fil' ? 'Tungkol sa App' : 'About the App'}
+          {labels.aboutApp}
         </SafeText>
 
         <View style={styles.aboutCard}>
@@ -237,14 +217,10 @@ export default function ProfileScreen() {
             DemoAlam
           </SafeText>
           <SafeText variant="bodyMd" color="muted" style={styles.appTagline}>
-            {language === 'fil'
-              ? '"Sayang, ngayon ko lang nalaman."'
-              : '"I wish I knew this earlier."'}
+            {labels.tagline}
           </SafeText>
           <SafeText variant="bodyMd" color="muted" style={styles.appMission}>
-            {language === 'fil'
-              ? 'Ginawa para gawing mas malinaw ang benefits, karapatan, proseso, at babala na dapat mas madaling makita ng bawat Pilipino.'
-              : 'Built to make public benefits, rights, processes, and warnings easier for Filipinos to understand and act on.'}
+            {labels.mission}
           </SafeText>
           <SafeText variant="caption" color="light" style={styles.appVersion}>
             Version {appVersion}

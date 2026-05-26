@@ -307,10 +307,11 @@ Completed initial Money move:
 Next Money candidates:
 
 1. `gcash-scam-red-flags`
-   - Upgraded in repo migration.
+   - Upgraded and applied.
    - New direction: specific GCash send-money, wrong-send, fake support, Account Secure/device registration, scam report, and unauthorized transaction safety.
    - Search support added for `maling send`, `wrong send`, `gcash otp`, `gcash support`, `account secure`, `device registration`, and `unauthorized transaction`.
-   - Next action: apply SQL in Supabase and verify in Expo Web.
+   - Expo Web verification: live guide renders the GCash-specific warning, wrong-send section, device registration section, and sample scam report.
+   - Search ranking was tightened for GCash-specific intent.
 
 2. `bank-account-first-time`
    - Polish Filipino title and simplify beginner wording.

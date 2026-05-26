@@ -411,6 +411,27 @@ function scoreGuide(guide: Guide, query: string) {
   }
 
   if (
+    cleanQuery.includes('gcash support') ||
+    cleanQuery.includes('fake support') ||
+    cleanQuery.includes('maling send') ||
+    cleanQuery.includes('wrong send') ||
+    cleanQuery.includes('account secure') ||
+    cleanQuery.includes('device registration') ||
+    cleanQuery.includes('unauthorized transaction')
+  ) {
+    if (
+      title.includes('gcash scam') ||
+      keywords.includes('wrong send') ||
+      keywords.includes('fake support') ||
+      keywords.includes('account secure') ||
+      keywords.includes('device registration') ||
+      keywords.includes('unauthorized transaction')
+    ) {
+      score += 70
+    }
+  }
+
+  if (
     cleanQuery.includes('stolen phone') ||
     cleanQuery.includes('lost phone') ||
     cleanQuery.includes('phone stolen') ||

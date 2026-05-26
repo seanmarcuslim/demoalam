@@ -153,7 +153,11 @@ export default function ProfileScreen() {
         <SettingRow
           icon="language-outline"
           title={labels.language}
-          subtitle={language === 'fil' ? 'Filipino' : 'English'}
+          subtitle={
+            language === 'fil'
+              ? labels.languageFilipino
+              : labels.languageEnglish
+          }
           right={
             <Switch
               value={language === 'fil'}
@@ -223,7 +227,7 @@ export default function ProfileScreen() {
             {labels.mission}
           </SafeText>
           <SafeText variant="caption" color="light" style={styles.appVersion}>
-            Version {appVersion}
+            {labels.version} {appVersion}
           </SafeText>
         </View>
       </View>

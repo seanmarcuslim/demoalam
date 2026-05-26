@@ -126,6 +126,7 @@ export default function SearchScreen() {
   const clearRecentSearches = useSearchStore((state) => state.clearRecentSearches)
 
   const styles = createStyles(colors)
+  const labels = t.searchScreen
 
   const showEmptySearch = searchTerm.trim().length === 0
   const resultCategoryIds = useMemo(
@@ -178,9 +179,7 @@ export default function SearchScreen() {
             <AppCard style={styles.recentBlock}>
               <View style={styles.recentHeader}>
                 <SafeText variant="h3" weight="700">
-                  {language === 'fil'
-                    ? 'Huli mong hinanap'
-                    : 'Recent searches'}
+                  {labels.recentSearches}
                 </SafeText>
 
                 <TouchableOpacity
@@ -189,7 +188,7 @@ export default function SearchScreen() {
                   onPress={clearRecentSearches}
                 >
                   <SafeText variant="caption" color="primary" weight="700">
-                    {language === 'fil' ? 'Burahin' : 'Clear'}
+                    {labels.clear}
                   </SafeText>
                 </TouchableOpacity>
               </View>
@@ -210,15 +209,11 @@ export default function SearchScreen() {
 
           <View style={styles.discoveryIntro}>
             <SafeText variant="h3" weight="700">
-              {language === 'fil'
-                ? 'Ano ang kailangan mong malinawan?'
-                : 'What do you need clarified?'}
+              {labels.discoveryTitle}
             </SafeText>
 
             <SafeText variant="bodyMd" color="muted" style={styles.cardHint}>
-              {language === 'fil'
-                ? 'Maghanap gamit ang simpleng salita. DemoAlam hahanapin ang mas tamang guide.'
-                : 'Search in plain words. DemoAlam will look for the closest useful guide.'}
+              {labels.discoverySubtitle}
             </SafeText>
           </View>
 
@@ -278,17 +273,13 @@ export default function SearchScreen() {
     return (
       <View style={styles.resultsHeader}>
         <SafeText variant="h3" weight="700">
-          {language === 'fil' ? 'Mga Resulta' : 'Results'}
+          {labels.results}
         </SafeText>
 
         <SafeText variant="caption" color="muted">
           {isLoading
-            ? language === 'fil'
-              ? 'Naghahanap...'
-              : 'Searching...'
-            : `${filteredResults.length} ${
-                language === 'fil' ? 'nahanap' : 'found'
-              }`}
+            ? labels.searching
+            : `${filteredResults.length} ${labels.found}`}
         </SafeText>
 
         <View style={styles.queryPill}>
@@ -319,7 +310,7 @@ export default function SearchScreen() {
               weight="700"
               color={!selectedCategory ? 'surface' : 'primary'}
             >
-              {language === 'fil' ? 'Lahat' : 'All'}
+              {labels.all}
             </SafeText>
           </TouchableOpacity>
 
@@ -365,11 +356,7 @@ export default function SearchScreen() {
     <View style={styles.container}>
       <AppHeader
         title={t.search}
-        subtitle={
-          language === 'fil'
-            ? 'Hanapin ang benefits, karapatan, IDs, trabaho, pera, at scam warnings.'
-            : 'Find guides about benefits, rights, IDs, work, money, and scam warnings.'
-        }
+        subtitle={labels.headerSubtitle}
       />
 
       <View style={styles.searchBoxWrap}>
@@ -379,9 +366,7 @@ export default function SearchScreen() {
           <TextInput
             style={styles.searchInput}
             placeholder={
-              language === 'fil'
-                ? 'Halimbawa: DSWD AICS, batas, valid ID...'
-                : 'Example: DSWD AICS, rights, valid ID...'
+              labels.placeholder
             }
             placeholderTextColor={colors.textLight}
             selectionColor={colors.primary}
@@ -418,20 +403,12 @@ export default function SearchScreen() {
             <AppCard style={styles.emptyCard}>
               <EmptyState
                 icon="!"
-                title={
-                  language === 'fil'
-                    ? 'Hindi ma-search ngayon'
-                    : 'Search is unavailable'
-                }
-                subtitle={
-                  language === 'fil'
-                    ? 'I-check ang internet connection o subukan ulit.'
-                    : 'Check your internet connection or try again.'
-                }
+                title={labels.searchUnavailableTitle}
+                subtitle={labels.searchUnavailableSubtitle}
               />
 
               <AppButton
-                title={language === 'fil' ? 'Subukan ulit' : 'Try again'}
+                title={labels.tryAgain}
                 onPress={() => refetch()}
                 style={styles.emptyAction}
               />
@@ -442,16 +419,8 @@ export default function SearchScreen() {
             <AppCard style={styles.emptyCard}>
               <EmptyState
                 icon="?"
-                title={
-                  language === 'fil'
-                    ? 'Walang resulta'
-                    : 'No results found'
-                }
-                subtitle={
-                  language === 'fil'
-                    ? 'Subukan ang mas simpleng salita o alisin ang category filter.'
-                    : 'Try simpler words or remove the category filter.'
-                }
+                title={labels.noResultsTitle}
+                subtitle={labels.noResultsSubtitle}
               />
 
               <View style={styles.emptySuggestions}>

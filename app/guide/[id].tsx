@@ -536,21 +536,6 @@ const createStyles = (colors: ThemeColors, heroColor: string) =>
       paddingTop: spacing.md,
     },
 
-    sectionCard: {
-      backgroundColor: colors.surface,
-      borderRadius: 14,
-      borderWidth: 1,
-      borderLeftWidth: 4,
-      borderColor: colors.border,
-      padding: spacing.md,
-      marginBottom: spacing.md,
-      elevation: 2,
-      shadowColor: colors.shadow,
-      shadowOffset: { width: 0, height: 2 },
-      shadowOpacity: 0.07,
-      shadowRadius: 5,
-    },
-
     emptyCard: {
       backgroundColor: colors.surface,
       borderRadius: 16,

@@ -26,6 +26,7 @@ import AppCard from '../../src/components/ui/AppCard'
 import AppButton from '../../src/components/ui/AppButton'
 import EmptyState from '../../src/components/ui/EmptyState'
 import { getCategoryAccent } from '../../src/lib/categoryVisuals'
+import { getCategoryName } from '../../src/lib/categoryCopy'
 import {
   SEARCH_SUGGESTION_GROUPS,
   SEARCH_SUGGESTIONS,
@@ -272,7 +273,7 @@ export default function SearchScreen() {
                     color: active ? '#FFFFFF' : accent,
                   }}
                 >
-                  {`${language === 'fil' ? cat.name_fil : cat.name_en} ${count}`}
+                  {`${getCategoryName(cat, language)} ${count}`}
                 </SafeText>
               </TouchableOpacity>
             )

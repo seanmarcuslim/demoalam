@@ -24,12 +24,11 @@ import SafeText from '../../src/components/ui/SafeText'
 import Badge from '../../src/components/ui/Badge'
 import GuideCard from '../../src/components/guide/GuideCard'
 import GuideCalloutCard from '../../src/components/guide/GuideCalloutCard'
-import GuideCompletenessItem from '../../src/components/guide/GuideCompletenessItem'
 import GuideDetailSkeleton from '../../src/components/guide/GuideDetailSkeleton'
 import GuideMetaPill from '../../src/components/guide/GuideMetaPill'
 import GuideOfficialSourcesCard from '../../src/components/guide/GuideOfficialSourcesCard'
 import GuideSectionCard from '../../src/components/guide/GuideSectionCard'
-import GuideTrustItem from '../../src/components/guide/GuideTrustItem'
+import GuideTrustSummaryCard from '../../src/components/guide/GuideTrustSummaryCard'
 import type {
   Guide,
   GuideSection,
@@ -207,12 +206,6 @@ export default function GuideDetailsScreen() {
   const warningCount = sections.filter((section) => section.section_type === 'warning').length
   const hasChecklist = sectionContents.some((content) => (content?.items?.length ?? 0) > 0)
   const hasSample = sectionContents.some((content) => Boolean(content?.sample))
-  const stepCountLabel =
-    stepCount === 1 ? guideLabels.stepCountSingular : guideLabels.stepCountPlural
-  const warningCountLabel =
-    warningCount === 1
-      ? guideLabels.warningCountSingular
-      : guideLabels.warningCountPlural
   const sectionCardLabels = {
     avoid: guideLabels.avoid,
     checkFirst: guideLabels.checkFirst,
@@ -329,101 +322,21 @@ export default function GuideDetailsScreen() {
         />
       ) : null}
 
-      <View style={styles.trustCard}>
-        <View style={styles.trustHeader}>
-          <View style={styles.trustIcon}>
-            <Ionicons name="shield-checkmark" size={17} color={colors.primary} />
-          </View>
-          <View style={styles.trustCopy}>
-            <SafeText variant="label" weight="700" style={styles.compactCardTitle}>
-              {guideLabels.quickCheck}
-            </SafeText>
-            <SafeText variant="caption" color="muted" style={styles.trustSubtitle}>
-              {guideLabels.quickCheckSubtitle}
-            </SafeText>
-          </View>
-        </View>
-
-        <View style={styles.trustGrid}>
-          <GuideTrustItem
-            icon="calendar-outline"
-            label={guideLabels.updated}
-            value={updatedLabel}
-          />
-          <GuideTrustItem
-            icon="shield-checkmark-outline"
-            label={guideLabels.sources}
-            value={
-              sourceCount > 0
-                ? `${sourceCount} ${guideLabels.officialSourceCount}`
-                : guideLabels.verifyFirst
-            }
-          />
-          <GuideTrustItem
-            icon="time-outline"
-            label={guideLabels.time}
-            value={getTimeLabel(
-              activeGuide.estimated_time || `${activeGuide.read_time_min} min`
-            )}
-          />
-          <GuideTrustItem
-            icon="wallet-outline"
-            label={guideLabels.cost}
-            value={getCostLabel(activeGuide.estimated_cost)}
-          />
-          <GuideTrustItem
-            icon="speedometer-outline"
-            label={guideLabels.level}
-            value={getDifficultyLabel(activeGuide.difficulty)}
-          />
-        </View>
-
-        <View style={styles.completenessBlock}>
-          <SafeText variant="label" weight="700" style={styles.completenessTitle}>
-            {guideLabels.guideIncludes}
-          </SafeText>
-
-          <View style={styles.completenessGrid}>
-            <GuideCompletenessItem
-              done={sourceCount > 0}
-              label={guideLabels.sources}
-            />
-            <GuideCompletenessItem
-              done={hasChecklist}
-              label={guideLabels.checklist}
-            />
-            <GuideCompletenessItem
-              done={hasSample}
-              label={guideLabels.sample}
-            />
-            <GuideCompletenessItem
-              done={stepCount > 0}
-              label={
-                stepCount > 0
-                  ? `${stepCount} ${stepCountLabel}`
-                  : guideLabels.stepsFallback
-              }
-            />
-            <GuideCompletenessItem
-              done={warningCount > 0}
-              label={
-                warningCount > 0
-                  ? `${warningCount} ${warningCountLabel}`
-                  : guideLabels.warningFallback
-              }
-            />
-          </View>
-        </View>
-
-        {officialSources.length === 0 ? (
-          <View style={styles.officialNote}>
-            <Ionicons name="information-circle" size={17} color={colors.warning} />
-            <SafeText variant="caption" color="muted" style={styles.officialText}>
-              {guideLabels.officialVerificationNote}
-            </SafeText>
-          </View>
-        ) : null}
-      </View>
+      <GuideTrustSummaryCard
+        colors={colors}
+        labels={guideLabels}
+        updatedLabel={updatedLabel}
+        sourceCount={sourceCount}
+        timeLabel={getTimeLabel(
+          activeGuide.estimated_time || `${activeGuide.read_time_min} min`
+        )}
+        costLabel={getCostLabel(activeGuide.estimated_cost)}
+        difficultyLabel={getDifficultyLabel(activeGuide.difficulty)}
+        hasChecklist={hasChecklist}
+        hasSample={hasSample}
+        stepCount={stepCount}
+        warningCount={warningCount}
+      />
 
       <GuideOfficialSourcesCard
         sources={officialSources}
@@ -616,82 +529,6 @@ const createStyles = (colors: ThemeColors, heroColor: string) =>
       flexWrap: 'wrap',
       gap: spacing.sm,
       marginTop: spacing.lg,
-    },
-
-    trustCard: {
-      marginHorizontal: spacing.md,
-      marginTop: spacing.md,
-      borderRadius: 14,
-      backgroundColor: colors.surface,
-      borderWidth: 1,
-      borderColor: colors.border,
-      padding: spacing.sm,
-    },
-
-    trustHeader: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      gap: spacing.sm,
-      marginBottom: spacing.xs,
-    },
-
-    trustIcon: {
-      width: 32,
-      height: 32,
-      borderRadius: 12,
-      backgroundColor: colors.primaryLight,
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
-
-    trustCopy: {
-      flex: 1,
-    },
-
-    trustSubtitle: {
-      marginTop: 1,
-    },
-
-    trustGrid: {
-      flexDirection: 'row',
-      flexWrap: 'wrap',
-      gap: spacing.xs,
-    },
-
-    officialNote: {
-      marginTop: spacing.sm,
-      borderRadius: 12,
-      backgroundColor: colors.warningLight,
-      padding: spacing.sm,
-      flexDirection: 'row',
-      alignItems: 'flex-start',
-      gap: spacing.sm,
-    },
-
-    officialText: {
-      flex: 1,
-    },
-
-    completenessBlock: {
-      marginTop: spacing.sm,
-      borderRadius: 12,
-      backgroundColor: colors.surfaceSecondary,
-      padding: spacing.sm,
-    },
-
-    completenessTitle: {
-      textTransform: 'uppercase',
-      marginBottom: spacing.xs,
-    },
-
-    completenessGrid: {
-      flexDirection: 'row',
-      flexWrap: 'wrap',
-      gap: spacing.xs,
-    },
-
-    compactCardTitle: {
-      textTransform: 'uppercase',
     },
 
     sectionContainer: {

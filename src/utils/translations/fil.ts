@@ -194,6 +194,14 @@ export const filTranslations = {
       searchGuides: 'Mag-search ng gabay',
       backToCategories: 'Bumalik sa mga kategorya',
     },
+    bundleDetailScreen: {
+      notFound: 'Hindi makita ang bundle',
+      badge: 'Gabay na paghahanda',
+      orderNote: 'Sundin muna ang tamang pagkakasunod. Siguraduhin muna ang access at bawasan ang risk bago mag-recover ng documents.',
+      firstStep: 'UNA',
+      urgent: 'Urgent',
+      minute: 'minuto',
+    },
     components: {
       guideCard: {
         officialSource: 'Opisyal na sanggunian',

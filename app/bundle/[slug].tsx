@@ -22,6 +22,7 @@ import { useSettingsStore } from '../../src/stores/settingsStore'
 
 import { spacing } from '../../src/theme/spacing'
 import type { ThemeColors } from '../../src/theme/colors'
+import { translations } from '../../src/utils/translations'
 
 export default function BundleDetailsScreen() {
   const { slug } = useLocalSearchParams()
@@ -37,6 +38,8 @@ export default function BundleDetailsScreen() {
     useSettingsStore()
 
   const styles = createStyles(colors)
+  const labels =
+    translations[language].bundleDetailScreen
 
   const {
     data: bundle,
@@ -51,9 +54,7 @@ export default function BundleDetailsScreen() {
     return (
       <View style={styles.empty}>
         <SafeText variant="h3" weight="700">
-          {language === 'fil'
-            ? 'Hindi makita ang bundle'
-            : 'Bundle not found'}
+          {labels.notFound}
         </SafeText>
       </View>
     )
@@ -81,9 +82,7 @@ export default function BundleDetailsScreen() {
               variant="caption"
               weight="700"
             >
-              {language === 'fil'
-                ? 'Gabay na paghahanda'
-                : 'Guided preparedness'}
+              {labels.badge}
             </SafeText>
           </View>
 
@@ -117,9 +116,7 @@ export default function BundleDetailsScreen() {
               color="muted"
               style={styles.orderNoteText}
             >
-              {language === 'fil'
-                ? 'Sundin muna ang tamang pagkakasunod. Siguraduhin muna ang access at bawasan ang risk bago mag-recover ng documents.'
-                : 'Follow this order first. Secure access, reduce risk, then recover documents.'}
+              {labels.orderNote}
             </SafeText>
           </View>
         </View>
@@ -147,9 +144,7 @@ export default function BundleDetailsScreen() {
               weight="700"
             >
               {index === 0
-                ? language === 'fil'
-                  ? 'UNA'
-                  : 'START'
+                ? labels.firstStep
                 : index + 1}
             </SafeText>
           </View>
@@ -183,9 +178,7 @@ export default function BundleDetailsScreen() {
                     variant="caption"
                     weight="700"
                   >
-                    {language === 'fil'
-                      ? 'Urgent'
-                      : 'Urgent'}
+                    {labels.urgent}
                   </SafeText>
                 </View>
               ) : null}
@@ -195,7 +188,7 @@ export default function BundleDetailsScreen() {
                   variant="caption"
                   weight="700"
                 >
-                  {item.guide?.read_time_min || '?'} min
+                  {item.guide?.read_time_min || '?'} {labels.minute}
                 </SafeText>
               </View>
             </View>

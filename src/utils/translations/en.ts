@@ -194,6 +194,14 @@ export const enTranslations = {
       searchGuides: 'Search guides',
       backToCategories: 'Back to categories',
     },
+    bundleDetailScreen: {
+      notFound: 'Bundle not found',
+      badge: 'Guided preparedness',
+      orderNote: 'Follow this order first. Secure access, reduce risk, then recover documents.',
+      firstStep: 'START',
+      urgent: 'Urgent',
+      minute: 'min',
+    },
     components: {
       guideCard: {
         officialSource: 'Verified source',

@@ -308,6 +308,11 @@ Current anchor:
   - Focus: safety first, 911/local responders, evidence, police/traffic reporting, insurance caution, and anti-pressure settlement guidance.
   - Search support added for `road accident`, `road crash`, `car accident`, `motorcycle accident`, `traffic accident`, `police report`, and `insurance claim`.
 
+Polished support guides:
+
+- `medical-emergency-documents`
+  - Improved title/copy, warning strength, document safety checklist, and search discovery for hospital/PhilHealth/HMO/billing/social-service terms.
+
 Potential next guides:
 
 - Road accident first steps

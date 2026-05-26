@@ -290,6 +290,33 @@ function scoreGuide(guide: Guide, query: string) {
   }
 
   if (
+    cleanQuery.includes('medical emergency') ||
+    cleanQuery.includes('hospital documents') ||
+    cleanQuery.includes('hospital emergency') ||
+    cleanQuery.includes('philhealth hospital') ||
+    cleanQuery.includes('emergency contact') ||
+    cleanQuery.includes('ambulance') ||
+    cleanQuery.includes('ambulansya') ||
+    cleanQuery.includes('hmo') ||
+    cleanQuery.includes('billing') ||
+    cleanQuery.includes('social service')
+  ) {
+    if (
+      slug === 'medical-emergency-documents' ||
+      title.includes('medical emergency') ||
+      title.includes('hospital') ||
+      keywords.includes('medical emergency') ||
+      keywords.includes('hospital') ||
+      keywords.includes('philhealth') ||
+      keywords.includes('hmo') ||
+      keywords.includes('billing') ||
+      keywords.includes('social service')
+    ) {
+      score += slug === 'medical-emergency-documents' ? 125 : 80
+    }
+  }
+
+  if (
     cleanQuery.includes('lost wallet') ||
     cleanQuery.includes('wallet') ||
     cleanQuery.includes('lost id') ||

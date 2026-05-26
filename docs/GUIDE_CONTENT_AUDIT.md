@@ -306,7 +306,9 @@ Completed initial Emergency move:
 Next Emergency candidates:
 
 1. `medical-emergency-documents`
-   - Already strong, but should be verified against the current guide standard.
+   - Polished after road accident anchor.
+   - Improved Filipino title, stronger start warning, richer what-to-know checklist, and anti-fixer/document safety items.
+   - Search support added for `medical emergency`, `hospital documents`, `hospital emergency`, `philhealth hospital`, `HMO`, `billing`, `social service`, `ambulance`, and `ambulansya`.
 
 2. `phone-stolen-first-hour`
    - Already strong and urgent.

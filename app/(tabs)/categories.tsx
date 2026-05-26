@@ -77,44 +77,36 @@ const CATEGORY_COPY: Record<string, CategoryCopy> = {
 const CATEGORY_SIGNALS: Record<
   string,
   {
-    en: string
-    fil: string
+    labelKey: keyof typeof translations.en.categoriesScreen.signals
     tone: 'priority' | 'urgent'
   }
 > = {
   gov: {
-    en: 'High impact',
-    fil: 'Mahalaga',
+    labelKey: 'highImpact',
     tone: 'priority',
   },
   money: {
-    en: 'High impact',
-    fil: 'Mahalaga',
+    labelKey: 'highImpact',
     tone: 'priority',
   },
   healthcare: {
-    en: 'High impact',
-    fil: 'Mahalaga',
+    labelKey: 'highImpact',
     tone: 'priority',
   },
   education: {
-    en: 'High impact',
-    fil: 'Mahalaga',
+    labelKey: 'highImpact',
     tone: 'priority',
   },
   'digital-safety': {
-    en: 'Protection',
-    fil: 'Proteksyon',
+    labelKey: 'protection',
     tone: 'priority',
   },
   scams: {
-    en: 'Warning',
-    fil: 'Babala',
+    labelKey: 'warning',
     tone: 'urgent',
   },
   emergency: {
-    en: 'Urgent',
-    fil: 'Urgent',
+    labelKey: 'urgent',
     tone: 'urgent',
   },
 }
@@ -179,7 +171,7 @@ export default function CategoriesScreen() {
     }
 
     return {
-      label: language === 'fil' ? signal.fil : signal.en,
+      label: labels.signals[signal.labelKey],
       tone: signal.tone,
     }
   }

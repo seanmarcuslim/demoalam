@@ -171,6 +171,12 @@ export const filTranslations = {
       emptyTitle: 'Walang kategorya',
       emptySubtitle: 'Wala pang available na kategorya.',
       planned: 'Pinaplano',
+      signals: {
+        highImpact: 'Mahalaga',
+        protection: 'Proteksyon',
+        warning: 'Babala',
+        urgent: 'Urgent',
+      },
     },
     categoryDetailScreen: {
       fallbackCategory: 'Kategorya',

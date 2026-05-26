@@ -171,6 +171,12 @@ export const enTranslations = {
       emptyTitle: 'No categories',
       emptySubtitle: 'No categories available yet.',
       planned: 'Planned',
+      signals: {
+        highImpact: 'High impact',
+        protection: 'Protection',
+        warning: 'Warning',
+        urgent: 'Urgent',
+      },
     },
     categoryDetailScreen: {
       fallbackCategory: 'Category',

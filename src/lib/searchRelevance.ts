@@ -327,6 +327,34 @@ function scoreGuide(guide: Guide, query: string) {
   }
 
   if (
+    cleanQuery.includes('bank') ||
+    cleanQuery.includes('bank account') ||
+    cleanQuery.includes('first bank account') ||
+    cleanQuery.includes('unang bank account') ||
+    cleanQuery.includes('savings account') ||
+    cleanQuery.includes('payroll account') ||
+    cleanQuery.includes('basic deposit account') ||
+    cleanQuery.includes('bda') ||
+    cleanQuery.includes('maintaining balance') ||
+    cleanQuery.includes('no maintaining balance') ||
+    cleanQuery.includes('dormancy fee') ||
+    cleanQuery.includes('deposit insurance') ||
+    cleanQuery.includes('pdic')
+  ) {
+    if (
+      title.includes('bank account') ||
+      keywords.includes('bank account') ||
+      keywords.includes('basic deposit account') ||
+      keywords.includes('maintaining balance') ||
+      keywords.includes('dormancy') ||
+      keywords.includes('pdic') ||
+      keywords.includes('payroll')
+    ) {
+      score += 90
+    }
+  }
+
+  if (
     cleanQuery.includes('rent') ||
     cleanQuery.includes('apartment') ||
     cleanQuery.includes('bedspace') ||

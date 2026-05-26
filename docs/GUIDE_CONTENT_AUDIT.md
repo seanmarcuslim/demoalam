@@ -314,8 +314,10 @@ Next Money candidates:
    - Search ranking was tightened for GCash-specific intent.
 
 2. `bank-account-first-time`
-   - Polish Filipino title and simplify beginner wording.
-   - Keep bank fees, maintaining balance, Basic Deposit Account, and money-mule warnings.
+   - Upgraded in repo migration.
+   - New direction: first-account choice, fees, maintaining balance, Basic Deposit Account, payroll use, PDIC awareness, and account-rental/money-mule safety.
+   - Search support added for `unang bank account`, `first bank account`, `payroll account`, `basic deposit account`, `BDA`, `maintaining balance`, `no maintaining balance`, `dormancy fee`, and `PDIC`.
+   - Next action: apply SQL in Supabase and verify in Expo Web.
 
 3. `loan-red-flags-before-borrowing`
    - Already strong.

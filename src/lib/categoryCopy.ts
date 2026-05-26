@@ -95,6 +95,19 @@ export const CATEGORY_SIGNALS: Record<string, CategorySignal> = {
   },
 }
 
+const CATEGORY_RECOMMENDATIONS: Record<string, string[]> = {
+  ids: ['gov', 'work'],
+  work: ['ids', 'money'],
+  money: ['gov', 'scams'],
+  gov: ['ids', 'healthcare'],
+  healthcare: ['gov', 'emergency'],
+  education: ['work', 'gov'],
+  scams: ['digital-safety', 'money'],
+  'digital-safety': ['scams', 'emergency'],
+  emergency: ['healthcare', 'digital-safety'],
+  adulting: ['money', 'work'],
+}
+
 export function getCategoryName(category: Category, language: Language) {
   return language === 'fil' ? category.name_fil : category.name_en
 }
@@ -134,4 +147,21 @@ export function getCategorySignal(
     label: labels.signals[signal.labelKey],
     tone: signal.tone,
   }
+}
+
+export function getSuggestedCategories(
+  currentCategory: Category | undefined,
+  categories: Category[]
+) {
+  const currentSlug = currentCategory?.slug
+
+  if (!currentSlug) {
+    return []
+  }
+
+  const slugs = CATEGORY_RECOMMENDATIONS[currentSlug] || []
+
+  return slugs
+    .map((slug) => categories.find((category) => category.slug === slug))
+    .filter((category): category is Category => Boolean(category))
 }

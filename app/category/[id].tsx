@@ -19,22 +19,13 @@ import SafeText from '../../src/components/ui/SafeText'
 import GuideCard from '../../src/components/guide/GuideCard'
 import Badge from '../../src/components/ui/Badge'
 import { Guide } from '../../src/types/guide'
-import { Category } from '../../src/types/category'
 import { getCategoryAccent } from '../../src/lib/categoryVisuals'
 import LoadingFeed from '../../src/components/layout/LoadingFeed'
-
-const CATEGORY_RECOMMENDATIONS: Record<string, string[]> = {
-  ids: ['gov', 'work'],
-  work: ['ids', 'money'],
-  money: ['gov', 'scams'],
-  gov: ['ids', 'healthcare'],
-  healthcare: ['gov', 'emergency'],
-  education: ['work', 'gov'],
-  scams: ['digital-safety', 'money'],
-  'digital-safety': ['scams', 'emergency'],
-  emergency: ['healthcare', 'digital-safety'],
-  adulting: ['money', 'work'],
-}
+import {
+  getCategoryName,
+  getSuggestedCategories,
+} from '../../src/lib/categoryCopy'
+import { getGuideTitle } from '../../src/lib/guideDisplay'
 
 export default function CategoryDetailsScreen() {
   const { id, name } = useLocalSearchParams()
@@ -65,7 +56,7 @@ export default function CategoryDetailsScreen() {
   const categoryColor = getCategoryAccent(firstCategory, colors.primary)
   const categoryIcon = firstCategory?.icon || 'Guide'
   const styles = createStyles(colors, categoryColor)
-  const suggestedCategories = getSuggestedCategories()
+  const suggestedCategories = getSuggestedCategories(firstCategory, categories)
   const officialGuideCount = guides.filter(
     (guide) => (guide.official_sources?.length ?? 0) > 0
   ).length
@@ -85,9 +76,6 @@ export default function CategoryDetailsScreen() {
       params: { id: nextCategoryId, name: nextCategoryName },
     })
   }
-
-  const getCategoryName = (category: Category) =>
-    language === 'fil' ? category.name_fil : category.name_en
 
   const getGuideCountLabel = (count: number) => {
     if (count === 0) return labels.noGuidesYet
@@ -176,7 +164,7 @@ export default function CategoryDetailsScreen() {
 
           <View style={styles.startHereRow}>
             {startHereGuides.map((guide) => {
-              const title = language === 'fil' ? guide.title_fil : guide.title_en
+              const title = getGuideTitle(guide, language)
               const sourceCount = guide.official_sources?.length ?? 0
 
               return (
@@ -282,7 +270,7 @@ export default function CategoryDetailsScreen() {
                         backgroundColor: `${accent}12`,
                       },
                     ]}
-                    onPress={() => openCategory(cat.id, getCategoryName(cat))}
+                    onPress={() => openCategory(cat.id, getCategoryName(cat, language))}
                   >
                     <SafeText>{cat.icon}</SafeText>
                     <SafeText
@@ -290,7 +278,7 @@ export default function CategoryDetailsScreen() {
                       weight="700"
                       style={{ color: accent }}
                     >
-                      {getCategoryName(cat)}
+                      {getCategoryName(cat, language)}
                     </SafeText>
                   </TouchableOpacity>
                   )
@@ -357,20 +345,6 @@ export default function CategoryDetailsScreen() {
       windowSize={5}
     />
   )
-
-  function getSuggestedCategories() {
-    const currentSlug = firstCategory?.slug
-
-    if (!currentSlug) {
-      return []
-    }
-
-    const slugs = CATEGORY_RECOMMENDATIONS[currentSlug] || []
-
-    return slugs
-      .map((slug) => categories.find((cat) => cat.slug === slug))
-      .filter((cat): cat is NonNullable<typeof cat> => Boolean(cat))
-  }
 }
 
 const createStyles = (colors: ThemeColors, heroColor: string) =>

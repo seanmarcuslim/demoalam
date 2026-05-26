@@ -134,6 +134,7 @@ export default function CategoriesScreen() {
   const { colors } = useTheme()
 
   const t = translations[language]
+  const labels = t.categoriesScreen
   const styles = createStyles(colors)
   const categoryTotal = categories.length || Object.keys(CATEGORY_COPY).length
   const priorityTotal = categories.filter((cat) => CATEGORY_SIGNALS[cat.slug]).length
@@ -155,9 +156,7 @@ export default function CategoriesScreen() {
     const copy = CATEGORY_COPY[cat.slug]
 
     if (!copy) {
-      return language === 'fil'
-        ? 'Mga practical guide para sa topic na ito'
-        : 'Practical guides for this topic'
+      return labels.fallbackDescription
     }
 
     return language === 'fil' ? copy.fil : copy.en
@@ -167,9 +166,9 @@ export default function CategoriesScreen() {
     guides.filter((guide) => guide.category_id === categoryId).length
 
   const getCountLabel = (count: number) => {
-    if (count === 0) return language === 'fil' ? 'Susunod' : 'Coming soon'
-    if (count === 1) return language === 'fil' ? '1 gabay' : '1 guide'
-    return language === 'fil' ? `${count} gabay` : `${count} guides`
+    if (count === 0) return labels.comingSoon
+    if (count === 1) return labels.guideSingular
+    return `${count} ${labels.guidePlural}`
   }
 
   const getCategorySignal = (cat: Category) => {
@@ -205,9 +204,7 @@ export default function CategoriesScreen() {
               color="surface"
               style={styles.heroSubtitle}
             >
-              {language === 'fil'
-                ? 'Hanapin ang tamang guide bago pumila, magbayad, o magbigay ng personal info.'
-                : 'Find the right guide before you line up, pay, or share personal information.'}
+              {labels.heroSubtitle}
             </SafeText>
           </View>
         </View>
@@ -215,17 +212,13 @@ export default function CategoriesScreen() {
         <View style={styles.statRow}>
           <View style={styles.statPill}>
             <SafeText variant="label" color="surface">
-              {language === 'fil'
-                ? `${categoryTotal} paksa`
-                : `${categoryTotal} topics`}
+              {`${categoryTotal} ${labels.topics}`}
             </SafeText>
           </View>
 
           <View style={styles.statPill}>
             <SafeText variant="label" color="surface">
-              {language === 'fil'
-                ? `${priorityTotal} mahalaga`
-                : `${priorityTotal} priority`}
+              {`${priorityTotal} ${labels.priority}`}
             </SafeText>
           </View>
         </View>
@@ -233,15 +226,11 @@ export default function CategoriesScreen() {
 
       <View style={styles.sectionIntro}>
         <SafeText variant="h3" weight="700">
-          {language === 'fil'
-            ? 'Piliin ang kailangan mo'
-            : 'Choose what you need'}
+          {labels.chooseTitle}
         </SafeText>
 
         <SafeText variant="caption" color="muted" style={styles.introText}>
-          {language === 'fil'
-            ? 'Mas mabilis magsimula kapag malinaw ang topic.'
-            : 'A clear topic makes the next step easier.'}
+          {labels.chooseSubtitle}
         </SafeText>
       </View>
     </View>
@@ -280,20 +269,12 @@ export default function CategoriesScreen() {
           <AppCard style={styles.emptyCard}>
             <EmptyState
               icon="!"
-              title={
-                language === 'fil'
-                  ? 'Hindi ma-load ang categories'
-                  : 'Unable to load categories'
-              }
-              subtitle={
-                language === 'fil'
-                  ? 'I-check ang internet connection o subukan ulit.'
-                  : 'Check your internet connection or try again.'
-              }
+              title={labels.loadErrorTitle}
+              subtitle={labels.loadErrorSubtitle}
             />
 
             <AppButton
-              title={language === 'fil' ? 'Subukan ulit' : 'Try again'}
+              title={labels.tryAgain}
               onPress={() => refetch()}
               style={styles.emptyAction}
             />
@@ -302,16 +283,8 @@ export default function CategoriesScreen() {
           <AppCard style={styles.emptyCard}>
             <EmptyState
               icon="📭"
-              title={
-                language === 'fil'
-                  ? 'Walang categories'
-                  : 'No categories'
-              }
-              subtitle={
-                language === 'fil'
-                  ? 'Wala pang available na categories.'
-                  : 'No categories available yet.'
-              }
+              title={labels.emptyTitle}
+              subtitle={labels.emptySubtitle}
             />
           </AppCard>
         )
@@ -371,7 +344,7 @@ export default function CategoriesScreen() {
 
                 {!hasGuides ? (
                   <SafeText variant="caption" color="light">
-                    {language === 'fil' ? 'Pinaplano' : 'Planned'}
+                    {labels.planned}
                   </SafeText>
                 ) : null}
               </View>

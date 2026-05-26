@@ -53,11 +53,12 @@ export default function CategoryDetailsScreen() {
   const { language } = useSettingsStore()
   const { colors } = useTheme()
   const t = translations[language]
+  const labels = t.categoryDetailScreen
   const toggleSave = useSavedStore((state) => state.toggleSave)
   const isSaved = useSavedStore((state) => state.isSaved)
 
   const displayName =
-    categoryName || (language === 'fil' ? 'Kategorya' : 'Category')
+    categoryName || labels.fallbackCategory
   const currentCategory =
     categories.find((cat) => cat.id === categoryId) || guides[0]?.category
   const firstCategory = currentCategory
@@ -89,9 +90,9 @@ export default function CategoryDetailsScreen() {
     language === 'fil' ? category.name_fil : category.name_en
 
   const getGuideCountLabel = (count: number) => {
-    if (count === 0) return language === 'fil' ? 'Wala pang gabay' : 'No guides yet'
-    if (count === 1) return language === 'fil' ? '1 gabay' : '1 guide'
-    return language === 'fil' ? `${count} gabay` : `${count} guides`
+    if (count === 0) return labels.noGuidesYet
+    if (count === 1) return labels.guideSingular
+    return `${count} ${labels.guidePlural}`
   }
 
   const renderHeader = () => (
@@ -114,7 +115,7 @@ export default function CategoryDetailsScreen() {
         </View>
 
         <SafeText variant="caption" color="surface" style={styles.eyebrow}>
-          {language === 'fil' ? 'Mga gabay sa paksa' : 'Topic guides'}
+          {labels.topicGuides}
         </SafeText>
 
         <SafeText variant="h1" color="surface" style={styles.title}>
@@ -122,9 +123,7 @@ export default function CategoryDetailsScreen() {
         </SafeText>
 
         <SafeText variant="bodyMd" color="surface" style={styles.subtitle}>
-          {language === 'fil'
-            ? 'Mga gabay na pinili para mas mabilis makita ang dapat gawin.'
-            : 'A focused set of guides built around what you may need next.'}
+          {labels.heroSubtitle}
         </SafeText>
 
         <View style={styles.metaRow}>
@@ -137,21 +136,15 @@ export default function CategoryDetailsScreen() {
           <View style={styles.statPill}>
             <SafeText variant="label" color="surface">
               {officialGuideCount > 0
-                ? language === 'fil'
-                  ? `${officialGuideCount} may source`
-                  : `${officialGuideCount} sourced`
-                : language === 'fil'
-                  ? 'Pwedeng i-save'
-                  : 'Save-ready'}
+                ? `${officialGuideCount} ${labels.sourced}`
+                : labels.saveReady}
             </SafeText>
           </View>
 
           {urgentGuideCount > 0 ? (
             <View style={styles.statPill}>
               <SafeText variant="label" color="surface">
-                {language === 'fil'
-                  ? `${urgentGuideCount} babala`
-                  : `${urgentGuideCount} alerts`}
+                {`${urgentGuideCount} ${labels.alerts}`}
               </SafeText>
             </View>
           ) : null}
@@ -161,12 +154,10 @@ export default function CategoryDetailsScreen() {
       <View style={styles.listIntro}>
         <View>
           <SafeText variant="h3" weight="700">
-            {language === 'fil' ? 'Mga available na gabay' : 'Available guides'}
+            {labels.availableGuides}
           </SafeText>
           <SafeText variant="caption" color="muted" style={styles.introSubtitle}>
-            {language === 'fil'
-              ? 'Piliin ang guide na pinakakapit sa sitwasyon mo.'
-              : 'Choose the guide that fits your situation best.'}
+            {labels.introSubtitle}
           </SafeText>
         </View>
 
@@ -180,7 +171,7 @@ export default function CategoryDetailsScreen() {
       {startHereGuides.length > 0 ? (
         <View style={styles.startHereBlock}>
           <SafeText variant="label" weight="700" style={styles.startHereTitle}>
-            {language === 'fil' ? 'Unahin ito' : 'Start here'}
+            {labels.startHere}
           </SafeText>
 
           <View style={styles.startHereRow}>
@@ -218,8 +209,12 @@ export default function CategoryDetailsScreen() {
                     />
                     <SafeText variant="caption" color="muted" numberOfLines={1}>
                       {sourceCount > 0
-                        ? `${sourceCount} ${sourceCount === 1 ? 'source' : 'sources'}`
-                        : `${guide.read_time_min} ${language === 'fil' ? 'minuto' : 'min'}`}
+                        ? `${sourceCount} ${
+                            sourceCount === 1
+                              ? labels.sourceSingular
+                              : labels.sourcePlural
+                          }`
+                        : `${guide.read_time_min} ${labels.minute}`}
                     </SafeText>
                   </View>
                 </TouchableOpacity>
@@ -256,28 +251,20 @@ export default function CategoryDetailsScreen() {
 
           <SafeText variant="h3" weight="700" style={styles.emptyTitle}>
             {isError
-              ? language === 'fil'
-                ? 'Hindi ma-load ang guides'
-                : 'Unable to load guides'
-              : language === 'fil'
-                ? 'Wala pang guides'
-                : 'No guides yet'}
+              ? labels.loadErrorTitle
+              : labels.emptyTitle}
           </SafeText>
 
           <SafeText variant="bodyMd" color="muted" style={styles.emptyText}>
             {isError
-              ? language === 'fil'
-                ? 'I-check ang internet connection o subukan ulit.'
-                : 'Check your internet connection or try again.'
-              : language === 'fil'
-                ? 'Wala pang guides sa category na ito. Subukan ang ibang category muna.'
-                : 'There are no guides under this category yet. Try another category first.'}
+              ? labels.loadErrorSubtitle
+              : labels.emptySubtitle}
           </SafeText>
 
           {!isError && suggestedCategories.length > 0 ? (
             <View style={styles.suggestionBlock}>
               <SafeText variant="caption" color="muted" style={styles.suggestionLabel}>
-                {language === 'fil' ? 'Subukan muna' : 'Try instead'}
+                {labels.tryInstead}
               </SafeText>
 
               <View style={styles.suggestionRow}>
@@ -319,7 +306,7 @@ export default function CategoryDetailsScreen() {
               onPress={() => refetch()}
             >
               <SafeText color="surface" weight="700">
-                {language === 'fil' ? 'Subukan ulit' : 'Try again'}
+                {labels.tryAgain}
               </SafeText>
             </TouchableOpacity>
           ) : (
@@ -329,7 +316,7 @@ export default function CategoryDetailsScreen() {
               onPress={() => router.push('/search')}
             >
               <SafeText color="primary" weight="700">
-                {language === 'fil' ? 'Mag-search ng guide' : 'Search guides'}
+                {labels.searchGuides}
               </SafeText>
             </TouchableOpacity>
           )}
@@ -341,7 +328,7 @@ export default function CategoryDetailsScreen() {
               onPress={() => router.back()}
             >
               <SafeText color="surface" weight="700">
-                {language === 'fil' ? 'Bumalik sa categories' : 'Back to categories'}
+                {labels.backToCategories}
               </SafeText>
             </TouchableOpacity>
           ) : null}

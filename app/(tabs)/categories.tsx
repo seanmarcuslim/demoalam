@@ -18,98 +18,16 @@ import Skeleton from '../../src/components/ui/Skeleton'
 import AppCard from '../../src/components/ui/AppCard'
 import AppButton from '../../src/components/ui/AppButton'
 import EmptyState from '../../src/components/ui/EmptyState'
-import { Category, CategoryCopy } from '../../src/types/category'
+import { Category } from '../../src/types/category'
 import { getCategoryAccent } from '../../src/lib/categoryVisuals'
-
-const CATEGORY_COPY: Record<string, CategoryCopy> = {
-  ids: {
-    en: 'Valid IDs, document recovery, and first-time requirements',
-    fil: 'Valid IDs, document recovery, at first-time requirements',
-    accent: '#2563A9',
-  },
-  work: {
-    en: 'Job hunting, requirements, interviews, and workplace basics',
-    fil: 'Trabaho, requirements, interview, at workplace basics',
-    accent: '#267A4D',
-  },
-  money: {
-    en: 'Banking, e-wallets, loans, fees, benefits, and cash aid',
-    fil: 'Bank, e-wallets, utang, fees, benefits, at cash aid',
-    accent: '#D9902F',
-  },
-  gov: {
-    en: 'DSWD aid, benefits, forms, offices, and appointments',
-    fil: 'DSWD ayuda, benefits, forms, opisina, at appointments',
-    accent: '#6D5BA8',
-  },
-  healthcare: {
-    en: 'Medical access, PhilHealth, hospital documents, and patient support',
-    fil: 'Medical access, PhilHealth, hospital documents, at patient support',
-    accent: '#2F8F83',
-  },
-  education: {
-    en: 'Scholarships, school documents, DSWD student aid, and pathways',
-    fil: 'Scholarships, school documents, DSWD student aid, at pathways',
-    accent: '#4F73C7',
-  },
-  scams: {
-    en: 'Red flags before sending money, OTPs, or personal information',
-    fil: 'Warning signs bago magpadala ng pera, OTP, o personal info',
-    accent: '#C83E3A',
-  },
-  'digital-safety': {
-    en: 'Protect accounts, e-wallets, passwords, phones, and online identity',
-    fil: 'Proteksyon sa accounts, e-wallets, passwords, phone, at online identity',
-    accent: '#3A7CA5',
-  },
-  emergency: {
-    en: 'Fast actions for urgent documents, safety, and help',
-    fil: 'Mabilis na steps para sa urgent documents, safety, at tulong',
-    accent: '#B86B16',
-  },
-  adulting: {
-    en: 'Practical life tasks no one explained clearly',
-    fil: 'Practical life tasks na bihirang ipaliwanag nang malinaw',
-    accent: '#2F8277',
-  },
-}
-
-const CATEGORY_SIGNALS: Record<
-  string,
-  {
-    labelKey: keyof typeof translations.en.categoriesScreen.signals
-    tone: 'priority' | 'urgent'
-  }
-> = {
-  gov: {
-    labelKey: 'highImpact',
-    tone: 'priority',
-  },
-  money: {
-    labelKey: 'highImpact',
-    tone: 'priority',
-  },
-  healthcare: {
-    labelKey: 'highImpact',
-    tone: 'priority',
-  },
-  education: {
-    labelKey: 'highImpact',
-    tone: 'priority',
-  },
-  'digital-safety': {
-    labelKey: 'protection',
-    tone: 'priority',
-  },
-  scams: {
-    labelKey: 'warning',
-    tone: 'urgent',
-  },
-  emergency: {
-    labelKey: 'urgent',
-    tone: 'urgent',
-  },
-}
+import {
+  CATEGORY_COPY,
+  CATEGORY_SIGNALS,
+  getCategoryDescription,
+  getCategoryName,
+  getCategorySecondaryName,
+  getCategorySignal,
+} from '../../src/lib/categoryCopy'
 
 export default function CategoriesScreen() {
   const {
@@ -138,22 +56,6 @@ export default function CategoriesScreen() {
     })
   }
 
-  const getCategoryName = (cat: Category) =>
-    language === 'fil' ? cat.name_fil : cat.name_en
-
-  const getSecondaryName = (cat: Category) =>
-    language === 'fil' ? cat.name_en : cat.name_fil
-
-  const getCategoryDescription = (cat: Category) => {
-    const copy = CATEGORY_COPY[cat.slug]
-
-    if (!copy) {
-      return labels.fallbackDescription
-    }
-
-    return language === 'fil' ? copy.fil : copy.en
-  }
-
   const getGuideCount = (categoryId: string) =>
     guides.filter((guide) => guide.category_id === categoryId).length
 
@@ -161,19 +63,6 @@ export default function CategoriesScreen() {
     if (count === 0) return labels.comingSoon
     if (count === 1) return labels.guideSingular
     return `${count} ${labels.guidePlural}`
-  }
-
-  const getCategorySignal = (cat: Category) => {
-    const signal = CATEGORY_SIGNALS[cat.slug]
-
-    if (!signal) {
-      return null
-    }
-
-    return {
-      label: labels.signals[signal.labelKey],
-      tone: signal.tone,
-    }
   }
 
   const renderHeader = () => (
@@ -297,7 +186,7 @@ export default function CategoriesScreen() {
         const guideCount = getGuideCount(item.id)
         const hasGuides = guideCount > 0
         const position = String(index + 1).padStart(2, '0')
-        const signal = getCategorySignal(item)
+        const signal = getCategorySignal(item, labels)
 
         return (
           <AppCard
@@ -308,7 +197,7 @@ export default function CategoriesScreen() {
                 opacity: hasGuides ? 1 : 0.72,
               },
             ]}
-            onPress={() => openCategory(item.id, getCategoryName(item))}
+            onPress={() => openCategory(item.id, getCategoryName(item, language))}
           >
             <View
               style={[
@@ -348,12 +237,12 @@ export default function CategoriesScreen() {
                   numberOfLines={1}
                   style={{ color: accent }}
                 >
-                  {getCategoryName(item)}
+                  {getCategoryName(item, language)}
                 </SafeText>
               </View>
 
               <SafeText variant="caption" color="muted" numberOfLines={1}>
-                {getSecondaryName(item)}
+                {getCategorySecondaryName(item, language)}
               </SafeText>
 
               <SafeText
@@ -362,7 +251,11 @@ export default function CategoriesScreen() {
                 numberOfLines={2}
                 style={styles.description}
               >
-                {getCategoryDescription(item)}
+                {getCategoryDescription(
+                  item,
+                  language,
+                  labels.fallbackDescription
+                )}
               </SafeText>
 
               <View style={styles.categoryMetaRow}>

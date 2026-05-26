@@ -28,6 +28,7 @@ import SafeText from '../../src/components/ui/SafeText'
 import Badge from '../../src/components/ui/Badge'
 import AppButton from '../../src/components/ui/AppButton'
 import GuideCard from '../../src/components/guide/GuideCard'
+import HomeCuratedSection from '../../src/components/home/HomeCuratedSection'
 import { Guide } from '../../src/types/guide'
 import LoadingFeed from '../../src/components/layout/LoadingFeed'
 import { getCategoryAccent } from '../../src/lib/categoryVisuals'
@@ -125,65 +126,22 @@ export default function HomeScreen() {
     />
   )
 
-  const renderCuratedSection = ({
-    title,
-    subtitle,
-    items,
-    icon,
-    priority = false,
-  }: {
+  const renderCuratedSection = (props: {
     title: string
     subtitle: string
     items: Guide[]
-    icon: string
+    icon?: string
     priority?: boolean
-  }) => {
-    if (items.length === 0) {
-      return null
-    }
-
-    return (
-      <View style={styles.section}>
-        <View style={[styles.sectionHeaderRow, priority && styles.priorityHeaderRow]}>
-          <View>
-            {priority ? (
-              <View style={styles.priorityPill}>
-                <SafeText variant="caption" color="primary" weight="700">
-                  {labels.priorityPill}
-                </SafeText>
-              </View>
-            ) : null}
-
-            <SafeText variant="h3" weight="700">
-              {icon ? `${icon} ${title}` : title}
-            </SafeText>
-            <SafeText variant="caption" color="muted" style={styles.sectionSubtitle}>
-              {subtitle}
-            </SafeText>
-          </View>
-        </View>
-
-        <ScrollView
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          contentContainerStyle={styles.curatedRow}
-        >
-          {items.map((guide) => (
-            <View key={guide.id} style={styles.curatedCardWrap}>
-              <GuideCard
-                guide={guide}
-                language={language}
-                isSaved={isSaved(guide.id)}
-                onPress={() => openGuide(guide.id)}
-                onSave={() => toggleSave(guide)}
-                compact
-              />
-            </View>
-          ))}
-        </ScrollView>
-      </View>
-    )
-  }
+  }) => (
+    <HomeCuratedSection
+      {...props}
+      language={language}
+      priorityPillLabel={labels.priorityPill}
+      isSaved={isSaved}
+      onOpenGuide={openGuide}
+      onSaveGuide={toggleSave}
+    />
+  )
 
   const renderHeader = () => (
     <View>
@@ -545,26 +503,6 @@ const createStyles = (colors: ThemeColors) =>
       marginBottom: spacing.md,
     },
 
-    sectionHeaderRow: {
-      marginBottom: spacing.md,
-    },
-
-    priorityHeaderRow: {
-      borderLeftWidth: 4,
-      borderLeftColor: colors.primary,
-      paddingLeft: spacing.sm,
-    },
-
-    priorityPill: {
-      alignSelf: 'flex-start',
-      minHeight: 24,
-      borderRadius: 999,
-      backgroundColor: colors.primaryLight,
-      paddingHorizontal: spacing.sm,
-      justifyContent: 'center',
-      marginBottom: spacing.xs,
-    },
-
     sectionSubtitle: {
       marginTop: spacing.xs,
     },
@@ -649,15 +587,6 @@ const createStyles = (colors: ThemeColors) =>
 
     recentTitle: {
       marginTop: spacing.sm,
-    },
-
-    curatedRow: {
-      paddingRight: spacing.md,
-      gap: spacing.sm,
-    },
-
-    curatedCardWrap: {
-      width: 286,
     },
 
     empty: {

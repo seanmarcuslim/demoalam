@@ -73,6 +73,7 @@ export default function HomeScreen() {
   const { colors } = useTheme()
   const { language } = useSettingsStore()
   const t = translations[language]
+  const labels = t.homeScreen
   const styles = createStyles(colors)
 
   const {
@@ -179,7 +180,7 @@ export default function HomeScreen() {
             {priority ? (
               <View style={styles.priorityPill}>
                 <SafeText variant="caption" color="primary" weight="700">
-                  {language === 'fil' ? 'Unahin kung kailangan' : 'Start here if needed'}
+                  {labels.priorityPill}
                 </SafeText>
               </View>
             ) : null}
@@ -226,9 +227,7 @@ export default function HomeScreen() {
               DemoAlam
             </SafeText>
             <SafeText variant="h1" color="surface" style={styles.heroTitle}>
-              {language === 'fil'
-                ? 'Sayang, ngayon ko lang nalaman.'
-                : 'Useful things worth knowing earlier.'}
+              {labels.heroTitle}
             </SafeText>
           </View>
 
@@ -238,20 +237,18 @@ export default function HomeScreen() {
         </View>
 
         <SafeText variant="bodyMd" color="surface" style={styles.heroSubtitle}>
-          {language === 'fil'
-            ? 'Praktikal na gabay para sa ayuda, benefits, karapatan, IDs, pera, trabaho, gobyerno, at iwas-scam.'
-            : 'Practical guides for aid, benefits, rights, IDs, money, work, government tasks, and scam safety.'}
+          {labels.heroSubtitle}
         </SafeText>
 
         <View style={styles.heroStats}>
           <View style={styles.statPill}>
             <SafeText variant="label" color="surface">
-              {visibleGuideCount} {language === 'fil' ? 'gabay' : 'guides'}
+              {visibleGuideCount} {labels.guideCount}
             </SafeText>
           </View>
           <View style={styles.statPill}>
             <SafeText variant="label" color="surface">
-              {visibleAlertCount} {language === 'fil' ? 'babala' : 'alerts'}
+              {visibleAlertCount} {labels.alertCount}
             </SafeText>
           </View>
         </View>
@@ -263,7 +260,7 @@ export default function HomeScreen() {
             {t.categories}
           </SafeText>
           <SafeText variant="caption" color="muted">
-            {language === 'fil' ? 'Piliin ang topic' : 'Browse topics'}
+            {labels.browseTopics}
           </SafeText>
         </View>
 
@@ -300,13 +297,11 @@ export default function HomeScreen() {
 {featuredBundles.length > 0 ? (
   <View style={styles.section}>
     <SafeText variant="h3" weight="700">
-      {language === 'fil' ? 'Maghanda para dito' : 'Guided preparedness'}
+      {labels.preparednessTitle}
     </SafeText>
 
     <SafeText variant="caption" color="muted" style={styles.sectionSubtitle}>
-      {language === 'fil'
-        ? 'Sunod-sunod na guides para sa stressful na sitwasyon.'
-        : 'Step-by-step guides for stressful situations.'}
+      {labels.preparednessSubtitle}
     </SafeText>
 
     {featuredBundles.map((bundle) => (
@@ -343,7 +338,7 @@ export default function HomeScreen() {
               {t.scamAlerts}
             </SafeText>
             <SafeText variant="caption" color="muted">
-              {language === 'fil' ? 'Basahin muna bago magpadala' : 'Read before sending money'}
+              {labels.urgentSubtitle}
             </SafeText>
           </View>
 
@@ -390,56 +385,40 @@ export default function HomeScreen() {
       ) : null}
 
       {renderCuratedSection({
-        title: language === 'fil' ? 'DSWD at Ayuda Guides' : 'DSWD & Aid Guides',
-        subtitle:
-          language === 'fil'
-            ? 'Alamin muna ang tamang programa bago magtanong, magpasa, o maniwala sa post.'
-            : 'Check the right program before asking, applying, or trusting a post.',
+        title: labels.dswdAidTitle,
+        subtitle: labels.dswdAidSubtitle,
         items: governmentAidGuides,
         icon: '',
         priority: true,
       })}
 
       {renderCuratedSection({
-        title: language === 'fil' ? 'Trending Ngayon' : 'Trending Now',
+        title: labels.trendingTitle,
         subtitle:
           trending.length > 0
-            ? language === 'fil'
-              ? 'Pinakabinabasa nitong mga araw'
-              : 'Most viewed in the last few days'
-            : language === 'fil'
-              ? 'Mga guide na magandang unahin'
-              : 'Useful guides to start with',
+            ? labels.trendingSubtitle
+            : labels.trendingFallbackSubtitle,
         items: trendingGuides,
         icon: '',
       })}
 
       {renderCuratedSection({
-        title: language === 'fil' ? 'Para sa First-Timers' : 'For First-Timers',
-        subtitle:
-          language === 'fil'
-            ? 'Unang trabaho, unang ID, unang requirements'
-            : 'First job, first ID, first requirements',
+        title: labels.firstTimersTitle,
+        subtitle: labels.firstTimersSubtitle,
         items: firstTimerGuides,
         icon: '',
       })}
 
       {renderCuratedSection({
-        title: language === 'fil' ? 'Money Moves' : 'Money Moves',
-        subtitle:
-          language === 'fil'
-            ? 'Bago magbayad, umutang, o mag-open ng account'
-            : 'Before paying, borrowing, or opening an account',
+        title: labels.moneyTitle,
+        subtitle: labels.moneySubtitle,
         items: moneyGuides,
         icon: '',
       })}
 
       {renderCuratedSection({
-        title: language === 'fil' ? 'Government Basics' : 'Government Basics',
-        subtitle:
-          language === 'fil'
-            ? 'Benefits, forms, opisina, at appointments'
-            : 'Benefits, forms, offices, and appointments',
+        title: labels.governmentTitle,
+        subtitle: labels.governmentSubtitle,
         items: governmentGuides,
         icon: '',
       })}
@@ -449,7 +428,7 @@ export default function HomeScreen() {
           {t.allGuides}
         </SafeText>
         <SafeText variant="caption" color="muted">
-          {language === 'fil' ? 'Para sa first-timers at everyday decisions' : 'For first-timers and everyday decisions'}
+          {labels.allGuidesSubtitle}
         </SafeText>
       </View>
     </View>
@@ -473,17 +452,13 @@ export default function HomeScreen() {
                 color={colors.warning}
               />
               <SafeText variant="h3" weight="700" style={styles.emptyTitle}>
-                {language === 'fil'
-                  ? 'Hindi ma-load ang guides'
-                  : 'Unable to load guides'}
+                {labels.loadErrorTitle}
               </SafeText>
               <SafeText variant="bodyMd" color="muted" style={styles.emptyText}>
-                {language === 'fil'
-                  ? 'I-check ang internet connection o subukan ulit.'
-                  : 'Check your internet connection or try again.'}
+                {labels.loadErrorSubtitle}
               </SafeText>
               <AppButton
-                title={language === 'fil' ? 'Subukan ulit' : 'Try again'}
+                title={labels.tryAgain}
                 onPress={() => refetch()}
                 style={styles.emptyAction}
               />
@@ -491,12 +466,10 @@ export default function HomeScreen() {
           ) : (
             <>
               <SafeText variant="h3" weight="700">
-                {language === 'fil' ? 'Wala pang guides' : 'No guides yet'}
+                {labels.emptyTitle}
               </SafeText>
               <SafeText variant="bodyMd" color="muted" style={styles.emptyText}>
-                {language === 'fil'
-                  ? 'Kapag may Supabase data na, lalabas dito ang mga gabay.'
-                  : 'Guides will appear here once Supabase has data.'}
+                {labels.emptySubtitle}
               </SafeText>
             </>
           )}

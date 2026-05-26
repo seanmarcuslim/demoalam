@@ -125,6 +125,31 @@ export const enTranslations = {
       searchGuides: 'Search guides',
       backToCategories: 'Back to categories',
     },
+    components: {
+      guideCard: {
+        officialSource: 'Verified source',
+        officialSources: 'official sources',
+        urgent: 'Scam Alert',
+        removedFromSaved: 'Removed from saved',
+        savedForOffline: 'Saved for offline',
+        minute: 'min',
+        read: 'Read',
+      },
+      guideBlocks: {
+        checklist: 'Checklist',
+        sampleQuestion: 'Sample you can ask',
+        officialSources: 'Official sources',
+      },
+      bundleCard: {
+        preparedBundle: 'Preparedness Bundle',
+        guideSingular: 'guide',
+        guidePlural: 'guides',
+        urgent: 'urgent',
+      },
+      offlineBanner: {
+        message: 'You are offline. Saved guides and cached content are available.',
+      },
+    },
     guideDetail: {
       notSpecified: 'Not specified',
       unknown: 'Unknown',

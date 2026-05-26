@@ -125,6 +125,31 @@ export const filTranslations = {
       searchGuides: 'Mag-search ng gabay',
       backToCategories: 'Bumalik sa mga kategorya',
     },
+    components: {
+      guideCard: {
+        officialSource: 'Opisyal na sanggunian',
+        officialSources: 'opisyal na sanggunian',
+        urgent: 'Babala',
+        removedFromSaved: 'Tinanggal sa naka-save',
+        savedForOffline: 'Na-save para balikan offline',
+        minute: 'minuto',
+        read: 'Basahin',
+      },
+      guideBlocks: {
+        checklist: 'Listahan',
+        sampleQuestion: 'Halimbawa ng tanong',
+        officialSources: 'Opisyal na sanggunian',
+      },
+      bundleCard: {
+        preparedBundle: 'Gabay na paghahanda',
+        guideSingular: 'gabay',
+        guidePlural: 'gabay',
+        urgent: 'babala',
+      },
+      offlineBanner: {
+        message: 'Offline ka ngayon. Naka-save na gabay at naka-cache na laman muna ang available.',
+      },
+    },
     guideDetail: {
       notSpecified: 'Hindi nakasaad',
       unknown: 'Hindi pa alam',

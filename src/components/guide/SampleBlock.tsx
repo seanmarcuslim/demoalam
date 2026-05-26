@@ -5,6 +5,7 @@ import SafeText from '../ui/SafeText'
 import { useTheme } from '../../hooks/useTheme'
 import { spacing } from '../../theme/spacing'
 import type { ThemeColors } from '../../theme/colors'
+import { translations } from '../../utils/translations'
 
 interface SampleBlockProps {
   sample?: string
@@ -13,6 +14,7 @@ interface SampleBlockProps {
 
 export default function SampleBlock({ sample, language }: SampleBlockProps) {
   const { colors } = useTheme()
+  const labels = translations[language].components.guideBlocks
   const styles = createStyles(colors)
 
   if (!sample) return null
@@ -27,7 +29,7 @@ export default function SampleBlock({ sample, language }: SampleBlockProps) {
         />
 
         <SafeText variant="label" color="primary" weight="700">
-          {language === 'fil' ? 'Halimbawa ng tanong' : 'Sample you can ask'}
+          {labels.sampleQuestion}
         </SafeText>
       </View>
 

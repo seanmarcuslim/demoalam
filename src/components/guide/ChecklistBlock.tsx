@@ -5,6 +5,7 @@ import SafeText from '../ui/SafeText'
 import { useTheme } from '../../hooks/useTheme'
 import { spacing } from '../../theme/spacing'
 import type { ThemeColors } from '../../theme/colors'
+import { translations } from '../../utils/translations'
 
 interface ChecklistBlockProps {
   items: string[]
@@ -13,6 +14,7 @@ interface ChecklistBlockProps {
 
 export default function ChecklistBlock({ items, language }: ChecklistBlockProps) {
   const { colors } = useTheme()
+  const labels = translations[language].components.guideBlocks
   const styles = createStyles(colors)
 
   if (!items?.length) {
@@ -22,7 +24,7 @@ export default function ChecklistBlock({ items, language }: ChecklistBlockProps)
   return (
     <View style={styles.container}>
       <SafeText variant="label" weight="700" style={styles.title}>
-        {language === 'fil' ? 'Listahan' : 'Checklist'}
+        {labels.checklist}
       </SafeText>
 
       {items.map((item, index) => (

@@ -9,6 +9,7 @@ import { getCategoryAccent } from '../../lib/categoryVisuals'
 import SafeText from '../ui/SafeText'
 import Badge from '../ui/Badge'
 import { useFeedbackStore } from '../../stores/feedbackStore'
+import { translations } from '../../utils/translations'
 
 interface GuideCardProps {
   guide: Guide
@@ -29,6 +30,7 @@ function GuideCard({
 }: GuideCardProps) {
   const { colors } = useTheme()
   const showFeedback = useFeedbackStore((state) => state.show)
+  const labels = translations[language].components.guideCard
   const styles = createStyles(colors, guide.is_urgent, compact)
   const title = language === 'fil' ? guide.title_fil : guide.title_en
   const tagline = language === 'fil' ? guide.tagline_fil : guide.tagline_en
@@ -43,24 +45,16 @@ function GuideCard({
   const hasOfficialSources = officialSourceCount > 0
   const sourceLabel =
     officialSourceCount > 1
-      ? language === 'fil'
-        ? `${officialSourceCount} opisyal na source`
-        : `${officialSourceCount} official sources`
-      : language === 'fil'
-        ? 'Opisyal na source'
-        : 'Verified source'
-  const urgentLabel = language === 'fil' ? 'Babala' : 'Scam Alert'
+      ? `${officialSourceCount} ${labels.officialSources}`
+      : labels.officialSource
+  const urgentLabel = labels.urgent
 
   const handleSave = () => {
     onSave()
     showFeedback(
       isSaved
-        ? language === 'fil'
-          ? 'Tinanggal sa saved'
-          : 'Removed from saved'
-        : language === 'fil'
-          ? 'Na-save para balikan offline'
-          : 'Saved for offline',
+        ? labels.removedFromSaved
+        : labels.savedForOffline,
       isSaved ? 'info' : 'success'
     )
   }
@@ -118,7 +112,7 @@ function GuideCard({
         <View style={styles.meta}>
           <Ionicons name="time-outline" size={15} color={colors.textLight} />
           <SafeText variant="caption" color="light">
-            {guide.read_time_min} {language === 'fil' ? 'minuto' : 'min'}
+            {guide.read_time_min} {labels.minute}
           </SafeText>
 
           {hasOfficialSources ? (
@@ -141,7 +135,7 @@ function GuideCard({
 
         <View style={styles.action}>
           <SafeText variant="caption" color="primary" weight="700">
-            {language === 'fil' ? 'Basahin' : 'Read'}
+            {labels.read}
           </SafeText>
           <Ionicons name="arrow-forward" size={15} color={colors.primary} />
         </View>

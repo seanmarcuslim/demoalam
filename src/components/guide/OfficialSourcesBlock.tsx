@@ -5,6 +5,7 @@ import SafeText from '../ui/SafeText'
 import { useTheme } from '../../hooks/useTheme'
 import { spacing } from '../../theme/spacing'
 import type { ThemeColors } from '../../theme/colors'
+import { translations } from '../../utils/translations'
 
 interface OfficialSource {
   title: string
@@ -21,6 +22,7 @@ export default function OfficialSourcesBlock({
   language,
 }: OfficialSourcesBlockProps) {
   const { colors } = useTheme()
+  const labels = translations[language].components.guideBlocks
   const styles = createStyles(colors)
 
   if (!sources?.length) {
@@ -37,9 +39,7 @@ export default function OfficialSourcesBlock({
         />
 
         <SafeText variant="label" weight="700" style={styles.title}>
-          {language === 'fil'
-            ? 'Opisyal na sanggunian'
-            : 'Official sources'}
+          {labels.officialSources}
         </SafeText>
       </View>
 

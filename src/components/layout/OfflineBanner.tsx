@@ -7,11 +7,13 @@ import { useTheme } from '../../hooks/useTheme'
 import { spacing } from '../../theme/spacing'
 import type { ThemeColors } from '../../theme/colors'
 import SafeText from '../ui/SafeText'
+import { translations } from '../../utils/translations'
 
 export default function OfflineBanner() {
   const { isOffline } = useOffline()
   const { language } = useSettingsStore()
   const { colors } = useTheme()
+  const labels = translations[language].components.offlineBanner
   const insets = useSafeAreaInsets()
   const styles = createStyles(colors)
 
@@ -34,9 +36,7 @@ export default function OfflineBanner() {
       </View>
 
       <SafeText variant="caption" weight="700" style={styles.text}>
-        {language === 'fil'
-          ? 'Offline ka ngayon. Saved guides at cached content muna ang available.'
-          : 'You are offline. Saved guides and cached content are available.'}
+        {labels.message}
       </SafeText>
     </View>
   )

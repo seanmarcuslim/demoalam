@@ -5,6 +5,7 @@ import { router } from 'expo-router'
 import type { GuideBundleWithItems } from '../../types/bundle'
 import SafeText from '../ui/SafeText'
 import { useSettingsStore } from '../../stores/settingsStore'
+import { translations } from '../../utils/translations'
 
 interface BundleCardProps {
   bundle: GuideBundleWithItems
@@ -12,6 +13,7 @@ interface BundleCardProps {
 
 export function BundleCard({ bundle }: BundleCardProps) {
   const { language } = useSettingsStore()
+  const labels = translations[language].components.bundleCard
 
   const guideCount = bundle.items.length
   const urgentCount = bundle.items.filter((item) => item.guide?.is_urgent).length
@@ -55,7 +57,7 @@ export function BundleCard({ bundle }: BundleCardProps) {
           }}
         >
           <SafeText variant="caption" weight="700">
-            {language === 'fil' ? 'Gabay na paghahanda' : 'Preparedness Bundle'}
+            {labels.preparedBundle}
           </SafeText>
         </View>
 
@@ -86,7 +88,8 @@ export function BundleCard({ bundle }: BundleCardProps) {
           }}
         >
           <SafeText variant="caption" weight="700">
-            {guideCount} {language === 'fil' ? 'gabay' : 'guides'}
+            {guideCount}{' '}
+            {guideCount === 1 ? labels.guideSingular : labels.guidePlural}
           </SafeText>
         </View>
 
@@ -100,7 +103,7 @@ export function BundleCard({ bundle }: BundleCardProps) {
             }}
           >
             <SafeText variant="caption" weight="700">
-              {urgentCount} urgent
+              {urgentCount} {labels.urgent}
             </SafeText>
           </View>
         ) : null}

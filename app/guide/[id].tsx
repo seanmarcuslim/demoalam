@@ -25,9 +25,9 @@ import Badge from '../../src/components/ui/Badge'
 import GuideCard from '../../src/components/guide/GuideCard'
 import GuideCompletenessItem from '../../src/components/guide/GuideCompletenessItem'
 import GuideMetaPill from '../../src/components/guide/GuideMetaPill'
+import GuideOfficialSourcesCard from '../../src/components/guide/GuideOfficialSourcesCard'
 import GuideSectionCard from '../../src/components/guide/GuideSectionCard'
 import GuideTrustItem from '../../src/components/guide/GuideTrustItem'
-import OfficialSourceRow from '../../src/components/guide/OfficialSourceRow'
 import {
   Guide,
   GuideSection,
@@ -516,36 +516,14 @@ export default function GuideDetailsScreen() {
         ) : null}
       </View>
 
-      {officialSources.length > 0 ? (
-        <View style={styles.sourceCard}>
-          <View style={styles.sourceHeader}>
-            <View style={styles.sourceIcon}>
-              <Ionicons name="checkmark-done-circle" size={17} color={colors.success} />
-            </View>
-
-            <View style={styles.sourceCopy}>
-              <SafeText variant="label" weight="700" style={styles.compactCardTitle}>
-                {guideLabels.officialSourcesTitle}
-              </SafeText>
-              <SafeText variant="caption" color="muted" style={styles.sourceSubtitle}>
-                {guideLabels.officialSourcesSubtitle}
-              </SafeText>
-            </View>
-          </View>
-
-          <View style={styles.officialSources}>
-            {officialSources.map((source) => (
-              <OfficialSourceRow
-                key={source.url}
-                source={source}
-                onOpenError={() =>
-                  showFeedback(guideLabels.unableToOpenSource, 'info')
-                }
-              />
-            ))}
-          </View>
-        </View>
-      ) : null}
+      <GuideOfficialSourcesCard
+        sources={officialSources}
+        title={guideLabels.officialSourcesTitle}
+        subtitle={guideLabels.officialSourcesSubtitle}
+        onOpenError={() =>
+          showFeedback(guideLabels.unableToOpenSource, 'info')
+        }
+      />
 
       <View style={styles.sectionContainer}>
         {sections.length > 0 ? (
@@ -873,46 +851,8 @@ const createStyles = (colors: ThemeColors, heroColor: string) =>
       gap: spacing.xs,
     },
 
-    sourceCard: {
-      marginHorizontal: spacing.md,
-      marginTop: spacing.md,
-      borderRadius: 12,
-      backgroundColor: colors.surface,
-      borderWidth: 1,
-      borderColor: colors.border,
-      padding: spacing.md,
-    },
-
-    sourceHeader: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      gap: spacing.sm,
-      marginBottom: spacing.sm,
-    },
-
-    sourceIcon: {
-      width: 32,
-      height: 32,
-      borderRadius: 12,
-      backgroundColor: colors.successLight,
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
-
-    sourceCopy: {
-      flex: 1,
-    },
-
-    sourceSubtitle: {
-      marginTop: 1,
-    },
-
     compactCardTitle: {
       textTransform: 'uppercase',
-    },
-
-    officialSources: {
-      gap: spacing.sm,
     },
 
     sectionContainer: {

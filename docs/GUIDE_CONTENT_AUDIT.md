@@ -82,9 +82,9 @@ These guides are useful, but should be upgraded to the richer guide standard.
    - Upgrade: add "what HR handles vs what you handle yourself."
 
 3. `first-job-requirements`
-   - Issue: Good beginner topic, but currently thinner than newer guides.
-   - Decision: Keep.
-   - Upgrade: add checklist, HR sample question, and common mistakes.
+   - Issue: Previously thinner than newer guides and had an English Filipino title.
+   - Decision: Keep as the Work cluster anchor.
+   - Upgrade: metadata and search polish added. Existing guide already includes HR checklist, first-time jobseeker warning, government-number guidance, common mistakes, master checklist, and sample HR message.
 
 4. `resume-no-experience`
    - Issue: Useful for students, but less mission-critical than government/money/scam guides.
@@ -331,6 +331,33 @@ Money category audit:
 - `gcash scam` is discoverable through Search and Scams/Digital Safety, even though it is not in Money.
 - Search verified for `utang`, `loan app`, `gcash scam`, `kulang sweldo`, `bank account`, and `maintaining balance`.
 - Decision: Money is strong enough for MVP. Do not add another Money guide immediately.
+
+## Work Cluster Progress
+
+Status: Active after Money cluster pass
+
+Decision:
+Strengthen Work around first-job readiness, anti-fixer protection, and practical employment preparation before adding broader skills content.
+
+Completed initial Work move:
+
+- Polished `first-job-requirements` as the Work cluster anchor.
+- Improved the Filipino title and tagline so it reads less like a translated English label.
+- Added search support for `unang trabaho`, `first job requirements`, `pre employment requirements`, `HR requirements`, `first time jobseeker`, `free NBI`, `NBI first job`, `barangay certificate`, and `SSS PhilHealth Pag-IBIG TIN`.
+- Kept the existing content structure because it already includes HR questions, first-time jobseeker guidance, government-number cautions, common mistakes, checklist, and a sample message.
+
+Next Work candidates:
+
+1. `resume-no-experience`
+   - Upgrade only if it becomes practical and specific: truthful resume bullets, student projects, volunteer work, certificates, and no-fake-experience warning.
+
+2. `job-interview-basic-answers`
+   - Low-medium priority.
+   - Improve only if focused on first-job scripts, salary expectation safety, availability, and avoiding exploitative offers.
+
+3. `fake-job-offer-red-flags`
+   - Already strong.
+   - Keep as the scam-facing Work guide.
 
 Rejected direction:
 Do not become a generic life hacks or blog article app.

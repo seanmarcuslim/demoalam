@@ -281,19 +281,33 @@ function scoreGuide(guide: Guide, query: string) {
 
   if (
     cleanQuery.includes('first job') ||
+    cleanQuery.includes('unang trabaho') ||
+    cleanQuery.includes('first job requirements') ||
+    cleanQuery.includes('pre employment') ||
+    cleanQuery.includes('hr requirements') ||
+    cleanQuery.includes('first time jobseeker') ||
+    cleanQuery.includes('free nbi') ||
+    cleanQuery.includes('nbi first job') ||
+    cleanQuery.includes('barangay certificate') ||
+    cleanQuery.includes('sss philhealth pagibig tin') ||
     cleanQuery.includes('trabaho') ||
     cleanQuery.includes('work') ||
     cleanQuery.includes('job')
   ) {
     if (
+      slug === 'first-job-requirements' ||
       title.includes('first job') ||
+      title.includes('unang trabaho') ||
       keywords.includes('first job') ||
+      keywords.includes('unang trabaho') ||
+      keywords.includes('pre employment') ||
+      keywords.includes('first time jobseeker') ||
       keywords.includes('resume') ||
       keywords.includes('interview') ||
       keywords.includes('requirements') ||
       keywords.includes('payroll')
     ) {
-      score += 65
+      score += slug === 'first-job-requirements' ? 120 : 65
     }
   }
 

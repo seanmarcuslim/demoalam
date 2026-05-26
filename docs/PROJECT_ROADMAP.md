@@ -250,7 +250,15 @@ Keep these practical and anti-exploitation. Avoid generic finance-blog tone.
 
 Priority: HIGH
 
-Potential guides:
+Status: Active
+
+Current anchor:
+
+- `first-job-requirements`
+  - Polished as the Work entry guide.
+  - Search support added for everyday terms like `unang trabaho`, `pre employment requirements`, `HR requirements`, `first time jobseeker`, `free NBI`, and `SSS PhilHealth Pag-IBIG TIN`.
+
+Potential next guides:
 
 - First job requirements
 - Resume basics

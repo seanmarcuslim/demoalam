@@ -12,23 +12,12 @@ import { useTheme } from '../src/hooks/useTheme'
 import { spacing } from '../src/theme/spacing'
 import type { ThemeColors } from '../src/theme/colors'
 import SafeText from '../src/components/ui/SafeText'
+import { translations } from '../src/utils/translations'
 
-const VALUE_POINTS = [
-  {
-    icon: 'card-outline',
-    fil: 'Alamin ang requirements bago pumila',
-    en: 'Know requirements before lining up',
-  },
-  {
-    icon: 'shield-checkmark-outline',
-    fil: 'Iwasan ang common scam at red flags',
-    en: 'Avoid common scams and red flags',
-  },
-  {
-    icon: 'bookmark-outline',
-    fil: 'I-save ang importanteng guide para balikan',
-    en: 'Save important guides for later',
-  },
+const VALUE_ICONS: Array<keyof typeof Ionicons.glyphMap> = [
+  'card-outline',
+  'shield-checkmark-outline',
+  'bookmark-outline',
 ]
 
 export default function OnboardingScreen() {
@@ -38,7 +27,7 @@ export default function OnboardingScreen() {
   const { language, setLanguage } = useSettingsStore()
   const { colors } = useTheme()
   const styles = createStyles(colors)
-
+  const labels = translations[language].onboardingScreen
   const isFilipino = language === 'fil'
 
   const handleGetStarted = () => {
@@ -100,15 +89,11 @@ export default function OnboardingScreen() {
         </SafeText>
 
         <SafeText variant="h1" color="surface" style={styles.title}>
-          {isFilipino
-            ? 'Sayang, ngayon ko lang nalaman.'
-            : 'Useful things worth knowing earlier.'}
+          {labels.heroTitle}
         </SafeText>
 
         <SafeText variant="bodyMd" color="surface" style={styles.subtitle}>
-          {isFilipino
-            ? 'Praktikal na gabay para sa benefits, karapatan, IDs, pera, trabaho, gobyerno, at scam alerts.'
-            : 'Practical guides for benefits, rights, IDs, money, work, government tasks, and scam alerts.'}
+          {labels.heroSubtitle}
         </SafeText>
       </View>
 
@@ -117,39 +102,35 @@ export default function OnboardingScreen() {
           <View style={styles.previewBadge}>
             <Ionicons name="warning" size={16} color={colors.danger} />
             <SafeText variant="label" color="danger" weight="700">
-              {isFilipino ? 'Scam Alert' : 'Scam Alert'}
+              {labels.scamAlert}
             </SafeText>
           </View>
           <SafeText variant="caption" color="light">
-            3 min
+            {labels.previewTime}
           </SafeText>
         </View>
 
         <SafeText variant="h3" weight="700" style={styles.previewTitle}>
-          {isFilipino
-            ? 'Bago ka magpadala sa GCash'
-            : 'Before sending money on GCash'}
+          {labels.previewTitle}
         </SafeText>
 
         <SafeText variant="bodyMd" color="muted">
-          {isFilipino
-            ? 'Checklist muna: OTP, MPIN, sender name, at trusted contact.'
-            : 'Check OTPs, MPINs, sender name, and trusted contacts first.'}
+          {labels.previewBody}
         </SafeText>
       </View>
 
       <View style={styles.valueList}>
-        {VALUE_POINTS.map((item) => (
-          <View key={item.icon} style={styles.valueRow}>
+        {labels.valuePoints.map((item, index) => (
+          <View key={VALUE_ICONS[index]} style={styles.valueRow}>
             <View style={styles.valueIcon}>
               <Ionicons
-                name={item.icon as keyof typeof Ionicons.glyphMap}
+                name={VALUE_ICONS[index]}
                 size={21}
                 color={colors.primary}
               />
             </View>
             <SafeText variant="bodyMd" weight="700" style={styles.valueText}>
-              {isFilipino ? item.fil : item.en}
+              {item}
             </SafeText>
           </View>
         ))}
@@ -161,15 +142,13 @@ export default function OnboardingScreen() {
         onPress={handleGetStarted}
       >
         <SafeText color="surface" weight="700">
-          {isFilipino ? 'Magpatuloy bilang guest' : 'Continue as guest'}
+          {labels.continueAsGuest}
         </SafeText>
         <Ionicons name="arrow-forward" size={18} color="#FFFFFF" />
       </TouchableOpacity>
 
       <SafeText variant="caption" color="muted" style={styles.footnote}>
-        {isFilipino
-          ? 'Walang account na kailangan para magsimula.'
-          : 'No account needed to start.'}
+        {labels.footnote}
       </SafeText>
     </ScrollView>
   )

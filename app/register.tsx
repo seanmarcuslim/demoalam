@@ -18,6 +18,7 @@ import { useTheme } from '../src/hooks/useTheme'
 import { spacing } from '../src/theme/spacing'
 import type { ThemeColors } from '../src/theme/colors'
 import SafeText from '../src/components/ui/SafeText'
+import { translations } from '../src/utils/translations'
 
 type InputRowProps = TextInputProps & {
   icon: keyof typeof Ionicons.glyphMap
@@ -28,37 +29,25 @@ export default function RegisterScreen() {
   const { language } = useSettingsStore()
   const { colors } = useTheme()
   const styles = createStyles(colors)
+  const labels = translations[language].authScreen
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
 
-  const isFilipino = language === 'fil'
-
   const handleRegister = async () => {
     if (!email || !password || !confirmPassword) {
-      Alert.alert(
-        isFilipino ? 'Kulang ang fields' : 'Missing fields',
-        isFilipino ? 'Kumpletuhin muna ang lahat ng fields.' : 'Please complete all fields.'
-      )
+      Alert.alert(labels.missingFieldsTitle, labels.registerMissingFieldsMessage)
       return
     }
 
     if (password !== confirmPassword) {
-      Alert.alert(
-        isFilipino ? 'Hindi pareho ang password' : 'Password mismatch',
-        isFilipino ? 'Hindi tugma ang dalawang password.' : 'Passwords do not match.'
-      )
+      Alert.alert(labels.passwordMismatchTitle, labels.passwordMismatchMessage)
       return
     }
 
     if (password.length < 6) {
-      Alert.alert(
-        isFilipino ? 'Mahina ang password' : 'Weak password',
-        isFilipino
-          ? 'Gumamit ng password na may 6 characters o higit pa.'
-          : 'Password must be at least 6 characters.'
-      )
+      Alert.alert(labels.weakPasswordTitle, labels.weakPasswordMessage)
       return
     }
 
@@ -66,17 +55,15 @@ export default function RegisterScreen() {
       await signUp(email.trim(), password)
 
       Alert.alert(
-        isFilipino ? 'Nagawa ang account' : 'Account created',
-        isFilipino
-          ? 'Tingnan ang email kung kailangan ng confirmation.'
-          : 'Please check your email if confirmation is required.'
+        labels.accountCreatedTitle,
+        labels.accountCreatedMessage
       )
 
       router.replace('/(tabs)')
     } catch (error: unknown) {
       Alert.alert(
-        isFilipino ? 'Hindi makapag-register' : 'Register failed',
-        getErrorMessage(error, isFilipino ? 'Subukan muli.' : 'Please try again.')
+        labels.registerFailedTitle,
+        getErrorMessage(error, labels.tryAgain)
       )
     }
   }
@@ -104,13 +91,11 @@ export default function RegisterScreen() {
         </View>
 
         <SafeText variant="h1" color="primary" style={styles.title}>
-          {isFilipino ? 'Gumawa ng account' : 'Create your account'}
+          {labels.registerTitle}
         </SafeText>
 
         <SafeText variant="bodyMd" color="muted" style={styles.subtitle}>
-          {isFilipino
-            ? 'Optional ito. Pwede ka pa ring gumamit ng DemoAlam bilang guest.'
-            : 'This is optional. You can still use DemoAlam as a guest.'}
+          {labels.registerSubtitle}
         </SafeText>
 
         <View style={styles.formCard}>
@@ -124,7 +109,7 @@ export default function RegisterScreen() {
 
           <InputRow
             icon="lock-closed-outline"
-            placeholder={isFilipino ? 'Password' : 'Password'}
+            placeholder={labels.passwordPlaceholder}
             value={password}
             onChangeText={setPassword}
             secureTextEntry
@@ -132,7 +117,7 @@ export default function RegisterScreen() {
 
           <InputRow
             icon="shield-checkmark-outline"
-            placeholder={isFilipino ? 'Kumpirmahin ang password' : 'Confirm password'}
+            placeholder={labels.confirmPasswordPlaceholder}
             value={confirmPassword}
             onChangeText={setConfirmPassword}
             secureTextEntry
@@ -145,13 +130,7 @@ export default function RegisterScreen() {
             disabled={isLoading}
           >
             <SafeText color="surface" weight="700">
-              {isLoading
-                ? isFilipino
-                  ? 'Ginagawa ang account...'
-                  : 'Creating account...'
-                : isFilipino
-                  ? 'Gumawa ng account'
-                  : 'Register'}
+              {isLoading ? labels.creatingAccount : labels.registerButton}
             </SafeText>
           </TouchableOpacity>
 
@@ -161,7 +140,7 @@ export default function RegisterScreen() {
             onPress={() => router.push('/login')}
           >
             <SafeText color="primary" weight="700">
-              {isFilipino ? 'May account na? Login' : 'Already have an account? Login'}
+              {labels.alreadyHaveAccount}
             </SafeText>
           </TouchableOpacity>
         </View>
@@ -171,7 +150,7 @@ export default function RegisterScreen() {
           onPress={() => router.replace('/(tabs)')}
         >
           <SafeText variant="bodyMd" color="muted" weight="700" style={styles.guestText}>
-            {isFilipino ? 'Magpatuloy bilang guest' : 'Continue as guest'}
+            {labels.continueAsGuest}
           </SafeText>
         </TouchableOpacity>
       </ScrollView>

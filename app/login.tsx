@@ -18,6 +18,7 @@ import { useTheme } from '../src/hooks/useTheme'
 import { spacing } from '../src/theme/spacing'
 import type { ThemeColors } from '../src/theme/colors'
 import SafeText from '../src/components/ui/SafeText'
+import { translations } from '../src/utils/translations'
 
 type InputRowProps = TextInputProps & {
   icon: keyof typeof Ionicons.glyphMap
@@ -28,20 +29,14 @@ export default function LoginScreen() {
   const { language } = useSettingsStore()
   const { colors } = useTheme()
   const styles = createStyles(colors)
+  const labels = translations[language].authScreen
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
-  const isFilipino = language === 'fil'
-
   const handleLogin = async () => {
     if (!email || !password) {
-      Alert.alert(
-        isFilipino ? 'Kulang ang fields' : 'Missing fields',
-        isFilipino
-          ? 'Ilagay ang email at password.'
-          : 'Please enter your email and password.'
-      )
+      Alert.alert(labels.missingFieldsTitle, labels.loginMissingFieldsMessage)
       return
     }
 
@@ -50,8 +45,8 @@ export default function LoginScreen() {
       router.replace('/(tabs)')
     } catch (error: unknown) {
       Alert.alert(
-        isFilipino ? 'Hindi maka-login' : 'Login failed',
-        getErrorMessage(error, isFilipino ? 'Subukan muli.' : 'Please try again.')
+        labels.loginFailedTitle,
+        getErrorMessage(error, labels.tryAgain)
       )
     }
   }
@@ -83,9 +78,7 @@ export default function LoginScreen() {
         </SafeText>
 
         <SafeText variant="bodyMd" color="muted" style={styles.subtitle}>
-          {isFilipino
-            ? 'Optional ang login. Gamitin ito kapag gusto mong i-sync ang saved guides sa future.'
-            : 'Login is optional. Use it when you want future sync for saved guides.'}
+          {labels.loginSubtitle}
         </SafeText>
 
         <View style={styles.formCard}>
@@ -99,7 +92,7 @@ export default function LoginScreen() {
 
           <InputRow
             icon="lock-closed-outline"
-            placeholder={isFilipino ? 'Password' : 'Password'}
+            placeholder={labels.passwordPlaceholder}
             value={password}
             onChangeText={setPassword}
             secureTextEntry
@@ -112,13 +105,7 @@ export default function LoginScreen() {
             disabled={isLoading}
           >
             <SafeText color="surface" weight="700">
-              {isLoading
-                ? isFilipino
-                  ? 'Naglo-login...'
-                  : 'Logging in...'
-                : isFilipino
-                  ? 'Mag-login'
-                  : 'Login'}
+              {isLoading ? labels.loggingIn : labels.loginButton}
             </SafeText>
           </TouchableOpacity>
 
@@ -128,7 +115,7 @@ export default function LoginScreen() {
             onPress={() => router.push('/register')}
           >
             <SafeText color="primary" weight="700">
-              {isFilipino ? 'Gumawa ng account' : 'Create an account'}
+              {labels.createAccount}
             </SafeText>
           </TouchableOpacity>
         </View>
@@ -138,7 +125,7 @@ export default function LoginScreen() {
           onPress={() => router.replace('/(tabs)')}
         >
           <SafeText variant="bodyMd" color="muted" weight="700" style={styles.guestText}>
-            {isFilipino ? 'Magpatuloy bilang guest' : 'Continue as guest'}
+            {labels.continueAsGuest}
           </SafeText>
         </TouchableOpacity>
       </ScrollView>

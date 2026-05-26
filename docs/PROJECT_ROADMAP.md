@@ -1,12 +1,24 @@
 # DemoAlam Project Roadmap
 
-Date: 2026-05-25
+Date: 2026-05-26
 
 ## Current Strategic Decision
 
 DemoAlam is now a structured MVP. The biggest current risk is uncontrolled growth, not lack of features.
 
-Before adding major new features or categories, prioritize architecture stabilization, localization consistency, search maintainability, and guide quality. New content should grow as guide clusters inside existing categories instead of creating new categories too early.
+Before adding major new features or categories, finish the remaining stabilization work, then prioritize guide quality. New content should grow as guide clusters inside existing categories instead of creating new categories too early.
+
+Recent stabilization progress:
+
+- Guide detail skeleton and trust summary were extracted.
+- Guide section, checklist, sample, source row, meta pill, and completeness/trust items now exist as reusable guide components.
+- Search aliases and search relevance logic were split out of the service layer.
+- Home curated sections, search suggestions, and category copy helpers were extracted.
+- Typecheck passed after the refactor batch.
+
+Current decision:
+
+Architecture stabilization is no longer the main blocker, but `app/guide/[id].tsx` is still large and should be treated carefully. Do not do a broad rewrite. Only extract or clean up pieces that directly reduce risk.
 
 ## Product Direction
 
@@ -51,28 +63,36 @@ Future category promotion rule:
 
 A guide cluster can become a new category only when it has enough high-quality guides, clear user demand, low overlap with existing categories, and a distinct user mental model.
 
-## Priority 1: Architecture Stabilization
+## Priority 1: Final Stabilization Pass
 
 ### 1. Extract Guide Detail Blocks
 
 Status: APPROVED
-Priority: CRITICAL
+Priority: HIGH
 MVP decision: REQUIRED
 Impact: 9/10
-Complexity: 5/10
+Complexity: 3/10
 
 Objective:
-Reduce risk in `app/guide/[id].tsx`, which is currently the largest and riskiest screen.
+Finish reducing risk in `app/guide/[id].tsx` without changing behavior.
 
-Tasks:
+Completed:
 
-- Extract `GuideSectionCard`
-- Extract `GuideTrustCard`
-- Extract `OfficialSourceRow`
-- Extract `CompletenessItem`
-- Extract `MetaPill`
-- Keep behavior identical during extraction
-- Run typecheck after each safe batch
+- `GuideSectionCard`
+- `GuideTrustSummaryCard`
+- `GuideDetailSkeleton`
+- `OfficialSourceRow`
+- `GuideCompletenessItem`
+- `GuideMetaPill`
+- `ChecklistBlock`
+- `SampleBlock`
+
+Remaining tasks:
+
+- Audit `app/guide/[id].tsx` for unused helpers/styles/imports.
+- Extract only obvious repeated UI if it reduces file risk.
+- Avoid changing guide layout or rendering rules during this pass.
+- Run typecheck after cleanup.
 
 Files affected:
 
@@ -96,20 +116,14 @@ Impact: 9/10
 Complexity: 5/10
 
 Objective:
-Reduce duplicated inline `language === 'fil' ? ... : ...` copy and prevent English/Filipino drift.
+Reduce duplicated UI labels and prevent English/Filipino drift.
 
 Tasks:
 
-- Split locale copy by domain:
-  - `common`
-  - `guideDetail`
-  - `search`
-  - `saved`
-  - `categories`
-  - `profile`
-- Replace duplicated inline strings gradually
-- Do not migrate all screens in one risky pass
-- Start with guide detail and saved/search copy
+- Continue domain-by-domain centralization.
+- Keep data selection logic near data when needed.
+- Avoid migrating every inline ternary in one risky pass.
+- Prioritize user-visible labels, empty states, and metadata copy.
 
 Files affected:
 
@@ -126,15 +140,15 @@ Testing:
 ### 3. Split Search Architecture
 
 Status: APPROVED
-Priority: HIGH
+Priority: COMPLETED
 MVP decision: REQUIRED
 Impact: 8/10
-Complexity: 4/10
+Complexity: 1/10
 
 Objective:
 Keep `guidesService.ts` focused on data access and move search relevance logic into its own module.
 
-Tasks:
+Completed:
 
 - Move search aliases into `src/lib/searchAliases.ts`
 - Move scoring helpers into `src/lib/searchRelevance.ts`
@@ -184,20 +198,18 @@ Testing:
 ### 5. Extract Category Config
 
 Status: APPROVED
-Priority: MEDIUM
+Priority: COMPLETED
 MVP decision: REQUIRED
 Impact: 6/10
-Complexity: 3/10
+Complexity: 1/10
 
 Objective:
 Move category copy, accents, and signals out of `categories.tsx`.
 
-Tasks:
+Completed:
 
-- Create `src/lib/categoryConfig.ts`
-- Move `CATEGORY_COPY`
-- Move `CATEGORY_SIGNALS`
-- Reuse config in home/category screens if useful
+- Category display/copy helpers were extracted into `src/lib/categoryCopy.ts`.
+- Categories, category detail, and search reuse the helper.
 
 Files affected:
 
@@ -283,7 +295,7 @@ Write for stressful situations. Prioritize first actions, safety, documentation,
 
 ### DSWD / Government Aid Cluster
 
-Priority: CRITICAL
+Priority: CRITICAL - NEXT CONTENT FOCUS
 
 Keep following `docs/DSWD_FINANCIAL_AID_ROADMAP.md`.
 
@@ -299,6 +311,12 @@ Core guides:
 
 Rule:
 Never promise approval or guaranteed payout. Always explain verification, assessment, documents, and scam/fixer risks.
+
+Next DSWD content audit:
+
+- Verify AICS, Walang Gutom, 4Ps, Social Pension, ECT, Student Cash-for-Work, and SLP have consistent structure.
+- Make sure each guide has official sources, checklist, scam/fixer warning, sample questions, and realistic expectations.
+- Avoid making DSWD guides sound like guaranteed ayuda instructions.
 
 ## Postponed For MVP
 
@@ -321,11 +339,11 @@ These add operational complexity before the app has a stable guide system, local
 
 ## Immediate Task Order
 
-1. Extract guide detail blocks
-2. Centralize localization for guide detail and saved/search screens
-3. Split search relevance logic out of `guidesService.ts`
-4. Fix bundle UI theme consistency
-5. Extract category config
-6. Resume high-impact guide cluster upgrades
+1. Run a final small cleanup audit on `app/guide/[id].tsx`.
+2. Fix bundle UI theme consistency if still hardcoded.
+3. Continue localization centralization only where drift is visible.
+4. Audit high-value guides for completeness and trust.
+5. Upgrade the DSWD/government aid cluster first.
+6. Strengthen Money, Work, Emergency, and Adulting guide clusters without adding new categories.
 
-This order protects the architecture first, then allows content to grow safely.
+This order avoids overengineering and moves the app back toward the highest product value: trustworthy, practical, searchable guides.

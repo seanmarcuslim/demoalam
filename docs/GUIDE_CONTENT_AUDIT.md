@@ -1,6 +1,6 @@
 # DemoAlam Guide Content Audit
 
-Date: 2026-05-23
+Date: 2026-05-26
 
 ## Executive Decision
 
@@ -167,46 +167,72 @@ These are candidates to upgrade, merge, or replace.
 
 ## Recommended Next Work
 
-Architecture now comes before more content expansion.
+Architecture has improved enough to resume content work carefully.
 
 Reference roadmap:
 `docs/PROJECT_ROADMAP.md`
 
-Priority 1: Extract guide detail blocks
-- Priority: Critical
-- MVP necessity: Required
-- Complexity: 5/10
-- Reason: `app/guide/[id].tsx` is now the largest and riskiest screen. New guide quality work will be safer after reusable guide blocks are extracted.
-
-Priority 2: Centralize localization
+Priority 1: Final guide detail cleanup
 - Priority: High
 - MVP necessity: Required
-- Complexity: 5/10
-- Reason: bilingual UI copy is scattered across screens. This creates language drift and inconsistent Filipino/English labels.
+- Complexity: 3/10
+- Reason: reusable guide blocks now exist, but `app/guide/[id].tsx` is still large. Do only small cleanup that reduces risk; avoid a broad rewrite.
 
-Priority 3: Split search relevance logic
+Priority 2: DSWD/government aid guide consistency
+- Priority: Critical
+- MVP necessity: Required
+- Complexity: 4/10
+- Reason: AICS, Walang Gutom, 4Ps, Social Pension, ECT, Student Cash-for-Work, and SLP are high-impact guides. They must be consistent, source-backed, and careful about eligibility/approval claims.
+
+Priority 3: Centralize localization where drift remains
 - Priority: High
 - MVP necessity: Required
 - Complexity: 4/10
-- Reason: search aliases and scoring have grown inside `guidesService.ts`. Search should become easier to maintain before more guide clusters are added.
+- Reason: UI labels are improving, but guide detail and metadata copy can still drift between English and Filipino.
 
 Priority 4: Fix bundle UI theme consistency
 - Priority: Medium-High
 - MVP necessity: Required
 - Complexity: 2/10
-- Reason: bundle UI currently has hardcoded colors and should follow the app theme.
+- Reason: bundle UI may still have hardcoded colors and should follow the app theme before bundle features expand.
 
-Priority 5: Extract category config
-- Priority: Medium
+Priority 5: Search quality regression check
+- Priority: High
 - MVP necessity: Required
-- Complexity: 3/10
-- Reason: category copy and signals should not live inside the Categories screen.
+- Complexity: 2/10
+- Reason: search aliases and scoring were extracted. Verify important searches still surface the right guides.
 
-Priority 6: Resume guide cluster upgrades
+Priority 6: Resume broader guide cluster upgrades
 - Priority: High
 - MVP necessity: Required
 - Complexity: 4-6/10
-- Reason: after architecture stabilization, strengthen existing categories with high-impact guide clusters instead of adding new categories.
+- Reason: strengthen existing categories with high-impact guide clusters instead of adding new categories.
+
+## Next Content Audit Targets
+
+1. `dswd-aics-assistance-checklist`
+   - Priority: Critical
+   - Check for: assistance-type decision matrix, cash vs guarantee letter explanation, official-source completeness, sample questions, anti-fixer warning.
+
+2. `walang-gutom-food-credits`
+   - Priority: Critical
+   - Check for: food credits vs cash distinction, validation explanation, accredited merchant details, fake registration warnings, realistic rollout caveats.
+
+3. `4ps-validation-guide`
+   - Priority: High
+   - Check for: clear explanation that 4Ps is not a normal open application, CBMS/validation wording, household preparation checklist, grievance questions.
+
+4. `social-pension-senior-citizens`
+   - Priority: High
+   - Check for: eligibility caveats, OSCA/LGU coordination, payout expectations, waitlist language, scam warnings.
+
+5. `national-id-problems`
+   - Priority: High
+   - Check for: anti-fixer positioning, what to do for delayed/missing ID, transaction slip/ePhilID guidance, sample questions.
+
+6. `gcash-scam-red-flags`
+   - Priority: Medium-High
+   - Check for: differentiation from phishing guide, send-money pressure scams, fake support, reversal/refund scams, evidence checklist.
 
 ## Product Direction Decision
 

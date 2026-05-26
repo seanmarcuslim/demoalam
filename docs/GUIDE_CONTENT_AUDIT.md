@@ -213,14 +213,21 @@ Priority 6: Resume broader guide cluster upgrades
 1. `dswd-aics-assistance-checklist`
    - Priority: Critical
    - Check for: assistance-type decision matrix, cash vs guarantee letter explanation, official-source completeness, sample questions, anti-fixer warning.
+   - Current inspection: Strong. It already explains assessment, assistance paths, Guarantee Letters, AKAP confusion, fake pages, and application trail.
+   - Next action: Do not rewrite now. Only improve later if Expo output shows spacing/copy issues.
 
 2. `walang-gutom-food-credits`
    - Priority: Critical
    - Check for: food credits vs cash distinction, validation explanation, accredited merchant details, fake registration warnings, realistic rollout caveats.
+   - Current inspection: Useful and source-backed, but copy still feels less polished than AICS.
+   - Issue: Filipino title and some wording still read too English, especially "food credits checklist."
+   - Next action: Upgrade copy/localization and add a clearer "what to expect" section before adding more new DSWD guides.
 
 3. `4ps-validation-guide`
    - Priority: High
    - Check for: clear explanation that 4Ps is not a normal open application, CBMS/validation wording, household preparation checklist, grievance questions.
+   - Current inspection: Strong direction. It correctly frames 4Ps as validation-based, not instant registration.
+   - Next action: Keep. Later improvement should add a clearer grievance/helpdesk flow if official source details are available.
 
 4. `social-pension-senior-citizens`
    - Priority: High

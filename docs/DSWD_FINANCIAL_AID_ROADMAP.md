@@ -103,7 +103,7 @@ Core content:
 
 ### 5. Walang Gutom Program / Food Stamp Program
 
-Status: Add new guide
+Status: Added, needs copy polish
 Priority: HIGH
 MVP necessity: REQUIRED
 Impact: 9/10
@@ -124,6 +124,12 @@ Core content:
 - It is not a random online application or guaranteed cash payout.
 - Ask DSWD/LGU/official program channels about validation, EBT card, accredited store, redemption schedule, and current rollout in your area.
 - Warning: fake registration links, payout posts, processing fees, and people asking for OTP, bank login, or e-wallet login.
+
+Next polish:
+
+- Improve Filipino title and labels so the guide does not feel like translated English.
+- Add a clearer "what to expect" section explaining that validation, EBT/card release, accredited stores, allowed food items, and redemption schedules may vary by area.
+- Keep the guide careful: it should explain verification and food credits, not promise cash payout or guaranteed inclusion.
 
 ### 6. Student Cash-for-Work / Tara, Basa / KALAHI-CIDSS Opportunities
 

@@ -25,6 +25,7 @@ import Badge from '../../src/components/ui/Badge'
 import GuideCard from '../../src/components/guide/GuideCard'
 import GuideCalloutCard from '../../src/components/guide/GuideCalloutCard'
 import GuideCompletenessItem from '../../src/components/guide/GuideCompletenessItem'
+import GuideDetailSkeleton from '../../src/components/guide/GuideDetailSkeleton'
 import GuideMetaPill from '../../src/components/guide/GuideMetaPill'
 import GuideOfficialSourcesCard from '../../src/components/guide/GuideOfficialSourcesCard'
 import GuideSectionCard from '../../src/components/guide/GuideSectionCard'
@@ -34,7 +35,6 @@ import type {
   GuideSection,
 } from '../../src/types/guide'
 import { useFeedbackStore } from '../../src/stores/feedbackStore'
-import Skeleton from '../../src/components/ui/Skeleton'
 import { getCategoryAccent } from '../../src/lib/categoryVisuals'
 import { analyticsService } from '../../src/services/analyticsService'
 import {
@@ -161,36 +161,7 @@ export default function GuideDetailsScreen() {
   }, [guide?.id])
 
   if (isLoading && !cachedGuide) {
-    return (
-      <ScrollView style={styles.container} contentContainerStyle={styles.content}>
-        <View style={styles.hero}>
-          <View style={styles.navRow}>
-            <Skeleton width={42} height={42} radius={21} />
-            <View style={styles.navActions}>
-              <Skeleton width={42} height={42} radius={21} />
-              <Skeleton width={42} height={42} radius={21} />
-            </View>
-          </View>
-          <Skeleton width={124} height={28} radius={999} />
-          <Skeleton width="92%" height={30} style={styles.skeletonTitle} />
-          <Skeleton width="76%" height={30} style={styles.skeletonLine} />
-          <Skeleton width="88%" height={18} style={styles.skeletonLine} />
-          <View style={styles.metaGrid}>
-            <Skeleton width={92} height={34} radius={999} />
-            <Skeleton width={112} height={34} radius={999} />
-          </View>
-        </View>
-        <View style={styles.sectionContainer}>
-          {[0, 1, 2].map((item) => (
-            <View key={item} style={styles.sectionCard}>
-              <Skeleton width="62%" height={24} />
-              <Skeleton width="94%" height={16} style={styles.skeletonLine} />
-              <Skeleton width="82%" height={16} style={styles.skeletonLine} />
-            </View>
-          ))}
-        </View>
-      </ScrollView>
-    )
+    return <GuideDetailSkeleton colors={colors} />
   }
 
   if (!activeGuide) {
@@ -741,15 +712,6 @@ const createStyles = (colors: ThemeColors, heroColor: string) =>
       shadowOffset: { width: 0, height: 2 },
       shadowOpacity: 0.07,
       shadowRadius: 5,
-    },
-
-    skeletonTitle: {
-      marginTop: spacing.md,
-      marginBottom: spacing.sm,
-    },
-
-    skeletonLine: {
-      marginTop: spacing.sm,
     },
 
     emptyCard: {

@@ -257,6 +257,33 @@ The DSWD/government-aid cluster now has a strong verified core:
 Decision:
 Pause new DSWD guide creation. The next step should be search/category quality audit so users can actually discover these guides by plain-language terms like `ayuda`, `senior pension`, `4Ps`, `livelihood`, `cash for work`, `bagyo cash aid`, and `walang gutom`.
 
+## DSWD Discovery Audit
+
+Status: Completed initial pass
+
+Search aliases and relevance scoring now directly support the most important plain-language DSWD discovery terms:
+
+- `ayuda`
+- `senior pension`
+- `4Ps`
+- `walang gutom`
+- `cash for work`
+- `livelihood`
+- `bagyo cash aid`
+
+Expo Web verification:
+
+- `ayuda` surfaces AICS, Emergency Cash Transfer, 4Ps, Walang Gutom, and SLP.
+- `senior pension` surfaces Social Pension.
+- `walang gutom` surfaces Walang Gutom.
+- `cash for work` surfaces Student Cash-for-Work.
+- `livelihood` surfaces SLP.
+- `bagyo cash aid` surfaces Emergency Cash Transfer.
+- Government category shows the core DSWD guides.
+
+Next action:
+Do not add more DSWD content yet. Watch for real user search misses, then add targeted aliases instead of broad new content.
+
 ## Product Direction Decision
 
 Approved direction:

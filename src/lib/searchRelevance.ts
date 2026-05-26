@@ -156,6 +156,91 @@ function scoreGuide(guide: Guide, query: string) {
   }
 
   if (
+    cleanQuery.includes('senior pension') ||
+    cleanQuery.includes('social pension') ||
+    cleanQuery.includes('senior citizen') ||
+    cleanQuery.includes('elderly')
+  ) {
+    if (
+      title.includes('social pension') ||
+      keywords.includes('social pension') ||
+      keywords.includes('senior citizen') ||
+      keywords.includes('older persons')
+    ) {
+      score += 95
+    }
+  }
+
+  if (
+    cleanQuery.includes('walang gutom') ||
+    cleanQuery.includes('food stamp') ||
+    cleanQuery.includes('food credits')
+  ) {
+    if (
+      title.includes('walang gutom') ||
+      keywords.includes('walang gutom') ||
+      keywords.includes('food credits') ||
+      keywords.includes('food stamp')
+    ) {
+      score += 95
+    }
+  }
+
+  if (
+    cleanQuery.includes('cash for work') ||
+    cleanQuery.includes('cash-for-work') ||
+    cleanQuery.includes('tara basa') ||
+    cleanQuery.includes('kalahi')
+  ) {
+    if (
+      title.includes('cash-for-work') ||
+      title.includes('cash for work') ||
+      keywords.includes('cash for work') ||
+      keywords.includes('cash-for-work') ||
+      keywords.includes('tara basa') ||
+      keywords.includes('kalahi')
+    ) {
+      score += 95
+    }
+  }
+
+  if (
+    cleanQuery.includes('livelihood') ||
+    cleanQuery.includes('slp') ||
+    cleanQuery.includes('negosyo')
+  ) {
+    if (
+      title.includes('livelihood') ||
+      keywords.includes('sustainable livelihood') ||
+      keywords.includes('slp') ||
+      keywords.includes('negosyo')
+    ) {
+      score += 95
+    }
+  }
+
+  if (
+    cleanQuery.includes('bagyo') ||
+    cleanQuery.includes('baha') ||
+    cleanQuery.includes('calamity') ||
+    cleanQuery.includes('disaster') ||
+    cleanQuery.includes('emergency cash transfer') ||
+    cleanQuery.includes('cash aid') ||
+    cleanQuery.includes('ect')
+  ) {
+    if (
+      title.includes('emergency cash') ||
+      title.includes('disaster') ||
+      keywords.includes('emergency cash transfer') ||
+      keywords.includes('disaster cash aid') ||
+      keywords.includes('calamity') ||
+      keywords.includes('relief')
+    ) {
+      score += 95
+    }
+  }
+
+  if (
     cleanQuery.includes('lost wallet') ||
     cleanQuery.includes('wallet') ||
     cleanQuery.includes('lost id') ||

@@ -295,7 +295,7 @@ Write for stressful situations. Prioritize first actions, safety, documentation,
 
 ### DSWD / Government Aid Cluster
 
-Priority: CRITICAL - NEXT CONTENT FOCUS
+Priority: CRITICAL - CORE SPRINT COMPLETED
 
 Keep following `docs/DSWD_FINANCIAL_AID_ROADMAP.md`.
 
@@ -314,9 +314,9 @@ Never promise approval or guaranteed payout. Always explain verification, assess
 
 Next DSWD content audit:
 
-- Verify AICS, Walang Gutom, 4Ps, Social Pension, ECT, Student Cash-for-Work, and SLP have consistent structure.
-- Make sure each guide has official sources, checklist, scam/fixer warning, sample questions, and realistic expectations.
-- Avoid making DSWD guides sound like guaranteed ayuda instructions.
+- Completed for the core sprint: AICS, Walang Gutom, 4Ps, Social Pension, ECT, Student Cash-for-Work, and SLP.
+- Pause new DSWD guide creation unless a clear bug, accuracy issue, or high-demand missing program appears.
+- Next step: audit discovery so users can find these guides through plain-language searches and category browsing.
 
 ## Postponed For MVP
 
@@ -339,11 +339,11 @@ These add operational complexity before the app has a stable guide system, local
 
 ## Immediate Task Order
 
-1. Run a final small cleanup audit on `app/guide/[id].tsx`.
-2. Fix bundle UI theme consistency if still hardcoded.
-3. Continue localization centralization only where drift is visible.
-4. Audit high-value guides for completeness and trust.
-5. Upgrade the DSWD/government aid cluster first.
-6. Strengthen Money, Work, Emergency, and Adulting guide clusters without adding new categories.
+1. Run a search and category discovery audit for the completed DSWD cluster.
+2. Run a final small cleanup audit on `app/guide/[id].tsx` only if new guide rendering issues appear.
+3. Fix bundle UI theme consistency if still hardcoded.
+4. Continue localization centralization only where drift is visible.
+5. Strengthen Money, Work, Emergency, and Adulting guide clusters without adding new categories.
+6. Add new DSWD guides only after search/category discovery proves the current cluster is easy to find.
 
 This order avoids overengineering and moves the app back toward the highest product value: trustworthy, practical, searchable guides.

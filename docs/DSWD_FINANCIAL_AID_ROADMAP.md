@@ -1,6 +1,6 @@
 # DSWD Financial Aid Guide Roadmap
 
-Date: 2026-05-23
+Date: 2026-05-26
 
 ## Architecture Decision
 
@@ -20,7 +20,7 @@ The cluster must stay trust-first:
 
 ### 1. DSWD AICS Crisis Assistance
 
-Status: Keep and improve
+Status: Upgraded and verified
 Priority: CRITICAL
 MVP necessity: REQUIRED
 Impact: 10/10
@@ -38,7 +38,7 @@ Next upgrade:
 
 ### 2. Social Pension for Indigent Senior Citizens
 
-Status: Add new guide
+Status: Upgraded and verified
 Priority: CRITICAL
 MVP necessity: REQUIRED
 Impact: 10/10
@@ -60,7 +60,7 @@ Core content:
 
 ### 3. 4Ps New Beneficiary Validation
 
-Status: Add explainer guide, not application guide
+Status: Upgraded and verified as explainer guide, not application guide
 Priority: HIGH
 MVP necessity: REQUIRED
 Impact: 9/10
@@ -82,7 +82,7 @@ Core content:
 
 ### 4. Emergency Cash Transfer / Disaster Cash Aid
 
-Status: Add situational guide
+Status: Upgraded and verified
 Priority: HIGH
 MVP necessity: REQUIRED
 Impact: 9/10
@@ -103,7 +103,7 @@ Core content:
 
 ### 5. Walang Gutom Program / Food Stamp Program
 
-Status: Added, needs copy polish
+Status: Upgraded and verified
 Priority: HIGH
 MVP necessity: REQUIRED
 Impact: 9/10
@@ -125,15 +125,15 @@ Core content:
 - Ask DSWD/LGU/official program channels about validation, EBT card, accredited store, redemption schedule, and current rollout in your area.
 - Warning: fake registration links, payout posts, processing fees, and people asking for OTP, bank login, or e-wallet login.
 
-Next polish:
+Verified improvements:
 
-- Improve Filipino title and labels so the guide does not feel like translated English.
-- Add a clearer "what to expect" section explaining that validation, EBT/card release, accredited stores, allowed food items, and redemption schedules may vary by area.
-- Keep the guide careful: it should explain verification and food credits, not promise cash payout or guaranteed inclusion.
+- Improved Filipino title and copy.
+- Added clearer expectations before traveling.
+- Kept the guide careful: it explains verification and food credits, not cash payout or guaranteed inclusion.
 
 ### 6. Student Cash-for-Work / Tara, Basa / KALAHI-CIDSS Opportunities
 
-Status: Add as part of education aid cluster
+Status: Upgraded and verified
 Priority: HIGH
 MVP necessity: REQUIRED
 Impact: 8/10
@@ -154,9 +154,9 @@ Core content:
 
 ### 7. Sustainable Livelihood Program / Livelihood Assistance
 
-Status: Add later, after core DSWD aid guides
-Priority: MEDIUM
-MVP necessity: OPTIONAL
+Status: Upgraded and verified
+Priority: HIGH
+MVP necessity: REQUIRED
 Impact: 8/10
 Complexity: 6/10
 
@@ -164,7 +164,7 @@ Guide title:
 `Livelihood assistance checklist: kailan DSWD SLP ang tamang tanungin`
 
 Why:
-Useful, especially for repatriated OFWs, vulnerable workers, and families needing income recovery. However, SLP can be more complex and location/case-specific than AICS or Social Pension.
+Useful, especially for vulnerable workers, 4Ps households, repatriated OFWs, disaster-affected families, and families needing income recovery. The guide must explain SLP as livelihood preparation and support, not instant cash ayuda.
 
 Core content:
 
@@ -184,15 +184,21 @@ To make room for this stronger direction, deprioritize or replace low-leverage g
 
 Do not remove all adulting content. Keep only adulting guides that prevent exploitation, debt, housing loss, or document problems.
 
-## Recommended Build Order
+## Sprint Result
 
-1. Upgrade existing `dswd-aics-assistance-checklist`.
-2. Add Social Pension guide.
-3. Add 4Ps validation guide.
-4. Add Disaster Cash Aid / ECT guide.
-5. Add Walang Gutom food credits guide.
-6. Add Student Cash-for-Work guide.
-7. Add SLP livelihood guide later.
+Completed and verified:
+
+1. `dswd-aics-assistance-checklist`
+2. `walang-gutom-food-credits-checklist`
+3. `social-pension-indigent-senior-citizens`
+4. `four-ps-validation-checklist`
+5. `emergency-cash-transfer-disaster-aid-checklist`
+6. `student-cash-for-work-dswd-checklist`
+7. `sustainable-livelihood-program-checklist`
+
+Next DSWD action:
+
+Do not add more DSWD guides immediately. Run a search/category quality audit first, then decide whether to add a new guide or improve discovery.
 
 ## Content Rule
 

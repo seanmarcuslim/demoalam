@@ -213,25 +213,26 @@ Priority 6: Resume broader guide cluster upgrades
 1. `dswd-aics-assistance-checklist`
    - Priority: Critical
    - Check for: assistance-type decision matrix, cash vs guarantee letter explanation, official-source completeness, sample questions, anti-fixer warning.
-   - Current inspection: Strong. It already explains assessment, assistance paths, Guarantee Letters, AKAP confusion, fake pages, and application trail.
-   - Next action: Do not rewrite now. Only improve later if Expo output shows spacing/copy issues.
+   - Current inspection: Strong and verified. It explains assessment, assistance paths, Guarantee Letters, AKAP confusion, fake pages, and application trail.
+   - Next action: Do not rewrite now.
 
 2. `walang-gutom-food-credits`
    - Priority: Critical
    - Check for: food credits vs cash distinction, validation explanation, accredited merchant details, fake registration warnings, realistic rollout caveats.
-   - Current inspection: Useful and source-backed, but copy still feels less polished than AICS.
-   - Issue: Filipino title and some wording still read too English, especially "food credits checklist."
-   - Next action: Upgrade copy/localization and add a clearer "what to expect" section before adding more new DSWD guides.
+   - Current inspection: Upgraded and verified.
+   - Next action: Do not rewrite now.
 
 3. `4ps-validation-guide`
    - Priority: High
    - Check for: clear explanation that 4Ps is not a normal open application, CBMS/validation wording, household preparation checklist, grievance questions.
-   - Current inspection: Strong direction. It correctly frames 4Ps as validation-based, not instant registration.
-   - Next action: Keep. Later improvement should add a clearer grievance/helpdesk flow if official source details are available.
+   - Current inspection: Upgraded and verified. It correctly frames 4Ps as validation-based, not instant registration.
+   - Next action: Do not rewrite now.
 
 4. `social-pension-senior-citizens`
    - Priority: High
    - Check for: eligibility caveats, OSCA/LGU coordination, payout expectations, waitlist language, scam warnings.
+   - Current inspection: Upgraded and verified.
+   - Next action: Do not rewrite now.
 
 5. `national-id-problems`
    - Priority: High
@@ -240,6 +241,21 @@ Priority 6: Resume broader guide cluster upgrades
 6. `gcash-scam-red-flags`
    - Priority: Medium-High
    - Check for: differentiation from phishing guide, send-money pressure scams, fake support, reversal/refund scams, evidence checklist.
+
+## Completed DSWD Sprint
+
+The DSWD/government-aid cluster now has a strong verified core:
+
+- `dswd-aics-assistance-checklist`
+- `walang-gutom-food-credits-checklist`
+- `social-pension-indigent-senior-citizens`
+- `four-ps-validation-checklist`
+- `emergency-cash-transfer-disaster-aid-checklist`
+- `student-cash-for-work-dswd-checklist`
+- `sustainable-livelihood-program-checklist`
+
+Decision:
+Pause new DSWD guide creation. The next step should be search/category quality audit so users can actually discover these guides by plain-language terms like `ayuda`, `senior pension`, `4Ps`, `livelihood`, `cash for work`, `bagyo cash aid`, and `walang gutom`.
 
 ## Product Direction Decision
 

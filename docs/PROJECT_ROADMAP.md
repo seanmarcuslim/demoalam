@@ -342,6 +342,8 @@ First Adulting anchor decision:
 Next Adulting candidates:
 
 1. Barangay complaint message and evidence checklist
+   - Status: Added as `barangay-complaint-evidence-checklist`.
+   - Search support added for `barangay`, `barangay complaint`, `reklamo`, `blotter`, `ebidensya`, `evidence`, `kapitbahay`, `mediation`, `conciliation`, `Katarungang Pambarangay`, `lupon`, and `barangay protection order`.
 2. Utility bill due date and disconnection checklist
 3. Renting/boarding house deposit red flags before paying
 4. Moving out budget and document checklist, only if merged tightly with renting

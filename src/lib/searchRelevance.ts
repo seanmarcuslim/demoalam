@@ -422,6 +422,40 @@ function scoreGuide(guide: Guide, query: string) {
   }
 
   if (
+    cleanQuery.includes('barangay') ||
+    cleanQuery.includes('barangay complaint') ||
+    cleanQuery.includes('reklamo') ||
+    cleanQuery.includes('blotter') ||
+    cleanQuery.includes('ebidensya') ||
+    cleanQuery.includes('evidence') ||
+    cleanQuery.includes('kapitbahay') ||
+    cleanQuery.includes('neighbor dispute') ||
+    cleanQuery.includes('mediation') ||
+    cleanQuery.includes('conciliation') ||
+    cleanQuery.includes('katarungang pambarangay') ||
+    cleanQuery.includes('lupon') ||
+    cleanQuery.includes('barangay protection order') ||
+    cleanQuery.includes('bpo')
+  ) {
+    if (
+      slug === 'barangay-complaint-evidence-checklist' ||
+      title.includes('barangay') ||
+      title.includes('complaint') ||
+      title.includes('blotter') ||
+      keywords.includes('barangay complaint') ||
+      keywords.includes('blotter') ||
+      keywords.includes('evidence') ||
+      keywords.includes('katarungang pambarangay') ||
+      keywords.includes('mediation') ||
+      keywords.includes('conciliation') ||
+      keywords.includes('kapitbahay') ||
+      keywords.includes('barangay protection order')
+    ) {
+      score += slug === 'barangay-complaint-evidence-checklist' ? 125 : 75
+    }
+  }
+
+  if (
     cleanQuery.includes('lost wallet') ||
     cleanQuery.includes('nawala wallet') ||
     cleanQuery.includes('nanakaw wallet') ||

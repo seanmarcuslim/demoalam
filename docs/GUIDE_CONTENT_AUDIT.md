@@ -418,6 +418,13 @@ First Adulting anchor:
 Adulting quality rule:
 If a guide cannot include a practical checklist, a sample script, common mistakes, and a clear paper-trail habit, it probably does not belong in DemoAlam Adulting.
 
+Adulting content progress:
+
+- Added `office-help-message-checklist` as the Adulting anchor.
+- Added `barangay-complaint-evidence-checklist` as the complaint/evidence guide.
+- Barangay guide is source-backed because it touches barangay disputes, mediation, conciliation, VAWC/BPO awareness, and public-safety escalation.
+- Search support added for `barangay`, `barangay complaint`, `reklamo`, `blotter`, `ebidensya`, `evidence`, `kapitbahay`, `mediation`, `conciliation`, `Katarungang Pambarangay`, `lupon`, and `barangay protection order`.
+
 ## Money Cluster Progress
 
 Status: Active after DSWD core sprint

@@ -335,7 +335,7 @@ Emergency is strong enough for MVP. Do not add more Emergency guides until Adult
 
 ## Healthcare Cluster Progress
 
-Status: Active after Emergency closeout
+Status: MVP-ready after category and search verification
 
 Decision:
 Healthcare should focus on access, benefits, documents, billing clarity, official channels, and preparation. Avoid diagnosis, treatment instructions, or medical claims.
@@ -362,10 +362,20 @@ Completed medicine-safety Healthcare move:
 - It avoids diagnosis, dose advice, and treatment recommendations.
 - Search support added for `gamot`, `medicine`, `generic medicine`, `reseta`, `prescription`, `licensed pharmacy`, `FDA verification`, `fake medicine`, `counterfeit medicine`, and `unregistered medicine`.
 
+Healthcare category closeout:
+
+- Category page shows 4 Healthcare guides.
+- Verified visible guides: `generic-medicine-buying-checklist`, `public-hospital-social-service-desk-guide`, `philhealth-hospital-benefits-checklist`, and `medical-emergency-documents`.
+- Verified all 4 visible guides show official-source counts.
+- Search verified for PhilHealth/hospital billing, public hospital social service, and generic medicine/fake medicine intent.
+
+Decision:
+Healthcare is strong enough for MVP. Do not add more Healthcare guides unless a clear search miss, source-backed public program, or safety issue appears.
+
 Next Healthcare candidates:
 
 1. PhilHealth YAKAP/Konsulta guide
-   - Needs current-source verification before writing.
+   - Postponed. Needs current-source verification and should not be rushed.
 
 2. Medicine price/generic medicine checklist
    - Completed as a safe buying and verification checklist.

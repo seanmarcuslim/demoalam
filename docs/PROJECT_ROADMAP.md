@@ -335,7 +335,7 @@ Write for stressful situations. Prioritize first actions, safety, documentation,
 
 Priority: HIGH
 
-Status: Active
+Status: MVP-ready
 
 Current anchor:
 
@@ -362,6 +362,9 @@ Potential next guides:
 
 Rule:
 Healthcare content must guide access and preparation, not diagnosis or treatment. Use official/current sources for every health-related program claim.
+
+Decision:
+Healthcare is strong enough for MVP after category and search verification. Move next to Adulting so that broad life-skills content does not become a junk drawer.
 
 ### DSWD / Government Aid Cluster
 

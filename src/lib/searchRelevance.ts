@@ -645,9 +645,20 @@ function scoreGuide(guide: Guide, query: string) {
     cleanQuery.includes('kuryente') ||
     cleanQuery.includes('tubig') ||
     cleanQuery.includes('meralco') ||
-    cleanQuery.includes('maynilad')
+    cleanQuery.includes('maynilad') ||
+    cleanQuery.includes('disconnection') ||
+    cleanQuery.includes('putol') ||
+    cleanQuery.includes('maputulan') ||
+    cleanQuery.includes('due date') ||
+    cleanQuery.includes('payment posting') ||
+    cleanQuery.includes('proof of payment') ||
+    cleanQuery.includes('payment arrangement') ||
+    cleanQuery.includes('installment') ||
+    cleanQuery.includes('partial payment') ||
+    cleanQuery.includes('reconnection')
   ) {
     if (
+      slug === 'utility-bill-disconnection-checklist' ||
       title.includes('renting') ||
       title.includes('moving out') ||
       title.includes('utility') ||
@@ -655,9 +666,15 @@ function scoreGuide(guide: Guide, query: string) {
       keywords.includes('moving out') ||
       keywords.includes('utility bills') ||
       keywords.includes('kuryente') ||
-      keywords.includes('tubig')
+      keywords.includes('tubig') ||
+      keywords.includes('disconnection') ||
+      keywords.includes('due date') ||
+      keywords.includes('payment posting') ||
+      keywords.includes('proof of payment') ||
+      keywords.includes('payment arrangement') ||
+      keywords.includes('reconnection')
     ) {
-      score += 75
+      score += slug === 'utility-bill-disconnection-checklist' ? 125 : 75
     }
   }
 

@@ -422,8 +422,11 @@ Adulting content progress:
 
 - Added `office-help-message-checklist` as the Adulting anchor.
 - Added `barangay-complaint-evidence-checklist` as the complaint/evidence guide.
+- Added `utility-bill-disconnection-checklist` as the utility due-date and disconnection guide.
 - Barangay guide is source-backed because it touches barangay disputes, mediation, conciliation, VAWC/BPO awareness, and public-safety escalation.
 - Search support added for `barangay`, `barangay complaint`, `reklamo`, `blotter`, `ebidensya`, `evidence`, `kapitbahay`, `mediation`, `conciliation`, `Katarungang Pambarangay`, `lupon`, and `barangay protection order`.
+- Utility guide is source-backed because it touches electric/water bills, payment posting, disconnection notices, and official payment channels.
+- Search support added for `utility bills`, `kuryente`, `tubig`, `disconnection`, `putol`, `maputulan`, `due date`, `payment posting`, `proof of payment`, `payment arrangement`, `installment`, and `reconnection`.
 
 ## Money Cluster Progress
 

@@ -1,0 +1,97 @@
+insert into public.guides (
+  slug,
+  category_id,
+  title_en,
+  title_fil,
+  tagline_en,
+  tagline_fil,
+  is_featured,
+  is_urgent,
+  is_published,
+  read_time_min,
+  difficulty,
+  estimated_time,
+  estimated_cost,
+  tags,
+  keywords_en,
+  keywords_fil,
+  official_sources,
+  published_at,
+  updated_at
+)
+values (
+  'utility-bill-disconnection-checklist',
+  (select id from public.categories where slug = 'adulting'),
+  'Utility bill due date and disconnection checklist',
+  'Utility bill checklist bago maputulan',
+  'Check due dates, notices, payment posting, and official payment options before electricity or water service is disconnected.',
+  'I-check ang due date, notice, payment posting, at official payment options bago maputulan ng kuryente o tubig.',
+  true,
+  false,
+  true,
+  6,
+  'madali',
+  '10-20 minuto mag-check',
+  'Libre magtanong; depende ang bill sa provider',
+  array['adulting','utility bills','electricity','water','disconnection','due date','payment posting','meralco','maynilad','manila water','bill payment','proof of payment','payment arrangement'],
+  'utility bills electricity water disconnection notice due date payment posting proof of payment payment arrangement installment reconnection fee meralco maynilad manila water bill account number service id official receipt customer support hotline online payment payment channels',
+  'utility bills kuryente tubig disconnection notice putol maputulan due date payment posting proof of payment payment arrangement installment reconnection fee meralco maynilad manila water bill account number service id resibo official receipt customer support hotline online payment payment channels',
+  '[
+    {"title":"Magna Carta for Residential Electricity Consumers","publisher":"Supreme Court E-Library","url":"https://elibrary.judiciary.gov.ph/thebookshelf/showdocs/10/39112"},
+    {"title":"Meralco Payment Channels","publisher":"Meralco","url":"https://www.meralco.com.ph/residential/billing-payment/payment-channels"},
+    {"title":"Meralco Online Payments FAQ","publisher":"Meralco","url":"https://www.meralco.com.ph/residential/help-support/frequently-asked-questions/online-payments"},
+    {"title":"Maynilad FAQs","publisher":"Maynilad Water Services","url":"https://www.mayniladwater.com.ph/contact-us/faqs/"},
+    {"title":"Notice of Interruptions - Manila Water","publisher":"MWSS Regulatory Office","url":"https://ro.mwss.gov.ph/water-advisories/notice-of-interruptions-manila-water/"}
+  ]'::jsonb,
+  now(),
+  now()
+)
+on conflict (slug) do update
+set
+  category_id = excluded.category_id,
+  title_en = excluded.title_en,
+  title_fil = excluded.title_fil,
+  tagline_en = excluded.tagline_en,
+  tagline_fil = excluded.tagline_fil,
+  is_featured = excluded.is_featured,
+  is_urgent = excluded.is_urgent,
+  is_published = excluded.is_published,
+  read_time_min = excluded.read_time_min,
+  difficulty = excluded.difficulty,
+  estimated_time = excluded.estimated_time,
+  estimated_cost = excluded.estimated_cost,
+  tags = excluded.tags,
+  keywords_en = excluded.keywords_en,
+  keywords_fil = excluded.keywords_fil,
+  official_sources = excluded.official_sources,
+  updated_at = now();
+
+delete from public.guide_sections
+where guide_id = (select id from public.guides where slug = 'utility-bill-disconnection-checklist');
+
+insert into public.guide_sections (guide_id, section_type, order_index, content_en, content_fil)
+values
+  ((select id from public.guides where slug = 'utility-bill-disconnection-checklist'),'what_to_know',1,
+    '{"title":"Disconnection problems often start before the due date","body":"Most utility stress happens because users miss the due date, payment posting time, old balance, account number, or disconnection notice. Before panic-paying or arguing online, check the bill, official account status, payment channels, and proof trail.","items":["Due date and disconnection notice are not always the same thing","Payment may need time to post depending on the channel","Old unpaid balances can still affect the account even if the latest bill is paid","Use official apps, hotlines, business centers, or accredited payment partners","Save proof of payment and reference numbers immediately"]}'::jsonb,
+    '{"title":"Madalas nagsisimula ang disconnection problem bago pa ang due date","body":"Madalas nagkakaproblema sa utility bills dahil namimiss ang due date, payment posting time, old balance, account number, o disconnection notice. Bago mag-panic pay o makipagtalo online, i-check muna ang bill, official account status, payment channels, at proof trail.","items":["Hindi laging pareho ang due date at disconnection notice","Puwedeng may posting time depende sa payment channel","Puwedeng maapektuhan pa rin ng old unpaid balances ang account kahit bayad ang latest bill","Gamitin ang official apps, hotlines, business centers, o accredited payment partners","I-save agad ang proof of payment at reference numbers"]}'::jsonb),
+  ((select id from public.guides where slug = 'utility-bill-disconnection-checklist'),'warning',2,
+    '{"title":"START HERE: verify through official channels before paying a stranger","body":"Disconnection fear is easy to exploit. Do not pay random people claiming they can stop disconnection, reconnect service faster, or erase penalties. Use official provider channels and accredited payment partners only.","severity":"high","items":["Do not pay fixers, private collectors, or random chat accounts","Do not send OTP, bank login, e-wallet PIN, or full card details","Do not trust edited payment screenshots as proof that your account is safe","Do not ignore a notice just because you already paid through a slow-posting channel","Confirm account status with the provider if disconnection is near"]}'::jsonb,
+    '{"title":"UNAHIN ITO: mag-verify sa official channels bago magbayad sa stranger","body":"Madaling ma-exploit ang takot maputulan. Huwag magbayad sa random tao na nagsasabing kaya nilang pigilan ang disconnection, pabilisin ang reconnection, o burahin ang penalties. Official provider channels at accredited payment partners lang gamitin.","severity":"high","items":["Huwag magbayad sa fixers, private collectors, o random chat accounts","Huwag mag-send ng OTP, bank login, e-wallet PIN, o full card details","Huwag magtiwala sa edited payment screenshots bilang proof na safe na ang account","Huwag balewalain ang notice dahil lang nagbayad ka sa slow-posting channel","I-confirm ang account status sa provider kung malapit na ang disconnection"]}'::jsonb),
+  ((select id from public.guides where slug = 'utility-bill-disconnection-checklist'),'step',3,
+    '{"title":"Read the bill like a checklist","body":"Before paying, look for the details that affect risk and posting.","step_number":1,"items":["Account number or service ID","Billing period and due date","Total current amount and old balance, if any","Disconnection notice, warning, or cut-off instruction","Provider hotline, app, or official website","Payment channels and posting reminders"]}'::jsonb,
+    '{"title":"Basahin ang bill na parang checklist","body":"Bago magbayad, hanapin ang details na nakakaapekto sa risk at posting.","step_number":1,"items":["Account number o service ID","Billing period at due date","Total current amount at old balance kung meron","Disconnection notice, warning, o cut-off instruction","Provider hotline, app, o official website","Payment channels at posting reminders"]}'::jsonb),
+  ((select id from public.guides where slug = 'utility-bill-disconnection-checklist'),'step',4,
+    '{"title":"Choose the safest payment route","body":"When disconnection is near, payment posting speed matters. Ask the provider which channels post in real time or fastest for your case.","step_number":2,"items":["Official app or website, if available","Business center or authorized payment partner","Channels with real-time or same-day posting","Correct account number and amount before confirming","Receipt or payment confirmation after transaction","Follow-up if payment does not appear in the account"]}'::jsonb,
+    '{"title":"Piliin ang pinaka-safe na payment route","body":"Kapag malapit na ang disconnection, importante ang bilis ng payment posting. Itanong sa provider kung aling channels ang real-time o pinakamabilis para sa case mo.","step_number":2,"items":["Official app o website kung available","Business center o authorized payment partner","Channels na real-time o same-day posting","Tamang account number at amount bago i-confirm","Receipt o payment confirmation pagkatapos ng transaction","Follow-up kung hindi lumabas sa account ang payment"]}'::jsonb),
+  ((select id from public.guides where slug = 'utility-bill-disconnection-checklist'),'step',5,
+    '{"title":"Ask before assuming payment arrangement is allowed","body":"Some providers or advisories may allow installment, payment arrangement, partial payment, or temporary relief in specific cases. Do not assume. Ask through official channels and save the reply.","step_number":3,"items":["Can I request a payment arrangement or installment?","Will partial payment hold disconnection or not?","Which bill month or balance is covered?","Where should I pay so it posts correctly?","Do I need to visit a business center?","Can I get a reference number for this inquiry?"]}'::jsonb,
+    '{"title":"Magtanong muna bago mag-assume na allowed ang payment arrangement","body":"May providers o advisories na puwedeng may installment, payment arrangement, partial payment, o temporary relief sa specific cases. Huwag mag-assume. Magtanong sa official channels at i-save ang reply.","step_number":3,"items":["Puwede po ba akong mag-request ng payment arrangement o installment?","Mahohold po ba ang disconnection sa partial payment o hindi?","Aling bill month o balance ang covered?","Saan po dapat magbayad para ma-post nang tama?","Kailangan po ba pumunta sa business center?","Puwede po bang makahingi ng reference number for this inquiry?"]}'::jsonb),
+  ((select id from public.guides where slug = 'utility-bill-disconnection-checklist'),'mistake',6,
+    '{"title":"Common mistakes that lead to disconnection stress","body":"These mistakes are common when users are rushing or short on cash.","items":["Paying the wrong account number","Paying through a slow channel right before disconnection without confirming posting","Ignoring old balance because the latest bill was paid","Deleting receipts or payment screenshots","Asking random groups instead of the official provider","Assuming partial payment automatically stops disconnection","Waiting until the field team arrives before asking options"]}'::jsonb,
+    '{"title":"Karaniwang mistakes na nauuwi sa disconnection stress","body":"Madalas itong nangyayari kapag nagmamadali o kulang ang budget.","items":["Maling account number ang nabayaran","Nagbayad sa slow channel right before disconnection nang hindi kino-confirm ang posting","Binalewala ang old balance dahil bayad ang latest bill","Binura ang receipts o payment screenshots","Nagtanong sa random groups imbes na official provider","Ina-assume na automatic na nahohold ang disconnection sa partial payment","Naghintay na dumating ang field team bago magtanong ng options"]}'::jsonb),
+  ((select id from public.guides where slug = 'utility-bill-disconnection-checklist'),'tip',7,
+    '{"title":"Utility bill checklist","body":"Use this before paying or asking for help.","items":["Account number/service ID checked","Due date checked","Old balance checked","Disconnection notice checked","Official payment channel chosen","Posting time checked","Proof of payment saved","Provider contacted if disconnection is near","Reference number saved"]}'::jsonb,
+    '{"title":"Utility bill checklist","body":"Gamitin ito bago magbayad o humingi ng tulong.","items":["Na-check ang account number/service ID","Na-check ang due date","Na-check ang old balance","Na-check ang disconnection notice","Official payment channel ang pinili","Na-check ang posting time","Na-save ang proof of payment","Na-contact ang provider kung malapit na ang disconnection","Na-save ang reference number"]}'::jsonb),
+  ((select id from public.guides where slug = 'utility-bill-disconnection-checklist'),'tip',8,
+    '{"title":"Sample message to ask for options","body":"Use this before paying through a random or slow channel.","sample":"Hello po. May disconnection notice / overdue balance po ang account ko: [account number/service ID]. Ang due date / notice date po ay [date]. Gusto ko pong i-confirm kung anong amount ang dapat bayaran ngayon, anong payment channel ang fastest posting, at kung may payment arrangement or installment option po. Puwede po bang makahingi ng reference number for this inquiry?"}'::jsonb,
+    '{"title":"Sample message para magtanong ng options","body":"Gamitin ito bago magbayad sa random o slow channel.","sample":"Hello po. May disconnection notice / overdue balance po ang account ko: [account number/service ID]. Ang due date / notice date po ay [date]. Gusto ko pong i-confirm kung anong amount ang dapat bayaran ngayon, anong payment channel ang fastest posting, at kung may payment arrangement or installment option po. Puwede po bang makahingi ng reference number for this inquiry?"}'::jsonb);

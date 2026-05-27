@@ -345,6 +345,8 @@ Next Adulting candidates:
    - Status: Added as `barangay-complaint-evidence-checklist`.
    - Search support added for `barangay`, `barangay complaint`, `reklamo`, `blotter`, `ebidensya`, `evidence`, `kapitbahay`, `mediation`, `conciliation`, `Katarungang Pambarangay`, `lupon`, and `barangay protection order`.
 2. Utility bill due date and disconnection checklist
+   - Status: Added as `utility-bill-disconnection-checklist`.
+   - Search support added for `utility bills`, `kuryente`, `tubig`, `disconnection`, `putol`, `maputulan`, `due date`, `payment posting`, `proof of payment`, `payment arrangement`, `installment`, and `reconnection`.
 3. Renting/boarding house deposit red flags before paying
 4. Moving out budget and document checklist, only if merged tightly with renting
 

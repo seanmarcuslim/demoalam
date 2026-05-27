@@ -412,6 +412,8 @@ First Adulting anchor:
   - Filipino title direction: "Paano magtanong sa office nang malinaw at hindi pabalik-balik"
   - Goal: give users a reusable message structure for asking requirements, next steps, office hours, documents, fees, appointment rules, and reference numbers.
   - Fit: high. This supports government, hospital, school, bank, HR, landlord, telco, and support-channel situations without becoming a new feature system.
+  - Status: Added as the Adulting anchor guide.
+  - Search support added for `office message`, `ask office`, `magtanong`, `pabalik balik`, `requirements`, `documents`, `paper trail`, `reference number`, `customer support`, and `follow up`.
 
 Adulting quality rule:
 If a guide cannot include a practical checklist, a sample script, common mistakes, and a clear paper-trail habit, it probably does not belong in DemoAlam Adulting.

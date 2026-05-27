@@ -336,6 +336,8 @@ First Adulting anchor decision:
   - Filipino title direction: "Paano magtanong sa office nang malinaw at hindi pabalik-balik"
   - Purpose: teach users to send one clear message before going to a government office, school, hospital desk, bank, telco, landlord, HR, or support channel.
   - Why first: it becomes a reusable behavior across almost every DemoAlam guide.
+  - Status: Added.
+  - Search support added for `office message`, `ask office`, `magtanong`, `pabalik balik`, `requirements`, `documents`, `paper trail`, `reference number`, `customer support`, and `follow up`.
 
 Next Adulting candidates:
 

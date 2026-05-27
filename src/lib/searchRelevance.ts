@@ -389,6 +389,39 @@ function scoreGuide(guide: Guide, query: string) {
   }
 
   if (
+    cleanQuery.includes('office message') ||
+    cleanQuery.includes('ask office') ||
+    cleanQuery.includes('office help') ||
+    cleanQuery.includes('magtanong') ||
+    cleanQuery.includes('pabalik balik') ||
+    cleanQuery.includes('requirements') ||
+    cleanQuery.includes('documents') ||
+    cleanQuery.includes('paper trail') ||
+    cleanQuery.includes('reference number') ||
+    cleanQuery.includes('customer support') ||
+    cleanQuery.includes('support message') ||
+    cleanQuery.includes('follow up') ||
+    cleanQuery.includes('appointment') ||
+    cleanQuery.includes('office hours')
+  ) {
+    if (
+      slug === 'office-help-message-checklist' ||
+      title.includes('office') ||
+      title.includes('magtanong') ||
+      title.includes('pabalik-balik') ||
+      keywords.includes('office help') ||
+      keywords.includes('office message') ||
+      keywords.includes('customer support') ||
+      keywords.includes('requirements') ||
+      keywords.includes('paper trail') ||
+      keywords.includes('reference number') ||
+      keywords.includes('follow up')
+    ) {
+      score += slug === 'office-help-message-checklist' ? 125 : 70
+    }
+  }
+
+  if (
     cleanQuery.includes('lost wallet') ||
     cleanQuery.includes('nawala wallet') ||
     cleanQuery.includes('nanakaw wallet') ||

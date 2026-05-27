@@ -355,13 +355,20 @@ Completed follow-up Healthcare move:
 - It covers desk selection, document preparation, realistic assistance questions, common fixer risks, checklist items, and sample messages.
 - Search support added for `hospital assistance`, `medical assistance`, `malasakit`, `malasakit center`, `public hospital`, `medical social worker`, `MAIFIP`, and `MAIPP`.
 
+Completed medicine-safety Healthcare move:
+
+- Added `generic-medicine-buying-checklist` as a safe medicine-buying guide.
+- It explains generic-name checking, pharmacist questions, licensed pharmacy safety, FDA verification, fake/unregistered medicine warnings, and receipt/package preservation.
+- It avoids diagnosis, dose advice, and treatment recommendations.
+- Search support added for `gamot`, `medicine`, `generic medicine`, `reseta`, `prescription`, `licensed pharmacy`, `FDA verification`, `fake medicine`, `counterfeit medicine`, and `unregistered medicine`.
+
 Next Healthcare candidates:
 
 1. PhilHealth YAKAP/Konsulta guide
    - Needs current-source verification before writing.
 
 2. Medicine price/generic medicine checklist
-   - Useful, but must avoid medical advice and focus only on safe purchasing and official verification.
+   - Completed as a safe buying and verification checklist.
 
 3. Public hospital social service desk guide
    - Completed as practical assistance navigation.

@@ -355,6 +355,40 @@ function scoreGuide(guide: Guide, query: string) {
   }
 
   if (
+    cleanQuery.includes('gamot') ||
+    cleanQuery.includes('medicine') ||
+    cleanQuery.includes('generic') ||
+    cleanQuery.includes('generic medicine') ||
+    cleanQuery.includes('reseta') ||
+    cleanQuery.includes('prescription') ||
+    cleanQuery.includes('pharmacy') ||
+    cleanQuery.includes('licensed pharmacy') ||
+    cleanQuery.includes('fda verification') ||
+    cleanQuery.includes('fda portal') ||
+    cleanQuery.includes('fda registered') ||
+    cleanQuery.includes('fake medicine') ||
+    cleanQuery.includes('counterfeit medicine') ||
+    cleanQuery.includes('unregistered medicine')
+  ) {
+    if (
+      slug === 'generic-medicine-buying-checklist' ||
+      title.includes('generic medicine') ||
+      title.includes('medicine') ||
+      title.includes('gamot') ||
+      keywords.includes('generic medicine') ||
+      keywords.includes('gamot') ||
+      keywords.includes('pharmacy') ||
+      keywords.includes('fda verification') ||
+      keywords.includes('counterfeit medicine') ||
+      keywords.includes('fake medicine') ||
+      keywords.includes('reseta') ||
+      keywords.includes('prescription')
+    ) {
+      score += slug === 'generic-medicine-buying-checklist' ? 125 : 75
+    }
+  }
+
+  if (
     cleanQuery.includes('lost wallet') ||
     cleanQuery.includes('nawala wallet') ||
     cleanQuery.includes('nanakaw wallet') ||

@@ -351,10 +351,14 @@ Completed support guide:
   - Focus: official Medical Social Service/Malasakit-style desks, assistance assessment, document readiness, realistic expectations, and anti-fixer warnings.
   - Search support added for `hospital assistance`, `medical assistance`, `malasakit`, `malasakit center`, `public hospital`, `medical social worker`, `MAIFIP`, and `MAIPP`.
 
+- `generic-medicine-buying-checklist`
+  - Added as the safe medicine-buying and verification guide.
+  - Focus: generic-name checking, pharmacist questions, licensed pharmacy safety, FDA verification, fake/unregistered medicine warnings, and receipt/package preservation.
+  - Search support added for `gamot`, `medicine`, `generic medicine`, `reseta`, `prescription`, `licensed pharmacy`, `FDA verification`, `fake medicine`, and `counterfeit medicine`.
+
 Potential next guides:
 
 - PhilHealth YAKAP/Konsulta guide
-- Generic medicine and medicine-price checklist
 
 Rule:
 Healthcare content must guide access and preparation, not diagnosis or treatment. Use official/current sources for every health-related program claim.

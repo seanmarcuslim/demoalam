@@ -344,10 +344,16 @@ Current anchor:
   - Focus: hospital billing clarity, PhilHealth benefit questions, documents, HMO/company benefit coordination, social service options, and anti-fixer guidance.
   - Search support added for `philhealth benefits`, `hospital bill`, `case rate`, `PhilHealth MDR`, `Claim Form 1`, and `discharge billing`.
 
+Completed support guide:
+
+- `public-hospital-social-service-desk-guide`
+  - Added as the public-hospital assistance navigation guide.
+  - Focus: official Medical Social Service/Malasakit-style desks, assistance assessment, document readiness, realistic expectations, and anti-fixer warnings.
+  - Search support added for `hospital assistance`, `medical assistance`, `malasakit`, `malasakit center`, `public hospital`, `medical social worker`, `MAIFIP`, and `MAIPP`.
+
 Potential next guides:
 
 - PhilHealth YAKAP/Konsulta guide
-- Public hospital social service desk guide
 - Generic medicine and medicine-price checklist
 
 Rule:

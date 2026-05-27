@@ -348,6 +348,13 @@ Completed initial Healthcare move:
 - Official sources are limited to PhilHealth pages.
 - Search support added for `philhealth benefits`, `hospital bill`, `case rate`, `PhilHealth MDR`, `Member Data Record`, `Claim Form 1`, and `discharge billing`.
 
+Completed follow-up Healthcare move:
+
+- Added `public-hospital-social-service-desk-guide` as the public-hospital assistance companion guide.
+- It explains Medical Social Service, Medical Social Work, and Malasakit-style desks as assessment and navigation points, not guaranteed free care.
+- It covers desk selection, document preparation, realistic assistance questions, common fixer risks, checklist items, and sample messages.
+- Search support added for `hospital assistance`, `medical assistance`, `malasakit`, `malasakit center`, `public hospital`, `medical social worker`, `MAIFIP`, and `MAIPP`.
+
 Next Healthcare candidates:
 
 1. PhilHealth YAKAP/Konsulta guide
@@ -357,7 +364,7 @@ Next Healthcare candidates:
    - Useful, but must avoid medical advice and focus only on safe purchasing and official verification.
 
 3. Public hospital social service desk guide
-   - High fit for DemoAlam if written as practical assistance navigation.
+   - Completed as practical assistance navigation.
 
 ## Money Cluster Progress
 

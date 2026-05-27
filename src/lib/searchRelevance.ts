@@ -297,6 +297,14 @@ function scoreGuide(guide: Guide, query: string) {
     cleanQuery.includes('member data record') ||
     cleanQuery.includes('claim form 1') ||
     cleanQuery.includes('discharge billing') ||
+    cleanQuery.includes('hospital assistance') ||
+    cleanQuery.includes('medical assistance') ||
+    cleanQuery.includes('malasakit') ||
+    cleanQuery.includes('malasakit center') ||
+    cleanQuery.includes('public hospital') ||
+    cleanQuery.includes('medical social worker') ||
+    cleanQuery.includes('maifip') ||
+    cleanQuery.includes('maipp') ||
     cleanQuery.includes('medical emergency') ||
     cleanQuery.includes('hospital documents') ||
     cleanQuery.includes('hospital emergency') ||
@@ -310,9 +318,13 @@ function scoreGuide(guide: Guide, query: string) {
   ) {
     if (
       slug === 'philhealth-hospital-benefits-checklist' ||
+      slug === 'public-hospital-social-service-desk-guide' ||
       slug === 'medical-emergency-documents' ||
       title.includes('philhealth') ||
       title.includes('hospital bill') ||
+      title.includes('social service') ||
+      title.includes('public hospital') ||
+      title.includes('malasakit') ||
       title.includes('medical emergency') ||
       title.includes('hospital') ||
       keywords.includes('philhealth benefits') ||
@@ -320,6 +332,12 @@ function scoreGuide(guide: Guide, query: string) {
       keywords.includes('case rate') ||
       keywords.includes('member data record') ||
       keywords.includes('claim form') ||
+      keywords.includes('medical assistance') ||
+      keywords.includes('malasakit') ||
+      keywords.includes('public hospital') ||
+      keywords.includes('medical social worker') ||
+      keywords.includes('maifip') ||
+      keywords.includes('maipp') ||
       keywords.includes('medical emergency') ||
       keywords.includes('hospital') ||
       keywords.includes('philhealth') ||
@@ -329,6 +347,7 @@ function scoreGuide(guide: Guide, query: string) {
     ) {
       score +=
         slug === 'philhealth-hospital-benefits-checklist' ||
+        slug === 'public-hospital-social-service-desk-guide' ||
         slug === 'medical-emergency-documents'
           ? 125
           : 80

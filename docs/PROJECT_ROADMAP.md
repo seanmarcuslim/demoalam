@@ -283,6 +283,30 @@ Future rename candidate:
 
 Priority: MEDIUM-HIGH
 
+Status: Definition approved, content pass next
+
+Definition:
+Adulting in DemoAlam means practical life administration and communication skills that help users handle offices, landlords, bills, forms, complaints, appointments, and everyday obligations without panic, shame, fixers, or wasted trips.
+
+Adulting is not a motivation, lifestyle, relationship, productivity, or general advice category.
+
+Approved Adulting scope:
+
+- clear messages to offices, schools, banks, hospitals, HR, landlords, barangays, and customer support
+- asking for requirements before traveling or paying
+- preparing proof, receipts, screenshots, IDs, and reference numbers
+- understanding bills, due dates, deposits, contracts, and disconnection risks
+- knowing when to escalate politely and where to keep a paper trail
+- preventing exploitation through unclear communication, pressure, shame, or rushed decisions
+
+Rejected Adulting scope:
+
+- dating, romance, friendship drama, or family conflict unless tied to safety/legal/financial action
+- motivation, confidence content, hustle culture, or inspirational essays
+- vague productivity systems
+- lifestyle tips that do not reduce confusion, cost, risk, or wasted time
+- mental health claims, diagnosis, or therapy-like guidance
+
 Potential guides:
 
 - How to write a proper message to an office
@@ -294,6 +318,31 @@ Potential guides:
 
 Rule:
 Adulting must not become a junk drawer. Only keep guides that reduce confusion, prevent exploitation, or help users act confidently.
+
+MVP Adulting guide standard:
+
+- one real situation, not broad life advice
+- exact words users can copy or adapt
+- checklist of proof/details to prepare
+- common mistakes that cause delays or exploitation
+- calm escalation path
+- no shame-based language
+- no fake expertise beyond practical communication and document readiness
+
+First Adulting anchor decision:
+
+- `office-help-message-checklist`
+  - Working title: "How to ask an office for help without wasting time"
+  - Filipino title direction: "Paano magtanong sa office nang malinaw at hindi pabalik-balik"
+  - Purpose: teach users to send one clear message before going to a government office, school, hospital desk, bank, telco, landlord, HR, or support channel.
+  - Why first: it becomes a reusable behavior across almost every DemoAlam guide.
+
+Next Adulting candidates:
+
+1. Barangay complaint message and evidence checklist
+2. Utility bill due date and disconnection checklist
+3. Renting/boarding house deposit red flags before paying
+4. Moving out budget and document checklist, only if merged tightly with renting
 
 ### Emergency Cluster
 

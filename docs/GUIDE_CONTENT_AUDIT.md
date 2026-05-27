@@ -383,6 +383,39 @@ Next Healthcare candidates:
 3. Public hospital social service desk guide
    - Completed as practical assistance navigation.
 
+## Adulting Cluster Definition
+
+Status: Definition approved, content pass next
+
+Decision:
+Adulting should be treated as practical life administration, not generic life advice. It should teach ordinary Filipinos how to communicate clearly, prepare proof, ask the right questions, keep records, and avoid wasted trips or exploitative shortcuts.
+
+Approved Adulting scope:
+
+- office, school, bank, hospital, HR, landlord, barangay, telco, and customer-support messages
+- asking requirements before traveling, paying, submitting IDs, or signing anything
+- receipts, screenshots, reference numbers, names of offices, dates, and written confirmation
+- bills, due dates, deposits, contracts, service requests, and disconnection prevention
+- polite escalation when the first answer is unclear or incomplete
+
+Rejected Adulting scope:
+
+- motivation, lifestyle, productivity, dating, or relationship content
+- vague advice that cannot become a checklist or sample script
+- therapy-like mental health guidance or diagnosis
+- broad “how to be responsible” essays
+
+First Adulting anchor:
+
+- `office-help-message-checklist`
+  - Working title: "How to ask an office for help without wasting time"
+  - Filipino title direction: "Paano magtanong sa office nang malinaw at hindi pabalik-balik"
+  - Goal: give users a reusable message structure for asking requirements, next steps, office hours, documents, fees, appointment rules, and reference numbers.
+  - Fit: high. This supports government, hospital, school, bank, HR, landlord, telco, and support-channel situations without becoming a new feature system.
+
+Adulting quality rule:
+If a guide cannot include a practical checklist, a sample script, common mistakes, and a clear paper-trail habit, it probably does not belong in DemoAlam Adulting.
+
 ## Money Cluster Progress
 
 Status: Active after DSWD core sprint

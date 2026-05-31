@@ -166,6 +166,13 @@ Testing:
 - Search: `dswd`, `ayuda`, `4Ps`, `Walang Gutom`, `loan app`, `fake job`, `wallet`, `phishing`, `nbi`, `philhealth`
 - Verify top results remain sensible
 
+Search tuning backlog:
+
+- Query: `salary complaint`
+- Current result: `payday-budget-simple-split` ranks #1 and `unpaid-salary-kulang-sahod-checklist` ranks #2.
+- Target result: `unpaid-salary-kulang-sahod-checklist` should rank #1.
+- Future boost terms: `salary complaint`, `labor complaint`, `dole complaint`, `sena complaint`.
+
 ### 4. Fix Bundle UI Theme Consistency
 
 Status: APPROVED

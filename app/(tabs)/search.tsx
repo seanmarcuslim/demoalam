@@ -5,7 +5,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { router } from 'expo-router'
 import { Ionicons } from '@expo/vector-icons'
 import { useSearch } from '../../src/hooks/useSearch'
@@ -33,10 +33,12 @@ import {
   getSuggestionGroupTitle,
   getSuggestionGroupSubtitle,
 } from '../../src/lib/searchSuggestions'
+import { analyticsService } from '../../src/services/analyticsService'
 
 export default function SearchScreen() {
   const {
     searchTerm,
+    debouncedTerm,
     setSearchTerm,
     results,
     isLoading,
@@ -45,6 +47,8 @@ export default function SearchScreen() {
   } = useSearch()
 
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
+  const [committedSearchTerm, setCommittedSearchTerm] = useState('')
+  const lastLoggedSearchKey = useRef('')
 
   const { language } = useSettingsStore()
   const { colors } = useTheme()
@@ -100,10 +104,42 @@ export default function SearchScreen() {
 
     if (cleanTerm.length > 1) {
       addRecentSearch(cleanTerm)
+      setCommittedSearchTerm(cleanTerm)
     }
 
     updateSearchTerm(term)
   }
+
+  useEffect(() => {
+    const cleanTerm = committedSearchTerm.trim()
+
+    if (
+      cleanTerm.length < 2 ||
+      debouncedTerm !== cleanTerm ||
+      isLoading ||
+      isError ||
+      searchTerm.trim() !== cleanTerm
+    ) {
+      return
+    }
+
+    const searchKey = `${language}:${cleanTerm.toLowerCase()}:${results.length}:${results[0]?.slug ?? ''}`
+
+    if (lastLoggedSearchKey.current === searchKey) {
+      return
+    }
+
+    lastLoggedSearchKey.current = searchKey
+
+    analyticsService.logSearchEvent({
+      query: cleanTerm,
+      resultCount: results.length,
+      topResultSlug: results[0]?.slug,
+      language,
+    }).catch(() => {
+      // Analytics should never interrupt search.
+    })
+  }, [committedSearchTerm, debouncedTerm, isError, isLoading, language, results, searchTerm])
 
   const renderListHeader = () => {
     if (showEmptySearch) {

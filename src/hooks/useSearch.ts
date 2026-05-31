@@ -31,6 +31,7 @@ export function useSearch() {
 
   return {
     searchTerm,
+    debouncedTerm,
     setSearchTerm,
     results: results || [],
     isLoading,

@@ -36,7 +36,8 @@ export default function SafeText({
 
   return (
     <Text
-      allowFontScaling={false}
+      allowFontScaling={true}
+      maxFontSizeMultiplier={1.3}
       {...props}
       style={[
         typography[variant],

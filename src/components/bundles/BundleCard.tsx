@@ -1,11 +1,17 @@
-import { TouchableOpacity, View } from 'react-native'
+import { StyleSheet, TouchableOpacity, View } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
 import { router } from 'expo-router'
 
 import type { GuideBundleWithItems } from '../../types/bundle'
 import SafeText from '../ui/SafeText'
 import { useSettingsStore } from '../../stores/settingsStore'
+import { useTheme } from '../../hooks/useTheme'
 import { translations } from '../../utils/translations'
+import {
+  getBundleTitle,
+  getBundleDescription,
+} from '../../lib/bundleDisplay'
+import type { ThemeColors } from '../../theme/colors'
 
 interface BundleCardProps {
   bundle: GuideBundleWithItems
@@ -13,14 +19,15 @@ interface BundleCardProps {
 
 export function BundleCard({ bundle }: BundleCardProps) {
   const { language } = useSettingsStore()
+  const { colors } = useTheme()
   const labels = translations[language].components.bundleCard
+  const styles = createStyles(colors)
 
   const guideCount = bundle.items.length
   const urgentCount = bundle.items.filter((item) => item.guide?.is_urgent).length
 
-  const title = language === 'fil' ? bundle.title_fil : bundle.title_en
-  const description =
-    language === 'fil' ? bundle.description_fil : bundle.description_en
+  const title = getBundleTitle(bundle, language)
+  const description = getBundleDescription(bundle, language)
 
   return (
     <TouchableOpacity
@@ -31,40 +38,19 @@ export function BundleCard({ bundle }: BundleCardProps) {
           params: { slug: bundle.slug },
         })
       }
-      style={{
-        backgroundColor: '#132033',
-        borderRadius: 22,
-        padding: 18,
-        marginTop: 14,
-        borderWidth: 1,
-        borderColor: '#223047',
-      }}
+      style={styles.card}
     >
-      <View
-        style={{
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          marginBottom: 12,
-        }}
-      >
-        <View
-          style={{
-            backgroundColor: '#1f3550',
-            borderRadius: 999,
-            paddingHorizontal: 12,
-            paddingVertical: 8,
-          }}
-        >
+      <View style={styles.header}>
+        <View style={styles.badge}>
           <SafeText variant="caption" weight="700">
             {labels.preparedBundle}
           </SafeText>
         </View>
 
-        <Ionicons name="arrow-forward" size={18} color="#7cb8ff" />
+        <Ionicons name="arrow-forward" size={18} color={colors.primary} />
       </View>
 
-      <SafeText variant="h3" weight="700" style={{ marginBottom: 10 }}>
+      <SafeText variant="h3" weight="700" style={styles.title}>
         {title}
       </SafeText>
 
@@ -72,21 +58,14 @@ export function BundleCard({ bundle }: BundleCardProps) {
         <SafeText
           variant="bodyMd"
           color="muted"
-          style={{ marginBottom: 14, lineHeight: 24 }}
+          style={styles.description}
         >
           {description}
         </SafeText>
       ) : null}
 
-      <View style={{ flexDirection: 'row', gap: 10, flexWrap: 'wrap' }}>
-        <View
-          style={{
-            backgroundColor: '#1c2d44',
-            borderRadius: 999,
-            paddingHorizontal: 12,
-            paddingVertical: 8,
-          }}
-        >
+      <View style={styles.metaRow}>
+        <View style={styles.pill}>
           <SafeText variant="caption" weight="700">
             {guideCount}{' '}
             {guideCount === 1 ? labels.guideSingular : labels.guidePlural}
@@ -94,14 +73,7 @@ export function BundleCard({ bundle }: BundleCardProps) {
         </View>
 
         {urgentCount > 0 ? (
-          <View
-            style={{
-              backgroundColor: '#3f241f',
-              borderRadius: 999,
-              paddingHorizontal: 12,
-              paddingVertical: 8,
-            }}
-          >
+          <View style={styles.urgentPill}>
             <SafeText variant="caption" weight="700">
               {urgentCount} {labels.urgent}
             </SafeText>
@@ -111,3 +83,58 @@ export function BundleCard({ bundle }: BundleCardProps) {
     </TouchableOpacity>
   )
 }
+
+const createStyles = (colors: ThemeColors) =>
+  StyleSheet.create({
+    card: {
+      backgroundColor: colors.surface,
+      borderRadius: 22,
+      padding: 18,
+      marginTop: 14,
+      borderWidth: 1,
+      borderColor: colors.border,
+    },
+
+    header: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      marginBottom: 12,
+    },
+
+    badge: {
+      backgroundColor: colors.surfaceSecondary,
+      borderRadius: 999,
+      paddingHorizontal: 12,
+      paddingVertical: 8,
+    },
+
+    title: {
+      marginBottom: 10,
+    },
+
+    description: {
+      marginBottom: 14,
+      lineHeight: 24,
+    },
+
+    metaRow: {
+      flexDirection: 'row',
+      gap: 10,
+      flexWrap: 'wrap',
+    },
+
+    pill: {
+      backgroundColor: colors.surfaceSecondary,
+      borderRadius: 999,
+      paddingHorizontal: 12,
+      paddingVertical: 8,
+    },
+
+    urgentPill: {
+      backgroundColor: colors.dangerLight,
+      borderRadius: 999,
+      paddingHorizontal: 12,
+      paddingVertical: 8,
+    },
+  })

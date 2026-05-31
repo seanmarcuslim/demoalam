@@ -506,6 +506,42 @@ set
         {"title":"Modus Operandi of Illegal Recruiters","publisher":"Department of Migrant Workers / POEA Archive","url":"https://dmw.gov.ph/archives/poea/air/modus.html"},
         {"title":"Tips to job applicants using the internet in job search","publisher":"Department of Migrant Workers / POEA Archive","url":"https://dmw.gov.ph/archives/poea/air/internetscams.html"}
       ]'::jsonb
+    when 'nbi-clearance-first-timers' then
+      '[
+        {"title":"NBI Clearance Online Services","publisher":"National Bureau of Investigation","url":"https://clearance.nbi.gov.ph/"},
+        {"title":"NBI Clearance First Time Jobseekers","publisher":"National Bureau of Investigation","url":"https://firsttimejobseekers.nbi.gov.ph/"},
+        {"title":"Republic Act No. 11261","publisher":"Supreme Court E-Library","url":"https://elibrary.judiciary.gov.ph/thebookshelf/showdocs/2/87437"}
+      ]'::jsonb
+    when 'first-job-requirements' then
+      '[
+        {"title":"Republic Act No. 11261 - First Time Jobseekers Assistance Act","publisher":"Official Gazette / Lawphil","url":"https://lawphil.net/statutes/repacts/ra2019/pdf/ra_11261_2019.pdf"},
+        {"title":"Oath of Undertaking - RA 11261","publisher":"DOLE Bureau of Local Employment","url":"https://www.ble.dole.gov.ph/wp-content/uploads/2022/06/FORM2-Oath-of-Undertaking-asof16June2021.pdf"},
+        {"title":"Become an SSS Member","publisher":"Social Security System","url":"https://www.sss.gov.ph/become-an-sss-member/"},
+        {"title":"Employees","publisher":"Social Security System","url":"https://www.sss.gov.ph/employees/"},
+        {"title":"BIR Form No. 1902","publisher":"Bureau of Internal Revenue","url":"https://bir-cdn.bir.gov.ph/BIR/pdf/1902%20October%202025%20%28ENCS%29%20Final.pdf"},
+        {"title":"BIR Citizens Charter - TIN of Local Employee","publisher":"Bureau of Internal Revenue","url":"https://bir-cdn.bir.gov.ph/local/pdf/BIR_Citizens_Charter_2020-2nd_Edition.pdf"},
+        {"title":"NBI Clearance Portal","publisher":"National Bureau of Investigation","url":"https://clearance.nbi.gov.ph/"}
+      ]'::jsonb
+    when 'lost-wallet-first-steps' then
+      '[
+        {"title":"BSP common scams and fraud guidance","publisher":"Bangko Sentral ng Pilipinas","url":"https://www.bsp.gov.ph/SitePages/FinancialStability/BSPVerifier.aspx"},
+        {"title":"LTO Citizens Charter - Duplicate Driver''s License / Student Permit","publisher":"Land Transportation Office","url":"https://lto.gov.ph/wp-content/uploads/2023/09/LTO-CITIZENS-CHARTER_2023_0905.pdf"},
+        {"title":"PhilSys Frequently Asked Questions","publisher":"Philippine Identification System","url":"https://philsys.gov.ph/faq/"}
+      ]'::jsonb
+    when 'fast-valid-id' then
+      $$[
+        {"title":"Frequently Asked Questions","publisher":"Philippine Identification System","url":"https://philsys.gov.ph/faq-frequently-asked-questions/"},
+        {"title":"Public Advisory: Tracking of the National ID and Required Information for Concerns","publisher":"Philippine Identification System","url":"https://philsys.gov.ph/wp-content/uploads/2024/05/Public-Advisory-Tracking-of-the-National-ID-and-the-Required-Information-for-Processing-of-Concerns.pdf"},
+        {"title":"National ID as a reliable, easy-to-authenticate valid ID","publisher":"Philippine Identification System","url":"https://philsys.gov.ph/national-id-a-reliable-easy-to-authenticate-valid-id-for-filipinos-government-and-private-institutions/"},
+        {"title":"National ID delivery tracking","publisher":"PHLPost","url":"https://tracking.phlpost.gov.ph/"}
+      ]$$::jsonb
+    when 'bank-account-first-time' then
+      '[
+        {"title":"Financial Products and Services - Deposits","publisher":"Bangko Sentral ng Pilipinas","url":"https://www.bsp.gov.ph/Pages/InclusiveFinance/FinancialProductsServices.aspx"},
+        {"title":"List of Banks Offering Basic Deposit Accounts","publisher":"Bangko Sentral ng Pilipinas","url":"https://www.bsp.gov.ph/banking/BDA.pdf"},
+        {"title":"Philippine Deposit Insurance System at a Glance","publisher":"Philippine Deposit Insurance Corporation","url":"https://www.pdic.gov.ph/public-policy"},
+        {"title":"New maximum deposit insurance coverage of P1 Million takes effect","publisher":"Philippine Deposit Insurance Corporation","url":"https://www.pdic.gov.ph/files/ccd/PR-038-25%20New%20maximum%20deposit%20insurance%20coverage%20of%20P1%20Million%20takes%20effect%20on%20March%2015.pdf"}
+      ]'::jsonb
     else official_sources
   end,
   updated_at = now()
@@ -519,7 +555,12 @@ where slug in (
   'medical-emergency-documents',
   'phishing-link-checklist',
   'phone-stolen-first-hour',
-  'fake-job-offer-red-flags'
+  'fake-job-offer-red-flags',
+  'nbi-clearance-first-timers',
+  'first-job-requirements',
+  'lost-wallet-first-steps',
+  'fast-valid-id',
+  'bank-account-first-time'
 );
 
 delete from public.guide_sections

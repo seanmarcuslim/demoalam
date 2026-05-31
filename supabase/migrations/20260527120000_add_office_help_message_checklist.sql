@@ -23,7 +23,7 @@ values (
   'office-help-message-checklist',
   (select id from public.categories where slug = 'adulting'),
   'How to ask an office for help without wasting time',
-  'Paano magtanong sa office nang malinaw at hindi pabalik-balik',
+  'Paano magtanong sa opisina nang malinaw para hindi pabalik-balik',
   'Send one clear message with the right details, proof, and next-step questions before going in person.',
   'Magpadala ng isang malinaw na message na may tamang details, proof, at next-step questions bago pumunta.',
   true,
@@ -52,7 +52,12 @@ values (
   ],
   'office help message ask requirements customer support inquiry documents proof reference number paper trail next steps appointment office hours fees status follow up escalation government office barangay school hospital bank landlord hr telco email chat call',
   'office help message tanong requirements customer support inquiry documents proof reference number paper trail next steps appointment office hours fees status follow up escalation government office barangay school hospital bank landlord hr telco email chat tawag pabalik balik malinaw na message magtanong',
-  '[]'::jsonb,
+  '[
+    {"title":"Republic Act 6770 - Ombudsman Act and Citizens Charter","publisher":"Lawphil","url":"https://lawphil.net/statutes/repacts/ra1989/ra_6770_1989.html"},
+    {"title":"Rules on Administrative Procedure - Proper Communication Channels","publisher":"Supreme Court E-Library","url":"https://elibrary.judiciary.gov.ph/thebookshelf/showdocs/2/7"},
+    {"title":"PNP and Government Agency Citizens Charter Requirements","publisher":"DILG Official","url":"https://dilg.gov.ph/citizens-charters/"},
+    {"title":"Bureau of Internal Revenue - Records and Communication Standards","publisher":"BIR","url":"https://www.bir.gov.ph/"}
+  ]'::jsonb,
   now(),
   now()
 )
@@ -202,6 +207,36 @@ values
     'tip',
     8,
     $${
+      "title":"Before going to the office",
+      "body":"A few minutes of preparation can save hours of travel, waiting, and repeat visits.",
+      "items":["Save screenshots of all replies","Save reference numbers","Bring at least one valid ID if applicable","Bring photocopies if commonly required","Check office hours and cut-off times","Confirm the office location or branch","Prepare exact fees if possible","Bring supporting documents mentioned by the office"]
+    }$$::jsonb,
+    $${
+      "title":"Bago pumunta sa opisina",
+      "body":"Ang ilang minutong paghahanda ay makakaiwas sa mahabang biyahe, paghihintay, at pabalik-balik.",
+      "items":["I-save ang screenshots ng mga reply","I-save ang reference numbers","Magdala ng kahit isang valid ID kung kailangan","Magdala ng photocopies kung madalas itong hinihingi","I-check ang office hours at cut-off times","I-confirm ang tamang office o branch","Maghanda ng eksaktong bayad kung maaari","Dalhin ang supporting documents na binanggit ng office"]
+    }$$::jsonb
+  ),
+  (
+    (select id from public.guides where slug = 'office-help-message-checklist'),
+    'tip',
+    9,
+    $${
+      "title":"Which contact channel should you use?",
+      "body":"Using the correct channel often leads to faster and more accurate answers.",
+      "items":["Official Facebook Page","Official Website","Official Email","Official Hotline","Official Customer Service Portal","Citizen's Charter","Verified Government Website"]
+    }$$::jsonb,
+    $${
+      "title":"Anong contact channel ang dapat gamitin?",
+      "body":"Mas mabilis at mas tama ang sagot kapag tama ang ginagamit na contact channel.",
+      "items":["Official Facebook Page","Official Website","Official Email","Official Hotline","Official Customer Service Portal","Citizen's Charter","Verified Government Website"]
+    }$$::jsonb
+  ),
+  (
+    (select id from public.guides where slug = 'office-help-message-checklist'),
+    'tip',
+    10,
+    $${
       "title":"Reusable message template",
       "body":"Copy this structure and replace the blanks.",
       "sample":"Hello po. Magtatanong lang po sana ako tungkol sa [document/service/concern]. Ako po si [name if needed]. Ang concern ko po ay [one sentence]. Mayroon na po akong [documents/reference number/appointment/details]. Ano po ang requirements, fees, office hours, at next step? Kailangan po ba ng appointment, at saan po dapat isumite?"
@@ -215,7 +250,7 @@ values
   (
     (select id from public.guides where slug = 'office-help-message-checklist'),
     'tip',
-    9,
+    11,
     $${
       "title":"If the answer is unclear",
       "body":"Ask one polite follow-up. Do not fight immediately. Ask for the exact missing detail and keep the reply.",

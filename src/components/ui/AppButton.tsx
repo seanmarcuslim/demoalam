@@ -3,6 +3,7 @@ import {
   StyleProp,
   StyleSheet,
   TouchableOpacity,
+  TouchableOpacityProps,
   ViewStyle,
 } from 'react-native'
 import { useTheme } from '../../hooks/useTheme'
@@ -10,7 +11,7 @@ import { spacing } from '../../theme/spacing'
 import { ThemeColors } from '../../theme/colors'
 import SafeText from './SafeText'
 
-interface AppButtonProps {
+interface AppButtonProps extends Omit<TouchableOpacityProps, 'style' | 'disabled'> {
   title: string
   onPress: () => void
   loading?: boolean
@@ -26,6 +27,9 @@ export default function AppButton({
   disabled = false,
   variant = 'primary',
   style,
+  accessibilityLabel,
+  accessibilityRole = 'button',
+  ...props
 }: AppButtonProps) {
   const { colors } = useTheme()
   const styles = createStyles(colors)
@@ -47,6 +51,9 @@ export default function AppButton({
       ]}
       onPress={onPress}
       disabled={disabled || loading}
+      accessibilityLabel={accessibilityLabel || title}
+      accessibilityRole={accessibilityRole}
+      {...props}
     >
       {loading ? (
         <ActivityIndicator color="#FFFFFF" />

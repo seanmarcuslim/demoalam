@@ -4,6 +4,7 @@ import {
   StyleSheet,
   View,
 } from 'react-native'
+import { useMemo } from 'react'
 import { router } from 'expo-router'
 import { Ionicons } from '@expo/vector-icons'
 import { useCategories } from '../../src/hooks/useCategories'
@@ -49,6 +50,16 @@ export default function CategoriesScreen() {
   const categoryTotal = categories.length || Object.keys(CATEGORY_COPY).length
   const priorityTotal = categories.filter((cat) => CATEGORY_SIGNALS[cat.slug]).length
 
+  // Precompute guide counts for O(1) lookup during render
+  const guideCounts = useMemo(() => {
+    const counts = new Map<string, number>()
+    for (const guide of guides) {
+      const count = counts.get(guide.category_id) ?? 0
+      counts.set(guide.category_id, count + 1)
+    }
+    return counts
+  }, [guides])
+
   const openCategory = (id: string, name: string) => {
     router.push({
       pathname: '/category/[id]',
@@ -57,7 +68,7 @@ export default function CategoriesScreen() {
   }
 
   const getGuideCount = (categoryId: string) =>
-    guides.filter((guide) => guide.category_id === categoryId).length
+    guideCounts.get(categoryId) ?? 0
 
   const getCountLabel = (count: number) => {
     if (count === 0) return labels.comingSoon
@@ -158,6 +169,8 @@ export default function CategoriesScreen() {
               title={labels.tryAgain}
               onPress={() => refetch()}
               style={styles.emptyAction}
+              accessibilityLabel={labels.tryAgain}
+              accessibilityRole="button"
             />
           </AppCard>
         ) : (
@@ -198,6 +211,9 @@ export default function CategoriesScreen() {
               },
             ]}
             onPress={() => openCategory(item.id, getCategoryName(item, language))}
+            accessibilityRole="button"
+            accessibilityLabel={`${getCategoryName(item, language)}, ${getCountLabel(guideCount)}`}
+            accessibilityHint={hasGuides ? undefined : labels.planned}
           >
             <View
               style={[

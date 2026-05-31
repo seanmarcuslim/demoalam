@@ -6,6 +6,8 @@ import { useTheme } from '../../hooks/useTheme'
 import { spacing } from '../../theme/spacing'
 import { ThemeColors } from '../../theme/colors'
 import { getCategoryAccent } from '../../lib/categoryVisuals'
+import { getGuideTitle, getGuideTagline } from '../../lib/guideDisplay'
+import { getCategoryName as getDisplayCategoryName } from '../../lib/categoryCopy'
 import SafeText from '../ui/SafeText'
 import Badge from '../ui/Badge'
 import { useFeedbackStore } from '../../stores/feedbackStore'
@@ -32,12 +34,10 @@ function GuideCard({
   const showFeedback = useFeedbackStore((state) => state.show)
   const labels = translations[language].components.guideCard
   const styles = createStyles(colors, guide.is_urgent, compact)
-  const title = language === 'fil' ? guide.title_fil : guide.title_en
-  const tagline = language === 'fil' ? guide.tagline_fil : guide.tagline_en
+  const title = getGuideTitle(guide, language)
+  const tagline = getGuideTagline(guide, language)
   const categoryName = guide.category
-    ? language === 'fil'
-      ? guide.category.name_fil
-      : guide.category.name_en
+    ? getDisplayCategoryName(guide.category, language)
     : ''
   const categoryColor = getCategoryAccent(guide.category, colors.primary)
   const accentColor = guide.is_urgent ? colors.danger : categoryColor
@@ -64,6 +64,9 @@ function GuideCard({
       activeOpacity={0.86}
       style={styles.card}
       onPress={onPress}
+      accessibilityRole="button"
+      accessibilityLabel={title}
+      accessibilityHint={isSaved ? labels.savedForOffline : undefined}
     >
       <View style={[styles.accentBar, { backgroundColor: accentColor }]} />
 
@@ -81,6 +84,8 @@ function GuideCard({
             isSaved && styles.saveButtonActive,
           ]}
           onPress={handleSave}
+          accessibilityRole="button"
+          accessibilityLabel={isSaved ? labels.removedFromSaved : labels.savedForOffline}
         >
           <Ionicons
             name={isSaved ? 'bookmark' : 'bookmark-outline'}

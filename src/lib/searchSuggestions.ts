@@ -20,7 +20,24 @@ export const SEARCH_SUGGESTIONS = [
   'gcash scam',
 ]
 
-export const SEARCH_SUGGESTION_GROUPS = [
+export type SearchSuggestionGroup = {
+  title_en: string
+  title_fil: string
+  subtitle_en: string
+  subtitle_fil: string
+  colorKey: 'success' | 'accent' | 'primary' | 'danger'
+  items: string[]
+}
+
+export function getSuggestionGroupTitle(group: SearchSuggestionGroup, language: 'en' | 'fil') {
+  return language === 'fil' ? group.title_fil : group.title_en
+}
+
+export function getSuggestionGroupSubtitle(group: SearchSuggestionGroup, language: 'en' | 'fil') {
+  return language === 'fil' ? group.subtitle_fil : group.subtitle_en
+}
+
+export const SEARCH_SUGGESTION_GROUPS: SearchSuggestionGroup[] = [
   {
     title_en: 'First job flow',
     title_fil: 'Unang trabaho',

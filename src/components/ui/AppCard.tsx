@@ -4,13 +4,14 @@ import {
   TouchableOpacity,
   StyleProp,
   ViewStyle,
+  TouchableOpacityProps,
 } from 'react-native'
 import { ReactNode } from 'react'
 import { useTheme } from '../../hooks/useTheme'
 import { spacing } from '../../theme/spacing'
 import { ThemeColors } from '../../theme/colors'
 
-interface AppCardProps {
+interface AppCardProps extends Omit<TouchableOpacityProps, 'style' | 'children'> {
   children: ReactNode
   onPress?: () => void
   style?: StyleProp<ViewStyle>
@@ -20,6 +21,10 @@ export default function AppCard({
   children,
   onPress,
   style,
+  accessibilityRole,
+  accessibilityLabel,
+  accessibilityHint,
+  ...props
 }: AppCardProps) {
   const { colors } = useTheme()
 
@@ -31,6 +36,10 @@ export default function AppCard({
         activeOpacity={0.85}
         style={[styles.card, style]}
         onPress={onPress}
+        accessibilityRole={accessibilityRole}
+        accessibilityLabel={accessibilityLabel}
+        accessibilityHint={accessibilityHint}
+        {...props}
       >
         {children}
       </TouchableOpacity>

@@ -30,6 +30,8 @@ import { getCategoryName } from '../../src/lib/categoryCopy'
 import {
   SEARCH_SUGGESTION_GROUPS,
   SEARCH_SUGGESTIONS,
+  getSuggestionGroupTitle,
+  getSuggestionGroupSubtitle,
 } from '../../src/lib/searchSuggestions'
 
 export default function SearchScreen() {
@@ -173,12 +175,12 @@ export default function SearchScreen() {
 
                   <View style={styles.groupCopy}>
                     <SafeText variant={compact ? 'body' : 'h3'} weight="700">
-                      {language === 'fil' ? group.title_fil : group.title_en}
+                      {getSuggestionGroupTitle(group, language)}
                     </SafeText>
 
                     {!compact ? (
                       <SafeText variant="caption" color="muted" style={styles.cardHint}>
-                        {language === 'fil' ? group.subtitle_fil : group.subtitle_en}
+                        {getSuggestionGroupSubtitle(group, language)}
                       </SafeText>
                     ) : null}
                   </View>

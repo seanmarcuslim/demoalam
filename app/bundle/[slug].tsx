@@ -19,6 +19,12 @@ import { useGuideBundle } from '../../src/hooks/useGuideBundles'
 import { useTheme } from '../../src/hooks/useTheme'
 
 import { useSettingsStore } from '../../src/stores/settingsStore'
+import {
+  getBundleTitle,
+  getBundleDescription,
+  getBundleItemReason,
+  getBundleItemGuideTitle,
+} from '../../src/lib/bundleDisplay'
 
 import { spacing } from '../../src/theme/spacing'
 import type { ThemeColors } from '../../src/theme/colors'
@@ -60,15 +66,8 @@ export default function BundleDetailsScreen() {
     )
   }
 
-  const title =
-    language === 'fil'
-      ? bundle.title_fil
-      : bundle.title_en
-
-  const description =
-    language === 'fil'
-      ? bundle.description_fil
-      : bundle.description_en
+  const title = getBundleTitle(bundle, language)
+  const description = getBundleDescription(bundle, language)
 
   return (
     <FlatList
@@ -154,9 +153,7 @@ export default function BundleDetailsScreen() {
               variant="h3"
               weight="700"
             >
-              {language === 'fil'
-                ? item.guide?.title_fil
-                : item.guide?.title_en}
+              {getBundleItemGuideTitle(item, language)}
             </SafeText>
 
             {!!item.reason_en && (
@@ -165,9 +162,7 @@ export default function BundleDetailsScreen() {
                 color="muted"
                 style={styles.reason}
               >
-                {language === 'fil'
-                  ? item.reason_fil
-                  : item.reason_en}
+                {getBundleItemReason(item, language)}
               </SafeText>
             )}
 

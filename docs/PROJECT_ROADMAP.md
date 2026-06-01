@@ -172,6 +172,10 @@ Search tuning backlog:
 - Current result: `payday-budget-simple-split` ranks #1 and `unpaid-salary-kulang-sahod-checklist` ranks #2.
 - Target result: `unpaid-salary-kulang-sahod-checklist` should rank #1.
 - Future boost terms: `salary complaint`, `labor complaint`, `dole complaint`, `sena complaint`.
+- Query: `philhealth solo parent`
+- Current result: PhilHealth-specific guides rank above `solo-parent-benefits-checklist`.
+- Target result: `solo-parent-benefits-checklist` should rank #1 or #2 while still keeping PhilHealth guides nearby.
+- Future boost terms: `philhealth solo parent`, `solo parent philhealth`, `solo parent automatic coverage`, `solo parent benefits`.
 
 ### 4. Fix Bundle UI Theme Consistency
 

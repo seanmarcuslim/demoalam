@@ -355,6 +355,29 @@ function scoreGuide(guide: Guide, query: string) {
   }
 
   if (
+    cleanQuery.includes('pcso medical assistance') ||
+    cleanQuery.includes('pcso medical') ||
+    cleanQuery.includes('pcso assistance') ||
+    cleanQuery.includes('pcso map')
+  ) {
+    if (slug === 'pcso-medical-assistance-checklist') {
+      score += 160
+    }
+  }
+
+  if (
+    !cleanQuery.includes('pcso') &&
+    (
+      cleanQuery.includes('medical assistance') ||
+      cleanQuery.includes('hospital assistance')
+    )
+  ) {
+    if (slug === 'public-hospital-social-service-desk-guide') {
+      score += 180
+    }
+  }
+
+  if (
     cleanQuery.includes('gamot') ||
     cleanQuery.includes('medicine') ||
     cleanQuery.includes('generic') ||
@@ -602,6 +625,17 @@ function scoreGuide(guide: Guide, query: string) {
       keywords.includes('bank account')
     ) {
       score += 70
+    }
+  }
+
+  if (
+    cleanQuery.includes('emergency fund') ||
+    cleanQuery.includes('ipon emergency') ||
+    cleanQuery.includes('ipon pang emergency') ||
+    cleanQuery.includes('emergency savings')
+  ) {
+    if (slug === 'emergency-fund-starter-checklist') {
+      score += 160
     }
   }
 

@@ -76,6 +76,37 @@ function scoreGuide(guide: Guide, query: string) {
   const expandedTerms = expandSearchTerms(cleanQuery)
   const readTime = guide.read_time_min || 999
   const officialSourceCount = guide.official_sources?.length || 0
+  const hasVehicleAccidentIntent =
+    cleanQuery.includes('road accident') ||
+    cleanQuery.includes('road crash') ||
+    cleanQuery.includes('car accident') ||
+    cleanQuery.includes('motorcycle accident') ||
+    cleanQuery.includes('traffic accident') ||
+    cleanQuery.includes('vehicular accident') ||
+    cleanQuery.includes('aksidente') ||
+    cleanQuery.includes('aksidente sa motor') ||
+    cleanQuery.includes('aksidente sa sasakyan') ||
+    cleanQuery.includes('crash') ||
+    cleanQuery.includes('banggaan') ||
+    cleanQuery.includes('hit and run')
+  const hasStolenDeviceIntent =
+    cleanQuery.includes('stolen phone') ||
+    cleanQuery.includes('nanakaw phone') ||
+    cleanQuery.includes('lost phone') ||
+    cleanQuery.includes('nawala phone') ||
+    cleanQuery.includes('imei') ||
+    cleanQuery.includes('sim') ||
+    cleanQuery.includes('lost sim')
+  const hasGenericBlotterIntent =
+    !hasVehicleAccidentIntent &&
+    !hasStolenDeviceIntent &&
+    (
+      cleanQuery.includes('blotter') ||
+      cleanQuery.includes('police blotter') ||
+      cleanQuery.includes('barangay blotter') ||
+      cleanQuery.includes('magpa blotter') ||
+      cleanQuery.includes('complaint blotter')
+    )
 
   let score = 0
 
@@ -266,15 +297,9 @@ function scoreGuide(guide: Guide, query: string) {
   }
 
   if (
-    cleanQuery.includes('road accident') ||
-    cleanQuery.includes('road crash') ||
-    cleanQuery.includes('car accident') ||
-    cleanQuery.includes('motorcycle accident') ||
-    cleanQuery.includes('traffic accident') ||
+    hasVehicleAccidentIntent ||
     cleanQuery.includes('police report') ||
-    cleanQuery.includes('insurance claim') ||
-    cleanQuery.includes('incident report') ||
-    cleanQuery.includes('blotter')
+    cleanQuery.includes('insurance claim')
   ) {
     if (
       slug === 'road-accident-first-steps' ||
@@ -448,7 +473,6 @@ function scoreGuide(guide: Guide, query: string) {
     cleanQuery.includes('barangay') ||
     cleanQuery.includes('barangay complaint') ||
     cleanQuery.includes('reklamo') ||
-    cleanQuery.includes('blotter') ||
     cleanQuery.includes('ebidensya') ||
     cleanQuery.includes('evidence') ||
     cleanQuery.includes('kapitbahay') ||
@@ -476,6 +500,13 @@ function scoreGuide(guide: Guide, query: string) {
     ) {
       score += slug === 'barangay-complaint-evidence-checklist' ? 125 : 75
     }
+  }
+
+  if (
+    hasGenericBlotterIntent &&
+    slug === 'barangay-complaint-evidence-checklist'
+  ) {
+    score += 160
   }
 
   if (

@@ -1,6 +1,6 @@
 import { Ionicons } from '@expo/vector-icons'
 import { router } from 'expo-router'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import {
   ScrollView,
   StyleSheet,
@@ -21,6 +21,7 @@ import {
   type PhoneLostAnswers,
   type PhoneLostQuestion,
 } from '../../src/lib/decisionFlows/phoneLostFlow'
+import { analyticsService } from '../../src/services/analyticsService'
 import type { ThemeColors } from '../../src/theme/colors'
 import { spacing } from '../../src/theme/spacing'
 import type { Guide } from '../../src/types/guide'
@@ -34,6 +35,7 @@ export default function PhoneLostFlowScreen() {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [answers, setAnswers] = useState<PhoneLostAnswers>({})
   const [showResult, setShowResult] = useState(false)
+  const loggedOutcomeId = useRef<string | null>(null)
 
   const styles = createStyles(colors)
   const currentQuestion = phoneLostFlow.questions[currentIndex]
@@ -45,12 +47,41 @@ export default function PhoneLostFlowScreen() {
     }, {})
   }, [guides])
 
-  const openGuideBySlug = (slug: string) => {
+  useEffect(() => {
+    if (!showResult || loggedOutcomeId.current === result.outcome.id) {
+      return
+    }
+
+    loggedOutcomeId.current = result.outcome.id
+
+    analyticsService.logFlowEvent({
+      flowSlug: 'phone-lost',
+      eventName: 'flow_outcome_shown',
+      outcomeId: result.outcome.id,
+      language,
+    }).catch(() => {
+      // Analytics should never interrupt the flow.
+    })
+  }, [language, result.outcome.id, showResult])
+
+  const openGuideBySlug = (slug: string, trackRecommendedGuide = false) => {
     const guide = guideMap[slug]
 
     if (!guide) {
       router.push('/search')
       return
+    }
+
+    if (trackRecommendedGuide) {
+      analyticsService.logFlowEvent({
+        flowSlug: 'phone-lost',
+        eventName: 'flow_guide_opened',
+        outcomeId: result.outcome.id,
+        guideSlug: slug,
+        language,
+      }).catch(() => {
+        // Analytics should never interrupt guide routing.
+      })
     }
 
     router.push({
@@ -66,6 +97,14 @@ export default function PhoneLostFlowScreen() {
     }))
 
     if (currentIndex >= phoneLostFlow.questions.length - 1) {
+      analyticsService.logFlowEvent({
+        flowSlug: 'phone-lost',
+        eventName: 'flow_completed',
+        language,
+      }).catch(() => {
+        // Analytics should never interrupt the flow.
+      })
+
       setShowResult(true)
       return
     }
@@ -78,6 +117,7 @@ export default function PhoneLostFlowScreen() {
     setCurrentIndex(0)
     setAnswers({})
     setShowResult(false)
+    loggedOutcomeId.current = null
   }
 
   const renderIntro = () => (
@@ -248,7 +288,7 @@ export default function PhoneLostFlowScreen() {
                   ? 'Hanapin sa Search'
                   : 'Find in Search'
             }
-            onPress={() => openGuideBySlug(outcome.primary_guide_slug)}
+            onPress={() => openGuideBySlug(outcome.primary_guide_slug, true)}
             style={styles.primaryAction}
           />
         </AppCard>

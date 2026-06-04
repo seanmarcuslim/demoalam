@@ -99,6 +99,19 @@ export default function SearchScreen() {
     })
   }
 
+  const openPhoneLostFlow = () => {
+    analyticsService.logFlowEvent({
+      flowSlug: 'phone-lost',
+      eventName: 'flow_opened',
+      searchQuery: searchTerm.trim(),
+      language,
+    }).catch(() => {
+      // Analytics should never interrupt search.
+    })
+
+    router.push('/flow/phone-lost')
+  }
+
   const updateSearchTerm = (term: string) => {
     setSelectedCategory(null)
     setSearchTerm(term)
@@ -273,7 +286,7 @@ export default function SearchScreen() {
         {showPhoneLostFlowCard ? (
           <AppCard
             style={styles.flowCard}
-            onPress={() => router.push('/flow/phone-lost')}
+            onPress={openPhoneLostFlow}
             accessibilityRole="button"
             accessibilityLabel={
               language === 'fil'

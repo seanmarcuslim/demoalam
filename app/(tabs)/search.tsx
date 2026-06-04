@@ -34,6 +34,10 @@ import {
   getSuggestionGroupSubtitle,
 } from '../../src/lib/searchSuggestions'
 import { analyticsService } from '../../src/services/analyticsService'
+import {
+  phoneLostFlow,
+  shouldShowPhoneLostFlow,
+} from '../../src/lib/decisionFlows/phoneLostFlow'
 
 export default function SearchScreen() {
   const {
@@ -86,6 +90,7 @@ export default function SearchScreen() {
     !isError &&
     searchTerm.trim().length > 0 &&
     !hasFilteredResults
+  const showPhoneLostFlowCard = shouldShowPhoneLostFlow(searchTerm)
 
   const openGuide = (id: string) => {
     router.push({
@@ -264,6 +269,57 @@ export default function SearchScreen() {
             {searchTerm.trim()}
           </SafeText>
         </View>
+
+        {showPhoneLostFlowCard ? (
+          <AppCard
+            style={styles.flowCard}
+            onPress={() => router.push('/flow/phone-lost')}
+            accessibilityRole="button"
+            accessibilityLabel={
+              language === 'fil'
+                ? phoneLostFlow.entry_title_fil
+                : phoneLostFlow.entry_title_en
+            }
+          >
+            <View style={styles.flowCardHeader}>
+              <View style={styles.flowIcon}>
+                <Ionicons
+                  name="phone-portrait-outline"
+                  size={22}
+                  color={colors.primary}
+                />
+              </View>
+
+              <View style={styles.flowCopy}>
+                <SafeText variant="h3" weight="700">
+                  {language === 'fil'
+                    ? phoneLostFlow.entry_title_fil
+                    : phoneLostFlow.entry_title_en}
+                </SafeText>
+
+                <SafeText
+                  variant="bodyMd"
+                  color="muted"
+                  style={styles.cardHint}
+                >
+                  {language === 'fil'
+                    ? phoneLostFlow.entry_body_fil
+                    : phoneLostFlow.entry_body_en}
+                </SafeText>
+              </View>
+            </View>
+
+            <View style={styles.flowActionRow}>
+              <SafeText variant="bodyMd" color="primary" weight="700">
+                {language === 'fil'
+                  ? phoneLostFlow.cta_fil
+                  : phoneLostFlow.cta_en}
+              </SafeText>
+
+              <Ionicons name="arrow-forward" size={18} color={colors.primary} />
+            </View>
+          </AppCard>
+        ) : null}
 
         {results.length > 0 ? (
           <View style={styles.filterRow}>
@@ -573,6 +629,40 @@ const createStyles = (colors: ThemeColors) =>
 
     queryText: {
       maxWidth: 260,
+    },
+
+    flowCard: {
+      marginTop: spacing.md,
+      marginBottom: 0,
+      borderColor: colors.primary,
+      backgroundColor: colors.surface,
+    },
+
+    flowCardHeader: {
+      flexDirection: 'row',
+      alignItems: 'flex-start',
+      gap: spacing.md,
+    },
+
+    flowIcon: {
+      width: 44,
+      height: 44,
+      borderRadius: 22,
+      backgroundColor: colors.primaryLight,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+
+    flowCopy: {
+      flex: 1,
+    },
+
+    flowActionRow: {
+      minHeight: 36,
+      marginTop: spacing.md,
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: spacing.xs,
     },
 
     filterRow: {

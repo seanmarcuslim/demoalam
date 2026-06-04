@@ -35,7 +35,9 @@ export default function PhoneLostFlowScreen() {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [answers, setAnswers] = useState<PhoneLostAnswers>({})
   const [showResult, setShowResult] = useState(false)
+  const [openingRecommendedGuide, setOpeningRecommendedGuide] = useState(false)
   const loggedOutcomeId = useRef<string | null>(null)
+  const loggedRecommendedGuideOpen = useRef(false)
 
   const styles = createStyles(colors)
   const currentQuestion = phoneLostFlow.questions[currentIndex]
@@ -72,7 +74,10 @@ export default function PhoneLostFlowScreen() {
       return
     }
 
-    if (trackRecommendedGuide) {
+    if (trackRecommendedGuide && !loggedRecommendedGuideOpen.current) {
+      loggedRecommendedGuideOpen.current = true
+      setOpeningRecommendedGuide(true)
+
       analyticsService.logFlowEvent({
         flowSlug: 'phone-lost',
         eventName: 'flow_guide_opened',
@@ -117,7 +122,9 @@ export default function PhoneLostFlowScreen() {
     setCurrentIndex(0)
     setAnswers({})
     setShowResult(false)
+    setOpeningRecommendedGuide(false)
     loggedOutcomeId.current = null
+    loggedRecommendedGuideOpen.current = false
   }
 
   const renderIntro = () => (
@@ -153,7 +160,7 @@ export default function PhoneLostFlowScreen() {
       <AppCard style={styles.questionCard}>
         <View style={styles.progressRow}>
           <SafeText variant="caption" color="primary" weight="700">
-            Quick check
+            {language === 'fil' ? 'Mabilisang check' : 'Quick check'}
           </SafeText>
 
           <SafeText variant="caption" color="muted">
@@ -161,7 +168,7 @@ export default function PhoneLostFlowScreen() {
           </SafeText>
         </View>
 
-        <SafeText variant="h2" weight="700" style={styles.questionText}>
+        <SafeText variant="h3" weight="700" style={styles.questionText}>
           {getLocalizedValue(currentQuestion, 'question', language)}
         </SafeText>
 
@@ -194,6 +201,14 @@ export default function PhoneLostFlowScreen() {
     const outcome = result.outcome
     const reasons = language === 'fil' ? result.reason_fil : result.reason_en
     const primaryGuide = guideMap[outcome.primary_guide_slug]
+    const priorityLabel =
+      outcome.priority === 'HIGH'
+        ? language === 'fil'
+          ? 'Mataas'
+          : 'High'
+        : language === 'fil'
+          ? 'Katamtaman'
+          : 'Medium'
     const relatedGuides = outcome.related_guide_slugs
       .map((slug) => guideMap[slug])
       .filter(Boolean)
@@ -212,9 +227,10 @@ export default function PhoneLostFlowScreen() {
             <SafeText
               variant="caption"
               weight="700"
+              numberOfLines={1}
               style={styles.priorityText}
             >
-              Priority Level: {outcome.priority}
+              {priorityLabel}
             </SafeText>
           </View>
 
@@ -289,6 +305,7 @@ export default function PhoneLostFlowScreen() {
                   : 'Find in Search'
             }
             onPress={() => openGuideBySlug(outcome.primary_guide_slug, true)}
+            disabled={openingRecommendedGuide}
             style={styles.primaryAction}
           />
         </AppCard>
@@ -296,7 +313,7 @@ export default function PhoneLostFlowScreen() {
         {relatedGuides.length > 0 ? (
           <AppCard>
             <SafeText variant="h3" weight="700">
-              Related guides
+              {language === 'fil' ? 'Kaugnay na gabay' : 'Related guides'}
             </SafeText>
 
             <View style={styles.relatedList}>
@@ -354,8 +371,8 @@ export default function PhoneLostFlowScreen() {
         title="First-hour check"
         subtitle={
           language === 'fil'
-            ? 'Sagutin ang ilang tanong para malaman ang uunahin.'
-            : 'Answer a few questions to choose the safest first step.'
+            ? 'Alamin ang uunahin.'
+            : 'Choose the safest first step.'
         }
       />
 
@@ -479,6 +496,7 @@ const createStyles = (colors: ThemeColors) =>
 
     priorityPill: {
       alignSelf: 'flex-start',
+      maxWidth: '100%',
       minHeight: 32,
       borderRadius: 999,
       paddingHorizontal: spacing.sm,
@@ -497,6 +515,7 @@ const createStyles = (colors: ThemeColors) =>
 
     priorityText: {
       color: '#FFFFFF',
+      flexShrink: 1,
     },
 
     eyebrow: {

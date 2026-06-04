@@ -61,16 +61,16 @@ export const phoneLostFlow = {
   title_en: 'Phone lost or stolen? Start here.',
   title_fil: 'Nawala o nanakaw ang phone? Dito magsimula.',
   intro_en:
-    'This quick check helps you choose the safest first step. Do not chase the phone or meet strangers claiming they found it. Protect your safety and account access first.',
+    'Choose the safest first step. Do not chase the phone or meet strangers. Protect yourself and your accounts first.',
   intro_fil:
-    'Tutulungan ka ng quick check na piliin ang pinakaligtas na unang hakbang. Huwag habulin ang phone o makipagkita sa strangers na nagsasabing nahanap nila ito. Unahin ang safety at account access.',
+    'Piliin ang pinakaligtas na unang hakbang. Huwag habulin ang phone o makipagkita sa strangers. Unahin ang safety at account access.',
   entry_title_en: 'Lost or stolen phone?',
   entry_title_fil: 'Nawala o nanakaw ang phone?',
   entry_body_en: 'Answer a few quick questions to know what to secure first.',
   entry_body_fil:
     'Sagutin ang ilang mabilis na tanong para malaman kung ano ang uunahin.',
-  cta_en: 'Start first-hour check',
-  cta_fil: 'Simulan ang first-hour check',
+  cta_en: 'Start quick check',
+  cta_fil: 'Simulan ang quick check',
   questions: [
     {
       id: 'situation',
@@ -119,9 +119,9 @@ export const phoneLostFlow = {
     {
       id: 'financial',
       question_en:
-        'Are GCash, Maya, bank apps, or saved cards connected to that phone?',
+        'Were GCash, Maya, bank apps, or cards on that phone?',
       question_fil:
-        'May GCash, Maya, bank apps, o saved cards ba sa phone na iyon?',
+        'May GCash, Maya, bank apps, o cards ba roon?',
       options: [
         {
           id: 'yes',
@@ -142,8 +142,8 @@ export const phoneLostFlow = {
     },
     {
       id: 'email',
-      question_en: 'Can you still access your email or main recovery account?',
-      question_fil: 'May access ka pa ba sa email o main recovery account mo?',
+      question_en: 'Can you still access your email or recovery account?',
+      question_fil: 'May access ka pa ba sa email o recovery account mo?',
       options: [
         {
           id: 'yes',
@@ -164,9 +164,9 @@ export const phoneLostFlow = {
     },
     {
       id: 'tracking',
-      question_en: 'Can you safely use Find My Device or Find My iPhone?',
+      question_en: 'Can you safely use phone tracking?',
       question_fil:
-        'Magagamit mo ba nang ligtas ang Find My Device o Find My iPhone?',
+        'Magagamit mo ba nang ligtas ang phone tracking?',
       options: [
         {
           id: 'yes',
@@ -188,9 +188,9 @@ export const phoneLostFlow = {
     {
       id: 'contacted',
       question_en:
-        'Did anyone contact you claiming they found the phone or asking for OTP, payment, or password?',
+        'Did anyone ask for OTP, payment, password, or screenshots?',
       question_fil:
-        'May kumontak ba na nagsasabing nahanap nila ang phone o humihingi ng OTP, bayad, o password?',
+        'May humingi ba ng OTP, bayad, password, o screenshots?',
       options: [
         {
           id: 'yes',
@@ -204,15 +204,15 @@ export const phoneLostFlow = {
         },
         {
           id: 'posted_online',
-          label_en: 'I posted online about the lost phone',
-          label_fil: 'Nag-post ako online tungkol sa nawalang phone',
+          label_en: 'I posted about the lost phone',
+          label_fil: 'Nag-post ako tungkol sa nawalang phone',
         },
       ],
     },
     {
       id: 'other_items',
       question_en:
-        'Were your wallet, ATM card, IDs, or documents also lost?',
+        'Were wallet, ATM card, IDs, or documents also lost?',
       question_fil:
         'Kasama bang nawala ang wallet, ATM card, IDs, o documents?',
       options: [
@@ -246,7 +246,7 @@ export const phoneLostFlow = {
       title_en: 'SIM / OTP risk',
       title_fil: 'SIM / OTP risk',
       first_action_en: 'Secure your SIM and OTP access first.',
-      first_action_fil: 'I-secure muna ang SIM at OTP access.',
+      first_action_fil: 'Unahin ang SIM at OTP access.',
       why_en:
         'Your SIM can control OTPs for GCash, Maya, banks, email, and password recovery.',
       why_fil:
@@ -264,7 +264,7 @@ export const phoneLostFlow = {
       title_en: 'Financial access risk',
       title_fil: 'Financial access risk',
       first_action_en: 'Lock down e-wallets, bank apps, and linked cards.',
-      first_action_fil: 'I-lockdown ang e-wallets, bank apps, at linked cards.',
+      first_action_fil: 'I-lock muna ang e-wallets, bank apps, at linked cards.',
       why_en:
         'If someone can open your financial apps, they may attempt transfers, password resets, or OTP-based recovery.',
       why_fil:
@@ -284,7 +284,7 @@ export const phoneLostFlow = {
       first_action_en:
         'Protect your email and recovery accounts before changing everything else.',
       first_action_fil:
-        'I-secure ang email at recovery accounts bago magpalit ng ibang bagay.',
+        'Unahin ang email at recovery accounts bago ang ibang changes.',
       why_en:
         'Email and recovery accounts can unlock passwords, e-wallets, bank alerts, and device sessions.',
       why_fil:
@@ -303,7 +303,7 @@ export const phoneLostFlow = {
       first_action_en:
         'Use device tracking safely, then lock the device if needed.',
       first_action_fil:
-        'Gamitin nang ligtas ang device tracking, pagkatapos i-lock ang device kung kailangan.',
+        'Gamitin nang ligtas ang tracking, pagkatapos i-lock ang device kung kailangan.',
       why_en:
         'Tracking may help if the phone is misplaced, but personal safety and account security still come first.',
       why_fil:
@@ -345,7 +345,7 @@ export const phoneLostFlow = {
       first_action_en:
         'After securing accounts, list missing items and block money access before replacing IDs.',
       first_action_fil:
-        'Pagkatapos i-secure ang accounts, ilista ang nawala at i-block muna ang money access bago magpalit ng IDs.',
+        'Pagkatapos i-secure ang accounts, ilista ang nawala at i-block muna ang money access.',
       why_en:
         'Money access can be misused quickly. ID replacement matters, but account security usually comes first.',
       why_fil:
@@ -365,7 +365,7 @@ export const phoneLostFlow = {
       first_action_en:
         'Treat the phone as high-risk. Secure SIM, email, and financial access first.',
       first_action_fil:
-        'Ituring muna na high-risk ang phone. I-secure ang SIM, email, at financial access.',
+        'Ituring muna na high-risk ang phone. Unahin ang SIM, email, at financial access.',
       why_en:
         'When details are unclear, the safer path is to protect the access points that can unlock other accounts.',
       why_fil:
@@ -432,7 +432,7 @@ export function getPhoneLostOutcome(answers: PhoneLostAnswers): PhoneLostResult 
 
   if (sim === 'yes' || sim === 'not_sure') {
     reason_en.push('Your SIM may be inside the missing phone.')
-    reason_fil.push('Posibleng nasa missing phone ang SIM mo.')
+    reason_fil.push('Posibleng nasa nawawalang phone ang SIM mo.')
 
     return {
       outcome: phoneLostFlow.outcomes.sim_otp_risk,
@@ -443,7 +443,7 @@ export function getPhoneLostOutcome(answers: PhoneLostAnswers): PhoneLostResult 
 
   if (financial === 'yes' || financial === 'not_sure') {
     reason_en.push('GCash, Maya, bank apps, or saved cards may be connected.')
-    reason_fil.push('Posibleng may GCash, Maya, bank apps, o saved cards na connected.')
+    reason_fil.push('Posibleng may GCash, Maya, bank apps, o cards na connected.')
 
     return {
       outcome: phoneLostFlow.outcomes.financial_access_risk,

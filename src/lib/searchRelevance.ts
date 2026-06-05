@@ -524,7 +524,11 @@ function scoreGuide(guide: Guide, query: string) {
     cleanQuery.includes('stolen phone') ||
     cleanQuery.includes('nanakaw phone') ||
     cleanQuery.includes('nawala phone') ||
+    cleanQuery.includes('nawala cp') ||
+    cleanQuery.includes('nanakaw cp') ||
     cleanQuery.includes('nawala cellphone') ||
+    cleanQuery.includes('nanakaw cellphone') ||
+    cleanQuery.includes('di ko mahanap phone') ||
     cleanQuery.includes('lost sim') ||
     cleanQuery.includes('sim replacement') ||
     cleanQuery.includes('imei')
@@ -777,9 +781,20 @@ function scoreGuide(guide: Guide, query: string) {
 
   if (
     cleanQuery.includes('gcash') ||
+    cleanQuery.includes('maya') ||
     cleanQuery.includes('maling send') ||
     cleanQuery.includes('wrong send') ||
     cleanQuery.includes('wrong number') ||
+    cleanQuery.includes('nawala pera') ||
+    cleanQuery.includes('nabawas pera') ||
+    cleanQuery.includes('nabawas gcash') ||
+    cleanQuery.includes('nabawas maya') ||
+    cleanQuery.includes('na scam sa gcash') ||
+    cleanQuery.includes('na scam sa maya') ||
+    cleanQuery.includes('di ko mabuksan gcash') ||
+    cleanQuery.includes('di ko maopen gcash') ||
+    cleanQuery.includes('hindi ko mabuksan gcash') ||
+    cleanQuery.includes('may kumuha ng pera') ||
     cleanQuery.includes('fake support') ||
     cleanQuery.includes('gcash support') ||
     cleanQuery.includes('account secure') ||
@@ -826,7 +841,11 @@ function scoreGuide(guide: Guide, query: string) {
     cleanQuery.includes('phone stolen') ||
     cleanQuery.includes('nanakaw phone') ||
     cleanQuery.includes('nawala phone') ||
+    cleanQuery.includes('nawala cp') ||
+    cleanQuery.includes('nanakaw cp') ||
     cleanQuery.includes('nawala cellphone') ||
+    cleanQuery.includes('nanakaw cellphone') ||
+    cleanQuery.includes('di ko mahanap phone') ||
     cleanQuery.includes('lost sim') ||
     cleanQuery.includes('sim replacement') ||
     cleanQuery.includes('imei') ||

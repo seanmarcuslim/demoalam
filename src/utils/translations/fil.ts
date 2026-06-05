@@ -70,8 +70,8 @@ export const filTranslations = {
       version: 'Bersyon',
     },
     searchScreen: {
-      headerSubtitle: 'Hanapin ang benefits, karapatan, IDs, trabaho, pera, at babala sa scam.',
-      placeholder: 'Halimbawa: DSWD AICS, batas, valid ID...',
+      headerSubtitle: 'Maghanap ng totoong problema tulad ng nawalang phone, GCash scam, kulang sahod, o IDs.',
+      placeholder: 'Halimbawa: nawala phone, GCash scam, kulang sahod...',
       recentSearches: 'Huli mong hinanap',
       clear: 'Burahin',
       discoveryTitle: 'Ano ang kailangan mong malinawan?',

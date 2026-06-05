@@ -70,8 +70,8 @@ export const enTranslations = {
       version: 'Version',
     },
     searchScreen: {
-      headerSubtitle: 'Find guides about benefits, rights, IDs, work, money, and scam warnings.',
-      placeholder: 'Example: DSWD AICS, rights, valid ID...',
+      headerSubtitle: 'Search real problems like lost phone, GCash scam, missing salary, or IDs.',
+      placeholder: 'Example: lost phone, GCash scam, missing salary...',
       recentSearches: 'Recent searches',
       clear: 'Clear',
       discoveryTitle: 'What do you need clarified?',

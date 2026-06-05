@@ -36,11 +36,9 @@ import {
 import { analyticsService } from '../../src/services/analyticsService'
 import {
   phoneLostFlow,
-  shouldShowPhoneLostFlow,
 } from '../../src/lib/decisionFlows/phoneLostFlow'
 import {
   eWalletMoneyFlow,
-  shouldShowEWalletMoneyFlow,
 } from '../../src/lib/decisionFlows/eWalletMoneyFlow'
 
 export default function SearchScreen() {
@@ -94,9 +92,6 @@ export default function SearchScreen() {
     !isError &&
     searchTerm.trim().length > 0 &&
     !hasFilteredResults
-  const showPhoneLostFlowCard = shouldShowPhoneLostFlow(searchTerm)
-  const showEWalletMoneyFlowCard =
-    shouldShowEWalletMoneyFlow(searchTerm) && !showPhoneLostFlowCard
 
   const openGuide = (id: string) => {
     router.push({
@@ -372,13 +367,7 @@ export default function SearchScreen() {
           </SafeText>
         </View>
 
-        {showPhoneLostFlowCard ? (
-          renderDecisionFlowCard('phone-lost')
-        ) : null}
-
-        {showEWalletMoneyFlowCard ? (
-          renderDecisionFlowCard('ewallet-money')
-        ) : null}
+        {renderQuickChecks()}
 
         {results.length > 0 ? (
           <View style={styles.filterRow}>
@@ -525,9 +514,7 @@ export default function SearchScreen() {
                 </View>
               </AppCard>
 
-              {!showPhoneLostFlowCard && !showEWalletMoneyFlowCard
-                ? renderQuickChecks()
-                : null}
+              {renderQuickChecks()}
             </View>
           ) : null
         }

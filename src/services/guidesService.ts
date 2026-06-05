@@ -268,6 +268,10 @@ export const guidesService = {
       )
       .eq('slug', slug)
       .eq('is_published', true)
+      .order('order_index', {
+        referencedTable: 'guide_bundle_items',
+        ascending: true,
+      })
       .single()
 
     if (error) {

@@ -131,6 +131,74 @@ export default function SearchScreen() {
     router.push('/flow/ewallet-money')
   }
 
+  const renderDecisionFlowCard = (flow: 'phone-lost' | 'ewallet-money') => {
+    const isPhoneLost = flow === 'phone-lost'
+    const flowCopy = isPhoneLost ? phoneLostFlow : eWalletMoneyFlow
+    const iconName = isPhoneLost ? 'phone-portrait-outline' : 'wallet-outline'
+    const onPress = isPhoneLost ? openPhoneLostFlow : openEWalletMoneyFlow
+
+    return (
+      <AppCard
+        key={flow}
+        style={styles.flowCard}
+        onPress={onPress}
+        accessibilityRole="button"
+        accessibilityLabel={
+          language === 'fil'
+            ? flowCopy.entry_title_fil
+            : flowCopy.entry_title_en
+        }
+      >
+        <View style={styles.flowCardHeader}>
+          <View style={styles.flowIcon}>
+            <Ionicons name={iconName} size={22} color={colors.primary} />
+          </View>
+
+          <View style={styles.flowCopy}>
+            <SafeText variant="h3" weight="700">
+              {language === 'fil'
+                ? flowCopy.entry_title_fil
+                : flowCopy.entry_title_en}
+            </SafeText>
+
+            <SafeText variant="bodyMd" color="muted" style={styles.cardHint}>
+              {language === 'fil'
+                ? flowCopy.entry_body_fil
+                : flowCopy.entry_body_en}
+            </SafeText>
+          </View>
+        </View>
+
+        <View style={styles.flowActionRow}>
+          <SafeText variant="bodyMd" color="primary" weight="700">
+            {language === 'fil' ? flowCopy.cta_fil : flowCopy.cta_en}
+          </SafeText>
+
+          <Ionicons name="arrow-forward" size={18} color={colors.primary} />
+        </View>
+      </AppCard>
+    )
+  }
+
+  const renderQuickChecks = () => (
+    <View style={styles.quickCheckBlock}>
+      <View style={styles.quickCheckHeader}>
+        <SafeText variant="h3" weight="700">
+          {language === 'fil' ? 'Mabilisang check' : 'Quick checks'}
+        </SafeText>
+
+        <SafeText variant="bodyMd" color="muted" style={styles.cardHint}>
+          {language === 'fil'
+            ? 'Kung hindi sigurado ang keywords, pumili muna ng flow.'
+            : 'If the keywords are unclear, start with a flow.'}
+        </SafeText>
+      </View>
+
+      {renderDecisionFlowCard('phone-lost')}
+      {renderDecisionFlowCard('ewallet-money')}
+    </View>
+  )
+
   const updateSearchTerm = (term: string) => {
     setSelectedCategory(null)
     setSearchTerm(term)
@@ -213,6 +281,8 @@ export default function SearchScreen() {
               </View>
             </AppCard>
           ) : null}
+
+          {renderQuickChecks()}
 
           <View style={styles.discoveryIntro}>
             <SafeText variant="h3" weight="700">
@@ -303,105 +373,11 @@ export default function SearchScreen() {
         </View>
 
         {showPhoneLostFlowCard ? (
-          <AppCard
-            style={styles.flowCard}
-            onPress={openPhoneLostFlow}
-            accessibilityRole="button"
-            accessibilityLabel={
-              language === 'fil'
-                ? phoneLostFlow.entry_title_fil
-                : phoneLostFlow.entry_title_en
-            }
-          >
-            <View style={styles.flowCardHeader}>
-              <View style={styles.flowIcon}>
-                <Ionicons
-                  name="phone-portrait-outline"
-                  size={22}
-                  color={colors.primary}
-                />
-              </View>
-
-              <View style={styles.flowCopy}>
-                <SafeText variant="h3" weight="700">
-                  {language === 'fil'
-                    ? phoneLostFlow.entry_title_fil
-                    : phoneLostFlow.entry_title_en}
-                </SafeText>
-
-                <SafeText
-                  variant="bodyMd"
-                  color="muted"
-                  style={styles.cardHint}
-                >
-                  {language === 'fil'
-                    ? phoneLostFlow.entry_body_fil
-                    : phoneLostFlow.entry_body_en}
-                </SafeText>
-              </View>
-            </View>
-
-            <View style={styles.flowActionRow}>
-              <SafeText variant="bodyMd" color="primary" weight="700">
-                {language === 'fil'
-                  ? phoneLostFlow.cta_fil
-                  : phoneLostFlow.cta_en}
-              </SafeText>
-
-              <Ionicons name="arrow-forward" size={18} color={colors.primary} />
-            </View>
-          </AppCard>
+          renderDecisionFlowCard('phone-lost')
         ) : null}
 
         {showEWalletMoneyFlowCard ? (
-          <AppCard
-            style={styles.flowCard}
-            onPress={openEWalletMoneyFlow}
-            accessibilityRole="button"
-            accessibilityLabel={
-              language === 'fil'
-                ? eWalletMoneyFlow.entry_title_fil
-                : eWalletMoneyFlow.entry_title_en
-            }
-          >
-            <View style={styles.flowCardHeader}>
-              <View style={styles.flowIcon}>
-                <Ionicons
-                  name="wallet-outline"
-                  size={22}
-                  color={colors.primary}
-                />
-              </View>
-
-              <View style={styles.flowCopy}>
-                <SafeText variant="h3" weight="700">
-                  {language === 'fil'
-                    ? eWalletMoneyFlow.entry_title_fil
-                    : eWalletMoneyFlow.entry_title_en}
-                </SafeText>
-
-                <SafeText
-                  variant="bodyMd"
-                  color="muted"
-                  style={styles.cardHint}
-                >
-                  {language === 'fil'
-                    ? eWalletMoneyFlow.entry_body_fil
-                    : eWalletMoneyFlow.entry_body_en}
-                </SafeText>
-              </View>
-            </View>
-
-            <View style={styles.flowActionRow}>
-              <SafeText variant="bodyMd" color="primary" weight="700">
-                {language === 'fil'
-                  ? eWalletMoneyFlow.cta_fil
-                  : eWalletMoneyFlow.cta_en}
-              </SafeText>
-
-              <Ionicons name="arrow-forward" size={18} color={colors.primary} />
-            </View>
-          </AppCard>
+          renderDecisionFlowCard('ewallet-money')
         ) : null}
 
         {results.length > 0 ? (
@@ -525,28 +501,34 @@ export default function SearchScreen() {
           ) : isLoading && !showEmptySearch ? (
             <LoadingFeed count={2} />
           ) : showNoResults ? (
-            <AppCard style={styles.emptyCard}>
-              <EmptyState
-                icon="?"
-                title={labels.noResultsTitle}
-                subtitle={labels.noResultsSubtitle}
-              />
+            <View style={styles.noResultsWrap}>
+              <AppCard style={styles.emptyCard}>
+                <EmptyState
+                  icon="?"
+                  title={labels.noResultsTitle}
+                  subtitle={labels.noResultsSubtitle}
+                />
 
-              <View style={styles.emptySuggestions}>
-                {SEARCH_SUGGESTIONS.slice(0, 4).map((item) => (
-                  <TouchableOpacity
-                    key={item}
-                    activeOpacity={0.84}
-                    onPress={() => {
-                      setSelectedCategory(null)
-                      commitSearch(item)
-                    }}
-                  >
-                    <Badge label={item} color={colors.primary} />
-                  </TouchableOpacity>
-                ))}
-              </View>
-            </AppCard>
+                <View style={styles.emptySuggestions}>
+                  {SEARCH_SUGGESTIONS.slice(0, 4).map((item) => (
+                    <TouchableOpacity
+                      key={item}
+                      activeOpacity={0.84}
+                      onPress={() => {
+                        setSelectedCategory(null)
+                        commitSearch(item)
+                      }}
+                    >
+                      <Badge label={item} color={colors.primary} />
+                    </TouchableOpacity>
+                  ))}
+                </View>
+              </AppCard>
+
+              {!showPhoneLostFlowCard && !showEWalletMoneyFlowCard
+                ? renderQuickChecks()
+                : null}
+            </View>
           ) : null
         }
         contentContainerStyle={styles.content}
@@ -627,6 +609,14 @@ const createStyles = (colors: ThemeColors) =>
 
     discoveryIntro: {
       marginBottom: spacing.md,
+    },
+
+    quickCheckBlock: {
+      marginBottom: spacing.lg,
+    },
+
+    quickCheckHeader: {
+      marginBottom: spacing.xs,
     },
 
     suggestionGroup: {
@@ -776,6 +766,10 @@ const createStyles = (colors: ThemeColors) =>
       alignItems: 'center',
       borderWidth: 1,
       borderColor: colors.border,
+    },
+
+    noResultsWrap: {
+      paddingBottom: spacing.lg,
     },
 
     emptySuggestions: {

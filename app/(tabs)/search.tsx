@@ -38,6 +38,10 @@ import {
   phoneLostFlow,
   shouldShowPhoneLostFlow,
 } from '../../src/lib/decisionFlows/phoneLostFlow'
+import {
+  eWalletMoneyFlow,
+  shouldShowEWalletMoneyFlow,
+} from '../../src/lib/decisionFlows/eWalletMoneyFlow'
 
 export default function SearchScreen() {
   const {
@@ -91,6 +95,8 @@ export default function SearchScreen() {
     searchTerm.trim().length > 0 &&
     !hasFilteredResults
   const showPhoneLostFlowCard = shouldShowPhoneLostFlow(searchTerm)
+  const showEWalletMoneyFlowCard =
+    shouldShowEWalletMoneyFlow(searchTerm) && !showPhoneLostFlowCard
 
   const openGuide = (id: string) => {
     router.push({
@@ -110,6 +116,19 @@ export default function SearchScreen() {
     })
 
     router.push('/flow/phone-lost')
+  }
+
+  const openEWalletMoneyFlow = () => {
+    analyticsService.logFlowEvent({
+      flowSlug: 'ewallet-money',
+      eventName: 'flow_opened',
+      searchQuery: searchTerm.trim(),
+      language,
+    }).catch(() => {
+      // Analytics should never interrupt search.
+    })
+
+    router.push('/flow/ewallet-money')
   }
 
   const updateSearchTerm = (term: string) => {
@@ -327,6 +346,57 @@ export default function SearchScreen() {
                 {language === 'fil'
                   ? phoneLostFlow.cta_fil
                   : phoneLostFlow.cta_en}
+              </SafeText>
+
+              <Ionicons name="arrow-forward" size={18} color={colors.primary} />
+            </View>
+          </AppCard>
+        ) : null}
+
+        {showEWalletMoneyFlowCard ? (
+          <AppCard
+            style={styles.flowCard}
+            onPress={openEWalletMoneyFlow}
+            accessibilityRole="button"
+            accessibilityLabel={
+              language === 'fil'
+                ? eWalletMoneyFlow.entry_title_fil
+                : eWalletMoneyFlow.entry_title_en
+            }
+          >
+            <View style={styles.flowCardHeader}>
+              <View style={styles.flowIcon}>
+                <Ionicons
+                  name="wallet-outline"
+                  size={22}
+                  color={colors.primary}
+                />
+              </View>
+
+              <View style={styles.flowCopy}>
+                <SafeText variant="h3" weight="700">
+                  {language === 'fil'
+                    ? eWalletMoneyFlow.entry_title_fil
+                    : eWalletMoneyFlow.entry_title_en}
+                </SafeText>
+
+                <SafeText
+                  variant="bodyMd"
+                  color="muted"
+                  style={styles.cardHint}
+                >
+                  {language === 'fil'
+                    ? eWalletMoneyFlow.entry_body_fil
+                    : eWalletMoneyFlow.entry_body_en}
+                </SafeText>
+              </View>
+            </View>
+
+            <View style={styles.flowActionRow}>
+              <SafeText variant="bodyMd" color="primary" weight="700">
+                {language === 'fil'
+                  ? eWalletMoneyFlow.cta_fil
+                  : eWalletMoneyFlow.cta_en}
               </SafeText>
 
               <Ionicons name="arrow-forward" size={18} color={colors.primary} />

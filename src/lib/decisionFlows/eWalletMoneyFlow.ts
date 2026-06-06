@@ -59,14 +59,14 @@ export const eWalletMoneyFlow = {
   intro_en:
     'Pick what happened so DemoAlam can route you to the safest first step.',
   intro_fil:
-    'Piliin ang nangyari para ma-route ka sa pinakaligtas na unang hakbang.',
+    'Piliin ang nangyari para maituro ang pinakaligtas na unang hakbang.',
   entry_title_en: 'GCash or Maya problem?',
   entry_title_fil: 'Problema sa GCash o Maya?',
   entry_body_en: 'Use one quick question to find the right first step.',
   entry_body_fil:
     'Gumamit ng isang mabilis na tanong para mahanap ang tamang unang hakbang.',
   cta_en: 'Start money check',
-  cta_fil: 'Simulan ang money check',
+  cta_fil: 'Simulan ang quick check',
   question: {
     id: 'problem',
     question_en: 'What best describes the problem?',
@@ -75,7 +75,7 @@ export const eWalletMoneyFlow = {
       {
         id: 'wrong_send',
         label_en: 'I sent money to the wrong person',
-        label_fil: 'Nakapag-send ako sa maling tao',
+        label_fil: 'Nakapagpadala ako sa maling tao',
       },
       {
         id: 'suspicious_link_otp',
@@ -109,15 +109,15 @@ export const eWalletMoneyFlow = {
       id: 'wrong_send_risk',
       priority: 'MEDIUM',
       title_en: 'Wrong-send risk',
-      title_fil: 'Wrong-send risk',
+      title_fil: 'Maling padala',
       first_action_en:
         'Save transaction details and use official support channels.',
       first_action_fil:
-        'I-save ang transaction details at gamitin ang official support channels.',
+        'I-save ang transaction details at dumaan sa opisyal na support channel.',
       why_en:
         'A mistaken transfer needs proof, calm contact if safe, and the correct official help path.',
       why_fil:
-        'Kailangan ng proof, mahinahong contact kung safe, at tamang official help path kapag maling send.',
+        'Kailangan ng proof, mahinahong contact kung ligtas, at tamang opisyal na help path kapag maling padala.',
       primary_guide_slug: 'wrong-send-gcash-checklist',
       related_guide_slugs: [
         'gcash-scam-red-flags',
@@ -128,15 +128,15 @@ export const eWalletMoneyFlow = {
       id: 'phishing_scam_risk',
       priority: 'HIGH',
       title_en: 'Scam / phishing risk',
-      title_fil: 'Scam / phishing risk',
+      title_fil: 'Scam / phishing',
       first_action_en:
         'Stop communicating with the sender and secure account access.',
       first_action_fil:
-        'Huminto sa pakikipag-usap sa sender at i-secure ang account access.',
+        'Huminto sa pakikipag-usap sa nagpadala at i-secure ang account access.',
       why_en:
         'OTP, MPIN, fake links, and fake support can expose your account or money access.',
       why_fil:
-        'Puwedeng ma-expose ang account o money access dahil sa OTP, MPIN, fake links, at fake support.',
+        'Puwedeng ma-expose ang account o access sa pera dahil sa OTP, MPIN, fake links, at fake support.',
       primary_guide_slug: 'phishing-link-checklist',
       related_guide_slugs: [
         'gcash-scam-red-flags',
@@ -151,7 +151,7 @@ export const eWalletMoneyFlow = {
       id: 'unauthorized_transaction_risk',
       priority: 'HIGH',
       title_en: 'Unauthorized transaction risk',
-      title_fil: 'Unauthorized transaction risk',
+      title_fil: 'Hindi awtorisadong transaction',
       first_action_en:
         'Secure access before focusing on the missing money.',
       first_action_fil:
@@ -170,7 +170,7 @@ export const eWalletMoneyFlow = {
       id: 'account_access_risk',
       priority: 'HIGH',
       title_en: 'Account access risk',
-      title_fil: 'Account access risk',
+      title_fil: 'Problema sa account access',
       first_action_en:
         'Secure SIM, email, password, MPIN, and recovery channels.',
       first_action_fil:
@@ -178,7 +178,7 @@ export const eWalletMoneyFlow = {
       why_en:
         'Lost access can involve SIM, email, password, MPIN, device, or support recovery steps.',
       why_fil:
-        'Puwedeng konektado sa SIM, email, password, MPIN, device, o support recovery steps ang lost access.',
+        'Puwedeng konektado sa SIM, email, password, MPIN, device, o recovery steps ang pagkawala ng access.',
       primary_guide_slug: 'gcash-maya-account-recovery-first-hour',
       related_guide_slugs: [
         'phishing-link-checklist',
@@ -189,11 +189,11 @@ export const eWalletMoneyFlow = {
       id: 'loan_harassment_risk',
       priority: 'HIGH',
       title_en: 'Loan harassment risk',
-      title_fil: 'Loan harassment risk',
+      title_fil: 'Loan app harassment',
       first_action_en:
         'Preserve evidence and avoid panic payments or unsafe replies.',
       first_action_fil:
-        'Mag-save ng ebidensya at iwasan ang panic payment o unsafe replies.',
+        'Mag-save ng ebidensya at iwasan ang panic payment o delikadong sagot.',
       why_en:
         'Threats, public shaming, fake legal messages, and abusive collection need clean evidence.',
       why_fil:
@@ -208,15 +208,15 @@ export const eWalletMoneyFlow = {
       id: 'unknown_high_risk',
       priority: 'HIGH',
       title_en: 'Unsure / possible account risk',
-      title_fil: 'Hindi sigurado / possible account risk',
+      title_fil: 'Hindi sigurado / posibleng account risk',
       first_action_en:
         'Treat it as possible account compromise until proven otherwise.',
       first_action_fil:
-        'Ituring muna itong possible account compromise hangga\'t hindi pa malinaw.',
+        'Ituring muna itong posibleng account compromise hangga\'t hindi pa malinaw.',
       why_en:
         'When details are unclear, the safer path is to secure access before chasing refunds.',
       why_fil:
-        'Kapag hindi malinaw ang details, mas ligtas na i-secure muna ang access bago habulin ang refund.',
+        'Kapag hindi malinaw ang detalye, mas ligtas na i-secure muna ang access bago habulin ang refund.',
       primary_guide_slug: 'gcash-maya-account-recovery-first-hour',
       related_guide_slugs: [
         'phishing-link-checklist',

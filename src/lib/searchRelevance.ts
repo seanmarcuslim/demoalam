@@ -748,6 +748,7 @@ function scoreGuide(guide: Guide, query: string) {
   }
 
   if (
+    cleanQuery.includes('valid id') ||
     cleanQuery.includes('national id') ||
     cleanQuery.includes('philsys') ||
     cleanQuery.includes('philid') ||
@@ -756,11 +757,12 @@ function scoreGuide(guide: Guide, query: string) {
   ) {
     if (
       title.includes('national id') ||
+      keywords.includes('valid id') ||
       keywords.includes('philsys') ||
       keywords.includes('philid') ||
       keywords.includes('trn')
     ) {
-      score += 95
+      score += slug === 'national-id-problems-checklist' ? 160 : 95
     }
   }
 

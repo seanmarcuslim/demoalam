@@ -1,9 +1,13 @@
 export const SEARCH_SUGGESTIONS = [
+  'nawala phone',
+  'gcash scam',
+  'kulang sahod',
+  'pcso medical assistance',
+  'valid id',
   'first job',
   'resume',
   'interview',
   'payroll',
-  'kulang sahod',
   'emergency fund',
   'rent',
   'utility bills',
@@ -23,7 +27,6 @@ export const SEARCH_SUGGESTIONS = [
   'social pension',
   'batas',
   'consumer rights',
-  'gcash scam',
 ]
 
 export type SearchSuggestionGroup = {

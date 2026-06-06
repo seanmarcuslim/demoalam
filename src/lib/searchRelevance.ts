@@ -386,7 +386,7 @@ function scoreGuide(guide: Guide, query: string) {
     cleanQuery.includes('pcso map')
   ) {
     if (slug === 'pcso-medical-assistance-checklist') {
-      score += 160
+      score += 260
     }
   }
 
@@ -506,7 +506,7 @@ function scoreGuide(guide: Guide, query: string) {
     hasGenericBlotterIntent &&
     slug === 'barangay-complaint-evidence-checklist'
   ) {
-    score += 160
+    score += 260
   }
 
   if (
@@ -670,7 +670,7 @@ function scoreGuide(guide: Guide, query: string) {
     cleanQuery.includes('emergency savings')
   ) {
     if (slug === 'emergency-fund-starter-checklist') {
-      score += 160
+      score += 260
     }
   }
 
@@ -832,6 +832,19 @@ function scoreGuide(guide: Guide, query: string) {
       keywords.includes('unauthorized transaction')
     ) {
       score += 70
+    }
+  }
+
+  if (
+    cleanQuery.includes('nawala pera') ||
+    cleanQuery.includes('money disappeared') ||
+    cleanQuery.includes('nabawas pera') ||
+    cleanQuery.includes('nabawas gcash') ||
+    cleanQuery.includes('nabawas maya') ||
+    cleanQuery.includes('may kumuha ng pera')
+  ) {
+    if (slug === 'gcash-maya-account-recovery-first-hour') {
+      score += 240
     }
   }
 

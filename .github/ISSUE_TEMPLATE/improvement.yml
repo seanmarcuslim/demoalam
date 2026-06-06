@@ -1,0 +1,37 @@
+name: Product improvement
+description: Propose a small improvement to usefulness, clarity, trust, or mobile polish.
+title: "[Improve]: "
+labels:
+  - improvement
+body:
+  - type: textarea
+    id: user_problem
+    attributes:
+      label: User problem
+      description: What user confusion, friction, or trust issue does this solve?
+    validations:
+      required: true
+  - type: textarea
+    id: smallest_fix
+    attributes:
+      label: Smallest useful fix
+      description: What is the smallest reversible change that would help?
+    validations:
+      required: true
+  - type: dropdown
+    id: priority_area
+    attributes:
+      label: Priority area
+      options:
+        - Search quality
+        - Guide quality
+        - Mobile polish
+        - Trust/source polish
+        - User confidence
+    validations:
+      required: true
+  - type: textarea
+    id: validation
+    attributes:
+      label: Validation
+      description: How will we know this improved DemoAlam?

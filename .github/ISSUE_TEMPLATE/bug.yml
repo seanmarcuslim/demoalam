@@ -1,0 +1,39 @@
+name: Bug report
+description: Report something broken, confusing, or visually rough in DemoAlam.
+title: "[Bug]: "
+labels:
+  - bug
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What happened?
+      description: Describe the bug or rough edge.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+      description: What should DemoAlam have done instead?
+    validations:
+      required: true
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - Search
+        - Guide
+        - Quick Check
+        - Mobile UI
+        - Translation
+        - Trust/source
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: validation
+    attributes:
+      label: How to check the fix
+      description: Add searches, screens, or steps that reproduce the issue.

@@ -48,7 +48,7 @@ export function getSuggestionGroupSubtitle(group: SearchSuggestionGroup, languag
 
 export const SEARCH_SUGGESTION_GROUPS: SearchSuggestionGroup[] = [
   {
-    title_en: 'First job flow',
+    title_en: 'First job help',
     title_fil: 'Unang trabaho',
     subtitle_en: 'Resume, interview, requirements, payroll, and payday basics.',
     subtitle_fil: 'Resume, interview, requirements, payroll, at payday basics.',
@@ -64,10 +64,10 @@ export const SEARCH_SUGGESTION_GROUPS: SearchSuggestionGroup[] = [
     items: ['emergency fund', 'lost atm', 'wrong send gcash', 'loan app harassment', 'payday'],
   },
   {
-    title_en: 'Adulting basics',
-    title_fil: 'Adulting basics',
+    title_en: 'Bills and home',
+    title_fil: 'Bayarin at bahay',
     subtitle_en: 'Rent, utility bills, moving out, and first home decisions.',
-    subtitle_fil: 'Rent, utility bills, pagbukod, at first home decisions.',
+    subtitle_fil: 'Upa, bills, pagbukod, at unang bahay.',
     colorKey: 'accent' as const,
     items: ['rent', 'utility bills', 'moving out', 'kuryente', 'tubig'],
   },
@@ -83,15 +83,15 @@ export const SEARCH_SUGGESTION_GROUPS: SearchSuggestionGroup[] = [
     title_en: 'Rights & protection',
     title_fil: 'Karapatan at proteksyon',
     subtitle_en: 'Useful when money, accounts, privacy, or complaints are involved.',
-    subtitle_fil: 'Useful kapag pera, account, privacy, o reklamo ang involved.',
+    subtitle_fil: 'Kapag pera, account, privacy, o reklamo ang problema.',
     colorKey: 'danger' as const,
     items: ['batas', 'consumer rights', 'data privacy act', 'lost sim', 'gcash scam'],
   },
   {
-    title_en: 'Scam checks',
-    title_fil: 'Scam checks',
+    title_en: 'Scam safety',
+    title_fil: 'Iwas-scam',
     subtitle_en: 'Loan apps, fake recruiters, e-wallet scams, and phishing.',
-    subtitle_fil: 'Loan apps, fake recruiters, e-wallet scams, at phishing.',
+    subtitle_fil: 'Loan app, pekeng recruiter, e-wallet scam, at phishing.',
     colorKey: 'danger' as const,
     items: ['loan app harassment', 'fake job', 'job scam', 'wrong send gcash', 'gcash scam'],
   },

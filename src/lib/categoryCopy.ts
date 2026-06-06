@@ -14,7 +14,7 @@ interface CategorySignal {
 export const CATEGORY_COPY: Record<string, CategoryCopy> = {
   ids: {
     en: 'Valid IDs, document recovery, and first-time requirements',
-    fil: 'Valid IDs, document recovery, at first-time requirements',
+    fil: 'Valid IDs, document recovery, at unang requirements',
     accent: '#2563A9',
   },
   work: {
@@ -24,12 +24,12 @@ export const CATEGORY_COPY: Record<string, CategoryCopy> = {
   },
   money: {
     en: 'Banking, e-wallets, loans, fees, benefits, and cash aid',
-    fil: 'Bank, e-wallets, utang, fees, benefits, at cash aid',
+    fil: 'Bank, e-wallets, utang, fees, benepisyo, at ayuda',
     accent: '#D9902F',
   },
   gov: {
     en: 'DSWD aid, benefits, forms, offices, and appointments',
-    fil: 'DSWD ayuda, benefits, forms, opisina, at appointments',
+    fil: 'DSWD ayuda, benepisyo, forms, opisina, at schedule',
     accent: '#6D5BA8',
   },
   healthcare: {
@@ -44,7 +44,7 @@ export const CATEGORY_COPY: Record<string, CategoryCopy> = {
   },
   scams: {
     en: 'Red flags before sending money, OTPs, or personal information',
-    fil: 'Warning signs bago magpadala ng pera, OTP, o personal info',
+    fil: 'Mga babala bago magpadala ng pera, OTP, o personal na impormasyon',
     accent: '#C83E3A',
   },
   'digital-safety': {
@@ -54,12 +54,12 @@ export const CATEGORY_COPY: Record<string, CategoryCopy> = {
   },
   emergency: {
     en: 'Fast actions for urgent documents, safety, and help',
-    fil: 'Mabilis na steps para sa urgent documents, safety, at tulong',
+    fil: 'Mabilis na hakbang para sa urgent documents, safety, at tulong',
     accent: '#B86B16',
   },
   adulting: {
     en: 'Practical life tasks no one explained clearly',
-    fil: 'Practical life tasks na bihirang ipaliwanag nang malinaw',
+    fil: 'Practical na gawain na bihirang ipaliwanag nang malinaw',
     accent: '#2F8277',
   },
 }

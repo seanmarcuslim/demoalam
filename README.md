@@ -125,6 +125,13 @@ Run TypeScript check:
 npm run typecheck
 ```
 
+GitHub workflow:
+
+- Open small product changes through pull requests into `main`.
+- CI runs the TypeScript check automatically on pull requests.
+- Keep direct pushes for urgent solo fixes only, then return to the PR workflow.
+- Avoid adding heavier CI jobs until DemoAlam has matching local scripts and real need.
+
 ## Environment
 
 Create `.env` with:

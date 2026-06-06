@@ -207,7 +207,6 @@ export const enTranslations = {
       notFound: 'Bundle not found',
       badge: 'Guided preparedness',
       orderNote: 'Follow this order first. Secure access, reduce risk, then recover documents.',
-      firstStep: 'START',
       urgent: 'Urgent',
       minute: 'min',
     },

@@ -207,7 +207,6 @@ export const filTranslations = {
       notFound: 'Hindi makita ang bundle',
       badge: 'Gabay na paghahanda',
       orderNote: 'Sundin muna ang tamang pagkakasunod. Siguraduhin muna ang access at bawasan ang risk bago mag-recover ng documents.',
-      firstStep: 'UNA',
       urgent: 'Urgent',
       minute: 'minuto',
     },

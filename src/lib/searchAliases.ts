@@ -765,6 +765,15 @@ export const SEARCH_ALIASES: Record<string, string[]> = {
     'digital national id',
     'valid id',
   ],
+  'valid id': [
+    'national id',
+    'philsys',
+    'philid',
+    'ephilid',
+    'digital national id',
+    'lost id',
+    'first job requirements',
+  ],
   trn: [
     'transaction reference number',
     'national id',

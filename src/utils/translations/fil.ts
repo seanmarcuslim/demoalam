@@ -268,7 +268,7 @@ export const filTranslations = {
       sample: 'Halimbawa',
       stepsFallback: 'Hakbang',
       warningFallback: 'Babala',
-      officialVerificationNote: 'Kung pera, ID, o dokumento ng gobyerno ang involved, i-verify sa opisyal na office, app, o website.',
+      officialVerificationNote: 'Kung pera, ID, o dokumento ng gobyerno ang sangkot, i-verify sa opisyal na tanggapan, app, o website.',
       officialSourcesTitle: 'Opisyal na sanggunian',
       officialSourcesSubtitle: 'I-tap para buksan ang opisyal na page. Iwasan ang screenshots, reposts, at fixer links.',
       noGuideContent: 'Wala pang laman ang gabay',

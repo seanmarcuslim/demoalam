@@ -14,7 +14,7 @@ interface CategorySignal {
 export const CATEGORY_COPY: Record<string, CategoryCopy> = {
   ids: {
     en: 'Valid IDs, document recovery, and first-time requirements',
-    fil: 'Valid IDs, document recovery, at unang requirements',
+    fil: 'Valid IDs, pagbawi ng dokumento, at unang requirements',
     accent: '#2563A9',
   },
   work: {
@@ -34,12 +34,12 @@ export const CATEGORY_COPY: Record<string, CategoryCopy> = {
   },
   healthcare: {
     en: 'Medical access, PhilHealth, hospital documents, and patient support',
-    fil: 'Medical access, PhilHealth, hospital documents, at patient support',
+    fil: 'Medical access, PhilHealth, hospital documents, at tulong sa pasyente',
     accent: '#2F8F83',
   },
   education: {
     en: 'Scholarships, school documents, DSWD student aid, and pathways',
-    fil: 'Scholarships, school documents, DSWD student aid, at pathways',
+    fil: 'Scholarships, school documents, DSWD student aid, at school options',
     accent: '#4F73C7',
   },
   scams: {
@@ -54,12 +54,12 @@ export const CATEGORY_COPY: Record<string, CategoryCopy> = {
   },
   emergency: {
     en: 'Fast actions for urgent documents, safety, and help',
-    fil: 'Mabilis na hakbang para sa urgent documents, safety, at tulong',
+    fil: 'Mabilis na hakbang para sa urgent na dokumento, safety, at tulong',
     accent: '#B86B16',
   },
   adulting: {
     en: 'Practical life tasks no one explained clearly',
-    fil: 'Practical na gawain na bihirang ipaliwanag nang malinaw',
+    fil: 'Praktikal na gawain na bihirang ipaliwanag nang malinaw',
     accent: '#2F8277',
   },
 }

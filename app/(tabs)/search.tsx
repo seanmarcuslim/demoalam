@@ -184,8 +184,8 @@ export default function SearchScreen() {
 
         <SafeText variant="bodyMd" color="muted" style={styles.cardHint}>
           {language === 'fil'
-            ? 'Kung hindi sigurado ang keywords, pumili muna ng flow.'
-            : 'If the keywords are unclear, start with a flow.'}
+            ? 'Kung hindi sigurado ang hahanapin, pumili muna ng quick check.'
+            : 'If you are not sure what to search, start with a quick check.'}
         </SafeText>
       </View>
 

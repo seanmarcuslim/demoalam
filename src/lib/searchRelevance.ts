@@ -380,6 +380,7 @@ function scoreGuide(guide: Guide, query: string) {
   }
 
   if (
+    cleanQuery === 'pcso' ||
     cleanQuery.includes('pcso medical assistance') ||
     cleanQuery.includes('pcso medical') ||
     cleanQuery.includes('pcso assistance') ||

@@ -348,6 +348,13 @@ export const SEARCH_ALIASES: Record<string, string[]> = {
     'pcso',
     'maifip',
   ],
+  pcso: [
+    'pcso medical assistance',
+    'medical assistance',
+    'medical access program',
+    'hospital assistance',
+    'malasakit center',
+  ],
   malasakit: [
     'malasakit center',
     'hospital assistance',

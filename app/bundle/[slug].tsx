@@ -142,9 +142,7 @@ export default function BundleDetailsScreen() {
               variant="caption"
               weight="700"
             >
-              {index === 0
-                ? labels.firstStep
-                : index + 1}
+              {index + 1}
             </SafeText>
           </View>
 

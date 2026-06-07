@@ -14,32 +14,32 @@ interface CategorySignal {
 export const CATEGORY_COPY: Record<string, CategoryCopy> = {
   ids: {
     en: 'Valid IDs, document recovery, and first-time requirements',
-    fil: 'Valid IDs, pagbawi ng dokumento, at unang requirements',
+    fil: 'Valid IDs, pagbawi ng dokumento, at unang kailangan',
     accent: '#2563A9',
   },
   work: {
     en: 'Job hunting, requirements, interviews, and workplace basics',
-    fil: 'Trabaho, requirements, interview, at unang araw sa work',
+    fil: 'Paghahanap ng trabaho, kailangan, interview, at unang araw sa trabaho',
     accent: '#267A4D',
   },
   money: {
     en: 'Banking, e-wallets, loans, fees, benefits, and cash aid',
-    fil: 'Bank, e-wallets, utang, bayarin, benepisyo, at ayuda',
+    fil: 'Banko, e-wallet, utang, bayarin, benepisyo, at ayuda',
     accent: '#D9902F',
   },
   gov: {
     en: 'DSWD aid, benefits, forms, offices, and appointments',
-    fil: 'DSWD ayuda, benepisyo, forms, opisina, at appointment',
+    fil: 'DSWD ayuda, benepisyo, form, opisina, at appointment',
     accent: '#6D5BA8',
   },
   healthcare: {
     en: 'Medical access, PhilHealth, hospital documents, and patient support',
-    fil: 'Medical access, PhilHealth, hospital documents, at tulong sa pasyente',
+    fil: 'Tulong medikal, PhilHealth, dokumento sa ospital, at suporta sa pasyente',
     accent: '#2F8F83',
   },
   education: {
     en: 'Scholarships, school documents, DSWD student aid, and pathways',
-    fil: 'Scholarships, school documents, DSWD student aid, at school options',
+    fil: 'Scholarship, dokumento sa school, DSWD student aid, at pagpipilian sa pag-aaral',
     accent: '#4F73C7',
   },
   scams: {
@@ -54,7 +54,7 @@ export const CATEGORY_COPY: Record<string, CategoryCopy> = {
   },
   emergency: {
     en: 'Fast actions for urgent documents, safety, and help',
-    fil: 'Mabilis na hakbang para sa urgent na dokumento, kaligtasan, at tulong',
+    fil: 'Mabilis na hakbang para sa agarang dokumento, kaligtasan, at tulong',
     accent: '#B86B16',
   },
   adulting: {

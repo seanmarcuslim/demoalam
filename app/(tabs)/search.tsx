@@ -179,12 +179,12 @@ export default function SearchScreen() {
     <View style={styles.quickCheckBlock}>
       <View style={styles.quickCheckHeader}>
         <SafeText variant="h3" weight="700">
-          {language === 'fil' ? 'Mabilisang check' : 'Quick checks'}
+          {language === 'fil' ? 'Mga mabilisang check' : 'Quick checks'}
         </SafeText>
 
         <SafeText variant="bodyMd" color="muted" style={styles.cardHint}>
           {language === 'fil'
-            ? 'Kung hindi sigurado ang hahanapin, pumili muna ng mabilisang check.'
+            ? 'Kung hindi mo alam ang isesearch, pumili muna ng mabilisang check.'
             : 'If you are not sure what to search, start with a quick check.'}
         </SafeText>
       </View>

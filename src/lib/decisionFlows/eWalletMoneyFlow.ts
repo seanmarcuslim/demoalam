@@ -66,7 +66,7 @@ export const eWalletMoneyFlow = {
   entry_body_fil:
     'Gumamit ng isang mabilis na tanong para mahanap ang tamang unang hakbang.',
   cta_en: 'Start money check',
-  cta_fil: 'Simulan ang quick check',
+  cta_fil: 'Simulan ang mabilisang check',
   question: {
     id: 'problem',
     question_en: 'What best describes the problem?',

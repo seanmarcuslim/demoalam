@@ -70,7 +70,7 @@ export const phoneLostFlow = {
   entry_body_fil:
     'Sagutin ang ilang mabilis na tanong para malaman kung ano ang uunahin.',
   cta_en: 'Start quick check',
-  cta_fil: 'Simulan ang quick check',
+  cta_fil: 'Simulan ang mabilisang check',
   questions: [
     {
       id: 'situation',

@@ -19,17 +19,17 @@ export const CATEGORY_COPY: Record<string, CategoryCopy> = {
   },
   work: {
     en: 'Job hunting, requirements, interviews, and workplace basics',
-    fil: 'Trabaho, requirements, interview, at workplace basics',
+    fil: 'Trabaho, requirements, interview, at unang araw sa work',
     accent: '#267A4D',
   },
   money: {
     en: 'Banking, e-wallets, loans, fees, benefits, and cash aid',
-    fil: 'Bank, e-wallets, utang, fees, benepisyo, at ayuda',
+    fil: 'Bank, e-wallets, utang, bayarin, benepisyo, at ayuda',
     accent: '#D9902F',
   },
   gov: {
     en: 'DSWD aid, benefits, forms, offices, and appointments',
-    fil: 'DSWD ayuda, benepisyo, forms, opisina, at schedule',
+    fil: 'DSWD ayuda, benepisyo, forms, opisina, at appointment',
     accent: '#6D5BA8',
   },
   healthcare: {
@@ -49,12 +49,12 @@ export const CATEGORY_COPY: Record<string, CategoryCopy> = {
   },
   'digital-safety': {
     en: 'Protect accounts, e-wallets, passwords, phones, and online identity',
-    fil: 'Proteksyon sa accounts, e-wallets, passwords, phone, at online identity',
+    fil: 'Proteksyon sa account, e-wallet, password, phone, at online identity',
     accent: '#3A7CA5',
   },
   emergency: {
     en: 'Fast actions for urgent documents, safety, and help',
-    fil: 'Mabilis na hakbang para sa urgent na dokumento, safety, at tulong',
+    fil: 'Mabilis na hakbang para sa urgent na dokumento, kaligtasan, at tulong',
     accent: '#B86B16',
   },
   adulting: {

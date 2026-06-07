@@ -49,7 +49,7 @@ export const CATEGORY_COPY: Record<string, CategoryCopy> = {
   },
   'digital-safety': {
     en: 'Protect accounts, e-wallets, passwords, phones, and online identity',
-    fil: 'Proteksyon sa account, e-wallet, password, phone, at online identity',
+    fil: 'Proteksyon sa account, e-wallet, password, phone, at pagkakakilanlan online',
     accent: '#3A7CA5',
   },
   emergency: {

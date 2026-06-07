@@ -250,7 +250,7 @@ export const phoneLostFlow = {
       why_en:
         'Your SIM can control OTPs for GCash, Maya, banks, email, and password recovery.',
       why_fil:
-        'Puwedeng gamitin ang SIM para makuha ang OTP sa GCash, Maya, bank, email, at password recovery.',
+        'Puwedeng gamitin ang SIM para makuha ang OTP sa GCash, Maya, banking app, email, at password recovery.',
       primary_guide_slug: 'lost-sim-replacement-checklist',
       related_guide_slugs: [
         'phone-stolen-first-hour',
@@ -264,11 +264,11 @@ export const phoneLostFlow = {
       title_en: 'Financial access risk',
       title_fil: 'Access sa pera',
       first_action_en: 'Lock down e-wallets, bank apps, and linked cards.',
-      first_action_fil: 'I-lock muna ang e-wallets, bank apps, at naka-link na cards.',
+      first_action_fil: 'I-lock muna ang mga e-wallet, banking app, at naka-link na card.',
       why_en:
         'If someone can open your financial apps, they may attempt transfers, password resets, or OTP-based recovery.',
       why_fil:
-        'Kung mabubuksan ng iba ang apps sa pera mo, puwede nilang subukan ang transfer, password reset, o OTP recovery.',
+        'Kung mabubuksan ng iba ang app na may pera mo, puwede nilang subukan ang transfer, password reset, o OTP recovery.',
       primary_guide_slug: 'gcash-maya-account-recovery-first-hour',
       related_guide_slugs: [
         'lost-atm-debit-card-checklist',
@@ -284,11 +284,11 @@ export const phoneLostFlow = {
       first_action_en:
         'Protect your email and recovery accounts before changing everything else.',
       first_action_fil:
-        'Unahin ang email at recovery accounts bago baguhin ang iba pang access.',
+        'Unahin ang email at recovery account bago baguhin ang iba pang access.',
       why_en:
         'Email and recovery accounts can unlock passwords, e-wallets, bank alerts, and device sessions.',
       why_fil:
-        'Puwedeng magamit ang email at recovery accounts para sa password, e-wallet, bank alert, at bukas na session sa device.',
+        'Puwedeng magamit ang email at recovery account para sa password, e-wallet, bank alert, at bukas na session sa device.',
       primary_guide_slug: 'phone-stolen-first-hour',
       related_guide_slugs: [
         'gcash-maya-account-recovery-first-hour',
@@ -345,7 +345,7 @@ export const phoneLostFlow = {
       first_action_en:
         'After securing accounts, list missing items and block money access before replacing IDs.',
       first_action_fil:
-        'Pagkatapos i-secure ang accounts, ilista ang nawala at i-block muna ang access sa pera.',
+        'Pagkatapos i-secure ang account, ilista ang nawala at i-block muna ang access sa pera.',
       why_en:
         'Money access can be misused quickly. ID replacement matters, but account security usually comes first.',
       why_fil:
@@ -369,7 +369,7 @@ export const phoneLostFlow = {
       why_en:
         'When details are unclear, the safer path is to protect the access points that can unlock other accounts.',
       why_fil:
-        'Kapag hindi malinaw ang detalye, mas ligtas na unahin ang mga access point na puwedeng magbukas ng ibang account.',
+        'Kapag hindi malinaw ang detalye, mas ligtas na unahin ang access na puwedeng magbukas ng ibang account.',
       primary_guide_slug: 'phone-stolen-first-hour',
       related_guide_slugs: [
         'lost-sim-replacement-checklist',

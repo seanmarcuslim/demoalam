@@ -14,12 +14,12 @@ interface CategorySignal {
 export const CATEGORY_COPY: Record<string, CategoryCopy> = {
   ids: {
     en: 'Valid IDs, document recovery, and first-time requirements',
-    fil: 'Valid IDs, pagbawi ng dokumento, at unang kailangan',
+    fil: 'Mga valid ID, pagbawi ng dokumento, at unang kailangan',
     accent: '#2563A9',
   },
   work: {
     en: 'Job hunting, requirements, interviews, and workplace basics',
-    fil: 'Paghahanap ng trabaho, kailangan, interview, at unang araw sa trabaho',
+    fil: 'Paghahanap ng trabaho, mga kailangan, interview, at unang araw sa trabaho',
     accent: '#267A4D',
   },
   money: {

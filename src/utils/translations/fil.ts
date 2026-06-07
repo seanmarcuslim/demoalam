@@ -106,7 +106,7 @@ export const filTranslations = {
       moneyTitle: 'Usapang Pera',
       moneySubtitle: 'Bago magbayad, umutang, o magbukas ng account',
       governmentTitle: 'Gabay sa Gobyerno',
-      governmentSubtitle: 'Benepisyo, form, opisina, at iskedyul',
+      governmentSubtitle: 'Benepisyo, mga form, opisina, at iskedyul',
       allGuidesSubtitle: 'Para sa baguhan at araw-araw na desisyon',
       loadErrorTitle: 'Hindi mabuksan ang mga gabay',
       loadErrorSubtitle: 'Tingnan ang koneksyon sa internet o subukan ulit.',

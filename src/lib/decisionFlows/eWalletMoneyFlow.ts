@@ -132,11 +132,11 @@ export const eWalletMoneyFlow = {
       first_action_en:
         'Stop communicating with the sender and secure account access.',
       first_action_fil:
-        'Huminto sa pakikipag-usap sa nagpadala at i-secure ang account access.',
+        'Huminto sa pakikipag-usap sa nagpadala at i-secure ang account.',
       why_en:
         'OTP, MPIN, fake links, and fake support can expose your account or money access.',
       why_fil:
-        'Puwedeng ma-expose ang account o access sa pera dahil sa OTP, MPIN, fake links, at fake support.',
+        'Puwedeng ma-expose ang account o pera dahil sa OTP, MPIN, pekeng link, at pekeng support.',
       primary_guide_slug: 'phishing-link-checklist',
       related_guide_slugs: [
         'gcash-scam-red-flags',
@@ -145,7 +145,7 @@ export const eWalletMoneyFlow = {
       safety_warning_en:
         'Do not send OTP, MPIN, password, screenshots, or recovery fees.',
       safety_warning_fil:
-        'Huwag mag-send ng OTP, MPIN, password, screenshots, o recovery fee.',
+        'Huwag magpadala ng OTP, MPIN, password, screenshot, o bayad para sa recovery.',
     },
     unauthorized_transaction_risk: {
       id: 'unauthorized_transaction_risk',
@@ -197,7 +197,7 @@ export const eWalletMoneyFlow = {
       why_en:
         'Threats, public shaming, fake legal messages, and abusive collection need clean evidence.',
       why_fil:
-        'Kailangan ng maayos na ebidensya kapag may threats, public shaming, fake legal messages, o abusive collection.',
+        'Kailangan ng maayos na ebidensya kapag may pagbabanta, public shaming, pekeng legal message, o abusadong paniningil.',
       primary_guide_slug: 'loan-app-harassment-evidence-checklist',
       related_guide_slugs: [
         'loan-red-flags-before-borrowing',
@@ -212,7 +212,7 @@ export const eWalletMoneyFlow = {
       first_action_en:
         'Treat it as possible account compromise until proven otherwise.',
       first_action_fil:
-        'Ituring muna itong posibleng account compromise hangga\'t hindi pa malinaw.',
+        'Ituring muna itong posibleng nakompromisong account hangga\'t hindi pa malinaw.',
       why_en:
         'When details are unclear, the safer path is to secure access before chasing refunds.',
       why_fil:

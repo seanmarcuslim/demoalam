@@ -63,7 +63,7 @@ export const phoneLostFlow = {
   intro_en:
     'Choose the safest first step. Do not chase the phone or meet strangers. Protect yourself and your accounts first.',
   intro_fil:
-    'Piliin ang pinakaligtas na unang hakbang. Huwag habulin ang phone o makipagkita sa hindi kilala. Unahin ang safety at account access.',
+    'Piliin ang pinakaligtas na unang hakbang. Huwag habulin ang phone o makipagkita sa hindi kilala. Unahin ang kaligtasan at account access.',
   entry_title_en: 'Lost or stolen phone?',
   entry_title_fil: 'Nawala o nanakaw ang phone?',
   entry_body_en: 'Answer a few quick questions to know what to secure first.',
@@ -190,7 +190,7 @@ export const phoneLostFlow = {
       question_en:
         'Did anyone ask for OTP, payment, password, or screenshots?',
       question_fil:
-        'May humingi ba ng OTP, bayad, password, o screenshots?',
+        'May humingi ba ng OTP, bayad, password, o screenshot?',
       options: [
         {
           id: 'yes',
@@ -250,7 +250,7 @@ export const phoneLostFlow = {
       why_en:
         'Your SIM can control OTPs for GCash, Maya, banks, email, and password recovery.',
       why_fil:
-        'Puwedeng kontrolin ng SIM ang OTP para sa GCash, Maya, banks, email, at password recovery.',
+        'Puwedeng kontrolin ng SIM ang OTP para sa GCash, Maya, bank, email, at password recovery.',
       primary_guide_slug: 'lost-sim-replacement-checklist',
       related_guide_slugs: [
         'phone-stolen-first-hour',
@@ -268,7 +268,7 @@ export const phoneLostFlow = {
       why_en:
         'If someone can open your financial apps, they may attempt transfers, password resets, or OTP-based recovery.',
       why_fil:
-        'Kung mabubuksan ng iba ang financial apps mo, puwede nilang subukan ang transfers, password resets, o OTP-based recovery.',
+        'Kung mabubuksan ng iba ang money apps mo, puwede nilang subukan ang transfers, password reset, o OTP recovery.',
       primary_guide_slug: 'gcash-maya-account-recovery-first-hour',
       related_guide_slugs: [
         'lost-atm-debit-card-checklist',
@@ -284,11 +284,11 @@ export const phoneLostFlow = {
       first_action_en:
         'Protect your email and recovery accounts before changing everything else.',
       first_action_fil:
-        'Unahin ang email at recovery accounts bago ang ibang changes.',
+        'Unahin ang email at recovery accounts bago baguhin ang iba.',
       why_en:
         'Email and recovery accounts can unlock passwords, e-wallets, bank alerts, and device sessions.',
       why_fil:
-        'Ang email at recovery accounts ay puwedeng magamit para sa passwords, e-wallets, bank alerts, at device sessions.',
+        'Puwedeng magamit ang email at recovery accounts para sa passwords, e-wallets, bank alerts, at bukas na device sessions.',
       primary_guide_slug: 'phone-stolen-first-hour',
       related_guide_slugs: [
         'gcash-maya-account-recovery-first-hour',
@@ -307,7 +307,7 @@ export const phoneLostFlow = {
       why_en:
         'Tracking may help if the phone is misplaced, but personal safety and account security still come first.',
       why_fil:
-        'Makakatulong ang tracking kung naligaw lang ang phone, pero personal safety at account security pa rin ang uunahin.',
+        'Makakatulong ang tracking kung naligaw lang ang phone, pero kaligtasan at account security pa rin ang uunahin.',
       primary_guide_slug: 'phone-stolen-first-hour',
       related_guide_slugs: [
         'lost-sim-replacement-checklist',
@@ -316,7 +316,7 @@ export const phoneLostFlow = {
       safety_warning_en:
         'Do not chase the phone or meet strangers. Protect yourself first.',
       safety_warning_fil:
-        'Huwag habulin ang phone o makipagkita sa hindi kilala. Unahin ang sarili mong safety.',
+        'Huwag habulin ang phone o makipagkita sa hindi kilala. Unahin ang sarili mong kaligtasan.',
     },
     scam_recovery_risk: {
       id: 'scam_recovery_risk',
@@ -326,11 +326,11 @@ export const phoneLostFlow = {
       first_action_en:
         'Do not send OTP, payment, password, screenshots, or ID details to recovery helpers.',
       first_action_fil:
-        'Huwag magpadala ng OTP, bayad, password, screenshots, o ID details sa recovery helpers.',
+        'Huwag magpadala ng OTP, bayad, password, screenshot, o detalye ng ID sa taong nag-aalok ng recovery.',
       why_en:
         'Fake recovery helpers often use lost-phone posts to steal accounts or ask for fees.',
       why_fil:
-        'Madalas gamitin ng pekeng recovery helpers ang posts tungkol sa nawalang phone para magnakaw ng accounts o maningil ng fees.',
+        'Madalas gamitin ng pekeng recovery helpers ang posts tungkol sa nawalang phone para magnakaw ng account o maningil ng bayad.',
       primary_guide_slug: 'phishing-link-checklist',
       related_guide_slugs: [
         'phone-stolen-first-hour',
@@ -369,7 +369,7 @@ export const phoneLostFlow = {
       why_en:
         'When details are unclear, the safer path is to protect the access points that can unlock other accounts.',
       why_fil:
-        'Kapag hindi malinaw ang detalye, mas ligtas na unahin ang access points na puwedeng magbukas ng ibang accounts.',
+        'Kapag hindi malinaw ang detalye, mas ligtas na unahin ang mga access point na puwedeng magbukas ng ibang account.',
       primary_guide_slug: 'phone-stolen-first-hour',
       related_guide_slugs: [
         'lost-sim-replacement-checklist',

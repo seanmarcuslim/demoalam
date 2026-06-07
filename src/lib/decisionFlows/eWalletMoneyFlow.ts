@@ -132,11 +132,11 @@ export const eWalletMoneyFlow = {
       first_action_en:
         'Stop communicating with the sender and secure account access.',
       first_action_fil:
-        'Itigil ang usapan sa nagpadala at i-secure ang access sa account.',
+        'Itigil ang usapan sa nagpadala at siguraduhin muna ang access sa account.',
       why_en:
         'OTP, MPIN, fake links, and fake support can expose your account or money access.',
       why_fil:
-        'Puwedeng ma-expose ang account o pera dahil sa OTP, MPIN, pekeng link, at pekeng support.',
+        'Puwedeng malagay sa peligro ang account o pera dahil sa OTP, MPIN, pekeng link, at pekeng support.',
       primary_guide_slug: 'phishing-link-checklist',
       related_guide_slugs: [
         'gcash-scam-red-flags',
@@ -155,7 +155,7 @@ export const eWalletMoneyFlow = {
       first_action_en:
         'Secure access before focusing on the missing money.',
       first_action_fil:
-        'I-secure muna ang access bago habulin ang nawawalang pera.',
+        'Siguraduhin muna ang access bago habulin ang nawawalang pera.',
       why_en:
         'Money moved without your permission may mean someone can still access the account.',
       why_fil:
@@ -174,7 +174,7 @@ export const eWalletMoneyFlow = {
       first_action_en:
         'Secure SIM, email, password, MPIN, and recovery channels.',
       first_action_fil:
-        'I-secure ang SIM, email, password, MPIN, at recovery options.',
+        'Siguraduhin ang SIM, email, password, MPIN, at recovery options.',
       why_en:
         'Lost access can involve SIM, email, password, MPIN, device, or support recovery steps.',
       why_fil:
@@ -216,7 +216,7 @@ export const eWalletMoneyFlow = {
       why_en:
         'When details are unclear, the safer path is to secure access before chasing refunds.',
       why_fil:
-        'Kapag hindi malinaw ang detalye, mas ligtas na i-secure muna ang access bago habulin ang refund o pera.',
+        'Kapag hindi malinaw ang detalye, mas ligtas na siguraduhin muna ang access bago habulin ang refund o pera.',
       primary_guide_slug: 'gcash-maya-account-recovery-first-hour',
       related_guide_slugs: [
         'phishing-link-checklist',

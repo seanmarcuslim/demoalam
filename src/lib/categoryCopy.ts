@@ -29,7 +29,7 @@ export const CATEGORY_COPY: Record<string, CategoryCopy> = {
   },
   gov: {
     en: 'DSWD aid, benefits, forms, offices, and appointments',
-    fil: 'DSWD ayuda, benepisyo, form, opisina, at appointment',
+    fil: 'DSWD ayuda, benepisyo, mga form, opisina, at iskedyul',
     accent: '#6D5BA8',
   },
   healthcare: {

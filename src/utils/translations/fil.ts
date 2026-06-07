@@ -142,7 +142,7 @@ export const filTranslations = {
       loginFailedTitle: 'Hindi makapag-login',
       registerFailedTitle: 'Hindi makagawa ng account',
       tryAgain: 'Subukan muli.',
-      loginSubtitle: 'Hindi kailangan ang login. Gamitin ito kapag gusto mong ma-sync ang naka-save mong gabay balang araw.',
+      loginSubtitle: 'Hindi kailangan ang login. Gamitin ito kung gusto mong madala ang naka-save mong gabay balang araw.',
       registerTitle: 'Gumawa ng account',
       registerSubtitle: 'Hindi ito kailangan. Pwede ka pa ring gumamit ng DemoAlam bilang bisita.',
       passwordPlaceholder: 'Password',

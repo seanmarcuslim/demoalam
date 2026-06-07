@@ -294,7 +294,7 @@ export default function EWalletMoneyFlowScreen() {
                   ? 'Buksan ang gabay'
                   : 'Open recommended guide'
                 : language === 'fil'
-                  ? 'Hanapin sa Search'
+                  ? 'Maghanap ng gabay'
                   : 'Find in Search'
             }
             onPress={() => openGuideBySlug(outcome.primary_guide_slug, true)}
@@ -348,7 +348,7 @@ export default function EWalletMoneyFlowScreen() {
           />
 
           <AppButton
-            title={language === 'fil' ? 'Bumalik sa Search' : 'Back to Search'}
+            title={language === 'fil' ? 'Bumalik sa paghahanap' : 'Back to Search'}
             variant="secondary"
             onPress={() => router.push('/search')}
             style={styles.secondaryAction}

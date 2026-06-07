@@ -361,7 +361,7 @@ export default function EWalletMoneyFlowScreen() {
   return (
     <View style={styles.container}>
       <AppHeader
-        title="Money problem check"
+        title={language === 'fil' ? 'Check sa problema sa pera' : 'Money problem check'}
         subtitle={
           language === 'fil'
             ? 'Hanapin ang tamang unang hakbang.'

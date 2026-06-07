@@ -368,7 +368,7 @@ export default function PhoneLostFlowScreen() {
   return (
     <View style={styles.container}>
       <AppHeader
-        title="First-hour check"
+        title={language === 'fil' ? 'Check sa nawawalang phone' : 'First-hour check'}
         subtitle={
           language === 'fil'
             ? 'Alamin ang uunahin.'

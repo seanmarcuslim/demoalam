@@ -35,7 +35,7 @@ export const filTranslations = {
       refreshTitle: 'I-update ang naka-save na gabay',
       emptyTitle: 'Wala ka pang naka-save na gabay',
       refreshSubtitle: 'Kumonekta sa internet at buksan ulit ang mga gabay para mai-save ang pinakabagong offline na kopya.',
-      emptySubtitle: 'I-save ang mga gabay tungkol sa ayuda, IDs, karapatan, kalusugan, o babala sa scam para mabilis balikan.',
+      emptySubtitle: 'I-save ang mga gabay tungkol sa ayuda, mga ID, karapatan, kalusugan, o babala sa scam para mabilis balikan.',
       goHome: 'Pumunta sa Home',
       browseGuides: 'Tumingin ng mga gabay',
       guideSingular: '1 gabay',
@@ -70,7 +70,7 @@ export const filTranslations = {
       version: 'Bersyon',
     },
     searchScreen: {
-      headerSubtitle: 'Maghanap ng totoong problema tulad ng nawalang phone, GCash scam, kulang sahod, o IDs.',
+      headerSubtitle: 'Maghanap ng totoong problema tulad ng nawalang phone, GCash scam, kulang sahod, o mga ID.',
       placeholder: 'Halimbawa: nawala phone, GCash scam, kulang sahod...',
       recentSearches: 'Huli mong hinanap',
       clear: 'Burahin',
@@ -88,7 +88,7 @@ export const filTranslations = {
     },
     homeScreen: {
       heroTitle: 'Sayang, ngayon ko lang nalaman.',
-      heroSubtitle: 'Praktikal na gabay para sa ayuda, benepisyo, karapatan, IDs, pera, trabaho, gobyerno, at iwas-scam.',
+      heroSubtitle: 'Praktikal na gabay para sa ayuda, benepisyo, karapatan, mga ID, pera, trabaho, gobyerno, at iwas-scam.',
       guideCount: 'gabay',
       alertCount: 'babala',
       browseTopics: 'Piliin ang paksa',
@@ -116,7 +116,7 @@ export const filTranslations = {
     },
     onboardingScreen: {
       heroTitle: 'Sayang, ngayon ko lang nalaman.',
-      heroSubtitle: 'Praktikal na gabay para sa benepisyo, karapatan, IDs, pera, trabaho, gobyerno, at babala sa scam.',
+      heroSubtitle: 'Praktikal na gabay para sa benepisyo, karapatan, mga ID, pera, trabaho, gobyerno, at babala sa scam.',
       scamAlert: 'Scam Alert',
       previewTime: '3 min',
       previewTitle: 'Bago ka magpadala sa GCash',

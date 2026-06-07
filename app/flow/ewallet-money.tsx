@@ -291,7 +291,7 @@ export default function EWalletMoneyFlowScreen() {
             title={
               primaryGuide
                 ? language === 'fil'
-                  ? 'Buksan ang recommended guide'
+                  ? 'Buksan ang gabay'
                   : 'Open recommended guide'
                 : language === 'fil'
                   ? 'Hanapin sa Search'

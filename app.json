@@ -7,25 +7,35 @@
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "automatic",
+
     "splash": {
+      "image": "./assets/icon.png",
       "resizeMode": "contain",
       "backgroundColor": "#2563A9"
     },
+
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#2563A9"
       },
-      "package": "com.demoalam.app",
-      "enableProguardInReleaseBuilds": true,
-      "enableShrinkResources": true
+      "package": "com.demoalam.app"
     },
+
     "plugins": [
       "expo-router",
       "expo-font"
     ],
+
     "experiments": {
       "typedRoutes": true
+    },
+
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "3ba79367-9d8e-4445-b5ec-1d56c30ede62"
+      }
     }
   }
 }

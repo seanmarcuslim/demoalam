@@ -66,7 +66,7 @@ export const filTranslations = {
       resetOnboardingSubtitle: 'Balikan ang unang gabay ng app.',
       aboutApp: 'Tungkol sa App',
       tagline: '"Sayang, ngayon ko lang nalaman."',
-      mission: 'Ginawa para gawing mas malinaw ang benepisyo, karapatan, proseso, at babala na dapat mas madaling makita ng bawat Pilipino.',
+      mission: 'Ginawa para tulungan ang Pilipino na matuto nang mas maaga, magdesisyon nang mas malinaw, at kumilos nang may kumpiyansa bago lumaki ang problema.',
       version: 'Bersyon',
     },
     searchScreen: {

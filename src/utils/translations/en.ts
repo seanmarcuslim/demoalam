@@ -66,7 +66,7 @@ export const enTranslations = {
       resetOnboardingSubtitle: 'See the first-launch intro again.',
       aboutApp: 'About the App',
       tagline: '"I wish I knew this earlier."',
-      mission: 'Built to make public benefits, rights, processes, and warnings easier for Filipinos to understand and act on.',
+      mission: 'Built to help Filipinos learn earlier, decide better, and act with more confidence before problems become costly.',
       version: 'Version',
     },
     searchScreen: {

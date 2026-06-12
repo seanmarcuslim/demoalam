@@ -269,7 +269,7 @@ export default function HomeScreen() {
                   styles.guidanceCard,
                   isSelected ? styles.guidanceCardSelected : null,
                 ]}
-                onPress={() => setSelectedGuidanceId(path.id)}
+                onPress={() => setSelectedGuidanceId(isSelected ? null : path.id)}
               >
                 <View style={styles.guidanceIcon}>
                   <Ionicons name={path.icon} size={20} color={colors.primary} />

@@ -1,5 +1,6 @@
 import { BundleCard } from '../../src/components/bundles/BundleCard'
 import { useFeaturedGuideBundles } from '../../src/hooks/useGuideBundles'
+import { useState } from 'react'
 import {
   FlatList,
   RefreshControl,
@@ -39,12 +40,23 @@ import {
   getGuideTitle,
 } from '../../src/lib/guideDisplay'
 
+type GuidancePath = {
+  id: string
+  zone: 'today' | 'future'
+  icon: keyof typeof Ionicons.glyphMap
+  slugs: string[]
+  title: string
+  subtitle: string
+  start: string
+}
+
 export default function HomeScreen() {
   const { colors } = useTheme()
   const { language } = useSettingsStore()
   const t = translations[language]
   const labels = t.homeScreen
   const styles = createStyles(colors)
+  const [selectedGuidanceId, setSelectedGuidanceId] = useState<string | null>(null)
 
   const {
     data: guides = [],
@@ -93,6 +105,101 @@ export default function HomeScreen() {
     .filter((guide) => guide.category?.slug === 'gov')
     .slice(0, 4)
 
+  const guidancePaths: GuidancePath[] = [
+    {
+      id: 'scam',
+      zone: 'today',
+      icon: 'shield-checkmark-outline',
+      slugs: ['gcash-scam-red-flags', 'phishing-link-checklist', 'fake-job-offer-red-flags'],
+      title: labels.guidancePaths.scam.title,
+      subtitle: labels.guidancePaths.scam.subtitle,
+      start: labels.guidancePaths.scam.start,
+    },
+    {
+      id: 'scholarship',
+      zone: 'today',
+      icon: 'school-outline',
+      slugs: [
+        'student-financial-aid-philippines-checklist',
+        'student-cash-for-work-dswd-checklist',
+      ],
+      title: labels.guidancePaths.scholarship.title,
+      subtitle: labels.guidancePaths.scholarship.subtitle,
+      start: labels.guidancePaths.scholarship.start,
+    },
+    {
+      id: 'first-job',
+      zone: 'today',
+      icon: 'briefcase-outline',
+      slugs: ['first-job-requirements', 'resume-no-experience', 'job-interview-basic-answers'],
+      title: labels.guidancePaths.firstJob.title,
+      subtitle: labels.guidancePaths.firstJob.subtitle,
+      start: labels.guidancePaths.firstJob.start,
+    },
+    {
+      id: 'emergency',
+      zone: 'today',
+      icon: 'alert-circle-outline',
+      slugs: [
+        'phone-stolen-first-hour',
+        'medical-emergency-documents',
+        'lost-wallet-first-steps',
+        'lost-atm-debit-card-checklist',
+      ],
+      title: labels.guidancePaths.emergency.title,
+      subtitle: labels.guidancePaths.emergency.subtitle,
+      start: labels.guidancePaths.emergency.start,
+    },
+    {
+      id: 'course',
+      zone: 'future',
+      icon: 'compass-outline',
+      slugs: ['student-financial-aid-philippines-checklist', 'first-job-requirements'],
+      title: labels.guidancePaths.course.title,
+      subtitle: labels.guidancePaths.course.subtitle,
+      start: labels.guidancePaths.course.start,
+    },
+    {
+      id: 'study',
+      zone: 'future',
+      icon: 'book-outline',
+      slugs: ['student-financial-aid-philippines-checklist', 'student-cash-for-work-dswd-checklist'],
+      title: labels.guidancePaths.study.title,
+      subtitle: labels.guidancePaths.study.subtitle,
+      start: labels.guidancePaths.study.start,
+    },
+    {
+      id: 'work-life',
+      zone: 'future',
+      icon: 'people-outline',
+      slugs: ['first-job-requirements', 'resume-no-experience', 'job-interview-basic-answers'],
+      title: labels.guidancePaths.workLife.title,
+      subtitle: labels.guidancePaths.workLife.subtitle,
+      start: labels.guidancePaths.workLife.start,
+    },
+    {
+      id: 'lessons',
+      zone: 'future',
+      icon: 'sparkles-outline',
+      slugs: [
+        'loan-red-flags-before-borrowing',
+        'emergency-fund-starter-checklist',
+        'everyday-rights-philippines-checklist',
+      ],
+      title: labels.guidancePaths.lessons.title,
+      subtitle: labels.guidancePaths.lessons.subtitle,
+      start: labels.guidancePaths.lessons.start,
+    },
+  ]
+
+  const selectedGuidance = guidancePaths.find((path) => path.id === selectedGuidanceId)
+  const selectedGuides = selectedGuidance
+    ? selectedGuidance.slugs
+        .map((slug) => guides.find((guide) => guide.slug === slug))
+        .filter((guide): guide is Guide => Boolean(guide))
+        .slice(0, 3)
+    : []
+
   const openGuide = (id: string) => {
     router.push({
       pathname: '/guide/[id]',
@@ -105,6 +212,10 @@ export default function HomeScreen() {
       pathname: '/category/[id]',
       params: { id, name },
     })
+  }
+
+  const openSearch = () => {
+    router.push('/search')
   }
 
   const getTitle = (guide: Guide) =>
@@ -143,6 +254,119 @@ export default function HomeScreen() {
     />
   )
 
+  const renderGuidanceZone = (
+    zone: GuidancePath['zone'],
+    title: string,
+    subtitle: string
+  ) => (
+    <View style={styles.guidanceZone}>
+      <View style={styles.sectionHeader}>
+        <SafeText variant="h3" weight="700">
+          {title}
+        </SafeText>
+        <SafeText variant="caption" color="muted" style={styles.sectionSubtitle}>
+          {subtitle}
+        </SafeText>
+      </View>
+
+      <View style={styles.guidanceGrid}>
+        {guidancePaths
+          .filter((path) => path.zone === zone)
+          .map((path) => {
+            const isSelected = selectedGuidanceId === path.id
+
+            return (
+              <TouchableOpacity
+                key={path.id}
+                activeOpacity={0.86}
+                style={[
+                  styles.guidanceCard,
+                  isSelected ? styles.guidanceCardSelected : null,
+                ]}
+                onPress={() => setSelectedGuidanceId(path.id)}
+              >
+                <View style={styles.guidanceIcon}>
+                  <Ionicons name={path.icon} size={20} color={colors.primary} />
+                </View>
+                <SafeText variant="body" weight="700" numberOfLines={2}>
+                  {path.title}
+                </SafeText>
+                <SafeText
+                  variant="caption"
+                  color="muted"
+                  style={styles.guidanceCardText}
+                  numberOfLines={3}
+                >
+                  {path.subtitle}
+                </SafeText>
+              </TouchableOpacity>
+            )
+          })}
+      </View>
+    </View>
+  )
+
+  const renderSelectedGuidance = () => {
+    if (!selectedGuidance) {
+      return null
+    }
+
+    return (
+      <View style={styles.guidancePanel}>
+        <View style={styles.guidancePanelHeader}>
+          <View style={styles.guidancePanelIcon}>
+            <Ionicons name={selectedGuidance.icon} size={22} color={colors.surface} />
+          </View>
+          <View style={styles.guidancePanelCopy}>
+            <SafeText variant="caption" color="primary" weight="700">
+              {labels.guidanceStartHere}
+            </SafeText>
+            <SafeText variant="h3" weight="700" style={styles.guidancePanelTitle}>
+              {selectedGuidance.title}
+            </SafeText>
+          </View>
+        </View>
+
+        <SafeText variant="bodyMd" color="muted" style={styles.guidancePanelText}>
+          {selectedGuidance.start}
+        </SafeText>
+
+        {selectedGuides.length > 0 ? (
+          <View style={styles.guidanceGuideList}>
+            {selectedGuides.map((guide) => (
+              <GuideCard
+                key={guide.id}
+                guide={guide}
+                language={language}
+                isSaved={isSaved(guide.id)}
+                onPress={() => openGuide(guide.id)}
+                onSave={() => toggleSave(guide)}
+                compact
+              />
+            ))}
+          </View>
+        ) : (
+          <SafeText variant="caption" color="muted" style={styles.guidancePanelText}>
+            {labels.guidanceSearchFallback}
+          </SafeText>
+        )}
+
+        <AppButton
+          title={selectedGuides[0] ? labels.guidanceOpenFirstGuide : labels.guidanceOpenSearch}
+          onPress={() => {
+            if (selectedGuides[0]) {
+              openGuide(selectedGuides[0].id)
+              return
+            }
+
+            openSearch()
+          }}
+          style={styles.guidanceAction}
+        />
+      </View>
+    )
+  }
+
   const renderHeader = () => (
     <View>
       <View style={styles.hero}>
@@ -179,6 +403,12 @@ export default function HomeScreen() {
             </SafeText>
           </View>
         </View>
+      </View>
+
+      <View style={styles.section}>
+        {renderGuidanceZone('today', labels.guidanceTodayTitle, labels.guidanceTodaySubtitle)}
+        {renderGuidanceZone('future', labels.guidanceFutureTitle, labels.guidanceFutureSubtitle)}
+        {renderSelectedGuidance()}
       </View>
 
       <View style={styles.section}>
@@ -505,6 +735,91 @@ const createStyles = (colors: ThemeColors) =>
 
     sectionSubtitle: {
       marginTop: spacing.xs,
+    },
+
+    guidanceZone: {
+      marginBottom: spacing.md,
+    },
+
+    guidanceGrid: {
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+      gap: spacing.sm,
+    },
+
+    guidanceCard: {
+      flexGrow: 1,
+      flexBasis: '47%',
+      maxWidth: 460,
+      minHeight: 112,
+      borderRadius: 14,
+      borderWidth: 1,
+      borderColor: colors.border,
+      backgroundColor: colors.surface,
+      padding: spacing.sm,
+    },
+
+    guidanceCardSelected: {
+      borderColor: colors.primary,
+      backgroundColor: `${colors.primary}18`,
+    },
+
+    guidanceIcon: {
+      width: 34,
+      height: 34,
+      borderRadius: 12,
+      backgroundColor: `${colors.primary}18`,
+      alignItems: 'center',
+      justifyContent: 'center',
+      marginBottom: spacing.sm,
+    },
+
+    guidanceCardText: {
+      marginTop: spacing.xs,
+    },
+
+    guidancePanel: {
+      borderRadius: 18,
+      borderWidth: 1,
+      borderColor: colors.border,
+      backgroundColor: colors.surface,
+      padding: spacing.md,
+      marginBottom: spacing.sm,
+    },
+
+    guidancePanelHeader: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: spacing.sm,
+    },
+
+    guidancePanelIcon: {
+      width: 44,
+      height: 44,
+      borderRadius: 14,
+      backgroundColor: colors.primary,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+
+    guidancePanelCopy: {
+      flex: 1,
+    },
+
+    guidancePanelTitle: {
+      marginTop: spacing.xs,
+    },
+
+    guidancePanelText: {
+      marginTop: spacing.md,
+    },
+
+    guidanceGuideList: {
+      marginTop: spacing.md,
+    },
+
+    guidanceAction: {
+      marginTop: spacing.sm,
     },
 
     sectionHeaderBlock: {

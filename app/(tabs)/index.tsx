@@ -727,6 +727,8 @@ const createStyles = (colors: ThemeColors) =>
     },
 
     guidanceCardSelected: {
+      flexBasis: '100%',
+      maxWidth: '100%',
       borderColor: colors.primary,
       backgroundColor: `${colors.primary}18`,
     },

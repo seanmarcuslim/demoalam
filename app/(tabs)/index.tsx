@@ -191,14 +191,6 @@ export default function HomeScreen() {
     },
   ]
 
-  const selectedGuidance = guidancePaths.find((path) => path.id === selectedGuidanceId)
-  const selectedGuides = selectedGuidance
-    ? selectedGuidance.slugs
-        .map((slug) => guides.find((guide) => guide.slug === slug))
-        .filter((guide): guide is Guide => Boolean(guide))
-        .slice(0, 3)
-    : []
-
   const openGuide = (id: string) => {
     router.push({
       pathname: '/guide/[id]',
@@ -263,6 +255,11 @@ export default function HomeScreen() {
           .filter((path) => path.zone === zone)
           .map((path) => {
             const isSelected = selectedGuidanceId === path.id
+            const pathGuides = path.slugs
+              .map((slug) => guides.find((guide) => guide.slug === slug))
+              .filter((guide): guide is Guide => Boolean(guide))
+              .slice(0, 3)
+            const firstGuide = pathGuides[0]
 
             return (
               <TouchableOpacity
@@ -288,73 +285,49 @@ export default function HomeScreen() {
                 >
                   {path.subtitle}
                 </SafeText>
+
+                {isSelected ? (
+                  <View style={styles.guidanceInlinePanel}>
+                    <SafeText variant="caption" color="primary" weight="700">
+                      {labels.guidanceStartHere}
+                    </SafeText>
+                    <SafeText
+                      variant="caption"
+                      color="muted"
+                      style={styles.guidanceInlineText}
+                      numberOfLines={4}
+                    >
+                      {path.start}
+                    </SafeText>
+                    <View style={styles.guidanceInlineChips}>
+                      {pathGuides.map((guide) => (
+                        <View key={guide.id} style={styles.guidanceGuideChip}>
+                          <SafeText variant="caption" color="primary" weight="700" numberOfLines={1}>
+                            {getTitle(guide)}
+                          </SafeText>
+                        </View>
+                      ))}
+                    </View>
+                    <AppButton
+                      title={firstGuide ? labels.guidanceOpenFirstGuide : labels.guidanceOpenSearch}
+                      onPress={() => {
+                        if (firstGuide) {
+                          openGuide(firstGuide.id)
+                          return
+                        }
+
+                        openSearch()
+                      }}
+                      style={styles.guidanceInlineAction}
+                    />
+                  </View>
+                ) : null}
               </TouchableOpacity>
             )
           })}
       </View>
     </View>
   )
-
-  const renderSelectedGuidance = (zone: GuidancePath['zone']) => {
-    if (!selectedGuidance || selectedGuidance.zone !== zone) {
-      return null
-    }
-
-    return (
-      <View style={styles.guidancePanel}>
-        <View style={styles.guidancePanelHeader}>
-          <View style={styles.guidancePanelIcon}>
-            <Ionicons name={selectedGuidance.icon} size={22} color={colors.surface} />
-          </View>
-          <View style={styles.guidancePanelCopy}>
-            <SafeText variant="caption" color="primary" weight="700">
-              {labels.guidanceStartHere}
-            </SafeText>
-            <SafeText variant="h3" weight="700" style={styles.guidancePanelTitle}>
-              {selectedGuidance.title}
-            </SafeText>
-          </View>
-        </View>
-
-        <SafeText variant="bodyMd" color="muted" style={styles.guidancePanelText}>
-          {selectedGuidance.start}
-        </SafeText>
-
-        {selectedGuides.length > 0 ? (
-          <View style={styles.guidanceGuideList}>
-            {selectedGuides.map((guide) => (
-              <GuideCard
-                key={guide.id}
-                guide={guide}
-                language={language}
-                isSaved={isSaved(guide.id)}
-                onPress={() => openGuide(guide.id)}
-                onSave={() => toggleSave(guide)}
-                compact
-              />
-            ))}
-          </View>
-        ) : (
-          <SafeText variant="caption" color="muted" style={styles.guidancePanelText}>
-            {labels.guidanceSearchFallback}
-          </SafeText>
-        )}
-
-        <AppButton
-          title={selectedGuides[0] ? labels.guidanceOpenFirstGuide : labels.guidanceOpenSearch}
-          onPress={() => {
-            if (selectedGuides[0]) {
-              openGuide(selectedGuides[0].id)
-              return
-            }
-
-            openSearch()
-          }}
-          style={styles.guidanceAction}
-        />
-      </View>
-    )
-  }
 
   const renderHeader = () => (
     <View>
@@ -396,9 +369,7 @@ export default function HomeScreen() {
 
       <View style={styles.section}>
         {renderGuidanceZone('today', labels.guidanceTodayTitle, labels.guidanceTodaySubtitle)}
-        {renderSelectedGuidance('today')}
         {renderGuidanceZone('future', labels.guidanceFutureTitle, labels.guidanceFutureSubtitle)}
-        {renderSelectedGuidance('future')}
       </View>
 
       <View style={styles.section}>
@@ -774,47 +745,34 @@ const createStyles = (colors: ThemeColors) =>
       marginTop: spacing.xs,
     },
 
-    guidancePanel: {
-      borderRadius: 18,
-      borderWidth: 1,
-      borderColor: colors.border,
-      backgroundColor: colors.surface,
-      padding: spacing.md,
-      marginBottom: spacing.sm,
+    guidanceInlinePanel: {
+      borderTopWidth: 1,
+      borderTopColor: colors.border,
+      marginTop: spacing.sm,
+      paddingTop: spacing.sm,
     },
 
-    guidancePanelHeader: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      gap: spacing.sm,
-    },
-
-    guidancePanelIcon: {
-      width: 44,
-      height: 44,
-      borderRadius: 14,
-      backgroundColor: colors.primary,
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
-
-    guidancePanelCopy: {
-      flex: 1,
-    },
-
-    guidancePanelTitle: {
+    guidanceInlineText: {
       marginTop: spacing.xs,
     },
 
-    guidancePanelText: {
-      marginTop: spacing.md,
+    guidanceInlineChips: {
+      gap: spacing.xs,
+      marginTop: spacing.sm,
     },
 
-    guidanceGuideList: {
-      marginTop: spacing.md,
+    guidanceGuideChip: {
+      alignSelf: 'flex-start',
+      maxWidth: '100%',
+      borderRadius: 999,
+      backgroundColor: colors.surface,
+      borderWidth: 1,
+      borderColor: `${colors.primary}35`,
+      paddingHorizontal: spacing.sm,
+      paddingVertical: spacing.xs,
     },
 
-    guidanceAction: {
+    guidanceInlineAction: {
       marginTop: spacing.sm,
     },
 

@@ -2,7 +2,6 @@ import { BundleCard } from '../../src/components/bundles/BundleCard'
 import { useFeaturedGuideBundles } from '../../src/hooks/useGuideBundles'
 import { useState } from 'react'
 import {
-  FlatList,
   RefreshControl,
   ScrollView,
   StyleSheet,
@@ -226,16 +225,6 @@ export default function HomeScreen() {
 
   const getCategoryName = (category: NonNullable<Guide['category']>) =>
     getGuideCategoryName(category, language)
-
-  const renderGuide = ({ item }: { item: Guide }) => (
-    <GuideCard
-      guide={item}
-      language={language}
-      isSaved={isSaved(item.id)}
-      onPress={() => openGuide(item.id)}
-      onSave={() => toggleSave(item)}
-    />
-  )
 
   const renderCuratedSection = (props: {
     title: string
@@ -580,58 +569,66 @@ export default function HomeScreen() {
         icon: '',
       })}
 
-      <View style={styles.sectionHeaderBlock}>
+      <View style={styles.browseAllPanel}>
         <SafeText variant="h3" weight="700">
-          {t.allGuides}
+          {labels.browseAllTitle}
         </SafeText>
-        <SafeText variant="caption" color="muted">
-          {labels.allGuidesSubtitle}
+        <SafeText variant="bodyMd" color="muted" style={styles.browseAllText}>
+          {labels.browseAllSubtitle}
         </SafeText>
+        <AppButton
+          title={labels.browseAllAction}
+          onPress={openSearch}
+          style={styles.browseAllAction}
+        />
       </View>
     </View>
   )
 
+  const renderStatusBlock = () => {
+    if (!isLoading && !isError && guides.length > 0) {
+      return null
+    }
+
+    return (
+      <View style={styles.empty}>
+        {isLoading ? (
+          <LoadingFeed count={3} />
+        ) : isError ? (
+          <>
+            <Ionicons
+              name="cloud-offline-outline"
+              size={34}
+              color={colors.warning}
+            />
+            <SafeText variant="h3" weight="700" style={styles.emptyTitle}>
+              {labels.loadErrorTitle}
+            </SafeText>
+            <SafeText variant="bodyMd" color="muted" style={styles.emptyText}>
+              {labels.loadErrorSubtitle}
+            </SafeText>
+            <AppButton
+              title={labels.tryAgain}
+              onPress={() => refetch()}
+              style={styles.emptyAction}
+            />
+          </>
+        ) : (
+          <>
+            <SafeText variant="h3" weight="700">
+              {labels.emptyTitle}
+            </SafeText>
+            <SafeText variant="bodyMd" color="muted" style={styles.emptyText}>
+              {labels.emptySubtitle}
+            </SafeText>
+          </>
+        )}
+      </View>
+    )
+  }
+
   return (
-    <FlatList
-      data={guides}
-      renderItem={renderGuide}
-      keyExtractor={(item) => item.id}
-      ListHeaderComponent={renderHeader}
-      ListEmptyComponent={
-        <View style={styles.empty}>
-          {isLoading ? (
-            <LoadingFeed count={3} />
-          ) : isError ? (
-            <>
-              <Ionicons
-                name="cloud-offline-outline"
-                size={34}
-                color={colors.warning}
-              />
-              <SafeText variant="h3" weight="700" style={styles.emptyTitle}>
-                {labels.loadErrorTitle}
-              </SafeText>
-              <SafeText variant="bodyMd" color="muted" style={styles.emptyText}>
-                {labels.loadErrorSubtitle}
-              </SafeText>
-              <AppButton
-                title={labels.tryAgain}
-                onPress={() => refetch()}
-                style={styles.emptyAction}
-              />
-            </>
-          ) : (
-            <>
-              <SafeText variant="h3" weight="700">
-                {labels.emptyTitle}
-              </SafeText>
-              <SafeText variant="bodyMd" color="muted" style={styles.emptyText}>
-                {labels.emptySubtitle}
-              </SafeText>
-            </>
-          )}
-        </View>
-      }
+    <ScrollView
       contentContainerStyle={styles.listContent}
       showsVerticalScrollIndicator={false}
       refreshControl={
@@ -642,12 +639,10 @@ export default function HomeScreen() {
           tintColor={colors.primary}
         />
       }
-      removeClippedSubviews
-      maxToRenderPerBatch={5}
-      updateCellsBatchingPeriod={50}
-      windowSize={5}
-      initialNumToRender={4}
-    />
+    >
+      {renderHeader()}
+      {renderStatusBlock()}
+    </ScrollView>
   )
 }
 
@@ -822,10 +817,20 @@ const createStyles = (colors: ThemeColors) =>
       marginTop: spacing.sm,
     },
 
-    sectionHeaderBlock: {
+    browseAllPanel: {
       paddingHorizontal: spacing.md,
       paddingTop: spacing.lg,
       paddingBottom: spacing.md,
+    },
+
+    browseAllText: {
+      marginTop: spacing.xs,
+      marginBottom: spacing.md,
+    },
+
+    browseAllAction: {
+      alignSelf: 'flex-start',
+      minWidth: 180,
     },
 
     categoryRow: {

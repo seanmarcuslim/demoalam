@@ -295,8 +295,8 @@ export default function HomeScreen() {
     </View>
   )
 
-  const renderSelectedGuidance = () => {
-    if (!selectedGuidance) {
+  const renderSelectedGuidance = (zone: GuidancePath['zone']) => {
+    if (!selectedGuidance || selectedGuidance.zone !== zone) {
       return null
     }
 
@@ -396,8 +396,9 @@ export default function HomeScreen() {
 
       <View style={styles.section}>
         {renderGuidanceZone('today', labels.guidanceTodayTitle, labels.guidanceTodaySubtitle)}
+        {renderSelectedGuidance('today')}
         {renderGuidanceZone('future', labels.guidanceFutureTitle, labels.guidanceFutureSubtitle)}
-        {renderSelectedGuidance()}
+        {renderSelectedGuidance('future')}
       </View>
 
       <View style={styles.section}>

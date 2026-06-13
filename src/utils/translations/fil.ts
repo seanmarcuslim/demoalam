@@ -123,12 +123,12 @@ export const filTranslations = {
         course: {
           title: 'Pumili ng course',
           subtitle: 'Magsimula sa gastos, ayuda, at realidad ng trabaho.',
-          start: 'Pinapalawak pa ang course guidance. Sa ngayon, simulan sa gastos, aid options, at first-job realities na konektado sa path mo.',
+          start: 'Magsimula sa fit, gastos, aid options, at work realities na konektado sa path mo.',
         },
         study: {
           title: 'Mag-aral nang mas malinaw',
           subtitle: 'Humanap ng suporta bago lumaki ang school pressure.',
-          start: 'Pinapalawak pa ang study guidance. Magsimula sa aid at student support guides para hindi ka maharang ng pera o missed opportunities.',
+          start: 'Ayusin muna kung ano ang urgent, ano ang pinaka-importante, at ano ang humaharang sa iyo ngayong linggo.',
         },
         workLife: {
           title: 'Intindihin ang work life',

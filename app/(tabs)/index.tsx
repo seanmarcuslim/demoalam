@@ -38,12 +38,15 @@ import {
   getGuideTagline,
   getGuideTitle,
 } from '../../src/lib/guideDisplay'
+import { analyticsService } from '../../src/services/analyticsService'
 
 type GuidancePath = {
   id: string
   zone: 'today' | 'future'
   icon: keyof typeof Ionicons.glyphMap
   slugs: string[]
+  flowPath?: '/flow/course-fit'
+  flowSlug?: 'course-fit'
   title: string
   subtitle: string
   start: string
@@ -158,6 +161,8 @@ export default function HomeScreen() {
         'student-financial-aid-philippines-checklist',
         'first-job-requirements',
       ],
+      flowPath: '/flow/course-fit',
+      flowSlug: 'course-fit',
       title: labels.guidancePaths.course.title,
       subtitle: labels.guidancePaths.course.subtitle,
       start: labels.guidancePaths.course.start,
@@ -215,6 +220,22 @@ export default function HomeScreen() {
 
   const openSearch = () => {
     router.push('/search')
+  }
+
+  const openGuidanceFlow = (path: GuidancePath) => {
+    if (!path.flowPath || !path.flowSlug) {
+      return
+    }
+
+    analyticsService.logFlowEvent({
+      flowSlug: path.flowSlug,
+      eventName: 'flow_opened',
+      language,
+    }).catch(() => {
+      // Analytics should never interrupt Home navigation.
+    })
+
+    router.push(path.flowPath)
   }
 
   const getTitle = (guide: Guide) =>
@@ -317,8 +338,21 @@ export default function HomeScreen() {
                       ))}
                     </View>
                     <AppButton
-                      title={firstGuide ? labels.guidanceOpenFirstGuide : labels.guidanceOpenSearch}
+                      title={
+                        path.flowPath
+                          ? language === 'fil'
+                            ? 'Simulan ang check'
+                            : 'Start quick check'
+                          : firstGuide
+                            ? labels.guidanceOpenFirstGuide
+                            : labels.guidanceOpenSearch
+                      }
                       onPress={() => {
+                        if (path.flowPath) {
+                          openGuidanceFlow(path)
+                          return
+                        }
+
                         if (firstGuide) {
                           openGuide(firstGuide.id)
                           return

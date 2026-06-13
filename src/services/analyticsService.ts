@@ -9,7 +9,7 @@ type SearchEventPayload = {
 }
 
 type FlowEventPayload = {
-  flowSlug: 'phone-lost' | 'ewallet-money'
+  flowSlug: 'phone-lost' | 'ewallet-money' | 'course-fit'
   eventName:
     | 'flow_opened'
     | 'flow_completed'

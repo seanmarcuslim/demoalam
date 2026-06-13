@@ -123,12 +123,12 @@ export const enTranslations = {
         course: {
           title: 'Choose a course',
           subtitle: 'Start with cost, aid, and work realities.',
-          start: 'Course guidance is still growing. For now, start by checking cost, aid options, and the first-job realities connected to your path.',
+          start: 'Start by checking fit, cost, aid options, and the work realities connected to your path.',
         },
         study: {
           title: 'Study smarter',
           subtitle: 'Find support before school pressure builds.',
-          start: 'Study guidance is still growing. Start with aid and student support guides so money or missed opportunities do not quietly block your studies.',
+          start: 'Start by sorting what is urgent, what matters most, and what is blocking you this week.',
         },
         workLife: {
           title: 'Understand work life',

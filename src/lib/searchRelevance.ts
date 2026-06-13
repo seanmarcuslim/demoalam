@@ -565,6 +565,57 @@ function scoreGuide(guide: Guide, query: string) {
   }
 
   if (
+    cleanQuery.includes('choose course') ||
+    cleanQuery.includes('pumili ng course') ||
+    cleanQuery.includes('anong course') ||
+    cleanQuery.includes('what course') ||
+    cleanQuery.includes('course fit') ||
+    cleanQuery.includes('college course') ||
+    cleanQuery.includes('strand') ||
+    cleanQuery.includes('undecided course') ||
+    cleanQuery.includes('career path') ||
+    cleanQuery.includes('school decision')
+  ) {
+    if (
+      slug === 'choose-course-fit-checklist' ||
+      keywords.includes('choose course') ||
+      keywords.includes('pumili ng course') ||
+      keywords.includes('course decision') ||
+      keywords.includes('career path') ||
+      keywords.includes('college course') ||
+      keywords.includes('strand') ||
+      title.includes('course')
+    ) {
+      score += slug === 'choose-course-fit-checklist' ? 260 : 80
+    }
+  }
+
+  if (
+    cleanQuery.includes('study smarter') ||
+    cleanQuery.includes('study plan') ||
+    cleanQuery.includes('study habits') ||
+    cleanQuery.includes('exam review') ||
+    cleanQuery.includes('cramming') ||
+    cleanQuery.includes('nahuhuli sa school') ||
+    cleanQuery.includes('behind in school') ||
+    cleanQuery.includes('habol sa lesson') ||
+    cleanQuery.includes('how to study') ||
+    cleanQuery.includes('paano mag-aral')
+  ) {
+    if (
+      slug === 'study-smarter-when-behind-checklist' ||
+      keywords.includes('study smarter') ||
+      keywords.includes('study plan') ||
+      keywords.includes('study habits') ||
+      keywords.includes('behind in school') ||
+      keywords.includes('nahuhuli sa school') ||
+      title.includes('study')
+    ) {
+      score += slug === 'study-smarter-when-behind-checklist' ? 260 : 80
+    }
+  }
+
+  if (
     cleanQuery.includes('first job') ||
     cleanQuery.includes('unang trabaho') ||
     cleanQuery.includes('first job requirements') ||

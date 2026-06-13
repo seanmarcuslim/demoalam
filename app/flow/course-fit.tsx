@@ -21,6 +21,7 @@ import {
   type CourseFitAnswers,
 } from '../../src/lib/decisionFlows/courseFitFlow'
 import { analyticsService } from '../../src/services/analyticsService'
+import { useCourseFitProgressStore } from '../../src/stores/courseFitProgressStore'
 import { useSettingsStore } from '../../src/stores/settingsStore'
 import type { ThemeColors } from '../../src/theme/colors'
 import { spacing } from '../../src/theme/spacing'
@@ -39,6 +40,18 @@ export default function CourseFitFlowScreen() {
   const loggedCompleted = useRef(false)
   const loggedOutcomeId = useRef<string | null>(null)
   const loggedRecommendedGuideOpen = useRef(false)
+  const markCourseFitOpened = useCourseFitProgressStore(
+    (state) => state.markCourseFitOpened
+  )
+  const markCourseFitStarted = useCourseFitProgressStore(
+    (state) => state.markCourseFitStarted
+  )
+  const markCourseFitCompleted = useCourseFitProgressStore(
+    (state) => state.markCourseFitCompleted
+  )
+  const markCourseFitGuideViewed = useCourseFitProgressStore(
+    (state) => state.markCourseFitGuideViewed
+  )
 
   const styles = createStyles(colors)
   const currentQuestion = courseFitFlow.questions[questionIndex]
@@ -52,6 +65,10 @@ export default function CourseFitFlowScreen() {
       return items
     }, {})
   }, [guides])
+
+  useEffect(() => {
+    markCourseFitOpened()
+  }, [markCourseFitOpened])
 
   useEffect(() => {
     if (!result || loggedOutcomeId.current === result.outcome.id) {
@@ -81,6 +98,7 @@ export default function CourseFitFlowScreen() {
     if (trackRecommendedGuide && result && !loggedRecommendedGuideOpen.current) {
       loggedRecommendedGuideOpen.current = true
       setOpeningRecommendedGuide(true)
+      markCourseFitGuideViewed()
 
       analyticsService.logFlowEvent({
         flowSlug: 'course-fit',
@@ -109,6 +127,7 @@ export default function CourseFitFlowScreen() {
       [currentQuestion.id]: answerId,
     }
 
+    markCourseFitStarted()
     setAnswers(nextAnswers)
 
     if (questionIndex < courseFitFlow.questions.length - 1) {
@@ -118,6 +137,7 @@ export default function CourseFitFlowScreen() {
 
     if (!loggedCompleted.current) {
       loggedCompleted.current = true
+      markCourseFitCompleted()
 
       analyticsService.logFlowEvent({
         flowSlug: 'course-fit',
@@ -158,7 +178,10 @@ export default function CourseFitFlowScreen() {
 
       <AppButton
         title={getCourseFitLocalizedValue(courseFitFlow, 'cta', language)}
-        onPress={() => setStarted(true)}
+        onPress={() => {
+          markCourseFitStarted()
+          setStarted(true)
+        }}
         style={styles.primaryAction}
       />
     </AppCard>

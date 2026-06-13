@@ -16,6 +16,7 @@ import { useSavedStore } from '../../src/stores/savedStore'
 import { useHistoryStore } from '../../src/stores/historyStore'
 import { useSessionStore } from '../../src/stores/sessionStore'
 import { useSettingsStore } from '../../src/stores/settingsStore'
+import { useCourseFitProgressStore } from '../../src/stores/courseFitProgressStore'
 import { translations } from '../../src/utils/translations'
 import { useTheme } from '../../src/hooks/useTheme'
 import { spacing } from '../../src/theme/spacing'
@@ -74,6 +75,9 @@ export default function GuideDetailsScreen() {
   const guideLabels = t.guideDetail
   const styles = createStyles(colors, colors.primary)
   const showFeedback = useFeedbackStore((state) => state.show)
+  const markCourseFitGuideViewed = useCourseFitProgressStore(
+    (state) => state.markCourseFitGuideViewed
+  )
 
   const isSaved = useSavedStore((state) =>
     activeGuide ? state.isSaved(activeGuide.id) : false
@@ -144,6 +148,12 @@ export default function GuideDetailsScreen() {
       addToHistory(activeGuide)
     }
   }, [activeGuide?.id])
+
+  useEffect(() => {
+    if (activeGuide?.slug === 'choose-course-fit-checklist') {
+      markCourseFitGuideViewed()
+    }
+  }, [activeGuide?.slug, markCourseFitGuideViewed])
 
   useEffect(() => {
     if (guide && isSaved) {

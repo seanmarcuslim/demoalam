@@ -12,6 +12,7 @@ import { useSearch } from '../../src/hooks/useSearch'
 import { useSavedStore } from '../../src/stores/savedStore'
 import { useSearchStore } from '../../src/stores/searchStore'
 import { useSettingsStore } from '../../src/stores/settingsStore'
+import { useCourseFitProgressStore } from '../../src/stores/courseFitProgressStore'
 import { useCategories } from '../../src/hooks/useCategories'
 import { translations } from '../../src/utils/translations'
 import { useTheme } from '../../src/hooks/useTheme'
@@ -71,6 +72,9 @@ export default function SearchScreen() {
   const recentSearches = useSearchStore((state) => state.recentSearches)
   const addRecentSearch = useSearchStore((state) => state.addRecentSearch)
   const clearRecentSearches = useSearchStore((state) => state.clearRecentSearches)
+  const markCourseFitOpened = useCourseFitProgressStore(
+    (state) => state.markCourseFitOpened
+  )
 
   const styles = createStyles(colors)
   const labels = t.searchScreen
@@ -130,6 +134,8 @@ export default function SearchScreen() {
   }
 
   const openCourseFitFlow = () => {
+    markCourseFitOpened()
+
     analyticsService.logFlowEvent({
       flowSlug: 'course-fit',
       eventName: 'flow_opened',

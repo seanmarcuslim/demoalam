@@ -192,7 +192,7 @@ export default function HomeScreen() {
       id: 'work-life',
       zone: 'future',
       icon: 'people-outline',
-      slugs: ['first-job-requirements', 'resume-no-experience', 'job-interview-basic-answers'],
+      slugs: ['first-job-requirements', 'sss-number-first-job', 'payday-budget-simple-split'],
       title: labels.guidancePaths.workLife.title,
       subtitle: labels.guidancePaths.workLife.subtitle,
       start: labels.guidancePaths.workLife.start,

@@ -20,6 +20,7 @@ import { useCategories } from '../../src/hooks/useCategories'
 import { useHistoryStore } from '../../src/stores/historyStore'
 import { useSavedStore } from '../../src/stores/savedStore'
 import { useSettingsStore } from '../../src/stores/settingsStore'
+import { useCourseFitProgressStore } from '../../src/stores/courseFitProgressStore'
 import { translations } from '../../src/utils/translations'
 import { useTheme } from '../../src/hooks/useTheme'
 import { spacing } from '../../src/theme/spacing'
@@ -75,6 +76,13 @@ export default function HomeScreen() {
   const { recentIds, cachedGuides } = useHistoryStore()
   const toggleSave = useSavedStore((state) => state.toggleSave)
   const isSaved = useSavedStore((state) => state.isSaved)
+  const courseFitOpened = useCourseFitProgressStore((state) => state.courseFitOpened)
+  const courseFitStarted = useCourseFitProgressStore((state) => state.courseFitStarted)
+  const courseFitCompleted = useCourseFitProgressStore((state) => state.courseFitCompleted)
+  const courseFitGuideViewed = useCourseFitProgressStore((state) => state.courseFitGuideViewed)
+  const markCourseFitOpened = useCourseFitProgressStore(
+    (state) => state.markCourseFitOpened
+  )
 
   const recentGuides = recentIds
     .map((id) => cachedGuides[id])
@@ -227,6 +235,10 @@ export default function HomeScreen() {
       return
     }
 
+    if (path.flowSlug === 'course-fit') {
+      markCourseFitOpened()
+    }
+
     analyticsService.logFlowEvent({
       flowSlug: path.flowSlug,
       eventName: 'flow_opened',
@@ -236,6 +248,20 @@ export default function HomeScreen() {
     })
 
     router.push(path.flowPath)
+  }
+
+  const openCourseFitNextMove = () => {
+    const courseFitGuide = guides.find(
+      (guide) => guide.slug === 'choose-course-fit-checklist'
+    )
+
+    if ((courseFitCompleted || courseFitGuideViewed) && courseFitGuide) {
+      openGuide(courseFitGuide.id)
+      return
+    }
+
+    markCourseFitOpened()
+    router.push('/flow/course-fit')
   }
 
   const getTitle = (guide: Guide) =>
@@ -371,6 +397,61 @@ export default function HomeScreen() {
     </View>
   )
 
+  const renderYourNextMove = () => {
+    const shouldShow =
+      courseFitOpened ||
+      courseFitStarted ||
+      courseFitCompleted ||
+      courseFitGuideViewed
+
+    if (!shouldShow) {
+      return null
+    }
+
+    const isGuideStep = courseFitCompleted || courseFitGuideViewed
+
+    return (
+      <View style={styles.nextMoveSection}>
+        <TouchableOpacity
+          activeOpacity={0.88}
+          style={styles.nextMoveCard}
+          onPress={openCourseFitNextMove}
+          accessibilityRole="button"
+        >
+          <View style={styles.nextMoveIcon}>
+            <Ionicons name="compass-outline" size={20} color={colors.primary} />
+          </View>
+
+          <View style={styles.nextMoveCopy}>
+            <SafeText variant="caption" color="primary" weight="700">
+              {language === 'fil' ? 'Susunod Mong Hakbang' : 'Your Next Move'}
+            </SafeText>
+            <SafeText variant="body" weight="700" style={styles.nextMoveTitle}>
+              {language === 'fil'
+                ? 'Pumipili ka ng course.'
+                : "You're choosing a course."}
+            </SafeText>
+            <SafeText variant="caption" color="muted" style={styles.nextMoveText}>
+              {language === 'fil'
+                ? isGuideStep
+                  ? 'Next: Ikumpara ang 3 course options bago magdesisyon.'
+                  : 'Next: Alamin kung ano ang dapat i-check bago magdesisyon.'
+                : isGuideStep
+                  ? 'Next: Compare 3 course options before deciding.'
+                  : 'Next: Find out what you should verify before deciding.'}
+            </SafeText>
+          </View>
+
+          <AppButton
+            title={language === 'fil' ? 'Magpatuloy' : 'Continue'}
+            onPress={openCourseFitNextMove}
+            style={styles.nextMoveAction}
+          />
+        </TouchableOpacity>
+      </View>
+    )
+  }
+
   const renderHeader = () => (
     <View>
       <View style={styles.hero}>
@@ -408,6 +489,8 @@ export default function HomeScreen() {
           </View>
         </View>
       </View>
+
+      {renderYourNextMove()}
 
       <View style={styles.section}>
         {renderGuidanceZone('today', labels.guidanceTodayTitle, labels.guidanceTodaySubtitle)}
@@ -736,6 +819,48 @@ const createStyles = (colors: ThemeColors) =>
     section: {
       paddingHorizontal: spacing.md,
       paddingTop: spacing.lg,
+    },
+
+    nextMoveSection: {
+      paddingHorizontal: spacing.md,
+      paddingTop: spacing.lg,
+    },
+
+    nextMoveCard: {
+      borderRadius: 16,
+      borderWidth: 1,
+      borderColor: `${colors.primary}45`,
+      backgroundColor: `${colors.primary}14`,
+      padding: spacing.md,
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: spacing.sm,
+    },
+
+    nextMoveIcon: {
+      width: 40,
+      height: 40,
+      borderRadius: 14,
+      backgroundColor: `${colors.primary}18`,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+
+    nextMoveCopy: {
+      flex: 1,
+      minWidth: 0,
+    },
+
+    nextMoveTitle: {
+      marginTop: spacing.xs,
+    },
+
+    nextMoveText: {
+      marginTop: spacing.xs,
+    },
+
+    nextMoveAction: {
+      minWidth: 112,
     },
 
     sectionHeader: {

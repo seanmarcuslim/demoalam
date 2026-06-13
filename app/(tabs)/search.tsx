@@ -40,6 +40,9 @@ import {
 import {
   eWalletMoneyFlow,
 } from '../../src/lib/decisionFlows/eWalletMoneyFlow'
+import {
+  courseFitFlow,
+} from '../../src/lib/decisionFlows/courseFitFlow'
 
 export default function SearchScreen() {
   const {
@@ -126,17 +129,46 @@ export default function SearchScreen() {
     router.push('/flow/ewallet-money')
   }
 
-  const renderDecisionFlowCard = (flow: 'phone-lost' | 'ewallet-money') => {
-    const isPhoneLost = flow === 'phone-lost'
-    const flowCopy = isPhoneLost ? phoneLostFlow : eWalletMoneyFlow
-    const iconName = isPhoneLost ? 'phone-portrait-outline' : 'wallet-outline'
-    const onPress = isPhoneLost ? openPhoneLostFlow : openEWalletMoneyFlow
+  const openCourseFitFlow = () => {
+    analyticsService.logFlowEvent({
+      flowSlug: 'course-fit',
+      eventName: 'flow_opened',
+      searchQuery: searchTerm.trim(),
+      language,
+    }).catch(() => {
+      // Analytics should never interrupt search.
+    })
+
+    router.push('/flow/course-fit')
+  }
+
+  const renderDecisionFlowCard = (
+    flow: 'phone-lost' | 'ewallet-money' | 'course-fit'
+  ) => {
+    const flowConfig = {
+      'phone-lost': {
+        copy: phoneLostFlow,
+        iconName: 'phone-portrait-outline' as const,
+        onPress: openPhoneLostFlow,
+      },
+      'ewallet-money': {
+        copy: eWalletMoneyFlow,
+        iconName: 'wallet-outline' as const,
+        onPress: openEWalletMoneyFlow,
+      },
+      'course-fit': {
+        copy: courseFitFlow,
+        iconName: 'compass-outline' as const,
+        onPress: openCourseFitFlow,
+      },
+    }[flow]
+    const flowCopy = flowConfig.copy
 
     return (
       <AppCard
         key={flow}
         style={styles.flowCard}
-        onPress={onPress}
+        onPress={flowConfig.onPress}
         accessibilityRole="button"
         accessibilityLabel={
           language === 'fil'
@@ -146,7 +178,7 @@ export default function SearchScreen() {
       >
         <View style={styles.flowCardHeader}>
           <View style={styles.flowIcon}>
-            <Ionicons name={iconName} size={22} color={colors.primary} />
+            <Ionicons name={flowConfig.iconName} size={22} color={colors.primary} />
           </View>
 
           <View style={styles.flowCopy}>
@@ -191,6 +223,7 @@ export default function SearchScreen() {
 
       {renderDecisionFlowCard('phone-lost')}
       {renderDecisionFlowCard('ewallet-money')}
+      {renderDecisionFlowCard('course-fit')}
     </View>
   )
 

@@ -166,8 +166,8 @@ export default function HomeScreen() {
       icon: 'compass-outline',
       slugs: [
         'choose-course-fit-checklist',
+        'compare-3-course-options-checklist',
         'student-financial-aid-philippines-checklist',
-        'first-job-requirements',
       ],
       flowPath: '/flow/course-fit',
       flowSlug: 'course-fit',
@@ -251,12 +251,17 @@ export default function HomeScreen() {
   }
 
   const openCourseFitNextMove = () => {
+    const nextMoveGuide = guides.find(
+      (guide) => guide.slug === 'compare-3-course-options-checklist'
+    )
     const courseFitGuide = guides.find(
       (guide) => guide.slug === 'choose-course-fit-checklist'
     )
 
-    if ((courseFitCompleted || courseFitGuideViewed) && courseFitGuide) {
-      openGuide(courseFitGuide.id)
+    const selectedGuide = nextMoveGuide || courseFitGuide
+
+    if ((courseFitCompleted || courseFitGuideViewed) && selectedGuide) {
+      openGuide(selectedGuide.id)
       return
     }
 

@@ -239,6 +239,7 @@ export const courseFitFlow = {
         'Puwedeng bagay ang course sa hilig mo pero mahirapan kung hindi malinaw ang tuition, allowance, biyahe, o ayuda.',
       primary_guide_slug: 'choose-course-fit-checklist',
       related_guide_slugs: [
+        'compare-3-course-options-checklist',
         'student-financial-aid-philippines-checklist',
         'student-cash-for-work-dswd-checklist',
       ],
@@ -262,6 +263,7 @@ export const courseFitFlow = {
         'Dapat ikumpara ang course sa trabahong hahantungan nito, hindi lang sa pangalan ng subject.',
       primary_guide_slug: 'choose-course-fit-checklist',
       related_guide_slugs: [
+        'compare-3-course-options-checklist',
         'first-job-requirements',
         'resume-no-experience',
         'job-interview-basic-answers',
@@ -282,6 +284,7 @@ export const courseFitFlow = {
         'Mahalaga ang hilig, pero dapat tugma rin ang araw-araw na gawain sa paraan mo ng pag-aaral at pagtatrabaho.',
       primary_guide_slug: 'choose-course-fit-checklist',
       related_guide_slugs: [
+        'compare-3-course-options-checklist',
         'study-smarter-when-behind-checklist',
         'resume-no-experience',
       ],
@@ -301,6 +304,7 @@ export const courseFitFlow = {
         'Kapag magulo ang desisyon, mas madaling makipag-usap kung may simpleng comparison ka.',
       primary_guide_slug: 'choose-course-fit-checklist',
       related_guide_slugs: [
+        'compare-3-course-options-checklist',
         'student-financial-aid-philippines-checklist',
         'first-job-requirements',
       ],

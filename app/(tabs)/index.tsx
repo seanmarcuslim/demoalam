@@ -660,7 +660,6 @@ export default function HomeScreen() {
   const renderHeader = () => (
     <View>
       <View style={styles.hero}>
-        <View style={styles.heroGlow} />
         <View style={styles.heroGoldGlow} />
         <View style={styles.heroSunMotif}>
           <View style={styles.heroSunRayVertical} />
@@ -882,16 +881,6 @@ const createStyles = (colors: ThemeColors) =>
       overflow: 'hidden',
     },
 
-    heroGlow: {
-      position: 'absolute',
-      right: -48,
-      top: -52,
-      width: 152,
-      height: 152,
-      borderRadius: 76,
-      backgroundColor: 'rgba(255,255,255,0.13)',
-    },
-
     heroGoldGlow: {
       position: 'absolute',
       right: 26,
@@ -904,19 +893,19 @@ const createStyles = (colors: ThemeColors) =>
 
     heroSunMotif: {
       position: 'absolute',
-      right: -10,
-      top: 28,
-      width: 96,
-      height: 96,
+      right: -46,
+      top: -52,
+      width: 154,
+      height: 154,
       alignItems: 'center',
       justifyContent: 'center',
-      opacity: 0.24,
+      opacity: 0.18,
     },
 
     heroSunCore: {
-      width: 38,
-      height: 38,
-      borderRadius: 19,
+      width: 52,
+      height: 52,
+      borderRadius: 26,
       backgroundColor: colors.accent,
       borderWidth: 1,
       borderColor: 'rgba(255,255,255,0.34)',
@@ -924,24 +913,24 @@ const createStyles = (colors: ThemeColors) =>
 
     heroSunRayVertical: {
       position: 'absolute',
-      width: 10,
-      height: 92,
+      width: 12,
+      height: 148,
       borderRadius: 999,
       backgroundColor: colors.accent,
     },
 
     heroSunRayHorizontal: {
       position: 'absolute',
-      width: 92,
-      height: 10,
+      width: 148,
+      height: 12,
       borderRadius: 999,
       backgroundColor: colors.accent,
     },
 
     heroSunRayDiagonal: {
       position: 'absolute',
-      width: 78,
-      height: 8,
+      width: 126,
+      height: 10,
       borderRadius: 999,
       backgroundColor: colors.accent,
     },
@@ -956,8 +945,8 @@ const createStyles = (colors: ThemeColors) =>
 
     heroStarOne: {
       position: 'absolute',
-      right: 104,
-      top: 76,
+      right: 112,
+      top: 52,
       width: 5,
       height: 5,
       borderRadius: 3,
@@ -968,7 +957,7 @@ const createStyles = (colors: ThemeColors) =>
     heroStarTwo: {
       position: 'absolute',
       right: 142,
-      top: 124,
+      top: 100,
       width: 4,
       height: 4,
       borderRadius: 2,

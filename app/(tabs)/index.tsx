@@ -84,7 +84,13 @@ export default function HomeScreen() {
       id: 'scam',
       zone: 'today',
       icon: 'shield-checkmark-outline',
-      slugs: ['gcash-scam-red-flags', 'phishing-link-checklist', 'fake-job-offer-red-flags'],
+      slugs: [
+        'gcash-scam-red-flags',
+        'phishing-link-checklist',
+        'fake-job-offer-red-flags',
+        'loan-red-flags-before-borrowing',
+        'loan-app-harassment-evidence-checklist',
+      ],
       title: labels.guidancePaths.scam.title,
       subtitle: labels.guidancePaths.scam.subtitle,
       start: labels.guidancePaths.scam.start,
@@ -96,6 +102,8 @@ export default function HomeScreen() {
       slugs: [
         'student-financial-aid-philippines-checklist',
         'student-cash-for-work-dswd-checklist',
+        'dswd-aics-assistance-checklist',
+        'cash-for-training',
       ],
       title: labels.guidancePaths.scholarship.title,
       subtitle: labels.guidancePaths.scholarship.subtitle,
@@ -105,7 +113,14 @@ export default function HomeScreen() {
       id: 'first-job',
       zone: 'today',
       icon: 'briefcase-outline',
-      slugs: ['first-job-requirements', 'resume-no-experience', 'job-interview-basic-answers'],
+      slugs: [
+        'first-job-requirements',
+        'resume-no-experience',
+        'job-interview-basic-answers',
+        'nbi-clearance-first-timers',
+        'sss-number-first-job',
+        'fast-valid-id',
+      ],
       title: labels.guidancePaths.firstJob.title,
       subtitle: labels.guidancePaths.firstJob.subtitle,
       start: labels.guidancePaths.firstJob.start,
@@ -117,8 +132,11 @@ export default function HomeScreen() {
       slugs: [
         'phone-stolen-first-hour',
         'medical-emergency-documents',
+        'public-hospital-social-service-desk-guide',
+        'pcso-medical-assistance-checklist',
         'lost-wallet-first-steps',
         'lost-atm-debit-card-checklist',
+        'lost-sim-replacement-checklist',
       ],
       title: labels.guidancePaths.emergency.title,
       subtitle: labels.guidancePaths.emergency.subtitle,
@@ -132,6 +150,7 @@ export default function HomeScreen() {
         'choose-course-fit-checklist',
         'compare-3-course-options-checklist',
         'student-financial-aid-philippines-checklist',
+        'study-smarter-when-behind-checklist',
       ],
       flowPath: '/flow/course-fit',
       flowSlug: 'course-fit',
@@ -147,6 +166,7 @@ export default function HomeScreen() {
         'study-smarter-when-behind-checklist',
         'student-financial-aid-philippines-checklist',
         'student-cash-for-work-dswd-checklist',
+        'resume-no-experience',
       ],
       title: labels.guidancePaths.study.title,
       subtitle: labels.guidancePaths.study.subtitle,
@@ -156,7 +176,14 @@ export default function HomeScreen() {
       id: 'work-life',
       zone: 'future',
       icon: 'people-outline',
-      slugs: ['first-job-requirements', 'sss-number-first-job', 'payday-budget-simple-split'],
+      slugs: [
+        'first-job-requirements',
+        'sss-number-first-job',
+        'salary-paycheck-checklist',
+        'unpaid-salary-kulang-sahod-checklist',
+        'payday-budget-simple-split',
+        'bank-account-first-time',
+      ],
       title: labels.guidancePaths.workLife.title,
       subtitle: labels.guidancePaths.workLife.subtitle,
       start: labels.guidancePaths.workLife.start,
@@ -169,6 +196,8 @@ export default function HomeScreen() {
         'loan-red-flags-before-borrowing',
         'emergency-fund-starter-checklist',
         'everyday-rights-philippines-checklist',
+        'fake-job-offer-red-flags',
+        'renting-first-time-checklist',
       ],
       title: labels.guidancePaths.lessons.title,
       subtitle: labels.guidancePaths.lessons.subtitle,
@@ -255,7 +284,6 @@ export default function HomeScreen() {
             const pathGuides = path.slugs
               .map((slug) => guides.find((guide) => guide.slug === slug))
               .filter((guide): guide is Guide => Boolean(guide))
-              .slice(0, 3)
             const firstGuide = pathGuides[0]
 
             return (
@@ -298,11 +326,16 @@ export default function HomeScreen() {
                     </SafeText>
                     <View style={styles.guidanceInlineChips}>
                       {pathGuides.map((guide) => (
-                        <View key={guide.id} style={styles.guidanceGuideChip}>
+                        <TouchableOpacity
+                          key={guide.id}
+                          activeOpacity={0.82}
+                          style={styles.guidanceGuideChip}
+                          onPress={() => openGuide(guide.id)}
+                        >
                           <SafeText variant="caption" color="primary" weight="700" numberOfLines={1}>
                             {getTitle(guide)}
                           </SafeText>
-                        </View>
+                        </TouchableOpacity>
                       ))}
                     </View>
                     <AppButton

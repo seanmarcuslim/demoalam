@@ -6,7 +6,7 @@ import {
   View,
 } from 'react-native'
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { router } from 'expo-router'
+import { router, useLocalSearchParams } from 'expo-router'
 import { Ionicons } from '@expo/vector-icons'
 import { useSearch } from '../../src/hooks/useSearch'
 import { useSavedStore } from '../../src/stores/savedStore'
@@ -46,6 +46,7 @@ import {
 } from '../../src/lib/decisionFlows/courseFitFlow'
 
 export default function SearchScreen() {
+  const params = useLocalSearchParams<{ q?: string | string[] }>()
   const {
     searchTerm,
     debouncedTerm,
@@ -59,6 +60,7 @@ export default function SearchScreen() {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
   const [committedSearchTerm, setCommittedSearchTerm] = useState('')
   const lastLoggedSearchKey = useRef('')
+  const lastAppliedRouteQuery = useRef('')
 
   const { language } = useSettingsStore()
   const { colors } = useTheme()
@@ -78,6 +80,7 @@ export default function SearchScreen() {
 
   const styles = createStyles(colors)
   const labels = t.searchScreen
+  const routeQuery = Array.isArray(params.q) ? params.q[0] : params.q
 
   const showEmptySearch = searchTerm.trim().length === 0
   const resultCategoryIds = useMemo(
@@ -248,6 +251,28 @@ export default function SearchScreen() {
 
     updateSearchTerm(term)
   }
+
+  useEffect(() => {
+    if (!routeQuery) {
+      return
+    }
+
+    const cleanRouteQuery = routeQuery.trim()
+
+    if (
+      cleanRouteQuery.length < 2 ||
+      cleanRouteQuery === searchTerm ||
+      lastAppliedRouteQuery.current === cleanRouteQuery
+    ) {
+      return
+    }
+
+    lastAppliedRouteQuery.current = cleanRouteQuery
+    setSelectedCategory(null)
+    setSearchTerm(cleanRouteQuery)
+    addRecentSearch(cleanRouteQuery)
+    setCommittedSearchTerm(cleanRouteQuery)
+  }, [addRecentSearch, routeQuery, searchTerm, setSearchTerm])
 
   useEffect(() => {
     const cleanTerm = committedSearchTerm.trim()

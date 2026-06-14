@@ -37,6 +37,7 @@ type GuidancePath = {
   audiences: Array<'student' | 'life'>
   icon: keyof typeof Ionicons.glyphMap
   slugs: string[]
+  searchQuery: string
   flowPath?: '/flow/course-fit'
   flowSlug?: 'course-fit'
   title: string
@@ -45,6 +46,7 @@ type GuidancePath = {
 }
 
 type HomeFocus = 'student' | 'life'
+const GUIDANCE_PREVIEW_LIMIT = 3
 
 export default function HomeScreen() {
   const { colors } = useTheme()
@@ -112,6 +114,7 @@ export default function HomeScreen() {
       title: labels.guidancePaths.scam.title,
       subtitle: labels.guidancePaths.scam.subtitle,
       start: labels.guidancePaths.scam.start,
+      searchQuery: 'scam warning signs',
     },
     {
       id: 'scholarship',
@@ -132,6 +135,7 @@ export default function HomeScreen() {
       title: labels.guidancePaths.scholarship.title,
       subtitle: labels.guidancePaths.scholarship.subtitle,
       start: labels.guidancePaths.scholarship.start,
+      searchQuery: 'student aid scholarship',
     },
     {
       id: 'first-job',
@@ -151,6 +155,7 @@ export default function HomeScreen() {
       title: labels.guidancePaths.firstJob.title,
       subtitle: labels.guidancePaths.firstJob.subtitle,
       start: labels.guidancePaths.firstJob.start,
+      searchQuery: 'first job requirements',
     },
     {
       id: 'emergency',
@@ -174,6 +179,7 @@ export default function HomeScreen() {
       title: labels.guidancePaths.emergency.title,
       subtitle: labels.guidancePaths.emergency.subtitle,
       start: labels.guidancePaths.emergency.start,
+      searchQuery: 'emergency help',
     },
     {
       id: 'money',
@@ -195,6 +201,7 @@ export default function HomeScreen() {
       title: labels.guidancePaths.money.title,
       subtitle: labels.guidancePaths.money.subtitle,
       start: labels.guidancePaths.money.start,
+      searchQuery: 'money problem',
     },
     {
       id: 'documents',
@@ -213,6 +220,7 @@ export default function HomeScreen() {
       title: labels.guidancePaths.documents.title,
       subtitle: labels.guidancePaths.documents.subtitle,
       start: labels.guidancePaths.documents.start,
+      searchQuery: 'valid id documents',
     },
     {
       id: 'course',
@@ -230,6 +238,7 @@ export default function HomeScreen() {
       title: labels.guidancePaths.course.title,
       subtitle: labels.guidancePaths.course.subtitle,
       start: labels.guidancePaths.course.start,
+      searchQuery: 'choose course',
     },
     {
       id: 'study',
@@ -246,6 +255,7 @@ export default function HomeScreen() {
       title: labels.guidancePaths.study.title,
       subtitle: labels.guidancePaths.study.subtitle,
       start: labels.guidancePaths.study.start,
+      searchQuery: 'study smarter',
     },
     {
       id: 'work-life',
@@ -263,6 +273,7 @@ export default function HomeScreen() {
       title: labels.guidancePaths.workLife.title,
       subtitle: labels.guidancePaths.workLife.subtitle,
       start: labels.guidancePaths.workLife.start,
+      searchQuery: 'first job work life',
     },
     {
       id: 'lessons',
@@ -284,6 +295,7 @@ export default function HomeScreen() {
       title: labels.guidancePaths.lessons.title,
       subtitle: labels.guidancePaths.lessons.subtitle,
       start: labels.guidancePaths.lessons.start,
+      searchQuery: 'life lessons before problems',
     },
   ]
   const studentPaths = guidancePaths.filter((path) =>
@@ -316,6 +328,13 @@ export default function HomeScreen() {
 
   const openSearch = () => {
     router.push('/search')
+  }
+
+  const openGuidanceSearch = (path: GuidancePath) => {
+    router.push({
+      pathname: '/search',
+      params: { q: path.searchQuery },
+    })
   }
 
   const openGuidanceFlow = (path: GuidancePath) => {
@@ -410,6 +429,7 @@ export default function HomeScreen() {
                 const pathGuides = path.slugs
                   .map((slug) => guides.find((guide) => guide.slug === slug))
                   .filter((guide): guide is Guide => Boolean(guide))
+                const previewGuides = pathGuides.slice(0, GUIDANCE_PREVIEW_LIMIT)
                 const firstGuide = pathGuides[0]
 
                 return (
@@ -446,24 +466,48 @@ export default function HomeScreen() {
                           variant="caption"
                           color="muted"
                           style={styles.guidanceInlineText}
-                          numberOfLines={4}
+                          numberOfLines={3}
                         >
                           {path.start}
                         </SafeText>
+                        <SafeText
+                          variant="caption"
+                          color="primary"
+                          weight="700"
+                          style={styles.guidanceInlineLabel}
+                        >
+                          {labels.guidanceRecommendedGuides}
+                        </SafeText>
                         <View style={styles.guidanceInlineChips}>
-                          {pathGuides.map((guide) => (
+                          {previewGuides.map((guide, index) => (
                             <TouchableOpacity
                               key={guide.id}
                               activeOpacity={0.82}
                               style={styles.guidanceGuideChip}
                               onPress={() => openGuide(guide.id)}
                             >
-                              <SafeText variant="caption" color="primary" weight="700" numberOfLines={1}>
-                                {getTitle(guide)}
+                              <SafeText
+                                variant="caption"
+                                color="primary"
+                                weight="700"
+                                numberOfLines={1}
+                              >
+                                {`${index + 1}. ${getTitle(guide)}`}
                               </SafeText>
                             </TouchableOpacity>
                           ))}
                         </View>
+                        <TouchableOpacity
+                          activeOpacity={0.82}
+                          style={styles.guidanceSeeAllAction}
+                          onPress={() => openGuidanceSearch(path)}
+                          accessibilityRole="button"
+                        >
+                          <SafeText variant="caption" color="primary" weight="700">
+                            {labels.guidanceSeeAllGuides}
+                          </SafeText>
+                          <Ionicons name="arrow-forward" size={14} color={colors.primary} />
+                        </TouchableOpacity>
                         <AppButton
                           title={
                             path.flowPath
@@ -1241,9 +1285,13 @@ const createStyles = (colors: ThemeColors) =>
       marginTop: spacing.xs,
     },
 
+    guidanceInlineLabel: {
+      marginTop: spacing.sm,
+    },
+
     guidanceInlineChips: {
       gap: spacing.xs,
-      marginTop: spacing.sm,
+      marginTop: spacing.xs,
     },
 
     guidanceGuideChip: {
@@ -1259,6 +1307,15 @@ const createStyles = (colors: ThemeColors) =>
 
     guidanceInlineAction: {
       marginTop: spacing.sm,
+    },
+
+    guidanceSeeAllAction: {
+      alignSelf: 'flex-start',
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: spacing.xs,
+      marginTop: spacing.sm,
+      paddingVertical: spacing.xs,
     },
 
     browseAllPanel: {

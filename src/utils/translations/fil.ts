@@ -106,6 +106,8 @@ export const filTranslations = {
       guidanceFocusLife: 'Ayusin ngayon',
       guidanceFocusLifeSubtitle: 'Scam, emergency, pera, ID, at karapatan.',
       guidanceStartHere: 'Magsimula dito',
+      guidanceRecommendedGuides: 'Mga recommended na gabay',
+      guidanceSeeAllGuides: 'Tingnan lahat ng gabay',
       guidanceOpenFirstGuide: 'Buksan ang unang gabay',
       guidanceOpenSearch: 'Maghanap ng gabay',
       guidanceSearchFallback: 'Pinapalawak pa ang path na ito. Maghanap muna ng kaugnay na gabay habang inaayos namin ito.',

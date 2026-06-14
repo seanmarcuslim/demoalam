@@ -106,6 +106,8 @@ export const enTranslations = {
       guidanceFocusLife: 'Solve today',
       guidanceFocusLifeSubtitle: 'Scams, emergencies, money, IDs, and rights.',
       guidanceStartHere: 'Start here',
+      guidanceRecommendedGuides: 'Recommended guides',
+      guidanceSeeAllGuides: 'See all guides',
       guidanceOpenFirstGuide: 'Open first guide',
       guidanceOpenSearch: 'Search guides',
       guidanceSearchFallback: 'This path is still growing. Search related guides first while we improve it.',

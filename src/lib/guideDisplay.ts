@@ -27,6 +27,10 @@ const ENGLISH_FREE_COST_LABELS: Record<string, string> = {
     'Usually free to ask; fees may vary by document request',
   'libre; kahit maliit na hulog ay puwedeng simulan':
     'Free; you can start even with a small contribution',
+  'libre; kailangan lang ng honest notes at konting research':
+    'Free; only honest notes and a little research needed',
+  'libre; kailangan lang ng honest self-check at school/program research':
+    'Free; only honest self-check and school/program research needed',
   'libre ang application; posibleng may gastos sa photocopy, scan, print, pamasahe, o internet data':
     'Application is free; possible costs for photocopying, scanning, printing, transport, or internet data',
   'libre kung official': 'Free through official channels',

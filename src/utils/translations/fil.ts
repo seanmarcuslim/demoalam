@@ -147,8 +147,8 @@ export const filTranslations = {
         },
         study: {
           title: 'Mag-aral nang mas malinaw',
-          subtitle: 'Humanap ng suporta bago lumaki ang school pressure.',
-          start: 'Ayusin muna kung ano ang urgent, ano ang pinaka-importante, at ano ang humaharang sa iyo ngayong linggo.',
+          subtitle: 'Humabol nang hindi nanghuhula kung ano ang uunahin.',
+          start: 'Magsimula sa maliit na reset plan: ilista ang deadlines, piliin ang pinaka-risky na task, tapos ayusin ang blocker na paulit-ulit humahadlang sa school.',
         },
         workLife: {
           title: 'Intindihin ang work life',

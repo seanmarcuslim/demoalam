@@ -132,8 +132,8 @@ export const enTranslations = {
         },
         money: {
           title: 'Fix a money problem',
-          subtitle: 'Budget, loans, salary, bank accounts, and emergency funds.',
-          start: 'Start with the money issue that could cost you the most if ignored.',
+          subtitle: 'Missing money, wrong-send, salary, loans, and emergency funds.',
+          start: 'Start with the money issue that could get worse fastest: missing e-wallet money, wrong-send transfers, salary problems, loans, or no backup fund.',
         },
         documents: {
           title: 'Prepare important documents',

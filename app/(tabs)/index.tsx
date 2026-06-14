@@ -174,6 +174,8 @@ export default function HomeScreen() {
       audiences: ['life'],
       icon: 'wallet-outline',
       slugs: [
+        'gcash-maya-account-recovery-first-hour',
+        'wrong-send-gcash-checklist',
         'payday-budget-simple-split',
         'emergency-fund-starter-checklist',
         'loan-red-flags-before-borrowing',

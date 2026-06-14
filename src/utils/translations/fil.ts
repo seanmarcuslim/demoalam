@@ -132,8 +132,8 @@ export const filTranslations = {
         },
         money: {
           title: 'Ayusin ang problemang pera',
-          subtitle: 'Budget, utang, sahod, bank account, at emergency fund.',
-          start: 'Unahin ang money issue na puwedeng lumaki kapag pinabayaan.',
+          subtitle: 'Nawalang pera, wrong-send, sahod, utang, at emergency fund.',
+          start: 'Unahin ang money issue na pinakamabilis lumala: nawawalang e-wallet money, wrong-send, sahod, utang, o walang backup fund.',
         },
         documents: {
           title: 'Ihanda ang importanteng documents',

@@ -7,10 +7,12 @@ interface CourseFitProgressStore {
   courseFitStarted: boolean
   courseFitCompleted: boolean
   courseFitGuideViewed: boolean
+  courseFitNextMoveDismissed: boolean
   markCourseFitOpened: () => void
   markCourseFitStarted: () => void
   markCourseFitCompleted: () => void
   markCourseFitGuideViewed: () => void
+  dismissCourseFitNextMove: () => void
   resetCourseFitProgress: () => void
 }
 
@@ -21,16 +23,19 @@ export const useCourseFitProgressStore = create<CourseFitProgressStore>()(
       courseFitStarted: false,
       courseFitCompleted: false,
       courseFitGuideViewed: false,
+      courseFitNextMoveDismissed: false,
 
       markCourseFitOpened: () =>
         set({
           courseFitOpened: true,
+          courseFitNextMoveDismissed: false,
         }),
 
       markCourseFitStarted: () =>
         set({
           courseFitOpened: true,
           courseFitStarted: true,
+          courseFitNextMoveDismissed: false,
         }),
 
       markCourseFitCompleted: () =>
@@ -38,12 +43,19 @@ export const useCourseFitProgressStore = create<CourseFitProgressStore>()(
           courseFitOpened: true,
           courseFitStarted: true,
           courseFitCompleted: true,
+          courseFitNextMoveDismissed: false,
         }),
 
       markCourseFitGuideViewed: () =>
         set({
           courseFitOpened: true,
           courseFitGuideViewed: true,
+          courseFitNextMoveDismissed: false,
+        }),
+
+      dismissCourseFitNextMove: () =>
+        set({
+          courseFitNextMoveDismissed: true,
         }),
 
       resetCourseFitProgress: () =>
@@ -52,6 +64,7 @@ export const useCourseFitProgressStore = create<CourseFitProgressStore>()(
           courseFitStarted: false,
           courseFitCompleted: false,
           courseFitGuideViewed: false,
+          courseFitNextMoveDismissed: false,
         }),
     }),
     {

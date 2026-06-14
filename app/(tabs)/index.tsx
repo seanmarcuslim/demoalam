@@ -65,8 +65,14 @@ export default function HomeScreen() {
   const courseFitStarted = useCourseFitProgressStore((state) => state.courseFitStarted)
   const courseFitCompleted = useCourseFitProgressStore((state) => state.courseFitCompleted)
   const courseFitGuideViewed = useCourseFitProgressStore((state) => state.courseFitGuideViewed)
+  const courseFitNextMoveDismissed = useCourseFitProgressStore(
+    (state) => state.courseFitNextMoveDismissed
+  )
   const markCourseFitOpened = useCourseFitProgressStore(
     (state) => state.markCourseFitOpened
+  )
+  const dismissCourseFitNextMove = useCourseFitProgressStore(
+    (state) => state.dismissCourseFitNextMove
   )
 
   const recentGuides = recentIds
@@ -374,10 +380,11 @@ export default function HomeScreen() {
 
   const renderYourNextMove = () => {
     const shouldShow =
-      courseFitOpened ||
-      courseFitStarted ||
-      courseFitCompleted ||
-      courseFitGuideViewed
+      !courseFitNextMoveDismissed &&
+      (courseFitOpened ||
+        courseFitStarted ||
+        courseFitCompleted ||
+        courseFitGuideViewed)
 
     if (!shouldShow) {
       return null
@@ -417,11 +424,24 @@ export default function HomeScreen() {
             </SafeText>
           </View>
 
-          <AppButton
-            title={language === 'fil' ? 'Magpatuloy' : 'Continue'}
-            onPress={openCourseFitNextMove}
-            style={styles.nextMoveAction}
-          />
+          <View style={styles.nextMoveActions}>
+            <TouchableOpacity
+              activeOpacity={0.82}
+              style={styles.nextMoveSecondaryAction}
+              onPress={dismissCourseFitNextMove}
+              accessibilityRole="button"
+            >
+              <SafeText variant="label" color="primary" weight="700">
+                {language === 'fil' ? 'Mamaya' : 'Not now'}
+              </SafeText>
+            </TouchableOpacity>
+
+            <AppButton
+              title={language === 'fil' ? 'Magpatuloy' : 'Continue'}
+              onPress={openCourseFitNextMove}
+              style={styles.nextMoveAction}
+            />
+          </View>
         </TouchableOpacity>
       </View>
     )
@@ -710,7 +730,19 @@ const createStyles = (colors: ThemeColors) =>
     },
 
     nextMoveAction: {
-      minWidth: 112,
+      minWidth: 104,
+    },
+
+    nextMoveActions: {
+      alignItems: 'flex-end',
+      gap: spacing.xs,
+    },
+
+    nextMoveSecondaryAction: {
+      minHeight: 36,
+      paddingHorizontal: spacing.sm,
+      alignItems: 'center',
+      justifyContent: 'center',
     },
 
     sectionHeader: {

@@ -196,6 +196,8 @@ export default function HomeScreen() {
         'national-id-problems-checklist',
         'nbi-clearance-first-timers',
         'philhealth-pagibig-tin-basics',
+        'first-job-requirements',
+        'bank-account-first-time',
       ],
       title: labels.guidancePaths.documents.title,
       subtitle: labels.guidancePaths.documents.subtitle,

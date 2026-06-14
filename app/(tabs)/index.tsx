@@ -333,7 +333,11 @@ export default function HomeScreen() {
   const openGuidanceSearch = (path: GuidancePath) => {
     router.push({
       pathname: '/search',
-      params: { q: path.searchQuery },
+      params: {
+        q: path.searchQuery,
+        guidanceTitle: path.title,
+        guidanceSlugs: path.slugs.join(','),
+      },
     })
   }
 
@@ -431,6 +435,12 @@ export default function HomeScreen() {
                   .filter((guide): guide is Guide => Boolean(guide))
                 const previewGuides = pathGuides.slice(0, GUIDANCE_PREVIEW_LIMIT)
                 const firstGuide = pathGuides[0]
+                const seeAllGuideLabel =
+                  pathGuides.length > previewGuides.length
+                    ? language === 'fil'
+                      ? `Tingnan lahat (${pathGuides.length})`
+                      : `See all ${pathGuides.length} guides`
+                    : labels.guidanceSeeAllGuides
 
                 return (
                   <TouchableOpacity
@@ -504,7 +514,7 @@ export default function HomeScreen() {
                           accessibilityRole="button"
                         >
                           <SafeText variant="caption" color="primary" weight="700">
-                            {labels.guidanceSeeAllGuides}
+                            {seeAllGuideLabel}
                           </SafeText>
                           <Ionicons name="arrow-forward" size={14} color={colors.primary} />
                         </TouchableOpacity>

@@ -9,6 +9,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { router, useLocalSearchParams } from 'expo-router'
 import { Ionicons } from '@expo/vector-icons'
 import { useSearch } from '../../src/hooks/useSearch'
+import { useGuides } from '../../src/hooks/useGuides'
 import { useSavedStore } from '../../src/stores/savedStore'
 import { useSearchStore } from '../../src/stores/searchStore'
 import { useSettingsStore } from '../../src/stores/settingsStore'
@@ -46,7 +47,11 @@ import {
 } from '../../src/lib/decisionFlows/courseFitFlow'
 
 export default function SearchScreen() {
-  const params = useLocalSearchParams<{ q?: string | string[] }>()
+  const params = useLocalSearchParams<{
+    q?: string | string[]
+    guidanceTitle?: string | string[]
+    guidanceSlugs?: string | string[]
+  }>()
   const {
     searchTerm,
     debouncedTerm,
@@ -56,6 +61,7 @@ export default function SearchScreen() {
     isError,
     refetch,
   } = useSearch()
+  const { data: allGuides = [] } = useGuides()
 
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
   const [committedSearchTerm, setCommittedSearchTerm] = useState('')
@@ -81,6 +87,34 @@ export default function SearchScreen() {
   const styles = createStyles(colors)
   const labels = t.searchScreen
   const routeQuery = Array.isArray(params.q) ? params.q[0] : params.q
+  const guidanceTitle = Array.isArray(params.guidanceTitle)
+    ? params.guidanceTitle[0]
+    : params.guidanceTitle
+  const guidanceSlugParam = Array.isArray(params.guidanceSlugs)
+    ? params.guidanceSlugs[0]
+    : params.guidanceSlugs
+  const guidanceSlugs = useMemo(
+    () =>
+      guidanceSlugParam
+        ? guidanceSlugParam
+            .split(',')
+            .map((slug) => slug.trim())
+            .filter(Boolean)
+        : [],
+    [guidanceSlugParam]
+  )
+  const guidanceSlugSet = useMemo(
+    () => new Set(guidanceSlugs),
+    [guidanceSlugs]
+  )
+  const guidanceGuides = useMemo(
+    () =>
+      guidanceSlugs
+        .map((slug) => allGuides.find((guide) => guide.slug === slug))
+        .filter((guide): guide is NonNullable<typeof guide> => Boolean(guide)),
+    [allGuides, guidanceSlugs]
+  )
+  const hasGuidanceContext = Boolean(guidanceTitle && guidanceGuides.length > 0)
 
   const showEmptySearch = searchTerm.trim().length === 0
   const resultCategoryIds = useMemo(
@@ -94,6 +128,9 @@ export default function SearchScreen() {
   const filteredResults = selectedCategory
     ? results.filter((guide) => guide.category_id === selectedCategory)
     : results
+  const visibleResults = hasGuidanceContext
+    ? filteredResults.filter((guide) => !guidanceSlugSet.has(guide.slug))
+    : filteredResults
 
   const hasFilteredResults = filteredResults.length > 0
 
@@ -409,13 +446,15 @@ export default function SearchScreen() {
     return (
       <View style={styles.resultsHeader}>
         <SafeText variant="h3" weight="700">
-          {labels.results}
+          {hasGuidanceContext
+            ? `${labels.guidanceResultsFor} ${guidanceTitle}`
+            : labels.results}
         </SafeText>
 
         <SafeText variant="caption" color="muted">
           {isLoading
             ? labels.searching
-            : `${filteredResults.length} ${labels.found}`}
+            : `${visibleResults.length + (hasGuidanceContext ? guidanceGuides.length : 0)} ${labels.found}`}
         </SafeText>
 
         <View style={styles.queryPill}>
@@ -431,7 +470,40 @@ export default function SearchScreen() {
           </SafeText>
         </View>
 
-        {renderQuickChecks()}
+        {hasGuidanceContext ? (
+          <View style={styles.guidanceContextBlock}>
+            <SafeText variant="bodyMd" color="muted" style={styles.cardHint}>
+              {labels.guidanceResultsSubtitle}
+            </SafeText>
+
+            <View style={styles.guidanceContextList}>
+              {guidanceGuides.map((guide) => (
+                <GuideCard
+                  key={guide.id}
+                  guide={guide}
+                  language={language}
+                  isSaved={isSaved(guide.id)}
+                  onPress={() => openGuide(guide.id)}
+                  onSave={() => toggleSave(guide)}
+                  compact
+                />
+              ))}
+            </View>
+
+            {visibleResults.length > 0 ? (
+              <SafeText
+                variant="caption"
+                color="muted"
+                weight="700"
+                style={styles.relatedResultsLabel}
+              >
+                {labels.relatedSearchResults}
+              </SafeText>
+            ) : null}
+          </View>
+        ) : (
+          renderQuickChecks()
+        )}
 
         {results.length > 0 ? (
           <View style={styles.filterRow}>
@@ -533,7 +605,7 @@ export default function SearchScreen() {
       </View>
 
       <FlatList
-        data={showEmptySearch || showNoResults || isError ? [] : filteredResults}
+        data={showEmptySearch || showNoResults || isError ? [] : visibleResults}
         keyExtractor={(item) => item.id}
         ListHeaderComponent={renderListHeader}
         ListEmptyComponent={
@@ -787,6 +859,21 @@ const createStyles = (colors: ThemeColors) =>
       flexDirection: 'row',
       alignItems: 'center',
       gap: spacing.xs,
+    },
+
+    guidanceContextBlock: {
+      marginTop: spacing.md,
+    },
+
+    guidanceContextList: {
+      marginTop: spacing.md,
+    },
+
+    relatedResultsLabel: {
+      marginTop: spacing.sm,
+      marginBottom: spacing.sm,
+      textTransform: 'uppercase',
+      letterSpacing: 0,
     },
 
     filterRow: {

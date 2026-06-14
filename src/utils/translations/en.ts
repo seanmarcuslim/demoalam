@@ -147,8 +147,8 @@ export const enTranslations = {
         },
         study: {
           title: 'Study smarter',
-          subtitle: 'Find support before school pressure builds.',
-          start: 'Start by sorting what is urgent, what matters most, and what is blocking you this week.',
+          subtitle: 'Catch up without guessing what to study first.',
+          start: 'Start with a small reset plan: list deadlines, choose the highest-risk task, then fix the blocker that keeps disrupting school.',
         },
         workLife: {
           title: 'Understand work life',

@@ -50,6 +50,11 @@ export default function HomeScreen() {
   const labels = t.homeScreen
   const styles = createStyles(colors)
   const [selectedGuidanceId, setSelectedGuidanceId] = useState<string | null>(null)
+  const [collapsedGuidanceZones, setCollapsedGuidanceZones] = useState({
+    today: false,
+    future: false,
+  })
+  const [nextMoveCollapsed, setNextMoveCollapsed] = useState(false)
 
   const {
     data: guides = [],
@@ -283,112 +288,138 @@ export default function HomeScreen() {
     zone: GuidancePath['zone'],
     title: string,
     subtitle: string
-  ) => (
-    <View style={styles.guidanceZone}>
-      <View style={styles.sectionHeader}>
-        <SafeText variant="h3" weight="700">
-          {title}
-        </SafeText>
-        <SafeText variant="caption" color="muted" style={styles.sectionSubtitle}>
-          {subtitle}
-        </SafeText>
-      </View>
+  ) => {
+    const isCollapsed = collapsedGuidanceZones[zone]
 
-      <View style={styles.guidanceGrid}>
-        {guidancePaths
-          .filter((path) => path.zone === zone)
-          .map((path) => {
-            const isSelected = selectedGuidanceId === path.id
-            const pathGuides = path.slugs
-              .map((slug) => guides.find((guide) => guide.slug === slug))
-              .filter((guide): guide is Guide => Boolean(guide))
-            const firstGuide = pathGuides[0]
+    return (
+      <View style={styles.guidanceZone}>
+        <TouchableOpacity
+          activeOpacity={0.84}
+          style={styles.collapsibleHeader}
+          onPress={() =>
+            setCollapsedGuidanceZones((current) => ({
+              ...current,
+              [zone]: !current[zone],
+            }))
+          }
+          accessibilityRole="button"
+        >
+          <View style={styles.collapsibleHeaderCopy}>
+            <SafeText variant="h3" weight="700">
+              {title}
+            </SafeText>
+            <SafeText variant="caption" color="muted" style={styles.sectionSubtitle}>
+              {subtitle}
+            </SafeText>
+          </View>
 
-            return (
-              <TouchableOpacity
-                key={path.id}
-                activeOpacity={0.86}
-                style={[
-                  styles.guidanceCard,
-                  isSelected ? styles.guidanceCardSelected : null,
-                ]}
-                onPress={() => setSelectedGuidanceId(isSelected ? null : path.id)}
-              >
-                <View style={styles.guidanceIcon}>
-                  <Ionicons name={path.icon} size={20} color={colors.primary} />
-                </View>
-                <SafeText variant="body" weight="700" numberOfLines={2}>
-                  {path.title}
-                </SafeText>
-                <SafeText
-                  variant="caption"
-                  color="muted"
-                  style={styles.guidanceCardText}
-                  numberOfLines={3}
-                >
-                  {path.subtitle}
-                </SafeText>
+          <View style={styles.collapseButton}>
+            <Ionicons
+              name={isCollapsed ? 'chevron-down' : 'chevron-up'}
+              size={18}
+              color={colors.accent}
+            />
+          </View>
+        </TouchableOpacity>
 
-                {isSelected ? (
-                  <View style={styles.guidanceInlinePanel}>
-                    <SafeText variant="caption" color="primary" weight="700">
-                      {labels.guidanceStartHere}
+        {!isCollapsed ? (
+          <View style={styles.guidanceGrid}>
+            {guidancePaths
+              .filter((path) => path.zone === zone)
+              .map((path) => {
+                const isSelected = selectedGuidanceId === path.id
+                const pathGuides = path.slugs
+                  .map((slug) => guides.find((guide) => guide.slug === slug))
+                  .filter((guide): guide is Guide => Boolean(guide))
+                const firstGuide = pathGuides[0]
+
+                return (
+                  <TouchableOpacity
+                    key={path.id}
+                    activeOpacity={0.86}
+                    style={[
+                      styles.guidanceCard,
+                      isSelected ? styles.guidanceCardSelected : null,
+                    ]}
+                    onPress={() => setSelectedGuidanceId(isSelected ? null : path.id)}
+                  >
+                    <View style={styles.guidanceIcon}>
+                      <Ionicons name={path.icon} size={20} color={colors.primary} />
+                    </View>
+                    <SafeText variant="body" weight="700" numberOfLines={2}>
+                      {path.title}
                     </SafeText>
                     <SafeText
                       variant="caption"
                       color="muted"
-                      style={styles.guidanceInlineText}
-                      numberOfLines={4}
+                      style={styles.guidanceCardText}
+                      numberOfLines={3}
                     >
-                      {path.start}
+                      {path.subtitle}
                     </SafeText>
-                    <View style={styles.guidanceInlineChips}>
-                      {pathGuides.map((guide) => (
-                        <TouchableOpacity
-                          key={guide.id}
-                          activeOpacity={0.82}
-                          style={styles.guidanceGuideChip}
-                          onPress={() => openGuide(guide.id)}
+
+                    {isSelected ? (
+                      <View style={styles.guidanceInlinePanel}>
+                        <SafeText variant="caption" color="primary" weight="700">
+                          {labels.guidanceStartHere}
+                        </SafeText>
+                        <SafeText
+                          variant="caption"
+                          color="muted"
+                          style={styles.guidanceInlineText}
+                          numberOfLines={4}
                         >
-                          <SafeText variant="caption" color="primary" weight="700" numberOfLines={1}>
-                            {getTitle(guide)}
-                          </SafeText>
-                        </TouchableOpacity>
-                      ))}
-                    </View>
-                    <AppButton
-                      title={
-                        path.flowPath
-                          ? language === 'fil'
-                            ? 'Simulan ang check'
-                            : 'Start quick check'
-                          : firstGuide
-                            ? labels.guidanceOpenFirstGuide
-                            : labels.guidanceOpenSearch
-                      }
-                      onPress={() => {
-                        if (path.flowPath) {
-                          openGuidanceFlow(path)
-                          return
-                        }
+                          {path.start}
+                        </SafeText>
+                        <View style={styles.guidanceInlineChips}>
+                          {pathGuides.map((guide) => (
+                            <TouchableOpacity
+                              key={guide.id}
+                              activeOpacity={0.82}
+                              style={styles.guidanceGuideChip}
+                              onPress={() => openGuide(guide.id)}
+                            >
+                              <SafeText variant="caption" color="primary" weight="700" numberOfLines={1}>
+                                {getTitle(guide)}
+                              </SafeText>
+                            </TouchableOpacity>
+                          ))}
+                        </View>
+                        <AppButton
+                          title={
+                            path.flowPath
+                              ? language === 'fil'
+                                ? 'Simulan ang check'
+                                : 'Start quick check'
+                              : firstGuide
+                                ? labels.guidanceOpenFirstGuide
+                                : labels.guidanceOpenSearch
+                          }
+                          onPress={() => {
+                            if (path.flowPath) {
+                              openGuidanceFlow(path)
+                              return
+                            }
 
-                        if (firstGuide) {
-                          openGuide(firstGuide.id)
-                          return
-                        }
+                            if (firstGuide) {
+                              openGuide(firstGuide.id)
+                              return
+                            }
 
-                        openSearch()
-                      }}
-                      style={styles.guidanceInlineAction}
-                    />
-                  </View>
-                ) : null}
-              </TouchableOpacity>
-            )
-          })}
+                            openSearch()
+                          }}
+                          style={styles.guidanceInlineAction}
+                        />
+                      </View>
+                    ) : null}
+                  </TouchableOpacity>
+                )
+              })}
+          </View>
+        ) : null}
       </View>
-    </View>
-  )
+    )
+  }
 
   const renderYourNextMove = () => {
     const shouldShow =
@@ -403,6 +434,34 @@ export default function HomeScreen() {
     }
 
     const isGuideStep = courseFitCompleted || courseFitGuideViewed
+
+    if (nextMoveCollapsed) {
+      return (
+        <View style={styles.nextMoveSection}>
+          <TouchableOpacity
+            activeOpacity={0.86}
+            style={[styles.nextMoveCard, styles.nextMoveCompactCard]}
+            onPress={() => setNextMoveCollapsed(false)}
+            accessibilityRole="button"
+          >
+            <View style={styles.nextMoveIcon}>
+              <Ionicons name="compass-outline" size={20} color={colors.accent} />
+            </View>
+
+            <View style={styles.nextMoveCopy}>
+              <SafeText variant="caption" color="primary" weight="700">
+                {language === 'fil' ? 'Susunod Mong Hakbang' : 'Your Next Move'}
+              </SafeText>
+              <SafeText variant="body" weight="700" style={styles.nextMoveTitle}>
+                {language === 'fil' ? 'I-tap para buksan ulit.' : 'Tap to expand again.'}
+              </SafeText>
+            </View>
+
+            <Ionicons name="chevron-down" size={18} color={colors.accent} />
+          </TouchableOpacity>
+        </View>
+      )
+    }
 
     return (
       <View style={styles.nextMoveSection}>
@@ -440,6 +499,17 @@ export default function HomeScreen() {
             <TouchableOpacity
               activeOpacity={0.82}
               style={styles.nextMoveSecondaryAction}
+              onPress={() => setNextMoveCollapsed(true)}
+              accessibilityRole="button"
+            >
+              <SafeText variant="label" color="primary" weight="700">
+                {language === 'fil' ? 'I-minimize' : 'Minimize'}
+              </SafeText>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              activeOpacity={0.82}
+              style={styles.nextMoveSecondaryAction}
               onPress={dismissCourseFitNextMove}
               accessibilityRole="button"
             >
@@ -463,6 +533,8 @@ export default function HomeScreen() {
     <View>
       <View style={styles.hero}>
         <View style={styles.heroGlow} />
+        <View style={styles.heroGoldGlow} />
+        <View style={styles.heroAccentRail} />
 
         <View style={styles.heroTop}>
           <View>
@@ -475,7 +547,7 @@ export default function HomeScreen() {
           </View>
 
           <View style={styles.logoMark}>
-            <Ionicons name="bulb-outline" size={25} color={colors.primary} />
+            <Ionicons name="bulb-outline" size={25} color={colors.accent} />
           </View>
         </View>
 
@@ -633,7 +705,7 @@ const createStyles = (colors: ThemeColors) =>
     },
 
     hero: {
-      backgroundColor: colors.primary,
+      backgroundColor: colors.primaryDark,
       paddingHorizontal: spacing.lg,
       paddingTop: spacing.xxl,
       paddingBottom: spacing.lg,
@@ -650,6 +722,26 @@ const createStyles = (colors: ThemeColors) =>
       height: 152,
       borderRadius: 76,
       backgroundColor: 'rgba(255,255,255,0.13)',
+    },
+
+    heroGoldGlow: {
+      position: 'absolute',
+      right: 26,
+      bottom: -58,
+      width: 150,
+      height: 150,
+      borderRadius: 75,
+      backgroundColor: `${colors.accent}2B`,
+    },
+
+    heroAccentRail: {
+      position: 'absolute',
+      left: 0,
+      bottom: 0,
+      width: '100%',
+      height: 4,
+      backgroundColor: colors.accent,
+      opacity: 0.78,
     },
 
     heroTop: {
@@ -678,7 +770,7 @@ const createStyles = (colors: ThemeColors) =>
       width: 48,
       height: 48,
       borderRadius: 14,
-      backgroundColor: colors.surface,
+      backgroundColor: colors.accentLight,
       alignItems: 'center',
       justifyContent: 'center',
     },
@@ -711,8 +803,8 @@ const createStyles = (colors: ThemeColors) =>
     nextMoveCard: {
       borderRadius: 16,
       borderWidth: 1,
-      borderColor: `${colors.primary}45`,
-      backgroundColor: `${colors.primary}14`,
+      borderColor: `${colors.accent}55`,
+      backgroundColor: colors.accentLight,
       padding: spacing.md,
       flexDirection: 'row',
       alignItems: 'center',
@@ -723,7 +815,7 @@ const createStyles = (colors: ThemeColors) =>
       width: 40,
       height: 40,
       borderRadius: 14,
-      backgroundColor: `${colors.primary}18`,
+      backgroundColor: `${colors.accent}22`,
       alignItems: 'center',
       justifyContent: 'center',
     },
@@ -750,6 +842,10 @@ const createStyles = (colors: ThemeColors) =>
       gap: spacing.xs,
     },
 
+    nextMoveCompactCard: {
+      minHeight: 72,
+    },
+
     nextMoveSecondaryAction: {
       minHeight: 36,
       paddingHorizontal: spacing.sm,
@@ -759,6 +855,31 @@ const createStyles = (colors: ThemeColors) =>
 
     sectionHeader: {
       marginBottom: spacing.md,
+    },
+
+    collapsibleHeader: {
+      marginBottom: spacing.md,
+      minHeight: 48,
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      gap: spacing.md,
+    },
+
+    collapsibleHeaderCopy: {
+      flex: 1,
+      minWidth: 0,
+    },
+
+    collapseButton: {
+      width: 36,
+      height: 36,
+      borderRadius: 18,
+      borderWidth: 1,
+      borderColor: `${colors.accent}45`,
+      backgroundColor: colors.accentLight,
+      alignItems: 'center',
+      justifyContent: 'center',
     },
 
     sectionSubtitle: {
@@ -790,8 +911,8 @@ const createStyles = (colors: ThemeColors) =>
     guidanceCardSelected: {
       flexBasis: '100%',
       maxWidth: '100%',
-      borderColor: colors.primary,
-      backgroundColor: `${colors.primary}18`,
+      borderColor: colors.accent,
+      backgroundColor: colors.accentLight,
     },
 
     guidanceIcon: {
@@ -830,7 +951,7 @@ const createStyles = (colors: ThemeColors) =>
       borderRadius: 999,
       backgroundColor: colors.surface,
       borderWidth: 1,
-      borderColor: `${colors.primary}35`,
+      borderColor: `${colors.accent}45`,
       paddingHorizontal: spacing.sm,
       paddingVertical: spacing.xs,
     },

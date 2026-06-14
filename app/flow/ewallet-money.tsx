@@ -162,6 +162,12 @@ export default function EWalletMoneyFlowScreen() {
         {getEWalletLocalizedValue(eWalletMoneyFlow.question, 'question', language)}
       </SafeText>
 
+      <SafeText variant="caption" color="muted" style={styles.navigationHint}>
+        {language === 'fil'
+          ? 'Pumili ng sagot para makita ang unang hakbang.'
+          : 'Tap an answer to see the first step.'}
+      </SafeText>
+
       <View style={styles.optionList}>
         {eWalletMoneyFlow.question.options.map((option) => (
           <TouchableOpacity
@@ -459,6 +465,10 @@ const createStyles = (colors: ThemeColors) =>
     },
 
     questionText: {
+      marginBottom: spacing.sm,
+    },
+
+    navigationHint: {
       marginBottom: spacing.lg,
     },
 

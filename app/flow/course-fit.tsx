@@ -208,6 +208,12 @@ export default function CourseFitFlowScreen() {
           {getCourseFitLocalizedValue(currentQuestion, 'question', language)}
         </SafeText>
 
+        <SafeText variant="caption" color="muted" style={styles.navigationHint}>
+          {language === 'fil'
+            ? 'Pumili ng sagot para magpatuloy.'
+            : 'Tap an answer to continue.'}
+        </SafeText>
+
         <View style={styles.optionList}>
           {currentQuestion.options.map((option) => (
             <TouchableOpacity
@@ -506,6 +512,10 @@ const createStyles = (colors: ThemeColors) =>
     },
 
     questionText: {
+      marginBottom: spacing.sm,
+    },
+
+    navigationHint: {
       marginBottom: spacing.lg,
     },
 

@@ -11,14 +11,10 @@ import {
 import { router } from 'expo-router'
 import { Ionicons } from '@expo/vector-icons'
 import {
-  useFeaturedGuides,
   useGuides,
-  useTrendingGuides,
   useUrgentGuides,
 } from '../../src/hooks/useGuides'
-import { useCategories } from '../../src/hooks/useCategories'
 import { useHistoryStore } from '../../src/stores/historyStore'
-import { useSavedStore } from '../../src/stores/savedStore'
 import { useSettingsStore } from '../../src/stores/settingsStore'
 import { useCourseFitProgressStore } from '../../src/stores/courseFitProgressStore'
 import { translations } from '../../src/utils/translations'
@@ -26,17 +22,11 @@ import { useTheme } from '../../src/hooks/useTheme'
 import { spacing } from '../../src/theme/spacing'
 import type { ThemeColors } from '../../src/theme/colors'
 import SafeText from '../../src/components/ui/SafeText'
-import Badge from '../../src/components/ui/Badge'
 import AppButton from '../../src/components/ui/AppButton'
-import GuideCard from '../../src/components/guide/GuideCard'
-import HomeCuratedSection from '../../src/components/home/HomeCuratedSection'
 import { Guide } from '../../src/types/guide'
 import LoadingFeed from '../../src/components/layout/LoadingFeed'
-import { getCategoryAccent } from '../../src/lib/categoryVisuals'
-import { isGovernmentAidGuide } from '../../src/lib/guideCollections'
 import {
   getGuideCategoryName,
-  getGuideTagline,
   getGuideTitle,
 } from '../../src/lib/guideDisplay'
 import { analyticsService } from '../../src/services/analyticsService'
@@ -68,14 +58,9 @@ export default function HomeScreen() {
     refetch,
     isRefetching,
   } = useGuides()
-  const { data: featured = [] } = useFeaturedGuides()
   const { data: featuredBundles = [] } = useFeaturedGuideBundles()
   const { data: urgent = [] } = useUrgentGuides()
-  const { data: trending = [] } = useTrendingGuides()
-  const { data: categories = [] } = useCategories()
   const { recentIds, cachedGuides } = useHistoryStore()
-  const toggleSave = useSavedStore((state) => state.toggleSave)
-  const isSaved = useSavedStore((state) => state.isSaved)
   const courseFitOpened = useCourseFitProgressStore((state) => state.courseFitOpened)
   const courseFitStarted = useCourseFitProgressStore((state) => state.courseFitStarted)
   const courseFitCompleted = useCourseFitProgressStore((state) => state.courseFitCompleted)
@@ -89,32 +74,11 @@ export default function HomeScreen() {
     .filter(Boolean)
     .slice(0, 5)
 
-  const featuredGuide = featured[0]
-  const trendingGuides = (trending.length > 0 ? trending : guides).slice(0, 4)
-  const visibleGuideCount = Math.max(guides.length, trendingGuides.length, recentGuides.length)
+  const visibleGuideCount = Math.max(guides.length, recentGuides.length)
   const visibleAlertCount = Math.max(
     urgent.length,
     guides.filter((guide) => guide.is_urgent).length
   )
-  const firstTimerGuides = guides
-    .filter((guide) =>
-      guide.tags?.some((tag) =>
-        ['first job', 'first-time', 'valid id', 'requirements'].some((needle) =>
-          tag.toLowerCase().includes(needle)
-        )
-      )
-    )
-    .slice(0, 4)
-  const moneyGuides = guides
-    .filter((guide) => guide.category?.slug === 'money')
-    .slice(0, 4)
-  const governmentAidGuides = guides
-    .filter(isGovernmentAidGuide)
-    .slice(0, 8)
-  const governmentGuides = guides
-    .filter((guide) => guide.category?.slug === 'gov')
-    .slice(0, 4)
-
   const guidancePaths: GuidancePath[] = [
     {
       id: 'scam',
@@ -219,13 +183,6 @@ export default function HomeScreen() {
     })
   }
 
-  const openCategory = (id: string, name: string) => {
-    router.push({
-      pathname: '/category/[id]',
-      params: { id, name },
-    })
-  }
-
   const openSearch = () => {
     router.push('/search')
   }
@@ -272,28 +229,8 @@ export default function HomeScreen() {
   const getTitle = (guide: Guide) =>
     getGuideTitle(guide, language)
 
-  const getTagline = (guide: Guide) =>
-    getGuideTagline(guide, language)
-
   const getCategoryName = (category: NonNullable<Guide['category']>) =>
     getGuideCategoryName(category, language)
-
-  const renderCuratedSection = (props: {
-    title: string
-    subtitle: string
-    items: Guide[]
-    icon?: string
-    priority?: boolean
-  }) => (
-    <HomeCuratedSection
-      {...props}
-      language={language}
-      priorityPillLabel={labels.priorityPill}
-      isSaved={isSaved}
-      onOpenGuide={openGuide}
-      onSaveGuide={toggleSave}
-    />
-  )
 
   const renderGuidanceZone = (
     zone: GuidancePath['zone'],
@@ -502,104 +439,18 @@ export default function HomeScreen() {
         {renderGuidanceZone('future', labels.guidanceFutureTitle, labels.guidanceFutureSubtitle)}
       </View>
 
-      <View style={styles.section}>
-        <View style={styles.sectionHeader}>
-          <SafeText variant="h3" weight="700">
-            {t.categories}
-          </SafeText>
-          <SafeText variant="caption" color="muted">
-            {labels.browseTopics}
-          </SafeText>
-        </View>
-
-        <ScrollView
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          contentContainerStyle={styles.categoryRow}
-        >
-          {categories.map((cat) => {
-            const accent = getCategoryAccent(cat, colors.primary)
-
-            return (
-              <TouchableOpacity
-                key={cat.id}
-                activeOpacity={0.86}
-                style={[
-                  styles.categoryChip,
-                  {
-                    borderColor: `${accent}35`,
-                    backgroundColor: `${accent}12`,
-                  },
-                ]}
-                onPress={() => openCategory(cat.id, getCategoryName(cat))}
-              >
-                <SafeText style={styles.categoryIcon}>{cat.icon}</SafeText>
-                <SafeText variant="label" style={{ color: accent }}>
-                  {getCategoryName(cat)}
-                </SafeText>
-              </TouchableOpacity>
-            )
-          })}
-        </ScrollView>
-      </View>
-{featuredBundles.length > 0 ? (
-  <View style={styles.section}>
-    <SafeText variant="h3" weight="700">
-      {labels.preparednessTitle}
-    </SafeText>
-
-    <SafeText variant="caption" color="muted" style={styles.sectionSubtitle}>
-      {labels.preparednessSubtitle}
-    </SafeText>
-
-    {featuredBundles.map((bundle) => (
-      <BundleCard key={bundle.id} bundle={bundle} />
-    ))}
-  </View>
-) : null}
-      {featuredGuide ? (
-        <TouchableOpacity
-          activeOpacity={0.88}
-          style={styles.featured}
-          onPress={() => openGuide(featuredGuide.id)}
-        >
-          <View style={styles.featuredCopy}>
-            <Badge label={t.featured} color={colors.accent} />
-            <SafeText variant="h2" color="surface" style={styles.featuredTitle} numberOfLines={2}>
-              {getTitle(featuredGuide)}
-            </SafeText>
-            <SafeText variant="bodyMd" color="surface" style={styles.featuredText} numberOfLines={2}>
-              {getTagline(featuredGuide)}
-            </SafeText>
-          </View>
-
-          <View style={styles.featuredAction}>
-            <Ionicons name="arrow-forward" size={20} color={colors.primary} />
-          </View>
-        </TouchableOpacity>
-      ) : null}
-
-      {urgent.length > 0 ? (
+      {featuredBundles.length > 0 ? (
         <View style={styles.section}>
-          <View style={styles.sectionHeader}>
-            <SafeText variant="h3" weight="700">
-              {t.scamAlerts}
-            </SafeText>
-            <SafeText variant="caption" color="muted">
-              {labels.urgentSubtitle}
-            </SafeText>
-          </View>
+          <SafeText variant="h3" weight="700">
+            {labels.preparednessTitle}
+          </SafeText>
 
-          {urgent.map((guide) => (
-            <GuideCard
-              key={guide.id}
-              guide={guide}
-              language={language}
-              isSaved={isSaved(guide.id)}
-              onPress={() => openGuide(guide.id)}
-              onSave={() => toggleSave(guide)}
-              compact
-            />
+          <SafeText variant="caption" color="muted" style={styles.sectionSubtitle}>
+            {labels.preparednessSubtitle}
+          </SafeText>
+
+          {featuredBundles.map((bundle) => (
+            <BundleCard key={bundle.id} bundle={bundle} />
           ))}
         </View>
       ) : null}
@@ -631,45 +482,6 @@ export default function HomeScreen() {
           </ScrollView>
         </View>
       ) : null}
-
-      {renderCuratedSection({
-        title: labels.dswdAidTitle,
-        subtitle: labels.dswdAidSubtitle,
-        items: governmentAidGuides,
-        icon: '',
-        priority: true,
-      })}
-
-      {renderCuratedSection({
-        title: labels.trendingTitle,
-        subtitle:
-          trending.length > 0
-            ? labels.trendingSubtitle
-            : labels.trendingFallbackSubtitle,
-        items: trendingGuides,
-        icon: '',
-      })}
-
-      {renderCuratedSection({
-        title: labels.firstTimersTitle,
-        subtitle: labels.firstTimersSubtitle,
-        items: firstTimerGuides,
-        icon: '',
-      })}
-
-      {renderCuratedSection({
-        title: labels.moneyTitle,
-        subtitle: labels.moneySubtitle,
-        items: moneyGuides,
-        icon: '',
-      })}
-
-      {renderCuratedSection({
-        title: labels.governmentTitle,
-        subtitle: labels.governmentSubtitle,
-        items: governmentGuides,
-        icon: '',
-      })}
 
       <View style={styles.browseAllPanel}>
         <SafeText variant="h3" weight="700">
@@ -964,67 +776,6 @@ const createStyles = (colors: ThemeColors) =>
     browseAllAction: {
       alignSelf: 'flex-start',
       minWidth: 180,
-    },
-
-    categoryRow: {
-      gap: spacing.sm,
-      paddingRight: spacing.md,
-    },
-
-    categoryChip: {
-      minHeight: 44,
-      borderRadius: 999,
-      borderWidth: 1,
-      paddingHorizontal: spacing.md,
-      paddingVertical: spacing.sm,
-      flexDirection: 'row',
-      alignItems: 'center',
-      gap: spacing.xs,
-    },
-
-    categoryIcon: {
-      fontSize: 16,
-    },
-
-    featured: {
-      marginHorizontal: spacing.md,
-      marginTop: spacing.lg,
-      backgroundColor: colors.primaryDark,
-      borderRadius: 18,
-      padding: spacing.lg,
-      minHeight: 188,
-      overflow: 'hidden',
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      alignItems: 'flex-end',
-      elevation: 4,
-      shadowColor: colors.shadow,
-      shadowOffset: { width: 0, height: 4 },
-      shadowOpacity: 0.14,
-      shadowRadius: 8,
-    },
-
-    featuredCopy: {
-      flex: 1,
-      paddingRight: spacing.md,
-    },
-
-    featuredTitle: {
-      marginTop: spacing.md,
-      marginBottom: spacing.sm,
-    },
-
-    featuredText: {
-      opacity: 0.86,
-    },
-
-    featuredAction: {
-      width: 44,
-      height: 44,
-      borderRadius: 22,
-      backgroundColor: colors.surface,
-      alignItems: 'center',
-      justifyContent: 'center',
     },
 
     recentCard: {

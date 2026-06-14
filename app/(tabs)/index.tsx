@@ -662,6 +662,15 @@ export default function HomeScreen() {
       <View style={styles.hero}>
         <View style={styles.heroGlow} />
         <View style={styles.heroGoldGlow} />
+        <View style={styles.heroSunMotif}>
+          <View style={styles.heroSunRayVertical} />
+          <View style={styles.heroSunRayHorizontal} />
+          <View style={[styles.heroSunRayDiagonal, styles.heroSunRayForward]} />
+          <View style={[styles.heroSunRayDiagonal, styles.heroSunRayBackward]} />
+          <View style={styles.heroSunCore} />
+        </View>
+        <View style={styles.heroStarOne} />
+        <View style={styles.heroStarTwo} />
         <View style={styles.heroAccentRail} />
 
         <View style={styles.heroTop}>
@@ -891,6 +900,80 @@ const createStyles = (colors: ThemeColors) =>
       height: 150,
       borderRadius: 75,
       backgroundColor: `${colors.accent}2B`,
+    },
+
+    heroSunMotif: {
+      position: 'absolute',
+      right: -10,
+      top: 28,
+      width: 96,
+      height: 96,
+      alignItems: 'center',
+      justifyContent: 'center',
+      opacity: 0.24,
+    },
+
+    heroSunCore: {
+      width: 38,
+      height: 38,
+      borderRadius: 19,
+      backgroundColor: colors.accent,
+      borderWidth: 1,
+      borderColor: 'rgba(255,255,255,0.34)',
+    },
+
+    heroSunRayVertical: {
+      position: 'absolute',
+      width: 10,
+      height: 92,
+      borderRadius: 999,
+      backgroundColor: colors.accent,
+    },
+
+    heroSunRayHorizontal: {
+      position: 'absolute',
+      width: 92,
+      height: 10,
+      borderRadius: 999,
+      backgroundColor: colors.accent,
+    },
+
+    heroSunRayDiagonal: {
+      position: 'absolute',
+      width: 78,
+      height: 8,
+      borderRadius: 999,
+      backgroundColor: colors.accent,
+    },
+
+    heroSunRayForward: {
+      transform: [{ rotate: '45deg' }],
+    },
+
+    heroSunRayBackward: {
+      transform: [{ rotate: '-45deg' }],
+    },
+
+    heroStarOne: {
+      position: 'absolute',
+      right: 104,
+      top: 76,
+      width: 5,
+      height: 5,
+      borderRadius: 3,
+      backgroundColor: colors.accent,
+      opacity: 0.58,
+    },
+
+    heroStarTwo: {
+      position: 'absolute',
+      right: 142,
+      top: 124,
+      width: 4,
+      height: 4,
+      borderRadius: 2,
+      backgroundColor: 'rgba(255,255,255,0.72)',
+      opacity: 0.64,
     },
 
     heroAccentRail: {

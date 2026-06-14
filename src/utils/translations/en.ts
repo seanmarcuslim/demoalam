@@ -137,8 +137,8 @@ export const enTranslations = {
         },
         documents: {
           title: 'Prepare important documents',
-          subtitle: 'IDs, clearance, work numbers, and account requirements.',
-          start: 'Check the document path before you spend time, money, or travel.',
+          subtitle: 'IDs, NBI, work numbers, job, and bank requirements.',
+          start: 'Start by asking what the document is for: work, bank, ID, benefits, or travel. Then prepare the path before paying or lining up.',
         },
         course: {
           title: 'Choose a course',

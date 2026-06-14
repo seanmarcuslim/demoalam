@@ -137,8 +137,8 @@ export const filTranslations = {
         },
         documents: {
           title: 'Ihanda ang importanteng documents',
-          subtitle: 'ID, clearance, work numbers, at account requirements.',
-          start: 'I-check ang document path bago gumastos, pumila, o bumiyahe.',
+          subtitle: 'ID, NBI, work numbers, job, at bank requirements.',
+          start: 'Magsimula sa tanong: para saan ang document, work, bank, ID, benefits, o biyahe? Ihanda muna ang path bago magbayad o pumila.',
         },
         course: {
           title: 'Pumili ng course',

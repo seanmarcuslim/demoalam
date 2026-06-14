@@ -34,6 +34,7 @@ import { analyticsService } from '../../src/services/analyticsService'
 type GuidancePath = {
   id: string
   zone: 'today' | 'future'
+  audiences: Array<'student' | 'life'>
   icon: keyof typeof Ionicons.glyphMap
   slugs: string[]
   flowPath?: '/flow/course-fit'
@@ -42,6 +43,8 @@ type GuidancePath = {
   subtitle: string
   start: string
 }
+
+type HomeFocus = 'student' | 'life'
 
 export default function HomeScreen() {
   const { colors } = useTheme()
@@ -55,6 +58,7 @@ export default function HomeScreen() {
     future: false,
   })
   const [nextMoveCollapsed, setNextMoveCollapsed] = useState(false)
+  const [homeFocus, setHomeFocus] = useState<HomeFocus>('student')
 
   const {
     data: guides = [],
@@ -94,6 +98,7 @@ export default function HomeScreen() {
     {
       id: 'scam',
       zone: 'today',
+      audiences: ['student', 'life'],
       icon: 'shield-checkmark-outline',
       slugs: [
         'gcash-scam-red-flags',
@@ -111,6 +116,7 @@ export default function HomeScreen() {
     {
       id: 'scholarship',
       zone: 'today',
+      audiences: ['student'],
       icon: 'school-outline',
       slugs: [
         'student-financial-aid-philippines-checklist',
@@ -125,6 +131,7 @@ export default function HomeScreen() {
     {
       id: 'first-job',
       zone: 'today',
+      audiences: ['student'],
       icon: 'briefcase-outline',
       slugs: [
         'first-job-requirements',
@@ -143,6 +150,7 @@ export default function HomeScreen() {
     {
       id: 'emergency',
       zone: 'today',
+      audiences: ['student', 'life'],
       icon: 'alert-circle-outline',
       slugs: [
         'phone-stolen-first-hour',
@@ -161,8 +169,40 @@ export default function HomeScreen() {
       start: labels.guidancePaths.emergency.start,
     },
     {
+      id: 'money',
+      zone: 'today',
+      audiences: ['life'],
+      icon: 'wallet-outline',
+      slugs: [
+        'payday-budget-simple-split',
+        'emergency-fund-starter-checklist',
+        'loan-red-flags-before-borrowing',
+        'salary-paycheck-checklist',
+        'bank-account-first-time',
+      ],
+      title: labels.guidancePaths.money.title,
+      subtitle: labels.guidancePaths.money.subtitle,
+      start: labels.guidancePaths.money.start,
+    },
+    {
+      id: 'documents',
+      zone: 'today',
+      audiences: ['life'],
+      icon: 'document-text-outline',
+      slugs: [
+        'fast-valid-id',
+        'national-id-problems-checklist',
+        'nbi-clearance-first-timers',
+        'philhealth-pagibig-tin-basics',
+      ],
+      title: labels.guidancePaths.documents.title,
+      subtitle: labels.guidancePaths.documents.subtitle,
+      start: labels.guidancePaths.documents.start,
+    },
+    {
       id: 'course',
       zone: 'future',
+      audiences: ['student'],
       icon: 'compass-outline',
       slugs: [
         'choose-course-fit-checklist',
@@ -179,6 +219,7 @@ export default function HomeScreen() {
     {
       id: 'study',
       zone: 'future',
+      audiences: ['student'],
       icon: 'book-outline',
       slugs: [
         'study-smarter-when-behind-checklist',
@@ -193,6 +234,7 @@ export default function HomeScreen() {
     {
       id: 'work-life',
       zone: 'future',
+      audiences: ['student', 'life'],
       icon: 'people-outline',
       slugs: [
         'first-job-requirements',
@@ -209,6 +251,7 @@ export default function HomeScreen() {
     {
       id: 'lessons',
       zone: 'future',
+      audiences: ['student', 'life'],
       icon: 'sparkles-outline',
       slugs: [
         'choose-course-fit-checklist',
@@ -227,6 +270,26 @@ export default function HomeScreen() {
       start: labels.guidancePaths.lessons.start,
     },
   ]
+  const studentPaths = guidancePaths.filter((path) =>
+    path.audiences.includes('student')
+  )
+  const lifePaths = guidancePaths.filter((path) =>
+    path.audiences.includes('life')
+  )
+  const guidancePathGroups = {
+    studentFuture: studentPaths.filter((path) =>
+      ['course', 'study', 'scholarship', 'first-job', 'work-life', 'lessons'].includes(path.id)
+    ),
+    studentToday: studentPaths.filter((path) =>
+      ['scam', 'emergency'].includes(path.id)
+    ),
+    lifeToday: lifePaths.filter((path) =>
+      ['scam', 'emergency', 'money', 'documents'].includes(path.id)
+    ),
+    lifeFuture: lifePaths.filter((path) =>
+      ['work-life', 'lessons'].includes(path.id)
+    ),
+  }
 
   const openGuide = (id: string) => {
     router.push({
@@ -287,7 +350,8 @@ export default function HomeScreen() {
   const renderGuidanceZone = (
     zone: GuidancePath['zone'],
     title: string,
-    subtitle: string
+    subtitle: string,
+    paths: GuidancePath[]
   ) => {
     const isCollapsed = collapsedGuidanceZones[zone]
 
@@ -324,8 +388,7 @@ export default function HomeScreen() {
 
         {!isCollapsed ? (
           <View style={styles.guidanceGrid}>
-            {guidancePaths
-              .filter((path) => path.zone === zone)
+            {paths
               .map((path) => {
                 const isSelected = selectedGuidanceId === path.id
                 const pathGuides = path.slugs
@@ -420,6 +483,71 @@ export default function HomeScreen() {
       </View>
     )
   }
+
+  const renderFocusSelector = () => (
+    <View style={styles.focusPanel}>
+      <SafeText variant="h3" weight="700">
+        {labels.guidanceFocusTitle}
+      </SafeText>
+      <SafeText variant="caption" color="muted" style={styles.sectionSubtitle}>
+        {labels.guidanceFocusSubtitle}
+      </SafeText>
+
+      <View style={styles.focusOptions}>
+        <TouchableOpacity
+          activeOpacity={0.86}
+          style={[
+            styles.focusOption,
+            homeFocus === 'student' ? styles.focusOptionActive : null,
+          ]}
+          onPress={() => setHomeFocus('student')}
+          accessibilityRole="button"
+        >
+          <View style={styles.focusIcon}>
+            <Ionicons
+              name="school-outline"
+              size={20}
+              color={homeFocus === 'student' ? colors.accent : colors.primary}
+            />
+          </View>
+          <View style={styles.focusCopy}>
+            <SafeText variant="body" weight="700">
+              {labels.guidanceFocusStudent}
+            </SafeText>
+            <SafeText variant="caption" color="muted" style={styles.focusText}>
+              {labels.guidanceFocusStudentSubtitle}
+            </SafeText>
+          </View>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          activeOpacity={0.86}
+          style={[
+            styles.focusOption,
+            homeFocus === 'life' ? styles.focusOptionActive : null,
+          ]}
+          onPress={() => setHomeFocus('life')}
+          accessibilityRole="button"
+        >
+          <View style={styles.focusIcon}>
+            <Ionicons
+              name="shield-checkmark-outline"
+              size={20}
+              color={homeFocus === 'life' ? colors.accent : colors.primary}
+            />
+          </View>
+          <View style={styles.focusCopy}>
+            <SafeText variant="body" weight="700">
+              {labels.guidanceFocusLife}
+            </SafeText>
+            <SafeText variant="caption" color="muted" style={styles.focusText}>
+              {labels.guidanceFocusLifeSubtitle}
+            </SafeText>
+          </View>
+        </TouchableOpacity>
+      </View>
+    </View>
+  )
 
   const renderYourNextMove = () => {
     const shouldShow =
@@ -571,9 +699,40 @@ export default function HomeScreen() {
 
       {renderYourNextMove()}
 
+      {renderFocusSelector()}
+
       <View style={styles.section}>
-        {renderGuidanceZone('today', labels.guidanceTodayTitle, labels.guidanceTodaySubtitle)}
-        {renderGuidanceZone('future', labels.guidanceFutureTitle, labels.guidanceFutureSubtitle)}
+        {homeFocus === 'student' ? (
+          <>
+            {renderGuidanceZone(
+              'future',
+              labels.guidanceStudentTitle,
+              labels.guidanceStudentSubtitle,
+              guidancePathGroups.studentFuture
+            )}
+            {renderGuidanceZone(
+              'today',
+              labels.guidanceTodayTitle,
+              labels.guidanceTodaySubtitle,
+              guidancePathGroups.studentToday
+            )}
+          </>
+        ) : (
+          <>
+            {renderGuidanceZone(
+              'today',
+              labels.guidanceLifeTitle,
+              labels.guidanceLifeSubtitle,
+              guidancePathGroups.lifeToday
+            )}
+            {renderGuidanceZone(
+              'future',
+              labels.guidanceFutureTitle,
+              labels.guidanceFutureSubtitle,
+              guidancePathGroups.lifeFuture
+            )}
+          </>
+        )}
       </View>
 
       {featuredBundles.length > 0 ? (
@@ -851,6 +1010,60 @@ const createStyles = (colors: ThemeColors) =>
       paddingHorizontal: spacing.sm,
       alignItems: 'center',
       justifyContent: 'center',
+    },
+
+    focusPanel: {
+      marginHorizontal: spacing.md,
+      marginTop: spacing.lg,
+      borderRadius: 16,
+      borderWidth: 1,
+      borderColor: `${colors.accent}35`,
+      backgroundColor: colors.surface,
+      padding: spacing.md,
+    },
+
+    focusOptions: {
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+      gap: spacing.sm,
+      marginTop: spacing.md,
+    },
+
+    focusOption: {
+      flexGrow: 1,
+      flexBasis: '47%',
+      minHeight: 96,
+      borderRadius: 14,
+      borderWidth: 1,
+      borderColor: colors.border,
+      backgroundColor: colors.background,
+      padding: spacing.sm,
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: spacing.sm,
+    },
+
+    focusOptionActive: {
+      borderColor: colors.accent,
+      backgroundColor: colors.accentLight,
+    },
+
+    focusIcon: {
+      width: 38,
+      height: 38,
+      borderRadius: 13,
+      backgroundColor: `${colors.primary}18`,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+
+    focusCopy: {
+      flex: 1,
+      minWidth: 0,
+    },
+
+    focusText: {
+      marginTop: spacing.xs,
     },
 
     sectionHeader: {

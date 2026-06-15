@@ -738,10 +738,14 @@ export default function HomeScreen() {
     <View>
       <View style={styles.hero}>
         <View style={styles.heroSunMotif}>
-          <View style={styles.heroSunRayVertical} />
-          <View style={styles.heroSunRayHorizontal} />
-          <View style={[styles.heroSunRayDiagonal, styles.heroSunRayForward]} />
-          <View style={[styles.heroSunRayDiagonal, styles.heroSunRayBackward]} />
+          {Array.from({ length: 8 }).map((_, index) => (
+            <View
+              key={index}
+              style={[styles.heroSunRayArm, { transform: [{ rotate: `${index * 45}deg` }] }]}
+            >
+              <View style={styles.heroSunRay} />
+            </View>
+          ))}
           <View style={styles.heroSunCore} />
         </View>
         <View style={styles.heroStarOne} />
@@ -992,36 +996,20 @@ const createStyles = (colors: ThemeColors) =>
       borderColor: 'rgba(255,255,255,0.34)',
     },
 
-    heroSunRayVertical: {
+    heroSunRayArm: {
       position: 'absolute',
-      width: 12,
-      height: 148,
-      borderRadius: 999,
-      backgroundColor: '#FCD116',
+      width: 154,
+      height: 154,
+      alignItems: 'center',
     },
 
-    heroSunRayHorizontal: {
-      position: 'absolute',
-      width: 148,
-      height: 12,
-      borderRadius: 999,
+    heroSunRay: {
+      width: 18,
+      height: 44,
+      marginTop: 2,
+      borderRadius: 6,
       backgroundColor: '#FCD116',
-    },
-
-    heroSunRayDiagonal: {
-      position: 'absolute',
-      width: 126,
-      height: 10,
-      borderRadius: 999,
-      backgroundColor: '#FCD116',
-    },
-
-    heroSunRayForward: {
       transform: [{ rotate: '45deg' }],
-    },
-
-    heroSunRayBackward: {
-      transform: [{ rotate: '-45deg' }],
     },
 
     heroStarOne: {

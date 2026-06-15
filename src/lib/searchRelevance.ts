@@ -142,6 +142,22 @@ function scoreGuide(guide: Guide, query: string) {
   }
 
   if (
+    cleanQuery.includes('otp scam') ||
+    cleanQuery.includes('phishing link') ||
+    cleanQuery.includes('suspicious link') ||
+    cleanQuery.includes('fake login')
+  ) {
+    if (
+      slug === 'phishing-link-checklist' ||
+      title.includes('phishing') ||
+      keywords.includes('otp') ||
+      keywords.includes('fake login')
+    ) {
+      score += slug === 'phishing-link-checklist' ? 180 : 90
+    }
+  }
+
+  if (
     cleanQuery.includes('loan') ||
     cleanQuery.includes('utang') ||
     cleanQuery.includes('pautang') ||

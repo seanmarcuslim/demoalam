@@ -45,7 +45,7 @@ type GuidancePath = {
   start: string
 }
 
-type HomeFocus = 'student' | 'life'
+type HomeFocus = 'study' | 'work' | 'everyday'
 const GUIDANCE_PREVIEW_LIMIT = 3
 
 export default function HomeScreen() {
@@ -60,7 +60,7 @@ export default function HomeScreen() {
     future: false,
   })
   const [nextMoveCollapsed, setNextMoveCollapsed] = useState(false)
-  const [homeFocus, setHomeFocus] = useState<HomeFocus>('student')
+  const [homeFocus, setHomeFocus] = useState<HomeFocus>('study')
 
   const {
     data: guides = [],
@@ -296,24 +296,24 @@ export default function HomeScreen() {
       searchQuery: 'life lessons before problems',
     },
   ]
-  const studentPaths = guidancePaths.filter((path) =>
-    path.audiences.includes('student')
-  )
-  const lifePaths = guidancePaths.filter((path) =>
-    path.audiences.includes('life')
-  )
   const guidancePathGroups = {
-    studentFuture: studentPaths.filter((path) =>
-      ['course', 'study', 'scholarship', 'first-job', 'work-life', 'lessons'].includes(path.id)
+    studyFuture: guidancePaths.filter((path) =>
+      ['course', 'study', 'scholarship', 'first-job'].includes(path.id)
     ),
-    studentToday: studentPaths.filter((path) =>
+    studyToday: guidancePaths.filter((path) =>
       ['scam', 'emergency'].includes(path.id)
     ),
-    lifeToday: lifePaths.filter((path) =>
+    workFuture: guidancePaths.filter((path) =>
+      ['first-job', 'work-life', 'lessons'].includes(path.id)
+    ),
+    workToday: guidancePaths.filter((path) =>
+      ['documents', 'money', 'scam'].includes(path.id)
+    ),
+    everydayToday: guidancePaths.filter((path) =>
       ['scam', 'emergency', 'money', 'documents'].includes(path.id)
     ),
-    lifeFuture: lifePaths.filter((path) =>
-      ['work-life', 'lessons'].includes(path.id)
+    everydayFuture: guidancePaths.filter((path) =>
+      ['lessons'].includes(path.id)
     ),
   }
 
@@ -552,70 +552,79 @@ export default function HomeScreen() {
     )
   }
 
-  const renderFocusSelector = () => (
-    <View style={styles.focusPanel}>
-      <SafeText variant="h3" weight="700">
-        {labels.guidanceFocusTitle}
-      </SafeText>
-      <SafeText variant="caption" color="muted" style={styles.sectionSubtitle}>
-        {labels.guidanceFocusSubtitle}
-      </SafeText>
+  const renderFocusSelector = () => {
+    const options: Array<{
+      id: HomeFocus
+      icon: keyof typeof Ionicons.glyphMap
+      title: string
+      subtitle: string
+    }> = [
+      {
+        id: 'study',
+        icon: 'school-outline',
+        title: labels.guidanceFocusStudy,
+        subtitle: labels.guidanceFocusStudySubtitle,
+      },
+      {
+        id: 'work',
+        icon: 'briefcase-outline',
+        title: labels.guidanceFocusWork,
+        subtitle: labels.guidanceFocusWorkSubtitle,
+      },
+      {
+        id: 'everyday',
+        icon: 'shield-checkmark-outline',
+        title: labels.guidanceFocusEveryday,
+        subtitle: labels.guidanceFocusEverydaySubtitle,
+      },
+    ]
 
-      <View style={styles.focusOptions}>
-        <TouchableOpacity
-          activeOpacity={0.86}
-          style={[
-            styles.focusOption,
-            homeFocus === 'student' ? styles.focusOptionActive : null,
-          ]}
-          onPress={() => setHomeFocus('student')}
-          accessibilityRole="button"
-        >
-          <View style={styles.focusIcon}>
-            <Ionicons
-              name="school-outline"
-              size={20}
-              color={homeFocus === 'student' ? colors.accent : colors.primary}
-            />
-          </View>
-          <View style={styles.focusCopy}>
-            <SafeText variant="body" weight="700" style={styles.focusLabel}>
-              {labels.guidanceFocusStudent}
-            </SafeText>
-            <SafeText variant="caption" color="muted" style={styles.focusText}>
-              {labels.guidanceFocusStudentSubtitle}
-            </SafeText>
-          </View>
-        </TouchableOpacity>
+    return (
+      <View style={styles.focusPanel}>
+        <SafeText variant="h3" weight="700">
+          {labels.guidanceFocusTitle}
+        </SafeText>
+        <SafeText variant="caption" color="muted" style={styles.sectionSubtitle}>
+          {labels.guidanceFocusSubtitle}
+        </SafeText>
 
-        <TouchableOpacity
-          activeOpacity={0.86}
-          style={[
-            styles.focusOption,
-            homeFocus === 'life' ? styles.focusOptionActive : null,
-          ]}
-          onPress={() => setHomeFocus('life')}
-          accessibilityRole="button"
-        >
-          <View style={styles.focusIcon}>
-            <Ionicons
-              name="shield-checkmark-outline"
-              size={20}
-              color={homeFocus === 'life' ? colors.accent : colors.primary}
-            />
-          </View>
-          <View style={styles.focusCopy}>
-            <SafeText variant="body" weight="700" style={styles.focusLabel}>
-              {labels.guidanceFocusLife}
-            </SafeText>
-            <SafeText variant="caption" color="muted" style={styles.focusText}>
-              {labels.guidanceFocusLifeSubtitle}
-            </SafeText>
-          </View>
-        </TouchableOpacity>
+        <View style={styles.focusOptions}>
+          {options.map((option) => {
+            const isActive = homeFocus === option.id
+
+            return (
+              <TouchableOpacity
+                key={option.id}
+                activeOpacity={0.86}
+                style={[
+                  styles.focusOption,
+                  isActive ? styles.focusOptionActive : null,
+                ]}
+                onPress={() => setHomeFocus(option.id)}
+                accessibilityRole="button"
+              >
+                <View style={styles.focusIcon}>
+                  <Ionicons
+                    name={option.icon}
+                    size={20}
+                    color={isActive ? colors.accent : colors.primary}
+                  />
+                </View>
+                <View style={styles.focusCopy}>
+                  <SafeText variant="body" weight="700" style={styles.focusLabel}>
+                    {option.title}
+                  </SafeText>
+                  <SafeText variant="caption" color="muted" style={styles.focusText}>
+                    {option.subtitle}
+                  </SafeText>
+                </View>
+              </TouchableOpacity>
+            )
+          })}
+        </View>
       </View>
-    </View>
-  )
+    )
+  }
 
   const renderYourNextMove = () => {
     const shouldShow =
@@ -778,19 +787,34 @@ export default function HomeScreen() {
       {renderFocusSelector()}
 
       <View style={styles.section}>
-        {homeFocus === 'student' ? (
+        {homeFocus === 'study' ? (
           <>
             {renderGuidanceZone(
               'future',
               labels.guidanceStudentTitle,
               labels.guidanceStudentSubtitle,
-              guidancePathGroups.studentFuture
+              guidancePathGroups.studyFuture
             )}
             {renderGuidanceZone(
               'today',
               labels.guidanceTodayTitle,
               labels.guidanceTodaySubtitle,
-              guidancePathGroups.studentToday
+              guidancePathGroups.studyToday
+            )}
+          </>
+        ) : homeFocus === 'work' ? (
+          <>
+            {renderGuidanceZone(
+              'future',
+              labels.guidanceWorkTitle,
+              labels.guidanceWorkSubtitle,
+              guidancePathGroups.workFuture
+            )}
+            {renderGuidanceZone(
+              'today',
+              labels.guidanceTodayTitle,
+              labels.guidanceTodaySubtitle,
+              guidancePathGroups.workToday
             )}
           </>
         ) : (
@@ -799,13 +823,13 @@ export default function HomeScreen() {
               'today',
               labels.guidanceLifeTitle,
               labels.guidanceLifeSubtitle,
-              guidancePathGroups.lifeToday
+              guidancePathGroups.everydayToday
             )}
             {renderGuidanceZone(
               'future',
               labels.guidanceFutureTitle,
               labels.guidanceFutureSubtitle,
-              guidancePathGroups.lifeFuture
+              guidancePathGroups.everydayFuture
             )}
           </>
         )}

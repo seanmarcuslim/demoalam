@@ -93,7 +93,7 @@ export const SEARCH_SUGGESTION_GROUPS: SearchSuggestionGroup[] = [
     subtitle_en: 'Start here before sending money, OTPs, or documents.',
     subtitle_fil: 'Unahin ito bago magpadala ng pera, OTP, o dokumento.',
     colorKey: 'danger' as const,
-    items: ['loan app harassment', 'fake job', 'job scam', 'wrong send gcash', 'gcash scam'],
+    items: ['otp scam', 'phishing link', 'fake job', 'job scam', 'gcash scam'],
   },
   {
     title_en: 'Student & livelihood',

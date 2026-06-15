@@ -737,7 +737,6 @@ export default function HomeScreen() {
   const renderHeader = () => (
     <View>
       <View style={styles.hero}>
-        <View style={styles.heroGoldGlow} />
         <View style={styles.heroSunMotif}>
           <View style={styles.heroSunRayVertical} />
           <View style={styles.heroSunRayHorizontal} />
@@ -973,20 +972,10 @@ const createStyles = (colors: ThemeColors) =>
       overflow: 'hidden',
     },
 
-    heroGoldGlow: {
-      position: 'absolute',
-      right: 26,
-      bottom: -58,
-      width: 150,
-      height: 150,
-      borderRadius: 75,
-      backgroundColor: `${colors.accent}2B`,
-    },
-
     heroSunMotif: {
       position: 'absolute',
-      right: -46,
-      top: -52,
+      right: -42,
+      bottom: -48,
       width: 154,
       height: 154,
       alignItems: 'center',

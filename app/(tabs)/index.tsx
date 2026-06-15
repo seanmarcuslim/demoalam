@@ -987,7 +987,7 @@ const createStyles = (colors: ThemeColors) =>
       width: 52,
       height: 52,
       borderRadius: 26,
-      backgroundColor: colors.accent,
+      backgroundColor: '#FCD116',
       borderWidth: 1,
       borderColor: 'rgba(255,255,255,0.34)',
     },
@@ -997,7 +997,7 @@ const createStyles = (colors: ThemeColors) =>
       width: 12,
       height: 148,
       borderRadius: 999,
-      backgroundColor: colors.accent,
+      backgroundColor: '#FCD116',
     },
 
     heroSunRayHorizontal: {
@@ -1005,7 +1005,7 @@ const createStyles = (colors: ThemeColors) =>
       width: 148,
       height: 12,
       borderRadius: 999,
-      backgroundColor: colors.accent,
+      backgroundColor: '#FCD116',
     },
 
     heroSunRayDiagonal: {
@@ -1013,7 +1013,7 @@ const createStyles = (colors: ThemeColors) =>
       width: 126,
       height: 10,
       borderRadius: 999,
-      backgroundColor: colors.accent,
+      backgroundColor: '#FCD116',
     },
 
     heroSunRayForward: {

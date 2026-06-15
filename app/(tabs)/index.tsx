@@ -978,19 +978,19 @@ const createStyles = (colors: ThemeColors) =>
 
     heroSunMotif: {
       position: 'absolute',
-      right: -42,
-      bottom: -48,
-      width: 154,
-      height: 154,
+      right: -34,
+      bottom: -42,
+      width: 136,
+      height: 136,
       alignItems: 'center',
       justifyContent: 'center',
-      opacity: 0.18,
+      opacity: 0.16,
     },
 
     heroSunCore: {
-      width: 52,
-      height: 52,
-      borderRadius: 26,
+      width: 46,
+      height: 46,
+      borderRadius: 23,
       backgroundColor: '#FCD116',
       borderWidth: 1,
       borderColor: 'rgba(255,255,255,0.34)',
@@ -998,18 +998,21 @@ const createStyles = (colors: ThemeColors) =>
 
     heroSunRayArm: {
       position: 'absolute',
-      width: 154,
-      height: 154,
+      width: 136,
+      height: 136,
       alignItems: 'center',
     },
 
     heroSunRay: {
-      width: 18,
-      height: 44,
-      marginTop: 2,
-      borderRadius: 6,
-      backgroundColor: '#FCD116',
-      transform: [{ rotate: '45deg' }],
+      width: 0,
+      height: 0,
+      marginTop: 8,
+      borderLeftWidth: 8,
+      borderRightWidth: 8,
+      borderBottomWidth: 30,
+      borderLeftColor: 'transparent',
+      borderRightColor: 'transparent',
+      borderBottomColor: '#FCD116',
     },
 
     heroStarOne: {

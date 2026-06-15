@@ -579,7 +579,7 @@ export default function HomeScreen() {
             />
           </View>
           <View style={styles.focusCopy}>
-            <SafeText variant="body" weight="700">
+            <SafeText variant="body" weight="700" style={styles.focusLabel}>
               {labels.guidanceFocusStudent}
             </SafeText>
             <SafeText variant="caption" color="muted" style={styles.focusText}>
@@ -605,7 +605,7 @@ export default function HomeScreen() {
             />
           </View>
           <View style={styles.focusCopy}>
-            <SafeText variant="body" weight="700">
+            <SafeText variant="body" weight="700" style={styles.focusLabel}>
               {labels.guidanceFocusLife}
             </SafeText>
             <SafeText variant="caption" color="muted" style={styles.focusText}>
@@ -1171,7 +1171,8 @@ const createStyles = (colors: ThemeColors) =>
 
     focusOption: {
       flexGrow: 1,
-      flexBasis: '47%',
+      flexShrink: 1,
+      flexBasis: 280,
       minHeight: 96,
       borderRadius: 14,
       borderWidth: 1,
@@ -1200,6 +1201,11 @@ const createStyles = (colors: ThemeColors) =>
     focusCopy: {
       flex: 1,
       minWidth: 0,
+    },
+
+    focusLabel: {
+      flexShrink: 1,
+      flexWrap: 'wrap',
     },
 
     focusText: {

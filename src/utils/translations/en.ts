@@ -151,8 +151,8 @@ export const enTranslations = {
         },
         course: {
           title: 'Choose a course',
-          subtitle: 'Start with cost, aid, and work realities.',
-          start: 'Start by checking fit, cost, aid options, and the work realities connected to your path.',
+          subtitle: 'Avoid the things students often regret later.',
+          start: 'Do not choose from course name, salary, or friends only. Check fit, total cost, backup options, and the real work after graduation.',
         },
         study: {
           title: 'Study smarter',

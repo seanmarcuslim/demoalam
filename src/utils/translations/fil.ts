@@ -151,8 +151,8 @@ export const filTranslations = {
         },
         course: {
           title: 'Pumili ng course',
-          subtitle: 'Magsimula sa gastos, ayuda, at realidad ng trabaho.',
-          start: 'Magsimula sa fit, gastos, aid options, at work realities na konektado sa path mo.',
+          subtitle: 'Iwasan ang madalas pagsisihan ng students.',
+          start: 'Huwag course name, salary, o friends lang ang basehan. I-check ang fit, total na gastos, backup options, at totoong trabaho pagkatapos ng graduation.',
         },
         study: {
           title: 'Mag-aral nang mas malinaw',

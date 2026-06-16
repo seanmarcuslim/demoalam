@@ -156,8 +156,8 @@ export const filTranslations = {
         },
         study: {
           title: 'Mag-aral nang mas malinaw',
-          subtitle: 'Humabol nang hindi nanghuhula kung ano ang uunahin.',
-          start: 'Magsimula sa maliit na reset plan: ilista ang deadlines, piliin ang pinaka-risky na task, tapos ayusin ang blocker na paulit-ulit humahadlang sa school.',
+          subtitle: 'Kapag nahuhuli ka, piliin ang susunod na kayang gawin.',
+          start: 'Huwag piliting ayusin ang buong semester ngayong gabi. Ilista ang deadlines, piliin ang pinaka-risky na task, at gumawa ng study reset plan na kaya mong tapusin.',
         },
         workLife: {
           title: 'Intindihin ang work life',

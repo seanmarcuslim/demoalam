@@ -126,8 +126,8 @@ export const enTranslations = {
         },
         scholarship: {
           title: 'Find scholarships or aid',
-          subtitle: 'Know which office or program to ask first.',
-          start: 'Do not search only for “scholarship.” Some help is called subsidy, aid, assistance, or cash-for-work.',
+          subtitle: 'Do not miss help because it has a different name.',
+          start: 'Before giving up, check the words schools and offices actually use: scholarship, subsidy, assistance, cash-for-work, or student aid.',
         },
         firstJob: {
           title: 'Prepare for your first job',

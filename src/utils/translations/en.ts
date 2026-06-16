@@ -166,8 +166,8 @@ export const enTranslations = {
         },
         lessons: {
           title: 'Lessons I wish I knew earlier',
-          subtitle: 'Money, rights, and choices that prevent regret.',
-          start: 'Start with lessons that protect your money, documents, and basic rights before small mistakes become expensive.',
+          subtitle: 'Avoid beginner mistakes before they become expensive.',
+          start: 'Start with the decisions people often learn too late: protecting money, documents, rights, and choices that can quietly shape your future.',
         },
       },
       browseTopics: 'Browse topics',

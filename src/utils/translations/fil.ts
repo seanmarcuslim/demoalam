@@ -166,8 +166,8 @@ export const filTranslations = {
         },
         lessons: {
           title: 'Mga aral na sana nalaman ko noon',
-          subtitle: 'Pera, karapatan, at desisyong iwas-regret.',
-          start: 'Magsimula sa aral na poprotekta sa pera, dokumento, at basic rights mo bago maging mahal ang maliit na pagkakamali.',
+          subtitle: 'Iwasan ang beginner mistakes bago ito maging mahal.',
+          start: 'Magsimula sa mga desisyong madalas huli na natututunan: protektahan ang pera, dokumento, karapatan, at choices na puwedeng humubog sa future mo.',
         },
       },
       browseTopics: 'Piliin ang paksa',

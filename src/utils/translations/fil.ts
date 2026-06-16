@@ -126,8 +126,8 @@ export const filTranslations = {
         },
         scholarship: {
           title: 'Humanap ng scholarship o ayuda',
-          subtitle: 'Alamin kung aling opisina o programa ang unang lalapitan.',
-          start: 'Huwag “scholarship” lang ang hanapin. Minsan ang tawag ay subsidy, aid, assistance, o cash-for-work.',
+          subtitle: 'Huwag palampasin ang tulong dahil iba ang tawag dito.',
+          start: 'Bago sumuko, i-check ang salitang gamit ng schools at offices: scholarship, subsidy, assistance, cash-for-work, o student aid.',
         },
         firstJob: {
           title: 'Maghanda sa unang trabaho',

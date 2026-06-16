@@ -156,8 +156,8 @@ export const enTranslations = {
         },
         study: {
           title: 'Study smarter',
-          subtitle: 'Catch up without guessing what to study first.',
-          start: 'Start with a small reset plan: list deadlines, choose the highest-risk task, then fix the blocker that keeps disrupting school.',
+          subtitle: 'When you feel behind, choose the next useful task.',
+          start: 'Do not try to fix the whole semester tonight. List what is due, pick the highest-risk task, and make one study reset plan you can actually finish.',
         },
         workLife: {
           title: 'Understand work life',

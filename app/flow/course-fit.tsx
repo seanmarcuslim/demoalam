@@ -176,6 +176,52 @@ export default function CourseFitFlowScreen() {
         {getCourseFitLocalizedValue(courseFitFlow, 'intro', language)}
       </SafeText>
 
+      <View style={styles.regretBox}>
+        <SafeText variant="bodyMd" weight="700">
+          {getCourseFitLocalizedValue(courseFitFlow, 'regret_title', language)}
+        </SafeText>
+
+        <View style={styles.regretList}>
+          {(language === 'fil'
+            ? courseFitFlow.regret_items_fil
+            : courseFitFlow.regret_items_en
+          ).map((item) => (
+            <View key={item} style={styles.regretRow}>
+              <Ionicons
+                name="chatbubble-ellipses-outline"
+                size={15}
+                color={colors.warning}
+              />
+              <SafeText variant="bodyMd" color="muted" style={styles.regretText}>
+                {item}
+              </SafeText>
+            </View>
+          ))}
+        </View>
+
+        <View style={styles.beforeBlock}>
+          <SafeText variant="bodyMd" weight="700">
+            {getCourseFitLocalizedValue(courseFitFlow, 'before_title', language)}
+          </SafeText>
+
+          {(language === 'fil'
+            ? courseFitFlow.before_items_fil
+            : courseFitFlow.before_items_en
+          ).map((item) => (
+            <View key={item} style={styles.beforeRow}>
+              <Ionicons
+                name="checkmark-circle"
+                size={15}
+                color={colors.success}
+              />
+              <SafeText variant="bodyMd" color="muted" style={styles.regretText}>
+                {item}
+              </SafeText>
+            </View>
+          ))}
+        </View>
+      </View>
+
       <AppButton
         title={getCourseFitLocalizedValue(courseFitFlow, 'cta', language)}
         onPress={() => {
@@ -492,6 +538,43 @@ const createStyles = (colors: ThemeColors) =>
 
     cardBody: {
       marginTop: spacing.sm,
+    },
+
+    regretBox: {
+      marginTop: spacing.lg,
+      borderRadius: 16,
+      borderWidth: 1,
+      borderColor: colors.border,
+      backgroundColor: colors.surfaceSecondary,
+      padding: spacing.md,
+      gap: spacing.md,
+    },
+
+    regretList: {
+      gap: spacing.sm,
+    },
+
+    regretRow: {
+      flexDirection: 'row',
+      alignItems: 'flex-start',
+      gap: spacing.sm,
+    },
+
+    regretText: {
+      flex: 1,
+    },
+
+    beforeBlock: {
+      borderTopWidth: 1,
+      borderTopColor: colors.border,
+      paddingTop: spacing.md,
+      gap: spacing.sm,
+    },
+
+    beforeRow: {
+      flexDirection: 'row',
+      alignItems: 'flex-start',
+      gap: spacing.sm,
     },
 
     primaryAction: {

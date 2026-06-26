@@ -6,10 +6,10 @@ import type {
 export const trustShieldScenarios: LocalizedTrustScenario[] = [
   {
     id: 'otp_request',
-    label_en: 'Someone asked for OTP',
-    label_fil: 'May nanghingi ng OTP',
-    short_en: 'Codes, MPINs, or verification numbers',
-    short_fil: 'Code, MPIN, o verification number',
+    label_en: 'Someone asked for OTP or approval',
+    label_fil: 'May nanghingi ng OTP o approval',
+    short_en: 'Codes, passkeys, prompts, screen sharing, or device registration',
+    short_fil: 'Code, passkey, prompt, screen sharing, o device registration',
   },
   {
     id: 'advance_payment',
@@ -37,34 +37,40 @@ export const trustShieldScenarios: LocalizedTrustScenario[] = [
 export const trustShieldRules: LocalizedTrustDecisionRule[] = [
   {
     id: 'otp_request',
-    situation_en: 'Someone is asking for your OTP, MPIN, or verification code.',
-    situation_fil: 'May nanghihingi ng OTP, MPIN, o verification code mo.',
+    situation_en: 'Someone is asking for your OTP, approval, passkey, PIN, password, or screen sharing.',
+    situation_fil: 'May nanghihingi ng OTP, approval, passkey, PIN, password, o screen sharing.',
     riskLevel: 'HIGH_RISK',
     why_en:
-      'An OTP is often a transaction approval code, not just identity verification. Sharing it can let someone move money or take over an account.',
+      'Banks and e-wallets are moving away from SMS/email OTPs for high-risk transactions by June 30, 2026, but the safety rule stays the same: never share or approve unknown access. OTPs, passkeys, prompts, and device registration can let someone move money or take over your account.',
     why_fil:
-      'Ang OTP ay madalas approval code para sa transaction, hindi simpleng identity check. Kapag binigay mo ito, puwedeng makagalaw ng pera o makuha ang account mo.',
+      'Lumalayo na ang banks at e-wallets sa SMS/email OTP para sa high-risk transactions pagsapit ng June 30, 2026, pero pareho pa rin ang safety rule: huwag mag-share o mag-approve ng unknown access. Ang OTP, passkey, prompt, at device registration ay puwedeng gamitin para makagalaw ng pera o makuha ang account mo.',
     warningSigns_en: [
-      'They say the code is needed to reverse a charge or claim a promo.',
-      'They pressure you to answer quickly.',
-      'They say they are from a bank, GCash, Maya, or support.',
+      'They ask for an OTP, PIN, password, passkey, approval code, or device registration.',
+      'They ask you to approve an in-app prompt you did not start.',
+      'They want you to share your screen or install a remote access app.',
+      'They say they are from a bank, GCash, Maya, or support and pressure you to act quickly.',
     ],
     warningSigns_fil: [
-      'Sabi nila kailangan ang code para i-reverse ang charge o kunin ang promo.',
-      'Pinapamadali ka nilang sumagot.',
-      'Sabi nila galing sila sa bank, GCash, Maya, o support.',
+      'Humihingi sila ng OTP, PIN, password, passkey, approval code, o device registration.',
+      'Pinapa-approve ka nila ng in-app prompt na hindi ikaw ang nagsimula.',
+      'Gusto nilang i-share mo ang screen mo o mag-install ng remote access app.',
+      'Sabi nila galing sila sa bank, GCash, Maya, o support at minamadali ka.',
     ],
     recommendedAction_en: [
-      'Do not share the code.',
+      'Do not share codes, PINs, passwords, passkeys, or approval prompts.',
+      'Do not approve prompts or device registrations you did not start.',
+      'Stop screen sharing immediately.',
       'End the call or chat.',
       'Open the official app or hotline yourself and check alerts.',
-      'Change your password or MPIN if you already shared anything.',
+      'Change your password, MPIN, or passkey settings if you already shared or approved anything.',
     ],
     recommendedAction_fil: [
-      'Huwag ibigay ang code.',
+      'Huwag ibigay ang code, PIN, password, passkey, o approval prompt.',
+      'Huwag mag-approve ng prompt o device registration na hindi ikaw ang nagsimula.',
+      'Itigil agad ang screen sharing.',
       'Tapusin ang tawag o chat.',
       'Ikaw mismo ang magbukas ng official app o hotline at i-check ang alerts.',
-      'Palitan ang password o MPIN kung may naibigay ka na.',
+      'Palitan ang password, MPIN, o passkey settings kung may naibigay o na-approve ka na.',
     ],
     relatedGuides: [
       'phishing-link-checklist',
@@ -74,25 +80,29 @@ export const trustShieldRules: LocalizedTrustDecisionRule[] = [
     sources_en: [
       'Official bank or e-wallet support channels',
       'BSP consumer protection reminders',
+      'BSP context on moving away from SMS/email OTPs for high-risk transactions by June 30, 2026',
     ],
     sources_fil: [
       'Official bank o e-wallet support channels',
       'BSP consumer protection reminders',
+      'BSP context sa paglipat palayo sa SMS/email OTP para sa high-risk transactions pagsapit ng June 30, 2026',
     ],
     recoverySteps_en: [
       'Secure the account first.',
+      'Remove unknown devices or passkeys if the app shows them.',
       'Preserve screenshots and transaction alerts.',
       'Report through official support channels.',
     ],
     recoverySteps_fil: [
       'I-secure muna ang account.',
+      'Tanggalin ang unknown devices o passkeys kung makikita sa app.',
       'I-save ang screenshots at transaction alerts.',
       'Mag-report sa official support channels.',
     ],
     shareText_en:
-      'Reminder: Never share OTPs, MPINs, or verification codes. They can approve transactions.',
+      'Reminder: Never share OTPs, PINs, passwords, passkeys, approval codes, or approve unknown prompts. Real support will not need them.',
     shareText_fil:
-      'Paalala: Huwag mag-share ng OTP, MPIN, o verification code. Puwede itong approval ng transaction.',
+      'Paalala: Huwag mag-share ng OTP, PIN, password, passkey, approval code, o mag-approve ng unknown prompt. Hindi ito kailangan ng tunay na support.',
   },
   {
     id: 'advance_payment',

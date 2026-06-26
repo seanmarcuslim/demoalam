@@ -38,7 +38,7 @@ type GuidancePath = {
   icon: keyof typeof Ionicons.glyphMap
   slugs: string[]
   searchQuery: string
-  flowPath?: '/flow/course-fit'
+  flowPath?: '/flow/course-fit' | '/flow/trust-shield'
   flowSlug?: 'course-fit'
   title: string
   subtitle: string
@@ -115,6 +115,7 @@ export default function HomeScreen() {
       subtitle: labels.guidancePaths.scam.subtitle,
       start: labels.guidancePaths.scam.start,
       searchQuery: 'scam warning signs',
+      flowPath: '/flow/trust-shield',
     },
     {
       id: 'scholarship',
@@ -340,23 +341,28 @@ export default function HomeScreen() {
   }
 
   const openGuidanceFlow = (path: GuidancePath) => {
-    if (!path.flowPath || !path.flowSlug) {
+    if (!path.flowPath) {
       return
     }
 
     if (path.flowSlug === 'course-fit') {
       markCourseFitOpened()
+
+      analyticsService.logFlowEvent({
+        flowSlug: path.flowSlug,
+        eventName: 'flow_opened',
+        language,
+      }).catch(() => {
+        // Analytics should never interrupt Home navigation.
+      })
     }
 
-    analyticsService.logFlowEvent({
-      flowSlug: path.flowSlug,
-      eventName: 'flow_opened',
-      language,
-    }).catch(() => {
-      // Analytics should never interrupt Home navigation.
-    })
+    if (path.flowPath === '/flow/course-fit') {
+      router.push('/flow/course-fit')
+      return
+    }
 
-    router.push(path.flowPath)
+    router.push('/flow/trust-shield' as never)
   }
 
   const openCourseFitNextMove = () => {
